@@ -111,6 +111,8 @@
         
         a.definition.ui-link:after {
           font-size: 0.5em;
+          position: relative;
+          top: -0.6em;
           content: "?";
         }
         
@@ -130,23 +132,23 @@
         }  
         
         a.definition.ui-link:hover {
+            position: relative;
+            top: -2px;
             background-color: #FFF;
         }  
         
         
         a.reference.ui-link:before{
-          text-decoration: none;
           content: "(";
         }
         a.reference.ui-link:after{
-          text-decoration: none;
           content: ")";
         }
           
         a.reference.ui-link {
             //border-left: 2px solid #000;
             //border-right: 2px solid #000;
-            border-bottom: 1px dashed;
+            border-bottom: 1px dotted;
             text-decoration: none;
             //background-color: #cdf;
             color: #000 !important;
@@ -159,6 +161,8 @@
         }  
         
         a.reference.ui-link:hover {
+            position: relative;
+            top: -2px;
             background-color: #FFF;
         }  
         
@@ -339,7 +343,7 @@
         "type": "irradiated",
         "verbatim": "All transfusions from <a href=\"javascript: showWord('relatives')\" class=\"definition\">first- or second-degree relatives</a> should be irradiated, even if the patient is immunocompetent (1B).",
         "reference": "bcsh2010",
-        "rationale": "<b>Summary</b><br/>It is important to irradiate blood from first and second degree relatives because it is more likely to contain cells which share HLA haplotypes with the recipient than blood from unrelated individuals. Shared HLA haplotypes is a risk factor for TA-GvHD.<br/><br/><b>What is HLA?</b><br/>The surface of cells are covered by Human Leucocyte Antigens (HLA). HLA  varies between individuals. It is composed of two haplotypes inherited from the mother and father.<br/><br/><b>The role of HLA in Transfusion Associated Graft versus Host Disease</b><br/>In a functioning system, cells covered by HLA differing from the body's own are identified as foreign and removed by the immune system. In TA-GvHD, blood from a donor who has a pair of identical HLA haplotypes (HLA-homozygous) is transfused into a recipient with two different HLA haplotypes (HLA-heterozygous) one of which is shared by the donor's HLA haplotypes. Thus the body's immune cells fail to recognise the transfused cells as foreign. This allows the transfused lymphocytes to multiply. They in turn recognise the body's cells as foreign and mount an attack.<br/><br/>For more details, refer to the Blood Bank Guy FAQ (opens in new window): <a target=\"_blank\" data-theme=\"b\" data-role=\"button\" href=\"http://www.bbguy.org/faq/family.asp\">Blood Bank Guy FAQ</a>"
+        "rationale": "<b>Summary</b><br/>It is important to irradiate blood from a  relative of the patient because the donor lymphocytes are genetically similar to the patient's own cells (they share one HLA haplotype).<br/>Because of this there is an elevated risk that the recipient's immune system is unable to distinguish and remove the donor lymphocytes. If they are not removed (or inactivated by irradiation), the donor lymphocytes may identify the patient's cells as foreign and attack them, causing TA-GvHD.<br/><br/>For more details, refer to the Blood Bank Guy FAQ (opens in new window): <a target=\"_blank\" data-theme=\"b\" data-role=\"button\" href=\"http://www.bbguy.org/faq/family.asp\">Blood Bank Guy FAQ</a>"
         }]
     },
 
@@ -353,20 +357,16 @@
     "recommendation": [
         {
         "type": "irradiated",
-        "verbatim": "All granulocyte transfusions should be irradiated for recipients of any age, and they should be transfused  soon as possible after irradiation. (1C).",
-        "reference": "bcsh2010"
-        },
-
-        {
-        "type": "irradiated",
-        "verbatim": "As granulocytes cannot be <a href=\"javascript: showWord('leucodepletion')\" class=\"definition\">leucodepleted<\/a> and is usually given to immunocompromised patients, it is essential that the product be irradiated prior to transfusion to avoid graft-versus-host disease.",
-        "reference": "ukbts2012"
+        "verbatim": "All granulocyte transfusions should be irradiated for recipients of any age, and they should be transfused as soon as possible after irradiation. (1C).",
+        "reference": "bcsh2010",
+        "rationale": "As granulocytes \"...cannot be <a href=\"javascript: showWord('leucodepletion')\" class=\"definition\">leucodepleted<\/a> and is usually given to immunocompromised patients, it is essential that the product be irradiated prior to transfusion to avoid graft-versus-host disease.\" <a href=\"javascript: showSource('ukbts2012')\" class=\"reference\">ukbts2012<\/a>"
         },
         
         {
         "type": "cmv",
         "verbatim": "Granulocyte components should continue to be provided as CMV seronegative for CMV seronegative patients.",
-        "reference": "sabto2012"
+        "reference": "sabto2012",
+        "rationale": "<a href=\"javascript: showWord('leucodepletion')\" class=\"definition\">Leucodepletion<\/a> reduces the risk of CMV infection. As granulocyte components cannot be leucodepleted, it is important that it is provided as CMV seronegative to CMV seronegative patients."
         },
 
         {
@@ -2684,7 +2684,7 @@
             </p>
             <p>
               Lymphocytes (a type of white cell) can cause <a href=
-              "javascript:%20showWord('gvhd')" class="definition">TA-GvHD</a>. Hence
+              "javascript:%20showWord('gvhd')" class="definition">TA-GvHD</a>. Hence,
               cellular blood components, even if <a href=
               "javascript:%20showWord('leucodepletion')" class=
               "definition">leucodepleted</a>, must be <a href=
