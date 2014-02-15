@@ -109,17 +109,24 @@
             display: inline;
         }
         
+        a.definition.ui-link:after {
+          font-size: 0.5em;
+          content: "?";
+        }
+        
+        
         a.definition.ui-link {
-            border-bottom: 2px solid #666;
-            background-color: #Fcd;
+            //border-bottom: 2px solid #666;
+            //background-color: #Fcd;
             text-decoration: none;
+            border-bottom:1px dashed;
             color: #000 !important;
             font-weight: normal !important;
-            padding: 1px;
+            //padding: 1px;
             margin: 0px;
             padding-left: 3px;
             padding-right: 3px;
-            border-radius:5px;
+            //border-radius:5px;
         }  
         
         a.definition.ui-link:hover {
@@ -127,19 +134,28 @@
         }  
         
         
+        a.reference.ui-link:before{
+          text-decoration: none;
+          content: "(";
+        }
+        a.reference.ui-link:after{
+          text-decoration: none;
+          content: ")";
+        }
+          
         a.reference.ui-link {
-            border-left: 2px solid #000;
-            border-right: 2px solid #000;
-            border-bottom: 1px solid #aaa;
+            //border-left: 2px solid #000;
+            //border-right: 2px solid #000;
+            border-bottom: 1px dashed;
             text-decoration: none;
-            background-color: #cdf;
+            //background-color: #cdf;
             color: #000 !important;
             font-weight: normal !important;
             padding: 0px;
             margin: 0px;
-            padding-left: 5px;
-            padding-right: 5px;
-            border-radius: 8px;
+            //padding-left: 5px;
+            //padding-right: 5px;
+            //border-radius: 8px;
         }  
         
         a.reference.ui-link:hover {
@@ -323,7 +339,7 @@
         "type": "irradiated",
         "verbatim": "All transfusions from <a href=\"javascript: showWord('relatives')\" class=\"definition\">first- or second-degree relatives</a> should be irradiated, even if the patient is immunocompetent (1B).",
         "reference": "bcsh2010",
-        "rationale": "The immune system distinguishes the cells belonging to the host body from foreign donor cells (i.e. those introduced by transfusion) based on Human Leucocyte Antigens (HLA). GvHD occurr when blood from an HLA-homozygous donor is transfused into an HLA-heterozygous recipient who shares one of the donor's HLA haplotypes. This causes any transfused viable lymphocytes to mount an attack on the recipient cells, whilst the recipient immune system fail to recognise the transfused cells as foreign. First and second degree relatives are more likely to share HLA haplotypes than unrelated individual. This is because HLA is hereditary and HLA haplotypes are inherited from the mother and father. For more details, please refer to the Blood Bank Guy FAQ (opens in new window): <a target=\"_blank\" data-theme=\"b\" data-role=\"button\" href=\"http://www.bbguy.org/faq/family.asp\">Blood Bank Guy FAQ</a>"
+        "rationale": "<b>Summary</b><br/>It is important to irradiate blood from first and second degree relatives because it is more likely to contain cells which share HLA haplotypes with the recipient than blood from unrelated individuals. Shared HLA haplotypes is a risk factor for TA-GvHD.<br/><br/><b>What is HLA?</b><br/>The surface of cells are covered by Human Leucocyte Antigens (HLA). HLA  varies between individuals. It is composed of two haplotypes inherited from the mother and father.<br/><br/><b>The role of HLA in Transfusion Associated Graft versus Host Disease</b><br/>In a functioning system, cells covered by HLA differing from the body's own are identified as foreign and removed by the immune system. In TA-GvHD, blood from a donor who has a pair of identical HLA haplotypes (HLA-homozygous) is transfused into a recipient with two different HLA haplotypes (HLA-heterozygous) one of which is shared by the donor's HLA haplotypes. Thus the body's immune cells fail to recognise the transfused cells as foreign. This allows the transfused lymphocytes to multiply. They in turn recognise the body's cells as foreign and mount an attack.<br/><br/>For more details, refer to the Blood Bank Guy FAQ (opens in new window): <a target=\"_blank\" data-theme=\"b\" data-role=\"button\" href=\"http://www.bbguy.org/faq/family.asp\">Blood Bank Guy FAQ</a>"
         }]
     },
 
@@ -602,7 +618,7 @@
     "recommendation": [
         {
         "type": "irradiated",
-        "verbatim": "It is not necessary to irradiate red cells or platelets for adults or children with acute leukaemia, except for HLA-selected platelets or donations from <a href=\"javascript: showGlossary('relatives')\" class=\"glossary\">first- or second-degree relatives</a> (1B).",
+        "verbatim": "It is not necessary to irradiate red cells or platelets for adults or children with acute leukaemia, except for HLA-selected platelets or donations from <a href=\"javascript: showGlossary('relatives')\" class=\"definition\">first- or second-degree relatives</a> (1B).",
         "reference": "bcsh2010"
         },
         
@@ -664,7 +680,7 @@
         {
         "type": "irradiated",
         "text": "There is no need to irradiate platelets for pre-term or term infants, unless it has been donated by relatives or newborn has had previous in utero transfusion.",
-        "verbatim": "There is no need to irradiate other platelet transfusions for pre-term or term infants, unless they have been donated by <a href=\"javascript: showGlossary('relatives')\" class=\"glossary\">first- or second-degree relatives</a> (1C).",
+        "verbatim": "There is no need to irradiate other platelet transfusions for pre-term or term infants, unless they have been donated by <a href=\"javascript: showGlossary('relatives')\" class=\"definition\">first- or second-degree relatives</a> (1C).",
         "reference": "bcsh2010"
         },
         {
