@@ -159,7 +159,7 @@
             display: none;
             border-radius: 5px;
         }
-        
+
         #evaluation a {
             border: 1px solid #fff;
             text-decoration: none;
@@ -321,9 +321,9 @@
     "recommendation": [
         {
         "type": "irradiated",
-        "text": "All transfusions between relatives should be irradiated.",
-        "verbatim": "All transfusions from first- or second-degree relatives should be irradiated, even if the patient is immunocompetent (1B).",
-        "reference": "bcsh2010"
+        "verbatim": "All transfusions from <a href=\"javascript: showWord('relatives')\" class=\"definition\">first- or second-degree relatives</a> should be irradiated, even if the patient is immunocompetent (1B).",
+        "reference": "bcsh2010",
+        "rationale": "The immune system distinguishes the cells belonging to the host body from foreign donor cells (i.e. those introduced by transfusion) based on Human Leucocyte Antigens (HLA). GvHD occurr when blood from an HLA-homozygous donor is transfused into an HLA-heterozygous recipient who shares one of the donor's HLA haplotypes. This causes any transfused viable lymphocytes to mount an attack on the recipient cells, whilst the recipient immune system fail to recognise the transfused cells as foreign. First and second degree relatives are more likely to share HLA haplotypes than unrelated individual. This is because HLA is hereditary and HLA haplotypes are inherited from the mother and father. For more details, please refer to the Blood Bank Guy FAQ (opens in new window): <a target=\"_blank\" data-theme=\"b\" data-role=\"button\" href=\"http://www.bbguy.org/faq/family.asp\">Blood Bank Guy FAQ</a>"
         }]
     },
 
@@ -343,7 +343,7 @@
 
         {
         "type": "irradiated",
-        "verbatim": "As granulocyte cannot be <a href=\"javascript: showWord('leucodepletion')\" class=\"definition\">leucodepleted<\/a> and is usually given to immunocompromised patients, it is essential that the product be irradiated prior to transfusion to avoid graft-versus-host disease.",
+        "verbatim": "As granulocytes cannot be <a href=\"javascript: showWord('leucodepletion')\" class=\"definition\">leucodepleted<\/a> and is usually given to immunocompromised patients, it is essential that the product be irradiated prior to transfusion to avoid graft-versus-host disease.",
         "reference": "ukbts2012"
         },
         
@@ -355,7 +355,6 @@
 
         {
         "type": "cmv",
-        "text": "Polymerase chain reaction (PCR) monitoring should be considered to detect signs of CMV infection early.",
         "verbatim": "CMV PCR monitoring should be considered for all patients (even CMV negative/negative patients) to allow early detection of any possible CMV infection (whether transfusion-transmitted or otherwise acquired).",
         "reference": "sabto2012"
         }
@@ -394,7 +393,7 @@
         
         {
         "type": "cmv",
-        "text": "CMV infection is associated with cellular blood components, such as red cells, platelets and granulocytes. Non-cellular components, such as fresh frozen plasma, cryoprecipitate and other plasma-derived blood components do not need to be provided as CMV negative.",
+        "text": "CMV infection is associated with cellular blood components, such as red cells, tplatelets and granulocytes. Non-cellular components, such as fresh frozen plasma, cryoprecipitate and other plasma-derived blood components, do not need to be provided as CMV negative.",
         "verbatim": "Cell-associated viruses such as CMV and HTLV do not pose a risk to plasma-derived products.",
         "reference": "htm2007"
         }
@@ -411,22 +410,19 @@
     "recommendation": [
         {
         "type": "irradiated",
-        "text": "Red cells and platelets are cellular blood component which can transmit CMV infection and cause graft versus host disease. However, irradiated and/or cmv negative platelets and red cells are only indicated for at-risk patients. Cryopreserved red cells after deglycerolization are washed free of leucocytes and therefore do not require irradiation <a href=\"javascript: showSource('bcsh2010')\" class=\"reference\">BCSH 2010, p. 42<\/a>.",
+        "text": "Red cells and platelets contain lymphocytes (white cells) that can cause transfusion-associated Graft versus Host Disease (TA-GvHD). Cryopreserved red cells after deglycerolization do not require irradiation because they are washed free of leucocytes. Irradiated platelets and red cells are only indicated for at-risk patients. Please consult <a href=\"#list\" class=\"definition\">the list of indications</a>.",
         "verbatim": " For at-risk patients, all red cell, platelet and granulocyte components should be irradiated, except cryopreserved red cells after deglycerolization. It is not necessary to irradiate fresh frozen plasma, cryoprecipitate or fractionated plasma. (1B).",
         "reference": "bcsh2010"
         },        
-        
         {
         "type": "cmv",
-        "text": "CMV negative red cells and platelets are required for intrauterine transfusions and neonates.",
         "verbatim" : " CMV seronegative red cell and platelet components should be provided for intra-uterine transfusions and for neonates (ie up to 28 days post expected date of delivery), and therefore all small sized blood packs and other cellular blood components intended for neonates should be provided as CMV seronegative.",
         "reference": "sabto2012"
         },
         
         {
         "type": "cmv",
-        "text": "Women should be provided with CMV negative red cells and platelets during pregnancy, but not at delivery.",
-        "verbatim" : "CMV seronegative red cell and platelet components should be provided for elective transfusions during pregnancy (not during delivery).",
+        "verbatim" : "CMV seronegative red cell and platelet components should be provided for elective transfusions during pregnancy (not during delivery) regardless of maternal CMV serostatus.",
         "reference": "sabto2012"
         },
         
@@ -443,7 +439,6 @@
         },
         {
         "type": "cmv",
-        "text": "Polymerase chain reaction (PCR) monitoring should be considered to detect signs of CMV infection early.",
         "verbatim": "CMV PCR monitoring should be considered for all patients (even CMV negative/negative patients) to allow early detection of any possible CMV infection (whether transfusion-transmitted or otherwise acquired).",
         "reference": "sabto2012"
         }
@@ -553,7 +548,7 @@
     },
 
     {
-    "title": "Aplastic anaemia with ATG or Campath",
+    "title": "Aplastic anaemia receiving ATG or Campath",
     "defintion": "A form of anemia in which the bone marrow fails to produce adequate numbers of peripheral blood elements <a href=\"javascript:showSource('mesh2013')\" class=\"reference\">MESH 2013<\/a>.",
     "key": "aplastic",
     "type": "irradiated",
@@ -607,7 +602,7 @@
     "recommendation": [
         {
         "type": "irradiated",
-        "verbatim": "It is not necessary to irradiate red cells or platelets for adults or children with acute leukaemia, except for HLA-selected platelets or donations from first- or second-degree relatives (1B).",
+        "verbatim": "It is not necessary to irradiate red cells or platelets for adults or children with acute leukaemia, except for HLA-selected platelets or donations from <a href=\"javascript: showGlossary('relatives')\" class=\"glossary\">first- or second-degree relatives</a> (1B).",
         "reference": "bcsh2010"
         },
         
@@ -635,7 +630,7 @@
     "recommendation": [
         {
         "type": "cmv",
-        "verbatim" : "CMV seronegative red cell and platelet components should be provided for elective transfusions during pregnancy (not during delivery).",
+        "verbatim" : "CMV seronegative red cell and platelet components should be provided for elective transfusions during pregnancy (not during delivery) regardless of maternal CMV serostatus.",
         "reference": "sabto2012"
         },
         
@@ -669,7 +664,7 @@
         {
         "type": "irradiated",
         "text": "There is no need to irradiate platelets for pre-term or term infants, unless it has been donated by relatives or newborn has had previous in utero transfusion.",
-        "verbatim": "There is no need to irradiate other platelet transfusions for pre-term or term infants, unless they have been donated by first- or second-degree relatives (1C).",
+        "verbatim": "There is no need to irradiate other platelet transfusions for pre-term or term infants, unless they have been donated by <a href=\"javascript: showGlossary('relatives')\" class=\"glossary\">first- or second-degree relatives</a> (1C).",
         "reference": "bcsh2010"
         },
         {
@@ -775,7 +770,7 @@
     },
 
     {
-    "title": "Allogeneic haemopoietic stem cell transplant recipient",
+    "title": "Allogeneic haemopoietic stem cell transplant recipients",
     "definition": "Recipient of stem cells donated by a genetically non-identical donor.",
     "key":"stemcell",
     "type": "irradiated",
@@ -879,6 +874,7 @@
 
     // Store quiz performance
     var correctAnswers = 0;
+    var attempts = 0;
 
     // Array for random quiz list
     var quizQuestions = components.entries.slice(0);
@@ -992,9 +988,11 @@
     $( "#quiz" ).live ( "pageshow", function( event ) {
         
         
-        $('#quizRound').text('Question ' + (currentQuestion+1) + ' of ' + (quizQuestions.length));
+        $('#quizRound').text('Question ' + (currentQuestion+1) + ' of ' + (quizQuestions.length)) + " (" +Math.floor (correctAnswers/attempts) + "% correct)";
 
-        var articleText = (quizQuestions[currentQuestion].category.search('condition') > -1) ? "cellular blood components for patients with a history of": "cellular blood components for";
+  var componentString = 'red cells or platelets';
+
+        var articleText = (quizQuestions[currentQuestion].category.search('condition') > -1) ? componentString + " for patients with a current episode (or history) of" : componentString + " for";
         
         articleText = (quizQuestions[currentQuestion].category.search('component') > -1) ? "": articleText;
         
@@ -1008,9 +1006,9 @@
         questionString = quizQuestions[currentQuestion].title;
         }
         
-        questionString = (quizQuestions[currentQuestion].title.search('stem cell') > -1) ? "patients undergoing " + questionString: questionString;
+        questionString = (quizQuestions[currentQuestion].title.search('stem cell') > -1 && quizQuestions[currentQuestion].title.search('recipient') < 1 ) ? "patients undergoing " + questionString : questionString;
         
-        questionString = (quizQuestions[currentQuestion].category.search('treatment') > -1) ? "patients who have been treated with " + questionString: questionString;
+        questionString = (quizQuestions[currentQuestion].category.search('treatment') > -1 || quizQuestions[currentQuestion].category.search('drug') > -1) ? "patients who have been treated with " + questionString: questionString;
         
         questionString += (questionString.search(/transfusion/i) > -1) ? " be supplied?": " be transfused?";
         
@@ -1023,7 +1021,7 @@
         var quizDef = "";
         
         if (descriptionText) {
-            quizDef = '<div data-role="collapsible" data-collapsed="true" data-content-theme="b" data-theme="b"><h3>Description<\/h3><p>' + descriptionText + '<\/p><\/div>';
+            quizDef = '<div data-role="collapsible" data-collapsed="true" data-content-theme="b" data-theme="b"><h3>Details<\/h3><p>' + descriptionText + '<\/p><\/div>';
         }
         
         $('#quizDefinition').html(quizDef).trigger("create");
@@ -1121,6 +1119,7 @@
             quizQuestions.shuffle();
             currentQuestion = 0;
             correctAnswers = 0;
+            attempts = 0;
     }
 
 
@@ -1155,7 +1154,7 @@
     /* Generate quiz answer text based */
 
     function showAnswer (correctAnswer, component) {
-        
+	attempts ++;        
         $("#quizTitle").html('');
         $("#quizRecommendation").html('');
         $("#quizCorrect").html('');
@@ -1303,6 +1302,9 @@
         var cmvSource = '';
         var irrSource = '';
         
+        var cmvRationale = '';
+        var irrRationale = '';
+        
         
         
         var cmvCounter = 0
@@ -1332,6 +1334,12 @@
                 else {
                     irrText += '<li>"' + components.entries[id].recommendation[i].verbatim + '" <a href="javascript: showSource(' + "'" + components.entries[id].recommendation[i].reference + "'" + ')" class="reference">' + components.entries[id].recommendation[i].reference.toUpperCase() + '<\/a><\/li>';
                 }
+                
+                // Add rationale tab
+                
+                if (components.entries[id].recommendation[i].rationale) {
+                  irrRationale += '<li>' + components.entries[id].recommendation[i].rationale + '<\/li>';
+                }
             }
             
               // Repeat for cmv guidelines
@@ -1353,6 +1361,10 @@
                 else {
                     cmvText += '<li>"' + components.entries[id].recommendation[i].verbatim + '" <a href="javascript: showSource(' + "'" + components.entries[id].recommendation[i].reference + "'" + ')" class="reference">' + components.entries[id].recommendation[i].reference.toUpperCase() + '<\/a><\/li>';
                 }
+                
+                if (components.entries[id].recommendation[i].rationale) {
+                  cmvRationale += '<li>' + components.entries[id].recommendation[i].rationale + '<\/li>';
+                }
             }
 
         }
@@ -1364,21 +1376,22 @@
         var cmvSymbol = "alert";
         var irrTheme = "g";
         var cmvTheme = "g";
-        var irrHeading = "Irradiation required!";
-        var cmvHeading = "CMV negative required!";
+        var irrHeading = "Irradiation required.";
+        var cmvHeading = "CMV negative required regardless of serostatus.";
         var recommendationTheme = "#FDD";
         
         switch (recommendation) {
             
-            
+            // todo
             case "irradiated-cmv":
-                recommendationHeading = "Stop! <br/> Irradiation <i>and<\/i> CMV negative required!";
+		if (components.entries[id].title == "Granulocytes") { recommendationHeading = "Irradiation required.<br/>CMV negative required for CMV negative patients."; cmvHeading = 'CMV negative required for CMV negative patients.';}
+		else recommendationHeading = "Irradiation required. <br/>CMV negative required regardless of serostatus.";
                 icon = "red.png";
             break;
             
             
             case "irradiated":
-                recommendationHeading = "Stop! <br/> Irradiation  required!";
+                recommendationHeading = "Irradiation required.";
                 icon = "red.png";
                 cmvTheme = "h";
                 cmvSymbol = "check";
@@ -1387,7 +1400,7 @@
             
             
             case "cmv":
-                recommendationHeading = "Stop! <br/> CMV negative required!";
+                recommendationHeading = "CMV negative required regardless of serostatus.";
                 icon = "red.png";
                 irrTheme = "h";
                 irrSymbol = "check";
@@ -1396,7 +1409,7 @@
             
             
             case "maybe":
-                recommendationHeading = "Irradiation <i>and/or<\/i> CMV negative may be required!";
+                recommendationHeading = "Irradiation may be required.<br/>CMV negative may be required.";
                 icon = "yellow.png";
                 irrTheme = "e";
                 cmvTheme = "e";
@@ -1407,7 +1420,7 @@
             
             
             case "normal":
-                recommendationHeading = "Irradiated and CMV negative not required";
+                recommendationHeading = "Irradiation not required. <br/>CMV negative not required.";
                 icon = "green.png";
                 irrTheme = "h";
                 cmvTheme = "h";
@@ -1419,12 +1432,9 @@
             break;
             
         }
-        
-        
-        var headingHtml = '<div class="ui-grid-a" style="background: ' + recommendationTheme + '; border-radius: 10px; border: 1px solid #000;"><div class="ui-block-a custom" ><img src="' + icon +'" style="vertical-align: bottom; width:120px;" /><\/div><div class="ui-block-b custom"><h2 style="margin: 0px; margin-top: 1em;  line-height: 1em;">' + recommendationHeading + '<\/h2><\/div><\/div><br/>';
 
-        
-        
+        var headingHtml = '<div class="ui-grid-a" style="background: ' + recommendationTheme + '; border-radius: 10px; border: 1px solid #000;"><div class="ui-block-a custom" ><img src="' + icon +'" style="vertical-align: bottom; width:120px;" /><\/div><div class="ui-block-b custom"><h2 style="margin: 0px; margin-top: 0.1em; margin-bottom: 0.1em;  line-height: 1em;">' + recommendationHeading + '<\/h2><\/div><\/div><br/>';
+
         var irrHtml = '';
         var cmvHtml = '';
         var guidelinesHtml = '';
@@ -1438,6 +1448,10 @@
                 irrHtml += '<div data-role="collapsible"><h3>More details<\/h3><ol class="plainlist"> ' + irrSource + ' <\/ol><\/div>';
             }
             
+            if (irrRationale) {
+                irrHtml += '<div data-role="collapsible"><h3>Rationale<\/h3><ol class="plainlist"> ' + irrRationale + ' <\/ol><\/div>';
+            }
+            
             irrHtml += '<\/div><br/>';
         }
         
@@ -1448,6 +1462,11 @@
             
             if (cmvSource) {
                 cmvHtml += '<div data-role="collapsible" data-collapsed="true"><h3>More details<\/h3><ol class="plainlist"> ' + cmvSource + ' <\/ol><\/div>';
+            }
+            
+            
+            if (cmvRationale) {
+                cmvHtml += '<div data-role="collapsible"><h3>Rationale<\/h3><ol class="plainlist"> ' + cmvRationale + ' <\/ol><\/div>';
             }
             
             cmvHtml += '<\/div><br/>';
@@ -1473,6 +1492,8 @@
         
         var definition = components.entries[id].definition;
         var tags = components.entries[id].tags;
+	tags = ''; // hide tags
+	definition = ''; // hide description
         
         if (definition && tags) {
             $("#pageDefinition").html('<div data-role="collapsible-set" data-content-theme="b" data-theme="b"><div data-role="collapsible"><h3>Entry description<\/h3><p>' + definition + ' <\/p><\/div><div data-role="collapsible"><h3>Entry keywords<\/h3><p>' + tags + '<\/p><\/div><\/div>').trigger("create");
@@ -1667,9 +1688,9 @@
           </div>
           <div class="ui-block-b">
             <p style="text-align: right; padding-right:10px;">
-              Alpha 0.1<br />
+              Alpha 0.1.2<br />
               Updated<br />
-              17 Oct 2013
+              15 Feb 2014
             </p>
           </div>
         </div>
@@ -1690,7 +1711,7 @@
           </li>
           <li>Biomedical scientists who process blood requests.
           </li>
-          <li>Nurses and midwives who administer transfusions.
+          <li>Nurses and midwives who administer or prescribe transfusions.
           </li>
           <li>Medical trainees who may be required to undertake any of the above.
           </li>
@@ -1922,7 +1943,7 @@
           "javascript:%20showWord('leucodepletion')" class="definition">leucocyte
           depleted</a> <a href="javascript:%20showSource('bcsh2010');" class=
           "reference">SaBTO 2012, p.1</a>. However removal of leucocytes (white cells) is
-          not substitute for irradiation, which prevents TA-GvHD by inactivating residual
+          not a substitute for irradiation, which prevents TA-GvHD by inactivating residual
           donor lymphocytes <a href="javascript:%20showSource('bcsh2010');" class=
           "reference">BCSH 2010, p.49</a>.
         </p>
@@ -2376,6 +2397,26 @@
               </div>
             </div>
           </div>
+          <div data-role="collapsible" id="nhsgenetics">
+            <h3>
+              NHS NGGEC (no year)
+            </h3>
+            <p>
+              NHS National Genetics and Genomics Education Centre,
+              glossary item "First-degree relative".
+            </p>
+            <div class="ui-grid-a">
+              <div class="ui-block-a">
+                <a href="#" data-rel="back" data-icon="arrow-l" data-role="button"
+                data-theme="b">Back</a>
+              </div>
+              <div class="ui-block-b">
+                <a href="http://www.geneticseducation.nhs.uk/genetics-glossary/181-first-degree-relative" target="_blank"
+                data-icon="arrow-r" data-iconpos="right" data-role="button" data-theme=
+                "b">Open</a>
+              </div>
+            </div>
+          </div>
           <div data-role="collapsible" id="obu2010">
             <h3>
               OBU (2010)
@@ -2685,6 +2726,23 @@
               with white blood cells." <a href="javascript:%20showSource('htm2007');"
               class="reference">HTM 2007, p. 41</a>
             </p><a href="#" data-rel="back" data-icon="arrow-l" data-role="button"
+            data-theme="b">Back</a>
+          </div>
+          <div data-role="collapsible" id="relatives">
+            <h3>
+              First- or second-degree relatives
+            </h3>
+            <p>
+	      "The 'degree of relationship' describes the proportion of genes shared by two 
+              blood relatives. A person's first degree relative is a parent, sibling,  or 
+              child. A first degree relative shares about half of their genes with the person.
+	    </p>
+	    <p>
+	      A second degree relative of a person is an uncle, aunt, nephew, niece, 
+              grandparent, grandchild or half- sibling.  A second degree relative shares about
+              one quarter of their genes with the person." <a href="javascript:%20showSource('nhsgenetics');" class="reference">NHS NGGEC no year</a>.
+            </p>
+            <a href="#" data-rel="back" data-icon="arrow-l" data-role="button"
             data-theme="b">Back</a>
           </div>
           <div data-role="collapsible" id="irradiation">
