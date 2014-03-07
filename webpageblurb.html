@@ -20,30 +20,12 @@
       
         <h1>Welcome to <span class="special noline">SPECIAL</span></h1>
         
-        <p>This is the home page for the Scottish <span class="special noline">SPECIAL</span> online clinical trial.</p>
         
-        <p style="padding-left: 2em"><span class="special">S</span>top and <span class="special">P</span>revent <span class="special">E</span>rrors in <span class="special">C</span>MV-negative and <span class="special">I</span>rradiated blood transfusions through <span class="special">A</span>pp-based <span class="special">L</span>earning.</p>
+        <p style="margin: 1em; border: 1px dashed; padding: 0.5em; border-radius: 3px;"><span class="special">S</span>topping and <span class="special">P</span>reventing <span class="special">E</span>rrors in <span class="special">C</span>MV-negative and <span class="special">I</span>rradiated blood transfusions through <span class="special">A</span>pp-based <span class="special">L</span>earning.</p>
 
-        <p>Explore the sections below to find out more.</p>
+        <p>This is the home page for the Scottish <span class="special noline">SPECIAL</span> online clinical trial. Explore the sections below to find out more.</p>
         
         <div data-role="collapsibleset">
-        
-          <div data-role="collapsible">
-          
-            <h2>Objectives</h2>
-        
-            <ol>
-              <li>What is the current state of knowledge of the indications for irradiated and CMV-negative blood components among doctors and nurses who prescribe blood?<br/><br/></li>
-
-              <li>How do access to a mobile app influence prescription behaviour for irradiated and CMV-negative blood in simulated patient scenarios?<br/><br/></li>
-
-              <li>How do prescribers rate the mobile app and existing local and UK guidelines?</li>
-            
-            </ol>
-            
-          </div>
-          
-          
           
           <div data-role="collapsible">
           
@@ -56,12 +38,37 @@
             
             <p>Transfusion can also transmit cytomegalovirus (CMV) infection, which can lead to serious conditions in vulnerable patients. CMV-negative blood components should therefore be provided to these patients.</p>
             
-            <p>Every year approximately one hundred mistakes related to failures to provide irradiated and/or CMV negative blood components according to clinical guidelines are reported to the UK haemovigilance scheme SHOT.</p>
+            <p>Every year approximately one hundred mistakes related to failures to provide irradiated and CMV-negative blood components to patients according to guidelines are reported to the UK haemovigilance scheme SHOT.</p>
             
-            <p>This trial will investigate the effectiveness of an app-based learning intervention in reducing mistakes and raising awareness of the underlying causes.</p>
+            <p>This trial will investigate the effectiveness of an app-based learning intervention in enhancing prescribers' knowledge and raising awareness of the underlying causes.</p>
             
           </div>
           
+          <div data-role="collapsible">
+          
+            <h2>Objectives</h2>
+        
+            <ol>
+              <li>What is the current state of knowledge of the indications for irradiated and CMV-negative blood components among doctors and nurses who prescribe blood?<br/><br/></li>
+
+              <li>How do access to a mobile app influence prescription behaviour for irradiated and CMV-negative blood in simulated patient scenarios. How does this compare to existing practice?<br/><br/></li>
+
+              <li>How do prescribers rate the mobile app and existing interventions, such as local and UK guidelines?</li>
+            
+            </ol>
+            
+          </div>
+          
+          <div data-role="collapsible">
+            <h2>Methodology</h2>
+            <p>Randomised controlled trial comparing participants' prescribing behaviour under two conditions:</p>
+            <ol>
+              <li>Current practice based on local and national guidelines (control group).</li>
+              <li>A mobile app with the indications and learning material (treatment group)</li>
+            </ol>
+            <p>Participants are randomly allocated one of the trial arms.</p>
+            <p>To provide a base-line, and weighing of the groups, participants are asked to answer a pre- and post-test involving simulated patient scenarios.</p>
+          </div>
           
           <div data-role="collapsible">
             <h2>Protocol</h2>
@@ -89,22 +96,24 @@
           
       
                 
-        <h1>Participate in the trial</h1>
+        <h1>Participate</h1>
         
-        <p><strong>The trial is currently active and recruiting</strong>. If you match the inclusion criteria, we would like to invite you to participate in the trial.</p>
+        <p style="text-align: center; margin: 1em; border: 1px dashed; padding: 0.5em; border-radius: 3px;"><strong>The trial is currently active and recruiting.</strong></p>
+
+        <p>If you match the inclusion criteria, please read the terms of participation and join the trial.</p>
         
         <div data-role="collapsibleset">
           <div data-role="collapsible">
             <h2>Inclusion criteria</h2>
+            
+            <p>Inclusion criteria:</p>
             <ul>
-              <li>Qualified nurse authoriser based on Scotland.</li>
-              <li>Doctor attached to the NHS Greater Glasgow and Clyde healthboard.</li>
+              <li>Nurses and doctors authorised to prescribe blood transfusion and who are working in Scotland.</li>
             </ul>
-            <p>Exclusion criteria</p>
+            <p>Exclusion criteria:</p>
             <ul>
               <li>Nurses who do not have blood transfusion authoriser status.</li>
-              <li>Nurses outside of Scotland</li>
-              <li>Doctor attached healthboards other than NHS Greater Glasgow and Clyde.</li>
+              <li>Nurses and doctors working outside of Scotland.</li>
             </ul>
             
           </div>
@@ -113,10 +122,15 @@
             <h2>Terms of participation</h2>
           </div>
 
-        <p>By proceeding you are indicating that you agree to the terms of participation and give your informed consent.</h2>
+        <p>By proceeding you are indicating your informed consent to participate in the research.</p>
+        
+        <p>Select your Health Board to begin:</p>
 
-        <a href="randomise.php" data-role="button">Click here to proceed</a>
+        <a href="randomise.php?board=glasgow" data-role="button">Greater Glasgow and Clyde</a>
 
+        <a href="randomise.php?board=other" data-role="button">Other Scottish Health Board</a>
+        
+        <a href="javascript: alert('Sorry, you do not match the inclusion criteria. The trial is recruiting Scottish nurses and doctors only.')" data-role="button">I'm working outside Scotland</a>
       </div>
     
     </div>
