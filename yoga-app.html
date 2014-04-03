@@ -1,0 +1,382 @@
+<html>
+<head>
+<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
+
+
+<script>
+
+var  words = [
+
+
+{
+"class": "body",
+"English": "head",
+"French": "la tête"
+}, 
+
+{
+"class": "body",
+"English": "neck",
+"French": "le cou"
+}, 
+{
+"class": "body",
+"English": "shoulders",
+"French" : "les épaules"
+}, 
+
+{
+"class": "body",
+"English": "arm",
+"French" : "le bras"
+},
+
+{
+"class": "body",
+"English": "elbow",
+"French" : "coude"
+}, 
+
+ {
+"class": "body",
+"English": "wrist",
+"French" : "poignet"
+},  
+
+ {
+"class": "body",
+"English": "hand",
+"French" : "le main"
+},  
+
+ {
+"class": "body",
+"English": "fingers",
+"French" : "doigt(s)"
+},  
+{
+"class": "body",
+"English": "spine",
+"French" : "colonne vertébral"
+},  
+
+{
+"class": "body",
+"English": "hips",
+"French" : "hanches"
+},  
+{
+"class": "body",
+"English": "thigh",
+"French" : "cuisse(s)"
+},  
+{
+"class": "body",
+"English": "knee",
+"French" : "genou"
+},  
+{
+"class": "body",
+"English": "ankle",
+"French" : "cheville"
+},  
+{
+"class": "body",
+"English": "foot",
+"French" : "le pied"
+},  
+{
+"class": "body",
+"English": "toes",
+"French" : "les orteils"
+},  
+{
+"class": "body",
+"English": "face",
+"French" : "le visage"
+},  
+{
+"class": "body",
+"English": "leg",
+"French" : "la jambe"
+},  
+{
+"class": "body",
+"English": "front of the body",
+"French" : "devant du corps"
+},  
+{
+"class": "body",
+"English": "back of the body",
+"French" : "l'arrière du corps"
+},  
+{
+"class": "verb",
+"English": "to breathe",
+"French" : "respirer"
+},  
+{
+"class": "verb",
+"English": "breathe in",
+"French" : "humer"
+},  
+
+{
+"class": "verb",
+"English": "breathe out",
+"French" : "expirer"
+}, 
+{
+"class": "verb",
+"English": "bend forwards",
+"French" : "se pencher en avant"
+},
+{
+"class":"verb",
+"English":"bend backwards",
+"French":"pliez vers l'arrière"
+},
+{
+"class": "posture",
+"English": "Mountain",
+"French" : "La montagne",
+"Sanskrit": "Tadasana",
+"Benefits": "Brings lightness to the body.Relieves tension in back and shoulders"
+},  
+{
+"class": "posture",
+"English": "Cat",
+"French" : "Le chat �  quatre pattes",
+"Sanskrit": "Marjaryasana",
+"image":"http://www.healtouch.com/yoga/cat.jpg",
+"Benefits": "Brings flexibility to the spine, strengthens wrists and shoulders, massages the digestive organs and improves digestion."
+},  
+{
+"class": "posture",
+"English": "Dog",
+"French" : "Le Chien",
+"Sanskrit": "Adho Mukha Svanasana",
+"image":
+"http://farm4.staticflickr.com/3573/3403834407_3944874ff8_n.jpg",
+"Benefits":"Calms the brain, energises the body, helps relieve fatigue."
+},
+{
+"class": "posture",
+"English": "Triangle",
+"French" : "La posture du triangle",
+"Sanskrit": "Trikonasana",
+"image":"http://yoga.org.nz/postures/images/mainpage/triangle.jpg",
+"Benefits": "Brings stability and firmness to body and mind"
+},  
+{
+"class": "posture",
+"English": "Reverse triangle",
+"French" : "Le Triangle contraire",
+"Sanskrit": "Parivrtta Trikonasana",
+"image":"http://health.indianetzone.com/yoga/hathyoga/images/hathyoga_091.jpg",
+"Benefits": "Increases flexibilty of the hips and spine, opens rib-cage,chest and heart"
+}, 
+{
+"class": "posture",
+"English": "Cobbler pose",
+"French" : "Le cordonnier",
+"Sanskrit": "Baddha Konasana",
+"image":"http://upload.wikimedia.org/wikipedia/commons/6/64/Baddha_konasana.jpg",
+"Benefits": "Brings life to the feet, moves the hips"
+},  
+{
+"class": "posture",
+"English": "Warrior",
+"French" : "Le guerrier/ La guerrière",
+"Sanskrit": "Virabhadrasana",
+"image": "http://upload.wikimedia.org/wikipedia/commons/a/a6/Virabhadrasana_I_-_Warrior_Pose_I.jpg",
+"Benefits":"Strengthens the legs, opens the front of the body, energises"
+},  
+{
+"class": "posture",
+"English": "Bridge",
+"French" : "La posture du pont",
+"Sanskrit": "Setu Bandha Sarvangasana",
+"image":"http://www.yogason.com/setubandhasan.jpg",
+"video":"Hbpba3F_0z8",
+"Benefits":"Brings movement through whole body, opens up solar plexus"
+},
+{
+"class": "posture",
+"English": "Tree pose",
+"French" : "La posture de l'arbre",
+"Sanskrit": "Vrkasana",
+"image":"http://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Vrksasana.jpg/212px-Vrksasana.jpg",
+"Benefits": "Improves balance, brings calmness to mind and body"
+},
+{"class": "posture",
+"English": "Cobra pose",
+"French": "La posture du Cobra",
+"Sanskrit": "Bhujangasana",
+"Benefits":"Strengthens the back , opens front of body and chest"
+},
+{
+"class": "posture",
+"English": "Sun Salutation",
+"French": "La salutation du soleil",
+"Sanskrit": "Surya Namaskar",
+"Benefits": "Wakes up the whole body, increases mobility to hips and legs"
+},
+{
+"class": "posture",
+"English": "Peacock",
+"French": "Le paon",
+"Sanskrit": "Pincha Mayurasana",
+"Benefits": "Wakens the spine, brings aliveness to the body"
+},
+{
+"class": "posture",
+"English": "Shoulderstand",
+"French": "La posture sur les épaules",
+"Sanskrit": "Salamba Sarvangasana",
+"image":"http://www.healthcare-natural.com/weight_loss/img/yoga1.jpg",
+"Benefits":"Brings balance and harmony to whole body"
+},
+{
+"class": "posture",
+"English": "Half-Moon Pose",
+"French": "Find",
+"Sanskrit": "Ardha Chandrasana",
+"image":"http://www.eastclareyoga.com/info/info/postures_files/ardha-chand",
+"Benefits": "Strengthens legs, improves balance, opens front of body"
+},
+{
+"class": "posture",
+"English": "Child Pose",
+"French": "La posture de l'enfant",
+"Sanskrit": "Pindasana",
+"image":"http://www.divernetxtra.com/technique/pics/0404yoga2.jpg",
+"Benefits": "A restful posture"
+},
+];
+
+
+function showWord (wordIndex) {
+
+    
+    // this updates the words details page
+    var translation ="<h1 style='color:red'>"+ words[wordIndex].English +"</h1>";
+    
+    if (words[wordIndex].French){
+        translation +="<h2 style='color:blue'>"+ words[wordIndex].French +"</h2>";
+    }
+    
+    if (words[wordIndex].Sanskrit){
+        translation +="<h2 style='color:green'>"+words[wordIndex].Sanskrit+"</h2>";
+    }
+    
+    if (words[wordIndex].image){
+        translation +='<img src="'+words[wordIndex].image+'">';
+;
+    }
+    
+    if (words[wordIndex].video){
+        translation +='<br/><br/><iframe width="100%" height="315" src="//www.youtube.com/embed/' + words[wordIndex].video + '" frameborder="0" allowfullscreen></iframe>';
+;
+    }
+    if (words[wordIndex].Benefits){
+        translation +="<h3 style='color:purple'>"+words[wordIndex].Benefits+"</h3>";
+    }
+    var wordContainer = document.getElementById("wordDetails");
+    wordContainer.innerHTML = translation;
+
+    // this opens the word details page
+    $.mobile.changePage('#item', {role: 'dialog'});   
+
+}
+
+function sortByKey(array, key) {
+    return array.sort(function(a, b) {
+        var x = a[key]; var y = b[key];
+        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+    });
+}
+
+words = sortByKey(words, 'English');
+
+$( "#list" ).live ( "pageinit", function( event ) {
+ 
+ 
+
+ $("#wordList").append ('<li data-role="list-divider">Yoga postures</li>');
+    
+     for (i=0; i<words.length; i++) {
+        if(words[i].class == "posture")
+       { $("#wordList").append ('<li><a data-role="button" href="javascript: showWord(' + i + ');"><img data-icon="true" src="' + words[i].image + '">' + words[i].English  + '</a></li>');}
+
+}
+ $("#wordList").append ('<li data-role="list-divider">Names of body parts</li>');
+ 
+    for (i=0; i<words.length; i++) {
+        if(words[i].class == "body")
+       { $("#wordList").append ('<li><a data-role="button" href="javascript: showWord(' + i + ');">' + words[i].English  + '</a></li>');}
+    }
+   
+ $("#wordList").append ('<li data-role="list-divider">Verbs</li>');
+ for (i=0; i<words.length; i++) {
+        if(words[i].class == "verb")
+       { $("#wordList").append ('<li><a data-role="button" href="javascript: showWord(' + i + ');">' + words[i].English  + '</a></li>');}
+    }
+
+ // this makes sure the buttons are styled
+    $("#wordList").listview("refresh");
+});
+
+</script>
+</head>
+
+<body>
+
+    <div data-role="page" id="list">
+
+        <div data-role="header"<div  data-role="header">
+            <h1>English words </h1>
+        </div>
+
+        <div data-role="content">
+        
+            <ul data-role="listview" id="wordList" data-filter="true" ></ul>
+        
+        </div>
+        
+        <div data-role="footer">
+            <h1>&copy; Beldon 2013</h1>
+        </div>
+
+    </div>
+    
+    
+    
+    <div data-role="page" id="item">
+
+        <div data-role="header">
+        <h1 id="make">word details</h1>
+        </div>
+
+
+        <div data-role="content">
+        
+        <center>
+            <div id="wordDetails">Insert name and picture here</div>
+        </center>
+        
+        <a href="#" data-rel="back" data-role="button">Back</a>
+        
+        </div>
+
+        <div data-role="footer">
+            <h1>&copy; Beldon 2013</h1>
+        </div>
+
+    </div>
+    
+
+</body>
+</html>
