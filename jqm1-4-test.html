@@ -7,11 +7,104 @@
 <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
 
-
 <script>
+
+
+/*
+var pageObject = {
+  section1 : [
+    {
+      title : "page 1",
+      summary : "page 1",
+      content: [
+        {
+          text
+          images
+          quiz
+          references
+          
+        }
+      ],
+      footer: "footer"
+    },
+    {
+      title : "page 2",
+      content: "some other text",
+      footer: "footing"
+    }
+  ]
+};
+
+console.log (pageObject.pages[0]);
+*/
+
+    
+$(document).on("mobileinit", function() {
+
+    alert ("ready");
+    
+    /*
+    
+  // views
+  
+  var templates = {
+    plain : {
+      html : '<div data-role="page" id="{{page-id}}" class="main-app"><div data-role="header"><h1>{{app-name}}</h1></div><div role="main" class="ui-content"><h1>{{page-title}}</h1>{{page-content}}</div><div data-role="footer"><h4>{{page-footer}}</h4></div></div>'
+    },
+    indications : {},
+    quiz : {},
+    glossary : {},
+    references : {}
+  };
+  
+  
+  // model
+  
+  var pages = [
+      {
+        title : "page 1",
+        content: "some text",
+        footer: "footer"
+      },
+      {
+        title : "page 2",
+        content: "some other text",
+        footer: "footing"
+      }
+    ];
+  
+  
+  // controller
+  
+  var pageCounter = 0;
+  
+  $.each (pages, function (key, value) {
+    
+    pageCounter ++;
+    console.log (value.title);
+    var tempPage = templates.plain.html
+     .replace("{{page-id}}","page" + pageCounter)
+     .replace("{{page-title}}", value.title)
+     .replace("{{page-footer}}", value.footer)
+     .replace("{{page-content}}", value.content);
+    
+    var pageDom = $(tempPage);
+    pageDom.appendTo($.mobile.pageContainer);
+    //go to it
+    //$.mobile.pageContainer.pagecontainer("change", pageDom);
+  });
+*/
+
+
+});
 
 $( document ).on( "pagecreate", ".main-app", function( event ) {
   
+  
+  
+  
+  
+  /*
   var htmlSnippet = '<div data-role="page" id="page1" class="main-app"><div data-role="header"><h1>Title</h1></div>';
   
   var newDynamicPage = $(htmlSnippet);
@@ -20,7 +113,9 @@ $( document ).on( "pagecreate", ".main-app", function( event ) {
   //go to it
   //$.mobile.pageContainer.pagecontainer("change", newDynamicPage );
   
-      
+    */
+    
+    
 	var search,
 		page = $( this ),
 		that = this,
@@ -96,6 +191,8 @@ $( document ).on( "pagecreate", ".main-app", function( event ) {
   
   	<div role="main" class="ui-content">
   		<p>Page content goes here.</p>
+  		<a href="#page1">Go to page 1</a>
+  		<a href="#page1">Go to page 2</a>
   	</div><!-- /content -->
   	
   	<div data-role="footer">
