@@ -12,6 +12,15 @@
 
 $( document ).on( "pagecreate", ".main-app", function( event ) {
   
+  var htmlSnippet = '<div data-role="page" id="page1" class="main-app"><div data-role="header"><h1>Title</h1></div>';
+  
+  var newDynamicPage = $(htmlSnippet);
+  //append it to the page container
+  newDynamicPage .appendTo($.mobile.pageContainer);
+  //go to it
+  //$.mobile.pageContainer.pagecontainer("change", newDynamicPage );
+  
+      
 	var search,
 		page = $( this ),
 		that = this,
@@ -24,20 +33,14 @@ $( document ).on( "pagecreate", ".main-app", function( event ) {
 		text = ver;
 		
 		
-		
 	// Global navmenu panel
-	$( ".jqm-navmenu-panel ul" ).listview();
-	
-	
-	$( ".jqm-navmenu-link" ).on( "click", function() {
-		page.find( ".jqm-navmenu-panel:not(.jqm-panel-page-nav)" ).panel( "open" );
-	});
+	$( "#menu-panel ul" ).listview();
 	
 		
 		
-		
-		
-	$( document ).on( "panelopen", ".jqm-search-panel", function() {
+  // Search panel
+  
+	$( document ).on( "panelopen", "#search-panel", function() {
 		$( this ).find( "input" ).focus();
 	})
 
@@ -86,19 +89,22 @@ $( document ).on( "pagecreate", ".main-app", function( event ) {
   <div data-role="page" class="main-app">
   
   	<div data-role="header">
-  		<a href="#" class="jqm-navmenu-link ui-btn ui-btn-icon-notext ui-corner-all ui-icon-bars ui-nodisc-icon ui-alt-icon ui-btn-left">Menu</a>
+  		<a href="#menu-panel" class="jqm-navmenu-link ui-btn ui-btn-icon-notext ui-corner-all ui-icon-bars ui-nodisc-icon ui-alt-icon ui-btn-left">Menu</a>
   		<a href="#" class="jqm-search-link ui-btn ui-btn-icon-notext ui-corner-all ui-icon-search ui-nodisc-icon ui-alt-icon ui-btn-right">Search</a>
-  		<h1>Page Title</h1>
+  		<h1>Special Blood</h1>
   	</div><!-- /header -->
   
   	<div role="main" class="ui-content">
   		<p>Page content goes here.</p>
   	</div><!-- /content -->
   	
+  	<div data-role="footer">
+  		<h4>Page Footer</h4>
+  	</div><!-- /footer -->
   	
-	    <div data-role="panel" class="jqm-navmenu-panel" data-position="left" data-display="overlay" data-theme="a">
+	    <div data-role="panel" id="menu-panel" data-position="left" data-display="overlay" data-theme="a">
 	    	<ul class="jqm-list ui-alt-icon ui-nodisc-icon">
-<li data-filtertext="demos homepage" data-icon="home"><a href=".././">Home</a></li>
+<li data-filtertext="demos homepage" data-icon="home"><a href="#page1">Home</a></li>
 <li data-filtertext="introduction overview getting started"><a href="../intro/" data-ajax="false">Introduction</a></li>
 <li data-filtertext="buttons button markup buttonmarkup method anchor link button element"><a href="../button-markup/" data-ajax="false">Buttons</a></li>
 <li data-filtertext="form button widget input button submit reset"><a href="../button/" data-ajax="false">Button widget</a></li>
@@ -287,10 +293,6 @@ $( document ).on( "pagecreate", ".main-app", function( event ) {
 		     </ul>
 		</div><!-- /panel -->
   
-  	<div data-role="footer">
-  		<h4>Page Footer</h4>
-  	</div><!-- /footer -->
-  	
   	
       <div data-role="panel" class="jqm-search-panel" data-position="right" data-display="overlay" data-theme="a">
   		<div class="jqm-search">
