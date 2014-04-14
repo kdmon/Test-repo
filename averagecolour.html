@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  
+    <style type='text/css'>
+      
+      body {
+          line-height: 1.2em;
+          background: #000;
+          color: #ccc;
+          margin: 0px;
+          padding: 5px;
+      }
+      
+      #gallery {
+          background: #000;
+          margin: 0px;
+          padding: 3px;
+      }
+      
+      #gallery img {
+          max-width: 120px;
+          height: 120px;
+          display: inline;
+          margin-left: 3px;
+          padding: 1px;
+          border-right: 150px solid #FFF;}
+      
+      .del:hover {opacity: 0.5;}
+      
+    </style>
+    
+    <script type='text/javascript' src='//code.jquery.com/jquery-1.9.1.js'></script>
+    
+    
+    <script type='text/javascript'>
+      
+      $("#add").on("click", function () {
+          
+          var sourceUrl = prompt("Please enter image URL","http://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Bufotes_balearicus_female_quadrat.jpg/600px-Bufotes_balearicus_female_quadrat.jpg");
+      
+          addImg(sourceUrl);    
+      });
+      
+      
+      // Insert image in gallery and add click event
+      // listener to remove the added image.
+      
+      function addImg (sourceUrl) {
+      
+          var img = document.createElement('img');
+          
+          img.onload = function(e) {
+      
+              document.getElementById("gallery").appendChild(this);
+              var colwidth = 200 - $(this).width();
+              var rgb = getAverageRGB(img);
+              $(this).css('border-right', colwidth + 'px solid rgb('+rgb.r+','+rgb.g+','+rgb.b+')');
+              $(this).addClass('del');
+                      
+              $(this).click( function () {
+                  if (confirm("Are you sure you want to remove this image?")) $(this).remove();
+              });
+          }
+          
+          // Server will need CORS support or
+          // image must reside on the same domain
+          img.crossOrigin = '';
+          img.src = sourceUrl;
+      }
+      
+      
+      
+      // Calculate average colour of image.
+      
+      function getAverageRGB(imgEl) {
+          
+          var blockSize = 5, // only visit every 5 pixels
+              defaultRGB = {r:0,g:0,b:0}, // for non-supporting envs
+              canvas = document.createElement('canvas'),
+              context = canvas.getContext && canvas.getContext('2d'),
+              data, width, height,
+              i = -4,
+              length,
+              rgb = {r:0,g:0,b:0},
+              count = 0;
+              
+          if (!context) {
+              return defaultRGB;
+          }
+          
+          height = canvas.height = imgEl.naturalHeight || imgEl.offsetHeight || imgEl.height;
+          width = canvas.width = imgEl.naturalWidth || imgEl.offsetWidth || imgEl.width;
+          
+          context.drawImage(imgEl, 0, 0);
+          
+          try {
+              data = context.getImageData(0, 0, width, height);
+          } catch(e) {
+              /* security error, img on diff domain */alert('Error: cross domain restriction encountered. Try again with a different image URL');
+              return defaultRGB;
+          }
+          
+          length = data.data.length;
+          
+          while ( (i += blockSize * 4) < length ) {
+              ++count;
+              rgb.r += data.data[i];
+              rgb.g += data.data[i+1];
+              rgb.b += data.data[i+2];
+          }
+          
+          // ~~ used to floor values
+          rgb.r = ~~(rgb.r/count);
+          rgb.g = ~~(rgb.g/count);
+          rgb.b = ~~(rgb.b/count);
+          
+          return rgb;
+          
+      }
+      
+      
+      // add some sample images from wikipedia
+      
+      addImg("http://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Volvariella_bombycina1.jpg/360px-Volvariella_bombycina1.jpg");
+      
+      addImg("http://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Garzweiler_Tagebau-1230.jpg/320px-Garzweiler_Tagebau-1230.jpg");
+      
+      addImg("http://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Euromaidan_in_Kiev_2014-02-19_12-06.jpg/320px-Euromaidan_in_Kiev_2014-02-19_12-06.jpg");
+      
+      addImg("http://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Immaculate_Conception_Church_Altar%2C_Farm_Street%2C_London%2C_UK_-_Diliff.jpg/227px-Immaculate_Conception_Church_Altar%2C_Farm_Street%2C_London%2C_UK_-_Diliff.jpg");
+      
+      addImg("http://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Orchis-mascula-Formation.jpg/297px-Orchis-mascula-Formation.jpg");
+      
+    </script>
+  
+  </head>
+  
+  
+  <body>
+    <h1>Average colour prototype</h1>
+    <p>Click on an image to remove it from the gallery or add a new image by pressing the "add image" button below.</p>
+    <br/>
+    <div id="gallery"></div>
+    <hr/>
+    <button id="add">Add image</button>
+    <br/><br/><br/>
+    <p>Sample images from Wikipedia.</p>
+      
+  </body>
+
+</html>
