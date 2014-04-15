@@ -19,8 +19,8 @@
       }
       
       #gallery img {
-          max-width: 120px;
-          height: 120px;
+          max-width: 150px;
+          height: 150px;
           display: inline;
           margin-left: 3px;
           padding: 1px;
@@ -34,13 +34,6 @@
     
     
     <script type='text/javascript'>
-      
-      $("#add").on("click", function () {
-          
-          var sourceUrl = prompt("Please enter image URL","http://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Bufotes_balearicus_female_quadrat.jpg/600px-Bufotes_balearicus_female_quadrat.jpg");
-      
-          addImg(sourceUrl);    
-      });
       
       
       // Insert image in gallery and add click event
@@ -132,6 +125,15 @@
       
       addImg("http://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Orchis-mascula-Formation.jpg/297px-Orchis-mascula-Formation.jpg");
       
+     $( document ).ready( function () {
+       
+        $("#add").click(function () {
+            var sourceUrl = prompt("Please enter image URL","http://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Bufotes_balearicus_female_quadrat.jpg/600px-Bufotes_balearicus_female_quadrat.jpg");
+            addImg(sourceUrl);
+        });
+        
+     });
+
     </script>
   
   </head>
