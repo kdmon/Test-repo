@@ -1,6 +1,6 @@
 body {
   padding: 10px;
   border: 101px red solid;
-  background: green;
+  background: green !important;
   font-size: 5em;
 }
