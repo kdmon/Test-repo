@@ -4,3 +4,10 @@ body {
   background: green !important;
   font-size: 5em;
 }
+
+.ui-content {
+  padding: 100px;
+  border: 101px red solid;
+  background: blue !important;
+  font-size: 5em;
+}
