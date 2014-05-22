@@ -1203,19 +1203,27 @@ document.getElementById(iframeId).onload = function() {
           </ul>
           <div id="viewcontainer">
             <div id="listmenu">
-              <div data-role="controlgroup" data-type="horizontal" data-mini="true" style="margin-left: 5px;"> <a href="#filebrowser" data-role="button"><i class="fa fa-folder-open fa-2x"></i> <span class="menulabel">Open</span></a>
+              <div data-role="controlgroup" data-type="horizontal" data-mini="true">
+                <a href="#filebrowser" data-role="button"><i class="fa fa-folder-open fa-2x"></i> <span class="menulabel">Open</span></a>
                 <a class="ui-not-disabled" data-role="button" href="#commit"><i class="fa fa-save fa-2x"></i> <span class="menulabel">Save</span></a>
+                <a class="ui-disabled" data-role="button"></a>
                 <a href="#history" data-role="button"><i class="fa fa-history fa-2x"></i> <span class="menulabel">History</span></a>
+                <a href="#undo" data-role="button"><i class="fa fa-reply fa-2x"></i> <span class="menulabel">History</span></a>
+                <a href="#redo" data-role="button"><i class="fa fa-share fa-2x"></i> <span class="menulabel">History</span></a>
+                <a class="ui-disabled" data-role="button"></a>
                 <a href="#collaborate" data-role="button" data-shadow="true"><i class="fa fa-comment fa-2x"></i> <span class="menulabel">Chat</span><span class="ui-li-count">999</span></a>
                 <a href="#errors" data-role="button"><i class="fa fa-warning fa-2x"></i> <span class="menulabel">Errors</span> <span class="ui-li-count error">9</span></a>
                 <a href="#options" data-role="button"><i class="fa fa-wrench fa-2x"></i> <span class="menulabel">Config</span></a>
+                <a class="ui-disabled" data-role="button"></a>
                 <a href="#" data-role="button" onclick="beautify();"><i class="fa fa-tasks fa-2x"></i> <span class="menulabel">Beautify</span></a>
                 <a href="#" data-role="button" onclick="scroll(true)"><i class="fa fa-long-arrow-up fa-2x"></i> <span class="menulabel">Scroll up</span></a>
                 <a href="#" data-role="button" onclick="scroll(false)"><i class="fa fa-long-arrow-down fa-2x"></i> <span class="menulabel">Scroll down</span></a>
+                <a class="ui-disabled" data-role="button"></a>
                 <a href="javascript: runCode();" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-play fa-2x"></i></a>
                 <a href="javascript: runCode(true);" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-stop fa-2x"></i></a>
                 <a href="javascript: runCode(true);" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-cog fa-2x"></i></a>
                 <a href="#collaborate" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-external-link fa-2x"></i></a>
+              </div>
                 <select name="select-choice-a" id="appsize" onchange="setAppSize()" data-native-menu="false" size="20">
                   <option>Mobile device resolution</option>
                   <option value="0">Hide preview</option>
@@ -1228,7 +1236,6 @@ document.getElementById(iframeId).onload = function() {
                   <option value="800">800 (Nexus 10, Kindle HD)</option>
                   <option value="1024">1024 (iPad landscape)</option>
                 </select>
-              </div>
             </div>
             <ul id="dashboard" style="overflow: auto; position: relative;">
               <li class="dashlet">
