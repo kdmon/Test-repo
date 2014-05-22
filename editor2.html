@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript">
+      $(document).bind('mobileinit', function() {
+        // disable ajax loading - interfers with URL rewrites
+        // $.mobile.ajaxEnabled = false;
+        // Prevent active state (blue buttons)
+        $.mobile.activeBtnClass = 'aBtnSelector';
+      });
+    </script>
+    <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
+    <script src="http://simplewebrtc.com/latest.js"></script>
+    <script src="/js/src-noconflict/ace.js" type="text/javascript"></script>
+    <script src="/js/src-noconflict/ext-language_tools.js" type="text/javascript"></script>
+    <script src="/js/src-noconflict/ext-emmet.js"></script>
+    <script src="/js/emmet.js"></script>
+    <script src="/js/src-noconflict/ext-modelist.js"></script>
+    <script src="/js/src-noconflict/ext-beautify.js"></script>
+    <script src="http://it4se.com:8080/channel/bcsocket.js"></script>
+    <script src="http://it4se.com:8080/share/share.uncompressed.js"></script>
+    <script src="/js/share_ace.js" type="text/javascript"></script>
+    <script src="/js/qrcode.min.js" type="text/javascript"></script>
+    <script src="/js/gitwrap.js" type="text/javascript"></script>
+    <script src="/js/beautify.js"></script>
+    <script src="/js/beautify-css.js"></script>
+    <script src="/js/beautify-html.js"></script>
+    <script src="/js/jquery.ui.touch-punch.min.js"></script>
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css" />
+    <style type="text/css" media="screen">
+      .ui-mobile,
+      .ui-mobile body {
+        height: 100% !important;
+      }
+      .editor,
+      .preview,
+      .preview iframe {
+        text-shadow: none;
+        float: left;
+      }
+      .preview iframe {
+        overflow: hidden;
+        border: none;
+        background: rgba(155, 155, 155, 0.3);
+      }
+      .preview iframe:hover {
+        overflow: auto;
+      }
+      #tablist,
+      #tablist li {
+        list-style-type: none;
+        display: inline-block;
+        padding: 0px;
+        margin: 0px;
+        //    overflow: hidden;
+
+      }
+      #filelist li .ui-btn {
+        font-size: 12px !important;
+        padding: 8px 3px 8px 3px;
+      }
+      #tablist li a {
+        display: inline;
+      }
+      #remoteVideos video {
+        width: 150px;
+      }
+      #localVideo {
+        width: 150px;
+      }
+      #viewcontainer {
+        clear: both;
+        margin: 4px;
+        padding: 0px;
+        overflow: hidden;
+        box-shadow: 0px 0px 10px 2px rgba(155, 155, 155, 0.5);
+        background: rgba(155, 155, 155, 0.5);
+        border-radius: 5px;
+        background: url("img/wood.png");
+      }
+      #tablist {
+        width: 100%;
+        line-height: 2em;
+        background: rgba(155, 155, 155, 0.2);
+        box-shadow: 0 0 10px 2px rgba(155, 155, 155, 0.5);
+      }
+      #tabmenu {
+        float: left;
+        padding: 0px;
+      }
+      #listmenu {
+        width: 65px;
+        height: 100%;
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        z-index: 99999;
+      }
+      .ui-panel-wrapper,
+      .ui-panel {
+        margin-left: 65px;
+        background: url("img/paper.png");
+      }
+      #listmenu .ui-btn {
+        background: rgba(155, 155, 155, 0.2);
+        border: 2px solid transparent;
+        margin: 2px;
+        border-radius: 5px;
+      }
+      #listmenu .ui-btn:hover {
+        border: 2px outset #000;
+      }
+      .menulabel {
+        display: none;
+      }
+      
+      #submenu .ui-btn {
+        background: rgba(155, 155, 155, 0.2);
+        border: 2px solid transparent;
+        width: 65px;
+        //margin: 2px;
+        //border-radius: 5px;
+        padding: 4px;
+        padding-top: 6px;
+        width: 2.2em;
+      }
+      .tablabel {
+        width: 100px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      #listmenu .ui-li-count, #submenu .ui-li-count {
+        margin-top: -2px;
+        padding: 0px;
+        right: 2px;
+        top: 0em;
+        background: none;
+        border: none;
+        color: #999;
+      }
+      #listmenu .error {
+        color: #F55;
+      }
+      .dashlet {
+        background: rgba(255, 255, 255, 0.2);
+        font-size: 1.2em;
+        width: 43%;
+        min-width: 360px;
+        padding: 10px;
+        margin: 10px;
+        border-radius: 10px;
+        display: inline-block;
+        vertical-align: middle;
+        box-shadow: 2px 2px 3px 3px rgba(155, 155, 155, 0.3);
+      }
+      .ui-listview > .ui-li-has-count > .ui-btn,
+      .ui-listview > .ui-li-static.ui-li-has-count,
+      .ui-listview > .ui-li-divider.ui-li-has-count {
+        padding-right: 0em;
+      }
+      .ui-content .ui-listview,
+      .ui-panel-inner > .ui-listview {
+        margin: 0em;
+      }
+      .ui-disabled {
+        background: rgba(155, 155, 155, 0.4);
+      }
+      .ui-panel-inner {
+        padding: 0em;
+      }
+      .ui-li-divider {
+        padding: 2px !important;
+        background: none !important;
+        border: none !important;
+      }
+      .ui-panel-inner .ui-content {
+        padding: 1em;
+        background: rgba(155, 155, 155, 0.2);
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+      }
+      .ui-panel {
+        background: none;
+      }
+      .ui-content {
+        padding: 0em;
+      }
+      .ui-header {
+        background: none !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+      .ui-panel-display-reveal {
+        box-shadow: none !important;
+      }
+      .ui-panel {
+        background: none !important;
+      }
+      .ui-panel .ui-header {
+        background: none !important;
+      }
+      .ui-page-theme-a {
+        background: url("img/paper.png") !important;
+      }
+      .ui-page-theme-b {
+        background: url("img/darkpaper.png") !important;
+      }
+      .ui-page-theme-b .ui-panel-wrapper,
+      .ui-page-theme-b .ui-panel {
+        margin-left: 65px;
+        background: url("img/darkpaper.png");
+      }
+      .selectlist {
+        top: -15px;
+      }
+      .tabPlaceholder {
+        height: 0.8em;
+        background: #5F5;
+        width: 150px;
+      }
+      .wrap {
+        white-space: normal !important;
+      }
+      .nowrap {
+        white-space: nowrap !important;
+        overflow: visible !important;
+      }
+      .preview iframe::-webkit-scrollbar {
+        width: 6px;
+      }
+      .preview iframe::-webkit-scrollbar-track {
+        background-color: #ddd;
+        border-left: 1px solid #aaa;
+      }
+      .preview iframe::-webkit-scrollbar-thumb {
+        background-color: #999;
+        border: 1px solid #444;
+      }
+      .preview iframe::-webkit-scrollbar-thumb:hover {
+        background-color: #bbb;
+      }
+    </style>
+    <script>
+      // Begin globals
+      var account = {}; // authenticated Github account.
+      var appSize = 320; // preview width in pixel.
+      var appServer = "http://it4se.com:8080";
+      var connection; // shareJS
+      var documents = []; // shareJS
+      var currentFile = ''; // important in tracking opened file.
+      var fileCount = 0; // tracks tabs and files.
+      var fileBrowser = {
+          repository: '',
+          path: '/'
+        } // tracks recent file history.
+      var editors = {}; // array of editors, takes currentFile as index.
+      var firefox = 'firefox'; //$.browser.mozilla; Should use feature detection with jqm 1.4.
+      var liveEditing = true;
+      var openFiles = {}; // important in tracking file details, like path and repo.
+      var timer = setTimeout(function() {}, 10); // used for live editing
+       // End globals
+       // Begin function declarations
+      function addTab(title, tabCount) {
+        var tabs = $("#tabmenu").tabs();
+        tabs.find(".ui-tabs-nav").sortable({
+          axis: "x",
+          tolerance: "pointer",
+          placeholder: "tabPlaceholder",
+          opacity: 0.5,
+          items: "li:not(.stickytab)",
+          stop: function() {
+            tabs.tabs("refresh");
+          }
+        });
+        // insert tab at last position
+        tabs.find(".ui-tabs-nav li:last").after('<li><a id="tabitem' + tabCount + '" href="#view' + tabCount + '" data-role="button" data-mini="true" data-ajax="false" class="ui-state-persist"><span class="tablabel" id="tabitemtext' + tabCount + '">' + title + '</span> <i style="position: relative; top: 4px; left: 4px;" class="closetab fa fa-times-circle fa-2x"></i></a></li>');
+        $("#tablist").trigger('create');
+        // create view associated with tab
+        $("#viewcontainer").append('<div id="view' + tabCount + '"></div>');
+        tabs.tabs("refresh");
+        // listen for tab delete clicks
+        $("#tabitem" + tabCount).on('click', ".closetab", function(event) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          editors[currentFile].destroy();
+          var element = $(this).parent().attr('href');
+          $(element).remove();
+          $(this).parent().parent().remove();
+          $("#tabmenu").tabs("refresh");
+          if ($("#tablist li").length > 2) {
+            $("#tablist li:last-child a").trigger('click');
+          } else {
+            $('#tabmenu').tabs('option', 'active', 0)
+          }
+          formatLayout();
+        });
+        // listen for tab click events
+        $("#tabitem" + tabCount).on('click', function() {
+          // call function to swap file context
+          changeFileContext(tabCount);
+          if (localStorage.uitheme == "dark") {
+            $("#tablist li a").buttonMarkup({
+              theme: 'b'
+            });
+            $("#newtab").buttonMarkup({
+              theme: 'a'
+            });
+            $(this).buttonMarkup({
+              theme: 'a'
+            });
+          } else {
+            $("#tablist li a").buttonMarkup({
+              theme: 'a'
+            });
+            $("#newtab").buttonMarkup({
+              theme: 'b'
+            });
+            $(this).buttonMarkup({
+              theme: 'b'
+            });
+          }
+        });
+        //switch to new tab
+        $('#tabitem' + tabCount).trigger('click');
+      }
+
+      function changeFileContext(file) {
+        currentFile = file;
+        setTitle();
+      }
+
+      function changeLog() {
+        GitWrap.getChanges({
+          username: openFiles[currentFile].username,
+          repository: openFiles[currentFile].repository,
+          path: openFiles[currentFile].path,
+          filename: openFiles[currentFile].filename,
+          accessToken: account.token
+        }, function(data) {
+          var history = "";
+          for (i = 0; i < data.length; i++) {
+            history += '<li><p class="wrap">' + data[i].commit.author.date.replace("T", " ").replace("Z", "<br/>") + data[i].commit.author.name + ': <a href="' + data[i].html_url + '" target="_blank"> ' + data[i].commit.message + '</a></p></li>';
+          }
+          $("#changelog").html(history).listview("refresh");
+        });
+      }
+
+      function changeRepo() {
+        $("#filebrowser").panel("close");
+        $("#repo").panel("open");
+        setPath('/');
+      }
+
+      function commit() {
+        var content = editors[currentFile].getValue();
+        var message = document.getElementById("commitmsg").value;
+        GitWrap.commit({
+          username: openFiles[currentFile].username,
+          repository: openFiles[currentFile].repository,
+          path: openFiles[currentFile].path,
+          filename: openFiles[currentFile].filename,
+          accessToken: account.token,
+          commitContent: content,
+          commitMessage: message,
+          committerName: account.username,
+          committerEmail: account.email
+        }, function(data) {
+          alert("Committed " + data.content.size + " bytes of data.");
+        });
+        $("#commit").panel("close");
+      }
+
+      function createEditor(file, value, user, repo, path, collab) {
+        fileCount++;
+        openFiles[fileCount] = {
+          "username": user,
+          "repository": repo,
+          "path": path,
+          "filename": file,
+          "collaboration": collab,
+          "modified": false
+        };
+        var iframeUrl = "/tmp/" + randomString(20);
+        if (user && repo && path && file) {
+          iframeUrl = "/" + user + "/" + repo + "/master" + path + file;
+        }
+        if (collab) {
+          startCollaboration(collab, fileCount, false);
+        } else {
+          startCollaboration(encodeURIComponent(iframeUrl), fileCount, true);
+          // startCollaboration (GitWrap._base64_encode(iframeUrl), fileCount, true);
+        }
+        currentFile = fileCount;
+        addTab(file, fileCount);
+        //window.history.pushState('', '', "/" + user + "/" + repo +"/master" + path + file + document.location.search );
+        $("#view" + fileCount).append('<div id="file' + fileCount + '"> <div id="editor' + fileCount + '" class="editor"></div>');
+        var htmlSnippet;
+        htmlSnippet = '<div class="preview"><div data-role="controlgroup" data-type="horizontal" data-mini="true" style="margin-left: 5px;">';
+        htmlSnippet += '<a href="javascript: runCode();" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-play fa-2x"></i></a>';
+        htmlSnippet += '<a href="javascript: runCode(true);" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-stop fa-2x"></i></a>';
+        //  htmlSnippet += '<a href="javascript: runCode(true);" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-cog fa-2x"></i></a>';
+        htmlSnippet += '<a href="#collaborate" data-inline="true" class="nowrap" data-role="button" class="nowrap"><i class="fa fa-external-link fa-2x"></i></a>';
+        //  htmlSnippet +='<center><div>';
+        //  htmlSnippet +='<label for="select-choice-a" class="select">Preview size <i class="fa fa-mobile"></i> <i class="fa fa-tablet"></i> <i class="fa fa-desktop"></i> </label>';
+        htmlSnippet += '<select data-mini="false" name="select-choice-a" id="appsize" onchange="setAppSize()" data-native-menu="false" size="20">';
+        htmlSnippet += '<option>Mobile device resolution</option>';
+        htmlSnippet += '<option value="0">Hide preview</option>';
+        htmlSnippet += '<option value="320" selected>320 (iPhone)</option>';
+        htmlSnippet += '<option value="360">360 (Galaxy S3)</option>';
+        htmlSnippet += '<option value="360">384 (Nexus 4, Lumia 925)</option>';
+        htmlSnippet += '<option value="400">400 (Galaxy Note)</option>';
+        htmlSnippet += '<option value="600">600 (Galaxy Tab, Kindle 1)</option>';
+        htmlSnippet += '<option value="768">768 (iPad)</option>';
+        htmlSnippet += '<option value="800">800 (Nexus 10, Kindle HD)</option>';
+        htmlSnippet += '<option value="1024">1024 (iPad landscape)</option>';
+        htmlSnippet += '</select>';
+        //  htmlSnippet +='</div></center>';
+        htmlSnippet += '</div><div id="iframecontainer' + fileCount + '"><iframe src="' + iframeUrl + '" name="preview' + fileCount + '" id="preview' + fileCount + '" src="javascript: ' + "'" + "Live preview window'" + '"></iframe></div>';
+        $("#view" + fileCount).append(htmlSnippet).trigger("create");
+        /*  $("#view" + fileCount).append('<fieldset data-role="controlgroup" data-type="horizontal"><input type="checkbox" value="true" name="play" id="play"/><label for="play"><i class="fa fa-play"></i></label><input type="checkbox" value="true" name="autorun" id="autorun"/><label for="autorun"><i class="fa fa-refresh"></i></label></fieldset>').trigger('create');
+         */
+        //  console.log(window.frames[fileCount-1].onerror = function (msg, url, line) {alert (msg)});
+        var modelist = ace.require('ace/ext/modelist');
+        ace.require("ace/ext/emmet");
+        editors[fileCount] = ace.edit("editor" + fileCount);
+        editors[fileCount].setBehavioursEnabled(true);
+        if (localStorage.uitheme == "dark") {
+          editors[fileCount].setTheme("ace/theme/vibrant_ink");
+        } else {
+          editors[fileCount].setTheme("ace/theme/chrome");
+        }
+        editors[fileCount].setOptions({
+          enableBasicAutocompletion: true
+        });
+        editors[fileCount].focus();
+        var mode = modelist.getModeForPath(openFiles[currentFile].path + openFiles[currentFile].filename).mode;
+        editors[fileCount].getSession().setMode(mode);
+        editors[fileCount].setOption("enableEmmet", true);
+        editors[fileCount].getSession().setUseWrapMode(false);
+        editors[fileCount].getSession().setTabSize(2);
+        // only show preview if appropriate
+        //  if (mode == "ace/mode/html") { 
+        editors[fileCount].getSession().on('change', function(e) {
+          if (liveEditing) {
+            clearTimeout(timer);
+            timer = setTimeout(function() {
+              runCode();
+            }, 2000);
+          }
+        });
+        //  runCode();
+        //}
+        setTitle();
+        formatLayout();
+        if (!collab) {
+          //editors[fileCount].session.setValue(value);
+          editors[fileCount].setValue(value, -1);
+        }
+        //setTimeout(runCode, 2500);
+      }
+
+      function deleteFile() {
+        alert("Deleting files is not implemented yet.");
+      }
+
+      function formatLayout(animate) {
+        var totalWidth = $(".ui-panel-wrapper").outerWidth();
+        var totalHeight = $(window).height() - $(".ui-header").outerHeight() - $("#tablist").outerHeight() - 10;
+        if (animate == true) {
+          //        if (!animate > 0) animate = 2500;
+          $("#tabmenu").css("width", totalWidth + "px");
+          $(".editor").animate({
+            width: totalWidth - appSize + "px",
+            height: totalHeight + "px"
+          }, animate);
+          $(".preview").animate({
+            width: appSize + "px",
+            height: totalHeight + "px"
+          }, animate);
+          $(".preview iframe").animate({
+            width: appSize + "px",
+            height: totalHeight - 48 + "px"
+          }, animate, function() {
+            formatLayout();
+          });
+        } else {
+          $("#tabmenu").css("width", totalWidth + "px");
+          $(".editor").css("width", totalWidth - appSize - 11 + "px").css("height", totalHeight + "px");
+          $(".preview").css("width", appSize + "px").css("height", totalHeight + "px");
+          $(".preview iframe").css("width", appSize + "px").css("height", totalHeight - 48 + "px");
+        }
+        $.each(editors, function(key, value) {
+          editors[key].resize();
+        });
+      }
+
+      function getFiles(reset) {
+        $("#filelist").html('<li>Loading...</li>').listview("refresh");
+        if (reset) {
+          //  fileBrowser.repository = '';
+          //  fileBrowser.path = '/';
+        }
+        // List files in repo
+        if (fileBrowser.repository != '') {
+          $("#folder").html(fileBrowser.repository);
+          var repoOwner = account.username;
+          if (fileBrowser.owner) repoOwner = fileBrowser.owner;
+          GitWrap.getFiles({
+            username: repoOwner,
+            repository: fileBrowser.repository,
+            path: fileBrowser.path,
+            accessToken: account.token
+          }, function(data) {
+            var list = '';
+            if (fileBrowser.path != "/") {
+              list = '<li data-role="divider">' + fileBrowser.path + '</li><li data-icon="false"><a href="javascript: setPath (' + "'..'" + ')"><i class="fa fa-level-up"></i> .. (up a directory)</a></li>';
+            } else {
+              list = '<li data-icon="false"><a href="javascript: setRepo (' + "''" + ')"><i class="fa fa-level-up"></i> Change repo</a></li>';
+            }
+            // user owns files
+            if (repoOwner == account.username) {
+              // add directories first
+              for (i = 0; i < data.length; i++) {
+                if (data[i].type == "dir") {
+                  list += '<li data-icon="false"><a href="javascript: setPath (' + "'" + data[i].name + "'" + ', true)"><i class="fa fa-folder"></i> ' + data[i].name + "</a></li>";
+                }
+              }
+              // then files
+              for (i = 0; i < data.length; i++) {
+                if (data[i].type != "dir") {
+                  list += '<li data-theme="b"><a href="javascript: resume(' + "'" + data[i].name + "'" + ')"><i class="fa fa-file"></i> ' + data[i].name + "</a></li>";
+                }
+              }
+            }
+            // files stored in shared repository where user is a collaborator
+            else {
+              // add directories first
+              for (i = 0; i < data.length; i++) {
+                if (data[i].type == "dir") {
+                  list += '<li data-icon="false"><a href="javascript: setPath (' + "'" + data[i].name + "'" + ', true)"><i class="fa fa-folder"></i> ' + data[i].name + "</a></li>";
+                }
+              }
+              // then files
+              for (i = 0; i < data.length; i++) {
+                if (data[i].type != "dir") {
+                  list += '<li data-theme="b"><a href="javascript: resume(' + "'" + data[i].name + "', '" + repoOwner + "'" + ')"><i class="fa fa-file"></i> ' + data[i].name + "</a></li>";
+                }
+              }
+            }
+            $("#filelist").html(list).listview("refresh");
+          });
+        }
+        // List user repos
+        else {
+          $("#folder").html('User repos');
+          GitWrap.getRepos({
+            username: account.username,
+            accessToken: account.token
+          }, function(data) {
+            console.log(data);
+            var list = "";
+            for (i = 0; i < data.length; i++) {
+              // owned repo
+              if (data[i].owner.login == account.username) {
+                list += '<li data-icon="false"><a href="javascript: setRepo(' + "'" + data[i].name + "'" + ')"><i class="fa fa-github"></i> ' + data[i].name + "</a></li>";
+              }
+              // shared repo with collab. permission
+              else {
+                list += '<li data-icon="false"><a href="javascript: setRepo(' + "'" + data[i].name + "', '" + data[i].owner.login + "'" + ')"><i class="fa fa-group"></i> ' + data[i].name + "</a></li>";
+              }
+            }
+            $("#filelist").html(list).listview("refresh");
+          });
+        }
+      }
+
+      function getSearchParameters() {
+        var search = window.location.search.substr(1);
+        var params = {};
+        if (search != null) {
+          var searcharr = search.split("&");
+          for (var i = 0; i < searcharr.length; i++) {
+            var tmparr = searcharr[i].split("=");
+            params[tmparr[0]] = tmparr[1];
+          }
+        }
+        return params;
+      }
+
+      function transformToAssocArray(prmstr) {
+        var prmarr = prmstr.split("&");
+        for (var i = 0; i < prmarr.length; i++) {
+          var tmparr = prmarr[i].split("=");
+          params[tmparr[0]] = tmparr[1];
+        }
+        return params;
+      }
+
+      function openSample(file) {
+        $.get(file, function(data) {
+          createEditor(file, data);
+        });
+      }
+
+      function pullProxy(url, sameWindow) {
+        console.log("Pulling " + url);
+        GitWrap.pullProxy({
+          url: url
+        }, function(data) {
+          console.log("data received:" + data);
+          if (typeof data == 'object') data = JSON.stringify(data, null, 2);
+          if (!sameWindow) createEditor(fileBrowser.filename, data, fileBrowser.owner, fileBrowser.repository, fileBrowser.path);
+          else editors[currentFile].setValue(data, -1);
+        });
+      }
+
+      function pull(sameWindow) {
+        var repoOwner = account.username;
+        if (fileBrowser.owner) repoOwner = fileBrowser.owner;
+        GitWrap.pull({
+          username: repoOwner,
+          accessToken: account.token,
+          repository: fileBrowser.repository,
+          path: fileBrowser.path,
+          filename: fileBrowser.filename
+        }, function(data) {
+          data.content = data.content.replace(/(\r\n|\n|\r)/gm, ""); // strip newlines
+          var decodedData = GitWrap._base64_decode(data.content);
+          if (!sameWindow) createEditor(fileBrowser.filename, decodedData, repoOwner, fileBrowser.repository, fileBrowser.path);
+          else editors[currentFile].setValue(decodedData, -1);
+        });
+        $("#revert").panel("close");
+      }
+
+      function randomString(length) {
+        var length = length ? length : 5;
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        for (var i = 0; i < length; i++) text += possible.charAt(Math.floor(Math.random() * possible.length));
+        return text;
+      }
+
+      function scroll(up) {
+        if (up) editors[currentFile].scrollPageUp();
+        else editors[currentFile].scrollPageDown();
+      }
+
+      function setAppSize() {
+        appSize = $("#appsize").val();
+        var tmpTimer = setTimeout(function() {
+          formatLayout(true);
+        }, 400);
+      }
+
+      function setFontSize() {
+        $(".editor").css("font-size", $("#fontsize").slider().val() + "px");
+      }
+
+      function setLiveCoding() {
+        if ($("#livecoding").slider().val() == "on") {
+          liveEditing = true;
+        } else {
+          liveEditing = false;
+        }
+      }
+
+      function setPath(path, append) {
+        console.log('Old path: ' + fileBrowser.path);
+        if (path == ".." && fileBrowser.path != "/") {
+          var splitPath = fileBrowser.path.split('/');
+          var newPath = splitPath.slice(0, splitPath.length - 2).join("/") + "/";
+          fileBrowser.path = newPath;
+        } else if (append) {
+          fileBrowser.path = fileBrowser.path + path + '/'
+        } else if (path == "/") {
+          fileBrowser.path = '/';
+        } else if (path != "..") {
+          fileBrowser.path = '/' + path + '/';
+        }
+        //history.pushState('', '', "/" + fileBrowser.owner + "/" + filebrowser.repository +"/master" + path + 'file' + document.location.search );
+        console.log('New path: ' + fileBrowser.path);
+        getFiles();
+      }
+
+      function setRepo(repo, owner) {
+        fileBrowser.repository = repo;
+        if (owner) fileBrowser.owner = owner;
+        else fileBrowser.owner = null;
+        getFiles();
+      }
+
+      function setTheme(theme) {
+        $.each(editors, function(key, value) {
+          editors[key].setTheme(theme);
+        });
+      }
+
+      function setTitle() {
+        var uname = openFiles[currentFile].username ? '<i class="fa fa-user"></i>' + openFiles[currentFile].username : '';
+        var rep = openFiles[currentFile].repository ? '<i class="fa fa-github-square"></i>' + openFiles[currentFile].repository : 'Temporary file: ';
+        var fp = openFiles[currentFile].path ? openFiles[currentFile].path : ' ';
+        $("#maintitle").html(uname + ' ' + rep + fp + openFiles[currentFile].filename);
+        document.title = 'Editing ' + openFiles[currentFile].filename;
+      }
+
+      function resume(file, owner, fullPath) {
+        fileBrowser.filename = file;
+        if (owner) fileBrowser.owner = owner;
+        else fileBrowser.owner = account.username;
+        if (fullPath) {
+          pullProxy(owner);
+        } else {
+          pullProxy("/" + fileBrowser.owner + "/" + fileBrowser.repository + "/master" + fileBrowser.path + file);
+        }
+        //$("#filebrowser").panel( "close" );
+      }
+
+      function absolutePath(filename) {
+        if (!filename) return;
+        var up = 0;
+        var splitPath = filename.split('/');
+        for (var i = 0; i < splitPath.length - 1; i++) {
+          if (splitPath[i] == "..") {
+            up++;
+            splitPath.splice(i, 1);
+          } else if (splitPath[i] == ".") {
+            splitPath.splice(i, 1);
+          }
+        }
+        filename = splitPath.join("/");
+        var currentPath = openFiles[currentFile].path;
+        var splitCurrentPath = currentPath.split('/');
+        for (var i = 0; i < up + 1; i++) {
+          splitCurrentPath.pop();
+        }
+        var path = splitCurrentPath.join("/") + "/";
+        /*
+  if (splitPath.length > 1) {
+
+    filename = splitPath.slice(splitPath.length-1, splitPath.length); 
+    var path2 = splitPath.slice(0, splitPath.length - 1).join("/") + "/";
+    path2 = path2.replace(/(^\.\.|^\.)/g, '');
+    if (path2.charAt(0) !="/") path2 = "/" + path2;
+  }
+
+  path = path + path2;
+*/
+        return decodeURIComponent(appServer + "/preview?user=" + openFiles[currentFile].username + "&repo=" + openFiles[currentFile].repository + "&path=" + path + "&filename=" + filename);
+      }
+
+      function beautify(forceType) {
+        var type = editors[currentFile].getSession().getMode().$id;
+        if (forceType) type = forceType;
+        var code = editors[currentFile].getValue();
+        switch (type) {
+          case "ace/mode/javascript":
+            code = js_beautify(code, {
+              'indent_size': 2,
+              'indent_char': ' ',
+              'wrap_line_length': 0,
+              'preserve_newlines': false
+            });
+            break;
+          case "ace/mode/css":
+            code = css_beautify(code, {
+              'indent_size': 1,
+              'indent_char': ' ',
+              'wrap_line_length': 0,
+              'preserve_newlines': false
+            });
+            break;
+            // assume html
+          default:
+            code = html_beautify(code, {
+              'indent_inner_html': true,
+              'indent_size': 2,
+              'indent_char': ' ',
+              'wrap_line_length': 0,
+              'unformatted': ['a', 'sub', 'sup', 'b', 'i', 'u'],
+              'preserve_newlines': false,
+              'indent_handlebars': false
+            });
+            break;
+        }
+        editors[currentFile].setValue(code, -1);
+      }
+
+      function runCode(pause) {
+        var iframeId = 'preview' + currentFile;
+        var ifrm = document.getElementById(iframeId);
+        ifrm = (ifrm.contentWindow) ? ifrm.contentWindow : (ifrm.contentDocument.document) ? ifrm.contentDocument.document : ifrm.contentDocument;
+        var currentUrl = document.getElementById(iframeId).src;
+        console.log("currenturl: " + currentUrl);
+        if (pause) {
+          ifrm.document.open();
+          ifrm.document.write('<h1>Execution stopped</h1>');
+        } else {
+          /*
+document.getElementById(iframeId).onload = function() {
+  try {
+    alert("loaded");
+  } catch(e) {
+    alert("Error: "+e);
+  }
+}
+*/
+          //	currentUrl ="http://rawgithub.com/kdmon/Test-repo/master/cars.html";
+          ifrm.document.open();
+          ifrm.document.write('<h1>Executing...</h1>');
+          ifrm.location.href = currentUrl;
+          ifrm.document.close();
+          /*
+      alert (currentUrl);
+
+      $("#iframecontainer" + currentFile).empty();
+      $("#iframecontainer" + currentFile).append('<iframe src="' + currentUrl + '" name="preview' + fileCount + '" id="preview' + fileCount + '"></iframe>');
+*/
+          /*
+      formatLayout();
+*/
+          //      document.getElementById(iframeId).src = currentUrl + "?tmp123=" + new Date().getTime();
+          //      currentUrl = "http://it4se.com";
+          //      document.getElementById(iframeId).reload(true);
+          //      $("#" + iframeId).attr('src', currentUrl);
+          //      $("#" + iframeId).attr('src', $("#" + iframeId).attr('src'));
+          //        document.getElementById(iframeId).src = currentUrl + "?tmp123=" + new Date().getTime();
+          console.log("Setting iframe to: " + currentUrl);
+          /*
+      var tmpFrame = $("#" + iframeId);
+      $("#" + iframeId).remove();
+      $("#view" + currentFile + " .preview").append(tmpFrame);
+*/
+          //        ifrm.location.href = currentUrl;
+          //	ifrm.location.reload();
+          //	var _theframe = document.getElementById(iframeId);
+          //	_theframe.contentWindow.location.href = _theframe.src;
+          //      document.getElementById(iframeId).src = ''; // prevent firefox caching!?
+          //      document.getElementById('ifr').contentWindow.location.href=document.getElementById('ifr').src
+        }
+        return;
+        var editor = editors[currentFile];
+        finalCode = editor.getValue();
+        // Firefox doesn't support push state history in iframes
+        // so we need to add some jquery mobile options and rely
+        // on to href attributes for data-rel back buttons.
+        if (navigator.userAgent.search("Firefox") > -1) {
+          var patched = '<scri' + 'pt>$(document).bind("mobileinit", function(){';
+          patched += '$.mobile.pushStateEnabled = false; $.mobile.ajaxEnabled = false;';
+          patched += '$.mobile.hashListeningEnabled = false;});'
+          patched += "$(document).bind('pageinit', function() { $(this).find('a[data-rel=";
+          patched += '"back"]' + "').click(function(event) {event.stopPropagation(); $.mobile.changePage($(this).attr('href')); return false}); });";
+          patched += "</scri" + "pt>";
+          var location = finalCode.search(/<script[\s\S]*?(jquery-)[\s\S]*?>[\s\S]*?<\/script\>/i);
+          if (location > -1) {
+            var entry = finalCode.substr(location).search(/<\/script>/i) + 9 + location;
+            finalCode = finalCode.slice(0, entry) + patched + finalCode.slice(entry);
+          }
+        }
+        // TODO: Make relative urls absolute, using the rawgit.com service
+        // "http://it4se.com/app/preview.php?user=" + openFiles[currentFile].username +
+        if (openFiles[currentFile].filename == "Example.html") {
+          finalCode = finalCode.replace(/(<html|<head|<body|<title|<\/html|<br\\|<\/body|<\/title|<\/head)/ig, '$1a');
+          var finalCode2 = $("<div>" + finalCode + "</div>");
+          //   var finalCode2 = $(finalCode);
+          // Links
+          finalCode2.find('a').not('[href^="http"],[href^="https"],[href^="mailto:"],[href^="//"],[href^="#"]').each(function() {
+            $(this).attr('href', absolutePath($(this).attr('href')));
+          });
+          // Styles
+          finalCode2.find('link').not('[href^="http"],[href^="https"],[href^="//"]').each(function() {
+            $(this).attr('href', absolutePath($(this).attr('href')));
+          });
+          // Scripts
+          finalCode2.find('script').not('[src^="http"],[src^="https"],[src^="//"]').each(function() {
+            $(this).attr('src', absolutePath($(this).attr('src')));
+          });
+          // Images
+          finalCode2.find('img').not('[src^="http"],[src^="https"],[src^="//"]').each(function() {
+            $(this).attr('src', absolutePath($(this).attr('src')));
+          });
+          //console.log(finalCode2);
+          finalCode = finalCode2.prop('innerHTML');
+          finalCode = finalCode.replace(/(<html|<head|<body|<title|<\/html|<br\\<\/body|<\/title|<\/head)./ig, '$1');
+        }
+        // return to last app page viewed
+        // var ifrm2 = document.getElementsByTagName('iframe')[0];
+        //window.history.pushState('', '', "/" + openFiles[currentFile].username + "/" +  openFiles[currentFile].repository +"/master" +  openFiles[currentFile].path +  openFiles[currentFile].filename + document.location.search );
+        window.history.pushState(null, null, '/examples/test2.html');
+        var iframeId = 'preview' + currentFile;
+        var ifrm = document.getElementById(iframeId);
+        ifrm = (ifrm.contentWindow) ? ifrm.contentWindow : (ifrm.contentDocument.document) ? ifrm.contentDocument.document : ifrm.contentDocument;
+        var pastPage = ifrm.document.activeElement.attributes.id;
+        if (pastPage != undefined) {
+          var anchor = pastPage.nodeValue;
+          var location = finalCode.search(/<script[\s\S]*?(jquery-)[\s\S]*?>[\s\S]*?<\/script\>/i);
+          if (location > -1) {
+            var entry = finalCode.substr(location).search(/<\/script>/i) + 9 + location;
+            var jumpPageCode = '<scr' + 'ipt type="text/javascript">var notRun = true; $(document).on("pageinit", function(){if (notRun) {$.mobile.changePage("#' + anchor + '"); notRun = false;} });</scr' + 'ipt>';
+            finalCode = finalCode.slice(0, entry) + jumpPageCode + finalCode.slice(entry);
+          }
+        }
+        ifrm.document.open();
+        ifrm.src = "/" + openFiles[currentFile].username + "/" + openFiles[currentFile].repository + "/master" + openFiles[currentFile].path + openFiles[currentFile].filename + document.location.search;
+        //ifrm.history.replaceState('', '', "/" + openFiles[currentFile].username + "/" +  openFiles[currentFile].repository +"/master" +  openFiles[currentFile].path +  openFiles[currentFile].filename + document.location.search );
+        //console.log(ifrm);
+        //ifrm.onload = function () {
+        //  history.replaceState('', '', "/" + openFiles[currentFile].username + "/" +  openFiles[currentFile].repository +"/master" +  openFiles[currentFile].path +  openFiles[currentFile].filename + document.location.search );
+        //};
+        var someDelay = setTimeout(function() {
+          ifrm.document.write(finalCode);
+          // Allow word search via select
+          $(iframeId).contents().find('body').css({
+            "-webkit-touch-callout": "text !important",
+            "-webkit-user-select": "text !important",
+            "-khtml-user-select": "text !important",
+            "-moz-user-select": "text !important",
+            "-ms-user-select": "text !important",
+            "user-select": "text !important"
+          });
+          ifrm.document.close();
+          ifrm.addEventListener('mouseup', function(event) {
+            var searchTerm = ifrm.getSelection().toString();
+            if (searchTerm != "") {
+              // delete one character at a time working towards the middle
+              var counter = 0;
+              while (!editor.find(searchTerm) && searchTerm) {
+                counter++;
+                if (counter % 2 == 0) {
+                  searchTerm = searchTerm.substring(1);
+                } else {
+                  searchTerm = searchTerm.substring(0, searchTerm.length - 1);
+                }
+              }
+              editors[fileCount].focus();
+            }
+          }, false);
+          editors[fileCount].focus();
+          // prevent focus stealing for 3 seconds
+          var handler = function() {
+            editors[fileCount].focus();
+          };
+          editors[fileCount].on("blur", handler);
+          setTimeout(function() {
+            editors[fileCount].focus();
+            editors[fileCount].removeEventListener("blur", handler);
+          }, 3000);
+        }, 500);
+      }
+      var cursors = {};
+      var selections = {};
+      var cursorHash = [];
+
+      function updateCursor(key, index, remove) {
+        // remove existing cursor, if they exist
+        if (cursorHash[key]) {
+          editors[index].session.removeMarker(cursorHash[key]);
+        }
+        // redraw cursor
+        if (!remove) {
+          var pointAnchor = editors[index].getSelectionRange();
+          pointAnchor.start = editors[index].session.doc.createAnchor({
+            row: cursors[key].row,
+            column: cursors[key].column
+          });
+          pointAnchor.end = editors[index].session.doc.createAnchor({
+            row: cursors[key].row + 1,
+            column: cursors[key].column
+          });
+          cursorHash[key] = editors[index].session.addMarker(pointAnchor, "ace_step", drawMarker, true);
+        }
+      }
+
+      function drawMarker(returnArray, range, left, top, config) {
+        console.log(config);
+        console.log('ags');
+        var color = "blue";
+        var opacity = 1;
+        //hat
+        returnArray.push("<div class='ace_selection' style='", "opacity:", opacity, ";", "left:", left - 2, "px;", "top:", top - 3, "px;", "height:", 5, "px;", "width:", 6, "px; background: ", color || "", "'></div>");
+        //stem
+        returnArray.push("<div class='ace_selection' style='", "opacity:", opacity, ";", "left:", left, "px;", "top:", top, "px;", "height: 1em;", "width:", 2, "px; background: ", color || "", "'></div>");
+        //eventlistener circle 
+        returnArray.push("<div data-user='popup' class='ace_selection' style='", "border-radius: 30px; background: ", color, "; opacity:0.2;", "left:", left - 16, "px;", "top:", top - 11, "px;", "height:", 35, "px;", "width:", 35, "px; pointer-events: auto; cursor: help;' onmouseover='javascript: showAuthor(this, 1);' onmouseout='javascript: showAuthor(this);'></div><div id='popup' style='position:absolute; ", "top:", top - 25, "px;", "left:", left - 2, "px;", "background: white; border-radius: 10px; border: 1px solid ", color, "; padding: 2px; display: none;'><b>A user with a very long username</b></div>");
+      }
+
+      function showAuthor(elem, show) {
+        var id = $(elem).attr('data-user');
+        if (show) $("#" + id).show();
+        else $("#" + id).hide();
+      }
+
+      function startCollaboration(url, index, preserveContent, username, cursorColor) {
+        if (!username) {
+          username = account.username ? account.username : 'Guest' + Math.floor(Math.random() * 1000000);
+        }
+        if (!cursorColor) color = "red";
+        connection.open(url, 'text', function(error, doc) {
+          doc.attach_ace(editors[index], preserveContent, username, color);
+          doc.shout({
+            action: "announce",
+            msg: username + ' opened document.'
+          });
+          doc.on('shout', function(data) {
+            switch (data.action) {
+              case "announce":
+                alert(data.msg);
+                break;
+              case "cursor":
+                cursors[data.user] = {
+                  row: data.row,
+                  column: data.column,
+                  color: data.color
+                };
+                updateCursor(data.user, index);
+                break;
+              case "selection":
+                selections[data.user] = [data.row, data.column, data.row2, data.column2, data.color];
+                //updateSelections(data.user, index);
+                break;
+            }
+          });
+          editors[index].selection.on("changeCursor", function(data) {
+            var position = editors[index].selection.getCursor();
+            doc.shout({
+              action: "cursor",
+              user: username,
+              color: cursorColor,
+              column: position.column,
+              row: position.row
+            });
+          });
+          editors[index].selection.on("changeSelection", function(data) {
+            var position = editors[index].getSelectionRange();
+            if (position.first) doc.shout({
+              action: "selections",
+              user: username,
+              color: cursorColor,
+              column: position.first.column,
+              row: position.first.row,
+              column2: position.end.column,
+              row2: position.end.row
+            });
+          });
+        });
+      }
+
+      function setUiTheme() {
+        if (localStorage.uitheme != $("#uitheme").slider().val()) {
+          if (confirm("Setting requires a restart. Do you want to restart?")) {
+            if ($("#uitheme").slider().val() == "light") {
+              localStorage.uitheme = "light";
+            } else {
+              localStorage.uitheme = "dark"
+            }
+            location.reload();
+          }
+        }
+      }
+
+      function signOut() {
+        var token = localStorage.token;
+        localStorage.removeItem('token');
+        window.location = 'logout.php?token=' + token;
+        //  window.location.replace(window.location.pathname);
+      }
+
+      function userLogin(data) {
+        account.token = localStorage.token;
+        account.username = data.login;
+        account.name = data.name;
+        account.email = data.email;
+        account.avatar = data.avatar;
+        $("#account").html('<a href="javascript: signOut();" data-role="button" data-icon="power">Log off ' + account.username + '</a></span>').trigger("create");
+      }
+       // end function declarations
+       // Begin event bindings
+       // Window events
+      $(window).resize(formatLayout);
+      $(window).on("orientationchange", formatLayout);
+      window.onbeforeunload = function() {
+       /*if ("Unsaved changes" == "Unsaved changes") {
+          alert("Did you remember to save? If not, 'stay on the page' and hit commit.");
+          return ("Did you remember to save? If not, 'stay on the page' and hit commit.");
+        }*/
+      }
+       // Page events
+      $(document).on("pagecreate", "#frontpage", function(event) {
+        var params = getSearchParameters();
+        document.title = 'Web App Editor';
+        connection = new sharejs.Connection("http://it4se.com:8080/channel");
+        var webrtc = new SimpleWebRTC({
+          // the id/element dom element that will hold "our" video
+          localVideoEl: 'localVideo',
+          // the id/element dom element that will hold remote videos
+          remoteVideosEl: 'remoteVideos',
+          // immediately ask for camera access
+          autoRequestMedia: false
+        });
+        if (localStorage.uitheme == "dark") {
+          $("#frontpage").page("option", "theme", "b");
+          $("#viewcontainer").css('background', 'url("img/blackwood.png")');
+        } else {
+          $("#frontpage").page("option", "theme", "a");
+        }
+        $("#dashboard").sortable();
+        // Check for existing oauth token
+        if (localStorage.token) {
+          GitWrap.checkToken(localStorage.token, function(data) {
+            if (data.login) {
+              userLogin(data);
+            } else {
+              // ask user to login
+              alert("It appears your last session has expired. Please sign in again");
+              localStorage.removeItem('token');
+            }
+          });
+        }
+        // Attempt to create new token if none exists
+        else {
+          GitWrap.createToken(function(token) {
+            if (token) {
+              GitWrap.checkToken(token, function(data) {
+                if (data.login) {
+                  localStorage.token = token;
+                  userLogin(data);
+                } else {
+                  //	     alert ("Unable to retrieve your profile. Please login again.");
+                }
+              });
+            } else {
+              alert("There was a problem signing you in. Please try again.");
+            }
+          });
+        }
+        formatLayout();
+        var tmpTimer = setTimeout(function() {
+          formatLayout();
+        }, 1500);
+        // Panel events
+        $(".ui-panel").panel({
+          open: function() {
+            if ($(".ui-panel").hasClass("ui-panel-open") == true) {
+              formatLayout();
+            }
+          },
+          close: function() {
+            if ($(".ui-panel").hasClass("ui-panel-open") == false) {
+              formatLayout();
+            }
+          }
+        });
+        $("#filebrowser").on("panelbeforeopen", function(event, ui) {
+          getFiles(true);
+        });
+        $("#history").on("panelbeforeopen", changeLog);
+        $("#errors").on("panelbeforeopen", changeLog);
+        $("#collaborate").on("panelbeforeopen", function(event, ui) {
+          // we have to wait until it's ready
+          webrtc.on('readyToCall', function() {
+            // you can name it anything
+            webrtc.joinRoom('your awesome room name');
+          });
+          var previewUrl = document.getElementById("preview" + currentFile).src;
+          if (previewUrl) {
+            $("#qrcode").html('');
+            var qrCode = new QRCode("qrcode", {
+              text: previewUrl,
+              width: 200,
+              height: 200
+            });
+            $('input[id=plainurl]').val(previewUrl);
+          } else $("#qrcode").html('<h1>Sorry</h1><h3>No file to share. Please open a file first.</h3>');
+        });
+        // Button events
+        $("#newfile, #newtab").on("click", function(event) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          createEditor('Untitled' + fileCount + '.html', '');
+        });
+        $("#tabmenu:not(ul)").on("dblclick", function(event) {
+          console.log(event);
+          var target = $(event.target).attr("id");
+          if (target == "tablist") {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            createEditor('Untitled' + fileCount + '.html', '');
+          } else if (target.search('tabitem') > -1) {
+            var name = prompt('Enter new filename: ', $("#" + target).text());
+            if (name) {
+              openFiles[currentFile].filename = name;
+              $("#" + target).text(name);
+            }
+          }
+        });
+        $("#uitheme").on("slidestop", function(event, ui) {
+          setUiTheme();
+        });
+        if (params.collaborate) {
+          createEditor('Collaboration.html', '', '', '', '', params.collaborate);
+        }
+      });
+    </script>
+    <title>Web App Editor</title>
+  </head>
+
+  <body>
+    <div data-role="page" id="frontpage" class="ui-responsive-panel">
+      <div data-role="header">
+        <span style="float: left; font-size: 1.5em; margin-top: 5px; padding-left: 5px;">Web App
+          <em>Editor</em>
+        </span>
+        <span id="account" style="float: right; display: inline; height: 1em; position: relative; top: -3px; right: 5px;"> <a href="https://github.com/login/oauth/authorize?client_id=c08a9a01c72d7b380f06&scope=user,public_repo" data-role="button" data-icon="lock">Sign in with GitHub</a>
+        </span> <a href="#share" data-rel="popup" data-position-to="window" style="display: none; float: right; padding: 4px; background: #55b; height: 1.4em; right: 120px; color: #fff; text-shadow: 0px 1px 5px #000; padding-right: 4px; text-decoration: none; border-radius: 5px; border: 1px solid #888;"><i class="fa fa-share"></i> Share preview</a>
+        <h1>
+          <span id="maintitle">Dashboard</span>
+        </h1>
+      </div>
+      <div id="listmenu">
+        <img src="/img/logo.png" style="height: 50px; margin: 12px; margin-left: 6px;">
+        <ul data-role="listview">
+          <li data-role="list-divider"></li>
+          <li data-icon="false"><a href="#filebrowser"><i class="fa fa-folder-open fa-2x"></i> <span class="menulabel">Open</span></a>
+          </li>
+          <li data-role="list-divider"></li>
+          <li data-icon="false"><a class="ui-not-disabled" href="#commit"><i class="fa fa-save fa-2x"></i> <span class="menulabel">Save</span></a>
+          </li>
+          <li data-icon="false"><a href="#history"><i class="fa fa-history fa-2x"></i> <span class="menulabel">History</span></a>
+          </li>
+          <li data-role="list-divider"></li>
+          <li data-icon="false"><a href="#collaborate" data-shadow="true"><i class="fa fa-comment fa-2x"></i> <span class="menulabel">Chat</span><span class="ui-li-count">999</span></a>
+          </li>
+          <li data-icon="false"><a href="#errors"><i class="fa fa-warning fa-2x"></i> <span class="menulabel">Errors</span> <span class="ui-li-count error">9</span></a>
+          </li>
+          <li data-role="list-divider"></li>
+          <li data-icon="false"><a href="#options"><i class="fa fa-wrench fa-2x"></i> <span class="menulabel">Config</span></a>
+          </li>
+          <li data-icon="false"><a href="#" onclick="beautify();"><i class="fa fa-tasks fa-2x"></i> <span class="menulabel">Beautify</span></a>
+          </li>
+          <li data-icon="false"><a href="#" onclick="scroll(true)"><i class="fa fa-long-arrow-up fa-2x"></i> <span class="menulabel">Scroll up</span></a>
+          </li>
+          <li data-icon="false"><a href="#" onclick="scroll(false)"><i class="fa fa-long-arrow-down fa-2x"></i> <span class="menulabel">Scroll down</span></a>
+          </li>
+        </ul>
+      </div>
+      <div role="main" class="ui-content">
+        <div id="tabmenu" data-role="tabs">
+          <ul id="tablist" style="margin-left: 4px; margin-top:2px;">
+            <li class="stickytab"><a href="#dashboard" onclick="$( '#tabmenu' ).tabs( 'option', 'active', 0);" data-theme="b" data-mini="true" data-role="button" style="padding-right: 0px;"><i style="position: relative; left: -8px; top: 3px;" class="fa fa-home fa-2x"></i></a>
+            </li>
+            <li class="stickytab"><a href="#" id="newtab" data-theme="b" data-mini="true" data-role="button" style="margin-left: 4px; padding-right: 0px;"><i style="position: relative; left: -8px; top: 3px;" class="fa fa-file fa-2x"></i><i style="position: relative; left: -5px;" class="fa fa-plus"></i></a>
+            </li>
+          </ul>
+          <div id="viewcontainer">
+          
+          <div id="submenu">
+              <div data-role="controlgroup" data-type="horizontal" data-mini="true">
+                <a href="#filebrowser" data-role="button"><i class="fa fa-folder-open fa-2x"></i> <span class="menulabel">Open</span></a>
+                <a class="ui-not-disabled" data-role="button" href="#commit"><i class="fa fa-save fa-2x"></i> <span class="menulabel">Save</span></a>
+                <a class="ui-disabled" data-role="button"></a>
+                <a href="#history" data-role="button"><i class="fa fa-history fa-2x"></i> <span class="menulabel">History</span></a>
+                <a href="#undo" data-role="button"><i class="fa fa-reply fa-2x"></i> <span class="menulabel">History</span></a>
+                <a href="#redo" data-role="button"><i class="fa fa-share fa-2x"></i> <span class="menulabel">History</span></a>
+                <a class="ui-disabled"data-role="button"></a>
+                <a href="#collaborate" data-role="button" data-shadow="true"><i class="fa fa-comment fa-2x"></i> <span class="menulabel">Chat</span><span class="ui-li-count">999</span></a>
+                <a href="#errors" data-role="button"><i class="fa fa-warning fa-2x"></i> <span class="menulabel">Errors</span> <span class="ui-li-count error">9</span></a>
+                <a href="#options" data-role="button"><i class="fa fa-wrench fa-2x"></i> <span class="menulabel">Config</span></a>
+                <a class="ui-disabled" data-role="button"></a>
+                <a href="#" data-role="button" onclick="beautify();"><i class="fa fa-tasks fa-2x"></i> <span class="menulabel">Beautify</span></a>
+                <a href="#" data-role="button" onclick="scroll(true)"><i class="fa fa-long-arrow-up fa-2x"></i> <span class="menulabel">Scroll up</span></a>
+                <a href="#" data-role="button" onclick="scroll(false)"><i class="fa fa-long-arrow-down fa-2x"></i> <span class="menulabel">Scroll down</span></a>
+                <a class="ui-disabled" data-role="button"></a>
+                <a href="javascript: runCode();" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-play fa-2x"></i></a>
+                <a href="javascript: runCode(true);" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-stop fa-2x"></i></a>
+                <a href="javascript: runCode(true);" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-cog fa-2x"></i></a>
+                <a href="#collaborate" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-external-link fa-2x"></i></a>
+              </div>
+                <select name="select-choice-a" id="appsize" onchange="setAppSize()" data-native-menu="false" size="20">
+                  <option>Mobile device resolution</option>
+                  <option value="0">Hide preview</option>
+                  <option value="320" selected>320 (iPhone)</option>
+                  <option value="360">360 (Galaxy S3)</option>
+                  <option value="360">384 (Nexus 4, Lumia 925)</option>
+                  <option value="400">400 (Galaxy Note)</option>
+                  <option value="600">600 (Galaxy Tab, Kindle 1)</option>
+                  <option value="768">768 (iPad)</option>
+                  <option value="800">800 (Nexus 10, Kindle HD)</option>
+                  <option value="1024">1024 (iPad landscape)</option>
+                </select>
+            </div>
+            
+            <ul id="dashboard" style="overflow: auto; position: relative;">
+              <li class="dashlet">
+                <h2><i class="fa fa-home fa-2x"></i> Dashboard home</h2>
+                <h3>Recent files</h3>
+                <ul>
+                  <li>Another path to a file.html</li>
+                  <li>A path to a file.html</li>
+                </ul> <a href="javascript: createEditor ('Untitled' + fileCount +  '.html', '');" data-role="button" data-inline="true"><i class="fa fa-plus"></i> New file</a>
+                <a href="#filebrowser" data-role="button" data-inline="true"><i class="fa fa-folder-open"></i> Open file</a>
+                <a href="javascript: openSample('index.html');" data-role="button" data-inline="true"><i class="fa fa-edit"></i> Edit the editor!</a>
+              </li>
+              <li class="dashlet" style="background: rgba(155,155,250,0.2);">
+                <img src="/img/octocat.png" style="float: right; margin: 0px; width: 130px;" title="GitHub Integration">
+                <h2><i class="fa fa-cubes fa-2x"></i> Integration</h2>
+                <p>Sign in to edit your files on <a href="http://github.com" target="_blank">GitHub</a>.</p>
+                <img src="/img/phonegap.png" style="float: left; margin-right: 10px; width: 100px;" title="PhoneGap Integration">
+                <p>Bundle your HTML5 web apps into native packages with <a href="http://build.phonegap.com" target="_blank">PhoneGap Build</a>.</p>
+                <p style="font-size: 8px;">Octocat logo &copy; <a href="https://github.com/logos">GitHub</a>
+                </p>
+                <p style="font-size: 8px;">Build Bot logo &copy; <a href="http://phonegap.com/about/artwork/">Adobe / Yohei Shimomae.</a>
+                </p>
+              </li>
+              <li class="dashlet" style="background: rgba(150,255,150,0.2);">
+                <h3><i class="fa fa-file-code-o fa-2x"></i> Code examples</h3>
+                <ul data-role="listview" data-inset="true">
+                  <li data-icon="false"><a href="javascript: resume('tutorial1.html', '/kdmon/Test-repo/master/cars.html', true);"><i class="fa fa-cogs"></i> Variables and functions</a>
+                  </li>
+                  <li data-icon="false"><a href="javascript: openSample('examples/jquerymobile.html');"><i class="fa fa-mobile"></i> jQuery Mobile</a>
+                  </li>
+                  <li data-icon="false"><a href="javascript: openSample('examples/json.html');"><i class="fa fa-exchange"></i> JSON</a>
+                  </li>
+                  <li data-icon="false"><a href="javascript: openSample('examples/map.html');"><i class="fa fa-map-marker"></i> Geolocation</a>
+                  </li>
+                  <li data-icon="false"><a href="javascript: openSample('examples/rss.html');"><i class="fa fa-rss"></i> RSS news reader</a>
+                  </li>
+                  <li data-icon="false"><a href="javascript: openSample('examples/music.html');"><i class="fa fa-music"></i> Audio player</a>
+                  </li>
+                  <li data-icon="false"><a class="ui-disabled" href="#"><i class="fa fa-rocket"></i> Box2D physics library</a>
+                  </li>
+                  <li data-icon="false"><a class="ui-disabled" href="#"><i class="fa fa-usd"></i>. jQuery</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="dashlet" style="background: rgba(255,150,150,0.2);">
+                <h3><i class="fa fa-mortar-board fa-2x"></i> Video tutorials</h3>
+                <iframe width="360" height="280" src="//www.youtube-nocookie.com/embed/bsthKhTHguI?list=PLccPlNFtq5uEMHqMTibKLtidwahHmCgRc" frameborder="0" allowfullscreen></iframe>
+                <p>Youtube playlist by <a href="https://www.youtube.com/user/cogee/videos">Sam Cogan</a> introducing jQuery Mobile 1.4.x and PhoneGap Build.</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div data-role="panel" data-animate="false" id="filemanager" data-swipe-close="false" data-dismissible="false">
+        <div data-role="header">
+          <h1>Files</h1>
+        </div>
+        <div role="main" class="ui-content">
+          <ul data-role="listview" data-inset="true">
+            <li data-icon="false"><a href="#" id="newfile"><i class="fa fa-file"></i> New</a>
+            </li>
+            <li data-icon="false"><a href="#filebrowser"><i class="fa fa-folder-open"></i> Open</a>
+            </li>
+            <li data-icon="false"><a href="#upload"><i class="fa fa-upload"></i> Upload</a>
+            </li>
+            <li data-role="list-divider">Active file</li>
+            <li data-icon="false"><a href="#commit"><i class="fa fa-save"></i> Save</a>
+            </li>
+            <li data-icon="false" class="ui-disabled"><a href="#filebrowser"><i class="fa fa-copy"></i> Save as</a>
+            </li>
+            <li data-icon="false" class="ui-disabled"><a href="#edit"><i class="fa fa-edit"></i> Rename</a>
+            </li>
+            <li data-icon="false"><a href="#history"><i class="fa fa-list"></i> Revisions (& revert)</a>
+            </li>
+            <li data-icon="false" class="ui-disabled"><a href="#delete"><i class="fa fa-trash-o"></i> Delete</a>
+            </li>
+            <li data-role="list-divider"></li>
+            <li data-icon="false"><a href="#options"><i class="fa fa-wrench"></i> Options</a>
+            </li>
+            <li data-icon="false"><a href="#about"><i class="fa fa-info-circle"></i> About</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div data-role="panel" data-animate="false" data-swipe-close="false" id="filebrowser" data-dismissible="false">
+        <div data-role="header">
+          <h1>Browse</h1>
+        </div>
+        <div role="main" class="ui-content">
+          <h3 id="folder">Your repos</h3>
+          <ul id="filelist" data-role="listview" data-inset="true" style="max-height: 400px; clear: both; overflow-y: auto;">
+            <li>None found</li>
+          </ul> <a href="javascript: getFiles();" data-role="button"><i class="fa fa-refresh"></i> Refresh</a>
+          <a href="javascript: getFiles();" class="ui-disabled" data-role="button"><i class="fa fa-plus"></i> New repo</a>
+          <a href="#upload" data-role="button" class="ui-disabled"><i class="fa fa-upload"></i> Upload</a>
+          <a href="javascript: getFiles();" class="ui-disabled" data-role="button"><i class="fa fa-code-fork"></i> Fork repo</a>
+        </div>
+      </div>
+      <div data-role="panel" data-animate="false" data-swipe-close="false" id="history" data-dismissible="false">
+        <div data-role="header">
+          <h1>History</h1>
+        </div>
+        <div role="main" class="ui-content">
+          <ul id="changelog" data-role="listview">
+            <li>No entries</li>
+          </ul>
+          <br/> <a href="javascript: changeLog();" data-role="button">Refresh</a>
+        </div>
+      </div>
+      <div data-role="panel" data-dismissible="false" data-animate="false" data-swipe-close="false" id="options">
+        <div data-role="header">
+          <h1>Options</h1>
+        </div>
+        <div role="main" class="ui-content">
+          <label for="live">Live preview:</label>
+          <select name="live" id="livecoding" data-role="slider" onchange="setLiveCoding()">
+            <option value="on">On</option>
+            <option value="off">Off</option>
+          </select>
+          <label for="uitheme">UI Theme:</label>
+          <select name="uitheme" id="uitheme" data-role="slider">
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+          <br/>
+          <label for="fontsize">Font size:</label>
+          <input type="range" name="fontsize" id="fontsize" value="12" min="12" max="25" onchange="setFontSize();" />
+          <br/>
+          <p>Editor theme:</p>
+          <div style="height: 200px; padding: 20px; overflow-x: hidden; overflow-y: scroll;">
+            <ul data-role="listview" data-icon="search" name="themelist">
+              <li><a href="javascript: setTheme('ace/theme/ambiance');">Ambiance</a>
+              </li>
+              <li><a href="javascript: setTheme('ace/theme/chaos');">Chaos</a>
+              </li>
+              <li><a href="javascript: setTheme('ace/theme/chrome');">Chrome (default)</a>
+              </li>
+              <li><a href="javascript: setTheme('ace/theme/clouds');">Clouds</a>
+              </li>
+              <li><a href="javascript: setTheme('ace/theme/clouds_midnight');">Clouds Midnight</a>
+              </li>
+              <li><a href="javascript: setTheme('ace/theme/cobalt');">Cobalt</a>
+              </li>
+              <li><a href="javascript: setTheme('ace/theme/crimson_editor');">Crimson Editor</a>
+              </li>
+              <li><a href="javascript: setTheme('ace/theme/dawn');">Dawn</a>
+              </li>
+              <li><a href="javascript: setTheme('ace/theme/dreamweaver');">Dreamweaver</a>
+              </li>
+              <li><a href="javascript: setTheme('ace/theme/eclipse');">Eclipse</a>
+              </li>
+              <li><a href="javascript: setTheme('ace/theme/github');">Github</a>
+              </li>
+              <li><a href="javascript: setTheme('ace/theme/idle_fingers');">Idle Fingers</a>
+              </li>
+              <li><a href="javascript: setTheme('ace/theme/kr_theme');">KR theme</a>
+              </li>
+              <li><a href="javascript: setTheme('ace/theme/merbivore');">Merbivore</a>
+              </li>
+              <li><a href="javascript: setTheme('ace/theme/merbivore_soft');">Merbivore Soft</a>
+              </li>
+              <li><a href="javascript: setTheme('ace/theme/mono_industrial');">Mono Industrial</a>
+              </li>
+              <li><a href="javascript: setTheme('ace/theme/monokai');">Monokai</a>
+              </li>
+              <li><a href="javascript: setTheme('ace/theme/pastel_on_dark');">Pastel on dark</a>
+              </li>
+              <li><a href="javascript: setTheme('ace/theme/solarized_dark');">Solarized Dark</a>
+              </li>
+              <li><a href="javascript: setTheme('ace/theme/solarized_light');">Solarized_Light</a>
+              </li>
+              <li><a href="javascript: setTheme('ace/theme/terminal');">Terminal</a>
+              </li>
+              <li><a href="javascript: setTheme('ace/theme/textmate');">Textmate</a>
+              </li>
+              <li><a href="javascript: setTheme('ace/theme/tomorrow');">Tomorrow</a>
+              </li>
+              <li><a href="javascript: setTheme('ace/theme/tomorrow_night');">Tomorrow Night</a>
+              </li>
+              <li><a href="javascript: setTheme('ace/theme/tomorrow_night_blue');">Tomorrow Night Blue</a>
+              </li>
+              <li><a href="javascript: setTheme('ace/theme/tomorrow_night_bright');">Tomorrow Night Bright</a>
+              </li>
+              <li><a href="javascript: setTheme('ace/theme/tomorrow_night_eighties');">Tomorrow Night 80s</a>
+              </li>
+              <li><a href="javascript: setTheme('ace/theme/twilight');">Twilight</a>
+              </li>
+              <li><a href="javascript: setTheme('ace/theme/vibrant_ink');">Vibrant Ink</a>
+              </li>
+              <li><a href="javascript: setTheme('ace/theme/xcode');">Xcode</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div data-role="panel" data-dismissible="false" data-animate="false" data-swipe-close="false" id="revert">
+        <div data-role="header">
+          <h1>Revert file</h1>
+        </div>
+        <div role="main" class="ui-content">
+          <h3>Are you sure?</h3>
+          <p>Reverting will reset the file to the last save. Unsaved changes will be lost!</p> <a href="javascript: pull(true);" data-role="button">Revert</a>
+        </div>
+      </div>
+      <div data-role="panel" data-dismissible="false" data-animate="false" data-swipe-close="false" id="commit">
+        <div data-role="header">
+          <h1>Save file</h1>
+        </div>
+        <div role="main" class="ui-content">
+          <h3>Ready to save</h3>
+          <p>Summarise changes:
+            <br/>
+          </p>
+          <textarea id="commitmsg" cols=30 rows=3>Update file.</textarea>
+          <br/> <a href="javascript:commit();" data-role="button"><i class="fa fa-save"></i> Save</a>
+          <a href="#filebrowser" data-role="button"><i class="fa fa-copy"></i> Save as</a>
+          <a href="#delete" data-role="button"><i class="fa fa-trash-o"></i> Delete</a>
+        </div>
+      </div>
+      <div data-role="panel" id="collaborate" data-position="left" data-animate="false" data-dismissible="false" data-swipe-close="false">
+        <div data-role="header">
+          <h3>Chat</h3> <a href="#" data-rel="close" data-role="button" data-iconpos="notext" data-icon="arrow-l" class="ui-btn-right">Close</a>
+        </div>
+        <div role="main" class="ui-content">
+          <video id="localVideo"></video>
+          <div id="remoteVideos"></div>
+          <p>Invite collaborators to edit the current file with you in real-time using the below URL.</p>
+          <center>
+            <div id="qrcode" style="width:200px; height: 200px; clear: both; display: block; border: 10px white solid;"></div>
+            <p>Scan the QR code to open a preview on your mobile device.</p>
+            <input type="text" id="plainurl"> <a href="#" onclick="javascript: window.open($('#plainurl').val(), '_blank');" data-role="button">Open <i class="fa fa-external-link"></i></a>
+          </center>
+        </div>
+      </div>
+      <div data-role="panel" id="error" data-dismissible="false" data-animate="false" data-swipe-close="false">
+        <div data-role="header">
+          <h1>Errors</h1>
+        </div>
+        <div role="main" class="ui-content">
+          <ul id="errorlog" data-role="listview">
+            <li>No entries</li>
+          </ul>
+          <br/> <a href="javascript: clearErrors();" data-role="button">Clear</a>
+        </div>
+      </div>
+      <div data-role="panel" id="coshare" data-dismissible="false" data-animate="false" data-swipe-close="false">
+        <div data-role="header">
+          <h1>Share</h1>
+        </div>
+        <div role="main" class="ui-content"></div>
+      </div>
+    </div>
+  </body>
+
+</html>
