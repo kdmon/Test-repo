@@ -20,8 +20,8 @@
     <script src="/js/emmet.js"></script>
     <script src="/js/src-noconflict/ext-modelist.js"></script>
     <script src="/js/src-noconflict/ext-beautify.js"></script>
-    <script src="http://it4se.com:8080/channel/bcsocket.js"></script>
-    <script src="http://it4se.com:8080/share/share.uncompressed.js"></script>
+    <script src="http://it4se.com:8081/channel/bcsocket.js"></script>
+    <script src="http://it4se.com:8081/share/share.uncompressed.js"></script>
     <script src="/js/share_ace.js" type="text/javascript"></script>
     <script src="/js/qrcode.min.js" type="text/javascript"></script>
     <script src="/js/gitwrap.js" type="text/javascript"></script>
@@ -1092,7 +1092,7 @@ document.getElementById(iframeId).onload = function() {
       $(document).on("pagecreate", "#frontpage", function(event) {
         var params = getSearchParameters();
         document.title = 'Web App Editor';
-        connection = new sharejs.Connection("http://it4se.com:8080/channel");
+        connection = new sharejs.Connection("http://it4se.com:8081/channel");
         var webrtc = new SimpleWebRTC({
           // the id/element dom element that will hold "our" video
           localVideoEl: 'localVideo',
