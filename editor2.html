@@ -263,6 +263,7 @@
       var openFiles = {}; // important in tracking file details, like path and repo.
       var timer = setTimeout(function() {}, 10); // used for live editing
        // End globals
+       
        // Begin function declarations
       function addTab(title, tabCount) {
         var tabs = $("#tabmenu").tabs();
@@ -396,31 +397,34 @@
         }
         currentFile = fileCount;
         addTab(file, fileCount);
-        //window.history.pushState('', '', "/" + user + "/" + repo +"/master" + path + file + document.location.search );
-        $("#view" + fileCount).append('<div id="file' + fileCount + '"> <div id="editor' + fileCount + '" class="editor"></div>');
+
         var htmlSnippet;
-        htmlSnippet = '<div class="preview"><div data-role="controlgroup" data-type="horizontal" data-mini="true" style="margin-left: 5px;">';
-        htmlSnippet += '<a href="javascript: runCode();" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-play fa-2x"></i></a>';
+        htmlSnippet = '<div class="submenu">';
+        htmlSnippet += '<div data-role="controlgroup" data-type="horizontal" data-mini="true">';
+        htmlSnippet += '<a class="ui-not-disabled" title="Save" data-role="button" href="#commit"><i class="fa fa-save fa-2x"></i> <span class="menulabel">Save</span></a>';
+        htmlSnippet += '<a class="ui-disabled" data-role="button"></a>';
+        htmlSnippet += '<a href="#undo" title="Undo" data-role="button"><i class="fa fa-reply fa-2x"></i> <span class="menulabel">Undo</span></a>';
+        htmlSnippet += '<a href="#redo" title="Redo" data-role="button"><i class="fa fa-share fa-2x"></i> <span class="menulabel">Redo</span></a>';
+        htmlSnippet += '<a class="ui-disabled" data-role="button"></a>';
+        htmlSnippet += '<a href="#" title="Cut" data-role="button" onclick="beautify();"><i class="fa fa-cut fa-2x"></i> <span class="menulabel">Beautify</span></a>';
+        htmlSnippet += '<a href="#" title="Copy" data-role="button" onclick="scroll(true)"><i class="fa fa-copy fa-2x"></i> <span class="menulabel">Scroll up</span></a>';
+        htmlSnippet += '<a href="#" title="Paste" data-role="button" onclick="scroll(false)"><i class="fa fa-paste fa-2x"></i> <span class="menulabel">Scroll down</span></a>';
+        htmlSnippet += '<a class="ui-disabled" data-role="button"></a>'
+        htmlSnippet += '<a href="#" title="Search" data-role="button" onclick="scroll(false)"><i class="fa fa-search fa-2x"></i> <span class="menulabel">Scroll down</span></a>';
+        htmlSnippet += '<a href="#" title="Beautify" data-role="button" onclick="beautify();"><i class="fa fa-tasks fa-2x"></i> <span class="menulabel">Beautify</span></a>';
+        htmlSnippet += '<a href="#history" title="History" data-role="button"><i class="fa fa-history fa-2x"></i> <span class="menulabel">History</span></a>';
+        htmlSnippet += '<a class="ui-disabled" data-role="button"></a> <a href="javascript: runCode();" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-play fa-2x"></i></a>';
         htmlSnippet += '<a href="javascript: runCode(true);" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-stop fa-2x"></i></a>';
-        //  htmlSnippet += '<a href="javascript: runCode(true);" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-cog fa-2x"></i></a>';
-        htmlSnippet += '<a href="#collaborate" data-inline="true" class="nowrap" data-role="button" class="nowrap"><i class="fa fa-external-link fa-2x"></i></a>';
-        //  htmlSnippet +='<center><div>';
-        //  htmlSnippet +='<label for="select-choice-a" class="select">Preview size <i class="fa fa-mobile"></i> <i class="fa fa-tablet"></i> <i class="fa fa-desktop"></i> </label>';
-        htmlSnippet += '<select data-mini="false" name="select-choice-a" id="appsize" onchange="setAppSize()" data-native-menu="false" size="20">';
-        htmlSnippet += '<option>Mobile device resolution</option>';
-        htmlSnippet += '<option value="0">Hide preview</option>';
-        htmlSnippet += '<option value="320" selected>320 (iPhone)</option>';
-        htmlSnippet += '<option value="360">360 (Galaxy S3)</option>';
-        htmlSnippet += '<option value="360">384 (Nexus 4, Lumia 925)</option>';
-        htmlSnippet += '<option value="400">400 (Galaxy Note)</option>';
-        htmlSnippet += '<option value="600">600 (Galaxy Tab, Kindle 1)</option>';
-        htmlSnippet += '<option value="768">768 (iPad)</option>';
-        htmlSnippet += '<option value="800">800 (Nexus 10, Kindle HD)</option>';
-        htmlSnippet += '<option value="1024">1024 (iPad landscape)</option>';
-        htmlSnippet += '</select>';
-        //  htmlSnippet +='</div></center>';
-        htmlSnippet += '</div><div id="iframecontainer' + fileCount + '"><iframe src="' + iframeUrl + '" name="preview' + fileCount + '" id="preview' + fileCount + '" src="javascript: ' + "'" + "Live preview window'" + '"></iframe></div>';
+        htmlSnippet += '<a href="javascript: runCode(true);" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-cog fa-2x"></i></a>';
+        htmlSnippet += '<a href="#collaborate" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-external-link fa-2x"></i></a>';
+        htmlSnippet += '</div></div>';
+
+        $("#view" + fileCount).append('<div id="file' + fileCount + '">' + htmlSnippet + '<div id="editor' + fileCount + '" class="editor"></div>');
+
+        htmlSnippet = '<div class="preview"><div id="iframecontainer' + fileCount + '"><iframe src="' + iframeUrl + '" name="preview' + fileCount + '" id="preview' + fileCount + '" src="javascript: ' + "'" + "Live preview window'" + '"></iframe></div>';
+
         $("#view" + fileCount).append(htmlSnippet).trigger("create");
+
         /*  $("#view" + fileCount).append('<fieldset data-role="controlgroup" data-type="horizontal"><input type="checkbox" value="true" name="play" id="play"/><label for="play"><i class="fa fa-play"></i></label><input type="checkbox" value="true" name="autorun" id="autorun"/><label for="autorun"><i class="fa fa-refresh"></i></label></fieldset>').trigger('create');
          */
         //  console.log(window.frames[fileCount-1].onerror = function (msg, url, line) {alert (msg)});
@@ -469,7 +473,8 @@
 
       function formatLayout(animate) {
         var totalWidth = $(".ui-panel-wrapper").outerWidth();
-        var totalHeight = $(window).height() - $(".ui-header").outerHeight() - $("#tablist").outerHeight() - 10;
+        var totalHeight = $(window).height() - $(".ui-header").outerHeight() - $("#tablist").outerHeight() - $(".submenu").outerHeight() - 30;
+
         if (animate == true) {
           //        if (!animate > 0) animate = 2500;
           $("#tabmenu").css("width", totalWidth + "px");
@@ -491,7 +496,7 @@
           $("#tabmenu").css("width", totalWidth + "px");
           $(".editor").css("width", totalWidth - appSize - 11 + "px").css("height", totalHeight + "px");
           $(".preview").css("width", appSize + "px").css("height", totalHeight + "px");
-          $(".preview iframe").css("width", appSize + "px").css("height", totalHeight - 48 + "px");
+          $(".preview iframe").css("width", appSize + "px").css("height", totalHeight + "px");
         }
         $.each(editors, function(key, value) {
           editors[key].resize();
@@ -1240,26 +1245,6 @@ document.getElementById(iframeId).onload = function() {
             </li>
           </ul>
           <div id="viewcontainer">
-            <div class="submenu">
-              <div data-role="controlgroup" data-type="horizontal" data-mini="true">
-                <a class="ui-not-disabled" title="Save" data-role="button" href="#commit"><i class="fa fa-save fa-2x"></i> <span class="menulabel">Save</span></a>
-                <a class="ui-disabled" data-role="button"></a> 
-                <a href="#undo" title="Undo" data-role="button"><i class="fa fa-reply fa-2x"></i> <span class="menulabel">Undo</span></a>
-                <a href="#redo" title="Redo" data-role="button"><i class="fa fa-share fa-2x"></i> <span class="menulabel">Redo</span></a>
-                <a class="ui-disabled" data-role="button"></a>
-                <a href="#" title="Cut" data-role="button" onclick="beautify();"><i class="fa fa-cut fa-2x"></i> <span class="menulabel">Beautify</span></a>
-                <a href="#" title="Copy" data-role="button" onclick="scroll(true)"><i class="fa fa-copy fa-2x"></i> <span class="menulabel">Scroll up</span></a>
-                <a href="#" title="Paste" data-role="button" onclick="scroll(false)"><i class="fa fa-paste fa-2x"></i> <span class="menulabel">Scroll down</span></a>
-                <a class="ui-disabled" data-role="button"></a>
-                <a href="#" title="Search" data-role="button" onclick="scroll(false)"><i class="fa fa-search fa-2x"></i> <span class="menulabel">Scroll down</span></a>
-                <a href="#" title="Beautify" data-role="button" onclick="beautify();"><i class="fa fa-tasks fa-2x"></i> <span class="menulabel">Beautify</span></a>
-                <a href="#history" title="History" data-role="button"><i class="fa fa-history fa-2x"></i> <span class="menulabel">History</span></a>
-                <a class="ui-disabled" data-role="button"></a> <a href="javascript: runCode();" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-play fa-2x"></i></a>
-                <a href="javascript: runCode(true);" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-stop fa-2x"></i></a>
-                <a href="javascript: runCode(true);" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-cog fa-2x"></i></a>
-                <a href="#collaborate" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-external-link fa-2x"></i></a>
-              </div>
-            </div>
             <ul id="dashboard" style="overflow: auto; position: relative;">
               <li class="dashlet">
                 <h2><i class="fa fa-home fa-2x"></i> Dashboard home</h2>
@@ -1342,6 +1327,18 @@ document.getElementById(iframeId).onload = function() {
           <h1>Options</h1>
         </div>
         <div role="main" class="ui-content">
+          <select name="select-choice-a" id="appsize" onchange="setAppSize()" data-native-menu="false" size="20">
+            <option>Mobile device resolution</option>
+            <option value="0">Hide preview</option>
+            <option value="320" selected>320 (iPhone)</option>
+            <option value="360">360 (Galaxy S3)</option>
+            <option value="360">384 (Nexus 4, Lumia 925)</option>
+            <option value="400">400 (Galaxy Note)</option>
+            <option value="600">600 (Galaxy Tab, Kindle 1)</option>
+            <option value="768">768 (iPad)</option>
+            <option value="800">800 (Nexus 10, Kindle HD)</option>
+            <option value="1024">1024 (iPad landscape)</option>
+          </select>
           <label for="live">Live preview:</label>
           <select name="live" id="livecoding" data-role="slider" onchange="setLiveCoding()">
             <option value="on">On</option>
