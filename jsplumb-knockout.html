@@ -1,166 +1,1173 @@
 <!DOCTYPE html>
 <html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Clinical flow</title>
+  
+  <script type='text/javascript' src='//code.jquery.com/jquery-1.9.1.js'></script>
+  
+  <script type="text/javascript" src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
+  
+    
+      <script type='text/javascript' src="http://optimalblooduse.eu/clinicalflow/jquery.jsPlumb-1.5.4-min.js"></script>
+    
+      <script type='text/javascript' src="http://optimalblooduse.eu/clinicalflow/jquery.ui.touch-punch.min.js"></script>
+    
+      <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+    
+  
+  <style type='text/css'>
+    html, #meta {
+        overflow: hidden;
+        margin: 0px;
+        padding: 0px;
+    }
 
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>Knockoutjs.com - Control types example - jsFiddle demo</title>
-    <script type='text/javascript' src='//code.jquery.com/jquery-1.9.1.js'></script>
-    <link rel="stylesheet" type="text/css" href="/css/normalize.css">
-    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
-    <script type='text/javascript' src="http://knockoutjs.com/downloads/knockout-3.0.0.js"></script>
-    <script type='text/javascript' src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
-    <style type='text/css'>
-    </style>
-  </head>
+    body {
+        font-family: "Trebuchet MS", "Helvetica", "Arial",  "Verdana", "sans-serif";
+        font-size: 62.5%;
+	margin: 0px;
+        padding: 0px;
+   }
 
-  <body>
-    <div data-role="page" id="front">
-      <div data-role="header"> <a href="#next" data-role="button">Next</a>
-        <h3>Hello</h3>
-      </div>
-      <div data-role="main" class="ui-content">
-        <h1>HTML controls</h1>
-        <table>
-          <tr>
-            <td class="label">Text value (updates on change):</td>
-            <td>
-              <input data-bind="value: stringValue" />
-            </td>
-          </tr>
-          <tr>
-            <td class="label">Text value (updates on keystroke):</td>
-            <td>
-              <input data-bind='value: stringValue, valueUpdate: "afterkeydown"' />
-            </td>
-          </tr>
-          <tr>
-            <td class="label">Text value (multi-line):</td>
-            <td>
-              <textarea data-bind="value: stringValue"></textarea>
-            </td>
-          </tr>
-          <tr>
-            <td class="label">Password:</td>
-            <td>
-              <input type="password" data-bind="value: passwordValue" />
-            </td>
-          </tr>
-          <tr>
-            <td class="label">Checkbox:</td>
-            <td>
-              <label>Yes?
-                <input type="checkbox" data-bind="checked: booleanValue" name="checkbox-0" />
-              </label>
-            </td>
-          </tr>
-          <tr>
-            <td class="label">Drop-down list:</td>
-            <td>
-              <select data-native-menu="false" data-bind="options: optionValues, value: selectedOptionValue"></select>
-            </td>
-          </tr>
-          <tr>
-            <td class="label">Radio buttons:</td>
-            <td>
-              <fieldset data-role="controlgroup">
-                <label>
-                  <input type="radio" name="radio-choice" id="radio-choice-1" value="Alpha" data-bind="checked: radioSelectedOptionValue" />Alpha</label>
-                <label>
-                  <input name="radio-choice" id="radio-choice-2" type="radio" value="Beta" data-bind="checked: radioSelectedOptionValue" />Beta</label>
-                <label>
-                  <input name="radio-choice" id="radio-choice-3" type="radio" value="Gamma" data-bind="checked: radioSelectedOptionValue" />Gamma</label>
-              </fieldset>
-            </td>
-          </tr>
-          <tr>
-            <td>Slider</td>
-            <td>
-              <input type="range" data-bind="value: quantity, slider: quantity" name="quantity-slider" id="quantity-slider" min="0" max="1000" />
-            </td>
-          </tr>
-        </table>
-        <table>
-          <tr>
-            <td class="label">Text value:</td>
-            <td data-bind="text: stringValue"></td>
-          </tr>
-          <tr>
-            <td class="label">Password:</td>
-            <td data-bind="text: passwordValue"></td>
-          </tr>
-          <tr>
-            <td class="label">Bool value:</td>
-            <td data-bind='text: booleanValue() ? "True" : "False"'></td>
-          </tr>
-          <tr>
-            <td class="label">Slider value:</td>
-            <td data-bind="text: quantity"></td>
-          </tr>
-          <tr>
-            <td class="label">Selected option:</td>
-            <td data-bind="text: selectedOptionValue"></td>
-          </tr>
-          <tr>
-            <td class="label">Radio button selection:</td>
-            <td data-bind="text: radioSelectedOptionValue"></td>
-          </tr>
-        </table>
-      </div>
-    </div>
-    <div data-role="page" id="next">
-      <div data-role="header"> <a href="#front" data-role="button">Front</a>
-        <h3>Next</h3>
-      </div>
-    </div>
-    <script type='text/javascript'>
-      //<![CDATA[ 
-      /* custom binding handler thanks to Varun http://stackoverflow.com/a/16493161/2308978 */
-      ko.bindingHandlers.slider = {
-        init: function(element, valueAccessor) {
-          console.log("init");
-          // use setTimeout with 0 to run this after Knockout is done
-          setTimeout(function() {
-            // $(element) doesn't work as that has been removed from the DOM
-            var curSlider = $('#' + element.id);
-            // helper function that updates the slider and refreshes the thumb location
-            function setSliderValue(newValue) {
-              curSlider.val(newValue).slider('refresh');
-            }
-            // subscribe to the bound observable and update the slider when it changes
-            valueAccessor().subscribe(setSliderValue);
-            // set up the initial value, which of course is NOT stored in curSlider, but the original element :\
-            setSliderValue($(element).val());
-            // subscribe to the slider's change event and update the bound observable
-            curSlider.bind('change', function() {
-              valueAccessor()(curSlider.val());
+#menustructure button {
+    width: 95%;
+    padding: 3px;
+    margin: 2px;
+}
+
+.ui-dialog.buttonset {width: 100%}
+
+
+p {margin: 0px}
+
+.ui-dialog-title{padding-left: 20px;}
+
+
+
+._jsPlumb_overlay {
+    font-size: 110%;
+    background: rgba(255,255,255, 0.6);
+    padding: 3px;
+    border: 1px dotted #fff;
+    z-index: 999;
+}
+/*._jsPlumb_endpoint, ._jsPlumb_connector, ._jsPlumb_overlay {z-index: 9999}*/
+
+.rule {background: #fafafa; border: 2px solid #000;
+box-shadow: 1px 1px 5px #000;}
+
+.outcome {background: #ffffff; border: 1px solid #000}
+
+.box {
+    text-align: center; 
+    width:140px; 
+    border: 2px solid; 
+    padding: 5px;
+    position: absolute;
+}
+
+p {
+    -webkit-touch-callout: text;
+    -webkit-user-select: text;
+    -khtml-user-select: text;
+    -moz-user-select: -moz-text;
+    -ms-user-select: text;
+    user-select: text;
+    padding: 0px;
+    margin: 0px;
+}
+.round {border-radius: 20px;}
+  </style>
+  
+
+
+<script type='text/javascript'>//<![CDATA[ 
+
+	$.zoomLevel = 1;
+
+	// fix scaling using css transform
+
+
+$(window).load(function(){
+var decisionTree = [
+    
+    {
+        "id":"8811",
+        "rule":"Is the patient going to receive platelets or red cells?",
+        "false":"2",
+        "true":"5"
+    },
+    
+    {
+        "id":"2",
+        "rule": "Is the patient going to receive granulocytes (white cells)?",
+        "false": "3",
+        "true": "4"
+    },
+    
+    {
+        "id":"3",
+        "outcome":"Special components not required",
+        "icon":"green",
+        "text":"Only components that contain viable lymphocytes are likely to cause GvHD or CMV infection. Fresh frozen plasma and other plasma derivatives are not necessary to provide as irradiated or CMV negative."
+    },
+    
+    {
+        "id":"4",
+        "outcome":"Irradiated and CMV negative components required!",
+        "icon":"red",
+        "text": "Granulocytes cannot be leucodepleted."
+    },
+    
+    {
+        "id":"5",
+        "rule":"Is the patient a neonate or fetus? (< 1 month of age)",
+        "true": "6",
+        "false":"7"
+    },
+    
+    {
+        "id":"6",
+        "outcome":"Irradiated and CMV negative required",
+        "icon":"red",
+        "text": "This includes intrauterine transfusion and neonatal exchange transfusions."
+    },
+    
+    {
+        "id":"7",
+        "rule":"Is the patient an infant (1-23 months of age) who has received an intrauterine transfusion in the past six months?",
+        "text": "",
+        "true":"8",
+        "false":"9"
+    },
+    
+    {
+        "id":"8",
+        "outcome":"Irradiated components required",
+        "icon":"red",
+        "text": "BCSH: Irradiated components should be administered until 6 months after the expected delivery date (40 weeks gestation), or the donation has come from a first- or second-degree relative"
+    },
+    
+    {
+        "id":"9",
+        "rule":"Is the patient a pregnant woman who is NOT in labour (giving birth)?",
+        "true": "10",
+        "false": "11"
+    },
+    
+    {
+        "id":"10",
+        "outcome":"CMV negative required",
+        "icon":"red",
+        "text": "Irregardless of mother's CMV sero status. Leucodepleted components can be used in emergency instead of CMV negative components.",
+        "continue": "11"
+    },
+
+    {
+        "id":"11",
+        "rule":"Is the donor and recipient related to each other? (e.g. mother and child, or HLA*-matched donor and recipient)",
+        "text": "* Human Leucocyte Antigens",
+        "true": "12",
+        "false": "13"
+    },
+    
+    {
+        "id":"12",
+        "outcome":"Irradiation required",
+        "icon":"red",
+        "text": "Shared haplotypes between the donor and recipient is a risk factor for GvHD.",
+    },
+    
+    {
+        "id":"13",
+        "rule":"Is the patient severly immunosuppressed as a result of the following:",
+        "text": "Treatment with purine analogues, Campath or ATG, stem cell or bone marrow transplant or harvest, Hodgkin Lymphoma, Severe T lymphocyte immunodeficiency (e.g. Di George, SCID)",
+        "true": "14",
+        "false": "15"
+    },
+    
+    {
+        "id":"14",
+        "outcome":"Irradiation required",
+        "icon":"red",
+        "text": "Patient considered at risk of GvHD."
+    },
+    
+    {
+        "id":"15",
+        "rule":"Have the blood component been leucodepleted?",
+        "text": "Leucodepletion is a process that removes white cells (leucocytes) implicated in both CMV infection and GvHD.",
+        "true": "16",
+        "false": "17"
+    },
+    
+    {
+        "id":"16",
+        "outcome":"Special component not required",
+        "icon":"green",
+        "text": ""
+    },
+    
+    {
+        "id":"17",
+        "outcome":"Take care",
+        "icon":"yellow",
+        "text": "Non-leucodepleted components carry added risks."
+    } 
+    
+    
+];
+
+var anchorPoints = [];
+var nodesList = [];
+
+/*
+$('#container').dblclick(function(e) {
+    
+    var topOffset = e.pageY;
+    var leftOffset = e.pageX;
+    
+    var choice = confirm ("Create a new item?");
+    
+    if (choice) {
+        
+        var newId = getNewId(decisionTree);
+        
+        var rule = confirm ("Would you like add a rule?");
+        
+        if (rule) {
+            
+            var newRule = [{"id": newId, "rule":"New rule", "false":"", "true":""}];
+            decisionTree = decisionTree.concat(newRule);
+            //console.log (decisionTree);
+            
+            createBox (newRule[0]);
+            
+            $("#rule" + newId).css({
+                'top': topOffset,
+                'left': leftOffset
             });
-          }, 250);
         }
-      };
-      var viewModel = {
-        stringValue: ko.observable("Hello"),
-        passwordValue: ko.observable("mypass"),
-        quantity: ko.observable(6),
-        booleanValue: ko.observable(true),
-        optionValues: ["Alpha", "Beta", "Gamma"],
-        selectedOptionValue: ko.observable("Gamma"),
-        radioSelectedOptionValue: ko.observable("Beta")
-      };
-      ko.applyBindings(viewModel);
-      /*
-$(document).on('pagebeforeshow', '#slider-page', function(){
-    $('#quantity-slider').val(viewModel.quantity());
-    $('#quantity-slider').slider('refresh');
+        
+        else {
+            
+            var newOutcome = {"id": newId, "outcome":"New outcome", "continue":""};
+            
+            createBox (newOutcome);
+            
+            $("#outcome" + newId).css({
+                'top': topOffset,
+                'left': leftOffset
+            });
+            
+        }
+        
+        jsPlumb.repaintEverything();
+        
+    }
+    
 });
 */
-      var c = 0;
-      setInterval(function() {
-        c += 10;
-        viewModel.quantity(c);
-      }, 200)
-       //]]>
-    </script>
-  </body>
+
+
+
+
+jsPlumb.ready(function () {
+
+    jsPlumb.Defaults.Container = $("#meta");
+    jsPlumb.setSuspendDrawing(true);
+
+    makeNodes (decisionTree);
+    
+    // arrange nodes here
+    connectNodes (decisionTree);
+    
+    arrangeNodes (decisionTree);
+    
+    /*jsPlumb.bind("click", function(endpoint, originalEvent) {
+        alert (endpoint + originalEvent);
+    });*/
+    
+    jsPlumb.setSuspendDrawing(false, true);
+
+    $("#meta").scrollTop(0);
+    $("#meta").scrollLeft(1800);
+
+    
+    //iconise and bind menubar buttons
+    
+    $("#menustructure").accordion({
+        collapsible: true,
+        heightStyle: "content"
+    });
+    
+    $("#minimise").button({
+        icons: {
+            primary: "ui-icon-minus"
+        }}).bind("click", function () {
+        //alert ("refresh");
+    });
+    
+    $("#new").button({
+        icons: {
+            primary: "ui-icon-document"
+        }}).bind("click", function () {
+            console.log (decisionTree);
+        if (confirm ("Are you sure you want to discard the current document and start on a new one?")) {
+            
+        for (item in decisionTree) {
+            
+            var node = findNode(item, decisionTree);
+            console.log(item);
+            if (node.rule)
+                 destroy ($("#rule" + node.id));
+            else
+                 destroy ($("#outcome" + node.id));    
+            
+        }
+    }
+    });
+    
+    $("#open").button({
+        icons: {
+            primary: "ui-icon-folder-open"
+        }}).bind("click", function () {
+        console.log (decisionTree[0].id);
+        var test = findNode(8811, decisionTree);
+        //alert (test.id);
+    });
+    
+    $("#save").button({
+        icons: {
+            primary: "ui-icon-disk"
+        }}).bind("click", function () {
+    });
+    
+    $("#decorate").button({
+        icons: {
+            primary: "ui-icon-pencil"
+        }}).bind("click", function () {
+		var textures = [
+		     "bg.png",
+		     "batthern.png",
+		     "random_grey_variations.png",
+		     "retina_wood.png",
+		     "wood_1.png",
+		     "leather_1.png",
+		     "green-fibers.png",
+		     "pool_table.png",
+		     "tiny_grid.png",
+		     "always_grey.png",
+		     "graphy.png"
+		];
+		
+        	$("#container").css("background", "url(../app/bg/" + textures[Math.floor(Math.random()*textures.length)] + ")");
+    });
+    
+    $("#addrule").button({
+        icons: {
+            primary: "ui-icon-check"
+        }}).bind("click", function () {
+            var newId = getNewId(decisionTree);
+            var newRule = [{"id": newId, "rule":"New rule " + newId, "false":"", "true":""}];
+            decisionTree = decisionTree.concat(newRule);
+            createBox (newRule[0]);
+    });
+    
+    $("#addoutcome").button({
+        icons: {
+            primary: "ui-icon-script  "
+        }}).bind("click", function () {
+            var newId = getNewId(decisionTree);
+            var newOutcome = [{"id": newId, "outcome":"New outcome " + newId, "continue":"", "icon":"yellow"}];
+            decisionTree = decisionTree.concat(newOutcome);
+            createBox (newOutcome[0]);
+    });
+    
+    $("#arrange").button({
+        icons: {
+            primary: "ui-icon-calculator"
+        }}).bind("click", function () {
+        arrangeNodes(decisionTree);
+        jsPlumb.repaintEverything
+    });
+    
+    $("#preview").button({
+        icons: {
+            primary: "ui-icon-search"
+        }}).bind("click", function () {
+        //alert ("refresh");
+    });
+
+    $("#zoomin").button({
+        icons: {
+            primary: "ui-icon-zoomin"
+        }}).bind("click", function () {
+	zoom ("in");
+    });
+
+    $("#zoomout").button({
+        icons: {
+            primary: "ui-icon-zoomin"
+        }}).bind("click", function () {
+	zoom ("out");
+    });
+    
+    $("#menubar").draggable({ containment: "window"}, {scroll : false});
+    
+
+    $("#reset").button({
+        icons: {
+            primary: "ui-icon-refresh"
+        }}).bind("click", function () {
+	zoom();
+	jsPlumb.repaintEverything();
+    });  
+    
+
+
+jsPlumb.bind("connection", function(info) {
+
+	var source = info.sourceEndpoint.getParameter("type");
+
+
+	switch (source) {
+
+	   case "right":
+  	   decisionTree[findIndex(info.sourceId.replace(/\D/g,''), decisionTree)].true = info.targetId.replace(/\D/g,'');
+	   break;
+
+	   case "left":
+  	   decisionTree[findIndex(info.sourceId.replace(/\D/g,''), decisionTree)].false = info.targetId.replace(/\D/g,'');
+	   break;
+
+	   case "bottom":
+  	   decisionTree[findIndex(info.sourceId.replace(/\D/g,''), decisionTree)].continue = info.targetId.replace(/\D/g,'');
+	   break;
+
+	}
+});
+
+
+jsPlumb.bind("connectionDetached", function(info) {
+
+        var source = info.sourceEndpoint.getParameter("type");
+
+
+        switch (source) {
+
+           case "right":
+           decisionTree[findIndex(info.sourceId.replace(/\D/g,''), decisionTree)].true = '';
+           break;
+
+           case "left":
+           decisionTree[findIndex(info.sourceId.replace(/\D/g,''), decisionTree)].false = '';
+           break;
+
+           case "bottom":
+           decisionTree[findIndex(info.sourceId.replace(/\D/g,''), decisionTree)].continue = '';
+           break;
+
+        }
+
+});
+
+
+
+
+    
+});
+
+
+function zoom (direction) {
+
+    switch (direction) {
+	case "in": $.zoomLevel += 0.1; break;
+	case "out": $.zoomLevel -= 0.1; break;
+	default: $.zoomLevel = 1; break;
+    }
+
+
+    $("#meta").css({
+        "-webkit-transform":"scale(" + $.zoomLevel +")",
+        "-moz-transform":"scale(" + $.zoomLevel + ")",
+        "-ms-transform":"scale(" + $.zoomLevel + ")",
+        "-o-transform":"scale(" + $.zoomLevel + ")",
+        "transform":"scale(" + $.zoomLevel + ")",
+        "-webkit-transform-origin": "0 0",
+        "-moz-transform-origin":"0 0",
+        "-ms-transform-origin":"0 0 ",
+        "-o-transform-origin":"0 0",
+        "transform-origin":"0 0",
+	"width": (100 / $.zoomLevel) + "%",
+	"height": (100 / $.zoomLevel) + "%",
+	
+    });
+
+    jsPlumb.setZoom($.zoomLevel);
+  //  jsPlumb.recalculateOffsets($("#meta"));
+   // jsPlumb.recalculateOffsets($("#container"));
+
+}
+
+function makeNodes (obj) {
+    
+    for (item in obj){
+        createBox(obj[item]);        
+    }
+    
+}
+
+function createBox (obj) {
+    
+    
+    // this is the paint style for the connecting lines..
+    var connectorPaintStyle = {
+        lineWidth:5,
+        strokeStyle:"#000000",
+        joinstyle:"round",
+        outlineColor:"white",
+        outlineWidth:1
+    };
+    
+    // .. and this is the hover style. 
+    var connectorHoverStyle = {
+        lineWidth:5,
+        strokeStyle:"#216477",
+        outlineWidth:1,
+        outlineColor:"white"
+    };
+    
+    
+    var endpointHoverStyle = {
+        lineWidth:5,
+        fillStyle:"#216477",
+        strokeStyle:"#216477"
+    };
+    
+    var endpoint1 = {
+        isSource:true,
+        maxConnections:1,
+        endpoint: "Rectangle",
+	parameters : {"type":"left"},
+        paintStyle:{ 
+            width: 40,
+            height: 40,
+            strokeStyle:"#000000",
+            fillStyle:"#FF0000",
+            lineWidth:5 
+        },                              
+        anchor: ["BottomLeft"], 
+        connectorStyle:connectorPaintStyle,
+        hoverPaintStyle:endpointHoverStyle,
+        connectorHoverStyle:connectorHoverStyle,
+        overlays:[
+            [ "Label", { 
+                location:[1.7, 1.3], 
+                label:"No"
+            } ]
+        ],
+        connector:[ "Flowchart", { stub:[20, 20], gap:0, cornerRadius:1, alwaysRespectStubs:false } ]
+    };
+    
+    var endpoint2 = {
+        isSource:true,
+        maxConnections:1,
+        endpoint: "Dot",
+	parameters : {"type":"right"},
+        paintStyle:{ 
+            strokeStyle:"#000000",
+            fillStyle:"#00FF00",
+            radius : 20,
+            lineWidth:3 
+        },
+        anchor: ["BottomRight"],
+        connectorStyle: connectorPaintStyle,
+        hoverPaintStyle: endpointHoverStyle,
+        connectorHoverStyle: connectorHoverStyle,
+        overlays:[
+            [ "Label", { 
+                location:[-.5, 1.2], 
+                label:"Yes"
+            } ]
+        ],
+        connector:[ "Flowchart", { stub:[20, 20], gap:0, cornerRadius:1, alwaysRespectStubs:false } ]
+    };
+    
+    var endpoint3 = {
+        isTarget:true,
+        maxConnections: 10,
+        endpoint:"Dot",
+	parameters : {"type":"top"},
+        paintStyle:{ 
+            strokeStyle:"#000000",
+            fillStyle:"#FFFFFF",
+            radius:20,
+            lineWidth:3 
+        },
+        overlays:[
+            [ "Label", { 
+                location:[1.8, 0.1], 
+                label:"Drop here"
+            } ]
+        ],                              
+        anchor: "Top"
+    };
+    
+    
+    var endpoint4 = {
+        isSource:true,
+        maxConnections:1,
+        endpoint:"Rectangle",
+	parameters : {"type":"bottom"},
+        paintStyle:{ 
+            width: "40",
+            height: "40",            
+            strokeStyle:"#000000",
+            fillStyle:"#000000",
+            lineWidth:3 
+        },                              
+        anchor: ["Bottom"],
+        connectorStyle: connectorPaintStyle,
+        hoverPaintStyle: endpointHoverStyle,
+        connectorHoverStyle: connectorHoverStyle,
+        overlays:[
+            [ "Label", { 
+                location:[-1.2,  1], 
+                label:"Continue"
+            } ]
+        ],
+        connector:[ "Flowchart", { stub:[20, 20], gap:0, cornerRadius:1, alwaysRespectStubs:false } ]
+    };
+    
+    
+    if (obj.rule) {
+        
+        var htmlString = '<p style="font-size: 150%;" id="ruletitle' + obj.id + '" contenteditable="true">'  + (obj.rule == undefined ? "Add a rule" : obj.rule ) + '</p><p id="ruletext' + obj.id + '" contenteditable="true">'  + (obj.text == undefined ? "Add more details" : obj.text ) + '</p>';
+        $("<div>" + htmlString + " </div>").dialog(
+            { dialogClass: "rule" },
+            {title: "Rule"},
+            {resizable: false},
+            {minWidth: 180},
+            {minHeight: 80},
+            {width: 240},
+            {hide: "explode"},
+            {dragStop: function(event, ui) {
+	        ui.position.left /= $.zoomLevel;
+	        ui.position.top /= $.zoomLevel;
+                jsPlumb.repaint($("#rule" + obj.id));
+            }
+            },
+            {dragStart: function(event, ui) {
+	        ui.position.left /= $.zoomLevel;
+	        ui.position.top /= $.zoomLevel;
+//                jsPlumb.repaint($("#rule" + obj.id));
+            }
+            },
+            {drag: function(event, ui) {
+	        ui.position.left /= $.zoomLevel;
+	        ui.position.top /= $.zoomLevel;
+                jsPlumb.repaint($("#rule" + obj.id));
+            }
+            }/*,
+            {
+                buttons: {
+                    No: function() { //ok
+                        $( this ).dialog( "close" );
+                    },
+                    Yes: function() { //cancel
+                        $( this ).dialog( "close" );
+                    }
+                }
+            }*/
+        ).attr("id", "box" + obj.id);
+        
+        $('#box' + obj.id).parent().attr("id","rule" + obj.id);
+        $('#rule' + obj.id +' .ui-dialog-titlebar-close').remove();
+        
+        $('<button class="ui-dialog-titlebar-close ui-icon ui-corner-all ui-icon-closethick"></button>')
+        .appendTo($("#box" + obj.id).parents('.ui-dialog').find('.ui-dialog-titlebar'))
+        .click(function() {
+            if (confirm ("Are you sure you want to delete this rule?")) {destroy ($("#rule" + obj.id));}
+        }); 
+        
+        $('<button class="ui-dialog-titlebar-close ui-icon ui-corner-all ui-icon-pencil" style="right: 30px;"></button>')
+        .appendTo($("#box" + obj.id).parents('.ui-dialog').find('.ui-dialog-titlebar'))
+        .click(function() {
+            //smth here
+        }); 
+        
+        $('<button class="ui-dialog-titlebar-close ui-icon ui-corner-all ui-icon-arrow-4" style="right: 60px;"></button>')
+        .appendTo($("#box" + obj.id).parents('.ui-dialog').find('.ui-dialog-titlebar'))
+        .click(function() {
+            //smth here
+        }); 
+        
+        $('<button class="ui-dialog-titlebar-close ui-icon ui-corner-all ui-icon-check" style="left: 5px;"></button>')
+        .appendTo($("#box" + obj.id).parents('.ui-dialog').find('.ui-dialog-titlebar'))
+        .click(function() {
+            //smth here
+        }); 
+        
+        $('<button class="ui-dialog-titlebar-close ui-icon ui-corner-all ui-icon-notice" style="right: 80px;"></button>')
+        .appendTo($("#box" + obj.id).parents('.ui-dialog').find('.ui-dialog-titlebar'))
+        .click(function() {
+            //smth here
+        }); 
+        
+        
+        $("#rule" + obj.id).appendTo("#container");
+        
+        $("#rule" + obj.id).draggable({ containment: "#container"}, {scroll : false});
+        
+        anchorPoints[obj.id + "l"] = jsPlumb.addEndpoint($("#rule"+obj.id), endpoint1);
+        anchorPoints[obj.id + "r"] = jsPlumb.addEndpoint($("#rule"+obj.id), endpoint2);
+        anchorPoints[obj.id] = jsPlumb.addEndpoint($("#rule"+obj.id), endpoint3);
+        
+        //$("#container").appendTo("#rule" + obj.id);
+        
+        /*        
+        jsPlumb.draggable($("#rule" + obj.id), {
+            containment: 'parent'
+        });
+  */      
+        
+        $("#rule" + obj.id).css({
+            'left': $(window).width/2,
+            'top': $(window).height/2
+        });
+    }
+    
+    else if (obj.outcome) {
+        
+        var htmlString = '<div style="float: left;"><img id="outcomeicon' + obj.id + '" src="http://optimalblooduse.eu/app/' + obj.icon + '.png" style="width:100px; height: 100px;"/></div><p style="font-size: 150%;" id="outcometitle' + obj.id + '" contenteditable="true">' + (obj.outcome == undefined ? "Add an outcome" : obj.outcome ) + '</p><p id="outcometext' + obj.id + '" contenteditable="true">' + (obj.text == undefined ? "Add more details" : obj.text ) + '</p>';
+        $("<div>" + htmlString + " </div>").dialog(
+            { dialogClass: "outcome" },
+            {title: "Outcome"},
+            {hide: "explode"},
+            {resizable: false},
+            {minWidth: 180},
+            {minHeight: 80},
+            {width: 240},
+            {dragStop: function(event, ui) {
+	        ui.position.left /= $.zoomLevel;
+	        ui.position.top /= $.zoomLevel;
+                jsPlumb.repaint($("#outcome" + obj.id));
+            }
+            },
+            {dragStart: function(event, ui) {
+	        ui.position.left /= $.zoomLevel;
+	        ui.position.top /= $.zoomLevel;
+//                jsPlumb.repaint($("#outcome" + obj.id));
+            }
+            },
+            {drag: function(event, ui) {
+	        ui.position.left /= $.zoomLevel;
+	        ui.position.top /= $.zoomLevel;
+                jsPlumb.repaint($("#outcome" + obj.id));
+            }
+            }/*
+            {
+                buttons: {
+                    Continue: function() {
+                        $( this ).dialog( "close" );
+                    }
+                }
+            }*/
+        ).attr("id", "box" + obj.id);
+        
+        $('#box' + obj.id).parent().attr("id","outcome" + obj.id);
+        
+        $('#outcome' + obj.id +' .ui-dialog-titlebar-close').remove();
+        
+        $('<button class="ui-dialog-titlebar-close ui-icon ui-corner-all ui-icon-closethick"></button>')
+        .appendTo($("#box" + obj.id).parents('.ui-dialog').find('.ui-dialog-titlebar'))
+        .click(function() {
+            if (confirm ("Are you sure you want to delete this outcome?")) {destroy ($("#outcome" + obj.id));}
+        }); 
+        
+        $('<button class="ui-dialog-titlebar-close ui-icon ui-corner-all ui-icon-gear" style="right: 30px;"></button>')
+        .appendTo($("#box" + obj.id).parents('.ui-dialog').find('.ui-dialog-titlebar'))
+        .click(function() {
+            pickImage ($("#outcomeicon" + obj.id));
+        });
+        
+            $('<button class="ui-dialog-titlebar-close ui-icon ui-corner-all ui-icon-notice" style="right: 60px;"></button>')
+            .appendTo($("#box" + obj.id).parents('.ui-dialog').find('.ui-dialog-titlebar'))
+            .click(function() {
+                //smth here
+            }); 
+            
+            $('<button class="ui-dialog-titlebar-close ui-icon ui-corner-all ui-icon-script" style="left: 5px;"></button>')
+            .appendTo($("#box" + obj.id).parents('.ui-dialog').find('.ui-dialog-titlebar'))
+            .click(function() {
+                //smth here
+            }); 
+            
+            /*
+        $("#nodes").append('<div class="ui-widget-content outcome box round" id="outcome' + obj.id + '" ><p contenteditable="true">' + obj.outcome + '</p></div>').dialog({drag: function(event, ui){jsPlumb.repaint($("#outcome" + obj.id));}}).parent('.ui-dialog');
+        */
+            
+            $("#outcome" + obj.id).appendTo("#container");
+            
+            $("#outcome" + obj.id).draggable({ containment: "#container"}, {scroll : false});
+            
+            anchorPoints[obj.id] = jsPlumb.addEndpoint("outcome" + obj.id, endpoint3);
+            anchorPoints[obj.id + "c"] = jsPlumb.addEndpoint("outcome" + obj.id, endpoint4);
+            
+        
+            $("#outcome" + obj.id).css({
+                'top': $(window).height/2 + $("#container").scrollTop(),
+                'left': $(window).width/2 + $("#container").scrollLeft()
+            });
+            
+        }
+               
+               
+               
+               /*
+    jsPlumb.draggable($(".ui-dialog-titlebar"), {
+        containment: 'parent'
+    });
+    */
+               
+               //jsPlumb.setDraggable($(".box"), false);
+               
+               
+}
+               
+               
+        function connectNodes (obj) {
+            
+            for (var i=0; i<obj.length; i++) {
+                
+                if (obj[i].rule) {
+                    
+                    var tnode = findNode (obj[i].true, obj);
+                    var fnode = findNode (obj[i].false, obj);
+                    
+                    // true connects to a rule
+                    if (tnode.rule) {
+                        jsPlumb.connect({
+                            source: anchorPoints[obj[i].id + "r"],
+                            target: anchorPoints[tnode.id]
+                        });
+                    }
+                    
+                    // true connects to an outcome
+                    else if (tnode.outcome) {
+                        jsPlumb.connect({
+                            source: anchorPoints[obj[i].id + "r"],
+                            target: anchorPoints[tnode.id]
+                        });
+                    }
+                    
+                    
+                    // false connects to a rule
+                    if (fnode.rule) {
+                        jsPlumb.connect({
+                            source: anchorPoints[obj[i].id + "l"],
+                            target: anchorPoints[fnode.id]
+                        });
+                    }
+                    
+                    // false connects to an outcome
+                    else if (fnode.outcome) {
+                        jsPlumb.connect({
+                            source: anchorPoints[obj[i].id + "l"],
+                            target: anchorPoints[fnode.id]
+                        });
+                    }
+                }
+                
+                else if (obj[i].continue) {
+                    
+                    var cnode = findNode (obj[i].continue, obj);
+                    
+                    if (cnode.id) {
+
+                        jsPlumb.connect({
+                            source: anchorPoints[obj[i].id + "c"],
+                            target: anchorPoints[cnode.id]
+                        });
+                    }
+                    
+                }
+                
+                
+            }
+        }
+        
+        function pickImage (id) {
+            $("#menubar").hide();
+            var htmlString = '<div title="Pick an icon"><p>Please select an icon from the list.</p><select name="iconlist" class="text ui-widget-content ui-corner-all" style="width: 80%"><option value="red">Red</option><option value="yellow">Yellow</option><option value="green">Green</option></select></fieldset></form><div>';
+            
+            $(htmlString).dialog({
+                resizable: false,
+                autoOpen: true,
+                modal: true,
+                buttons: {
+                    'OK': function() {
+                        $(id).attr("src", "http://optimalblooduse.eu/app/" + $('select[name="iconlist"]').val() + ".png");
+                        $( this ).dialog( "close" );
+                    },
+                    'Cancel': function() {
+                        $( this ).dialog( "close" );
+                    },
+                },
+                close: function() {
+                $('select[name="iconlist"]').val('');
+                $( this ).remove();
+                $("#menubar").show();
+                }
+            });
+        }
+        
+        function findNode (id, obj) {
+            for (item in obj) {
+                if (id == obj[item].id) return (obj[item]);
+            }
+            return (false);
+        }
+
+
+        function findIndex (id, obj) {
+            for (item in obj) {
+                if (id === obj[item].id) return (item);
+            }
+            return (false);
+        }
+        
+        function destroy (element) {
+            jsPlumb.removeAllEndpoints(element);
+            //jsPlumb.detachAllConnections(element);
+            element.remove();
+        }
+        
+
+        function getNewId (obj) {
+            
+            var IdList = [];
+            for (i in obj) {
+                IdList[i] = [obj[i].id];
+            }
+            IdList.sort();
+            IdList.sort(function(a,b){return a-b});
+            //alert (" h" + IdList);
+            var newId = parseInt(IdList[IdList.length-1]) + 1;
+            if (newId.toString() > 0) return (newId.toString())
+            else return (0);
+        }
+    
+
+        
+        function arrangeNodes (obj) {
+            
+            setTimeout (function() {
+                jsPlumb.repaintEverything();}, 50);
+            setTimeout (function() {
+                jsPlumb.repaintEverything();}, 100);
+            setTimeout (function() {
+                jsPlumb.repaintEverything();}, 150);
+            setTimeout (function() {
+                jsPlumb.repaintEverything();}, 250);
+            setTimeout (function() {
+                jsPlumb.repaintEverything();}, 350);
+            
+            // determine root node (top level)
+            // (there can only be one!)
+            
+            var linkedList = {};
+            
+            for (var i=0; i<obj.length; i++) {
+                if (obj[i].id) linkedList[obj[i].id] = 0;
+            }
+            
+            for (var i=0; i<obj.length; i++) {
+                if (obj[i].true) linkedList[obj[i].true] ++;
+                if (obj[i].false) linkedList[obj[i].false] ++;
+                if (obj[i].continue) linkedList[obj[i].continue] ++;
+            }
+           //console.log (linkedList);
+            
+            var levels = {};
+            
+            // root node
+            for (var key in linkedList) {
+                if (linkedList[key] == 0) {
+                    levels[0] = [key];
+                }
+            }
+            
+            
+            // generate hierarchy structure
+            // (which node goes into which level)
+            var i = 0;
+            var finished = false;
+            
+            while (!finished) {
+                if (levels[i] == undefined) {
+                    finished = true;
+                    break;
+                }
+                var trues = [];
+                var falses = [];
+                
+                for (var p = 0; p < levels[i].length; p++){
+                    
+                    var parent = obj[findIndex(levels[i][p], obj)];
+
+                    
+                    
+                    for (var c = 0; c<obj.length; c++) {
+                        
+                        var child = obj[c];
+                        
+                        if (parent.true == child.id) {
+                            
+                            //if (levels[i+1] == undefined) levels[i+1] = [];
+                            //levels[i+1].push(parent.true);
+                            trues.push(parent.true)
+                        }
+                        
+                        if (parent.false == child.id) {
+                            
+                            //if (levels[i+1] == undefined) levels[i+1] = [];
+                            //levels[i+1].push(parent.false);
+                            falses.push(parent.false)
+                        }
+                        
+                    }
+                    
+                     if (levels[i+1] == undefined) levels[i+1] = [];
+                    
+                    levels[i+1] = $.map(falses, function(v, i) { return [v, trues[i]]; });
+                    console.log (falses);
+                    console.log (trues);
+                    console.log(levels[i+1]);
+                    
+                }
+                i++;
+            }
+            
+            console.log (levels);
+            
+            
+            var nodeWidth = 1;
+            for (var p = 0; p < levels.length; p++){
+                nodeWidth = (levels[p].length > nodeWidth) ? levels[p].length : nodeWidth;
+            }
+            
+            var offset = 0;
+            
+            for (p in levels){
+                
+                
+                for (var c = 0; c < levels[p].length; c++){
+                    var node = findNode (levels[p][c], obj);
+                    
+                    //var xpos = (5000/2) - (levels[p].length/2*300) + 300 * c;
+                    
+
+                    var distance;
+
+                    switch (p) {
+                            case "1": distance = 600; break;
+                            case "2": distance = 500; break;
+                            case "3": distance = 400; break;
+                            case "4": distance = 300; break;
+                            case "5": distance = 200; break;
+		            default: distance = 200; break;
+                    }
+
+ 		    var lastWidth = 5000;
+//		    if (p > 1) lastWidth = 5000/(levels[p-1].length+1);
+
+	            var xpos = lastWidth/(levels[p].length+1) * (c+1) - 150;
+
+
+			   // centerpoint                   dialog midpoint 
+                    
+
+
+		    // find parent and offset child from their position
+
+
+		    if (p > 1) {
+
+		      for (item in obj) {
+
+			if (obj[item].true == node.id) {
+//				alert ($("#rule" + obj[item].id).position().left);
+				xpos = $("#rule" + obj[item].id).position().left + distance;
+			}
+
+			else if (obj[item].false == node.id) {
+//				alert ($("#rule" + obj[item].id).position().left);
+				xpos = $("#rule" + obj[item].id).position().left  - distance;
+			}
+
+		      }
+
+		    }
+
+
+
+                    offset += 15;
+                    if (offset > 50) {offset = 0;}
+                    
+                    var ypos = 350 * p + offset + 80;
+                    
+                        
+                    if (node.rule) 
+                        $("#rule" + node.id).css({"left": xpos + "px", "top": ypos + "px"});
+//                        $("#rule" + node.id).animate({"left": xpos/$.zoomLevel + "px", "top": ypos/$.zoomLevel + "px"}, "fast");
+                    else
+                        $("#outcome" + node.id).css({"left": xpos + "px", "top": ypos + "px"});
+//                        $("#outcome" + node.id).animate({"left": xpos/$.zoomLevel + "px", "top": ypos/$.zoomLevel + "px"}, "fast");
+                }
+            }
+            
+}
+});//]]>  
+
+</script>
+
+
+</head>
+<body>
+  <div id="menubar" style=" border-radius: 5px; background: rgba(0,0,0,.6); width: 210px; padding: 5px; text-align: center; position: fixed; z-index: 9999; border: 1px solid #ddd;
+box-shadow: 1px 1px 10px #000;">
+    <img width="32" src="http://upload.wikimedia.org/wikipedia/commons/d/d1/BlueLightCat_Logo.png"/>
+    <p style="color: #FFFFFF; font-size: 250%;">Open Clinical Flow</p>
+    <div id="menustructure">
+        <h3>File</h3><div>
+        <button id="new">New</button>
+        <button id="open">Open</button>
+        <button id="save">Save</button>
+        <button id="preview">Preview</button></div>
+        <h3>View</h3><div>
+        <button id="arrange">Arrange</button>
+        <button id="decorate">Decorate</button>
+        <button id="zoomin">Zoom in</button>
+        <button id="zoomout">Zoom out</button>
+        <button id="reset">Reset</button></div>
+        <h3>Components</h3><div>
+        <button id="addrule">Add Rule</button>
+        <button id="addoutcome">Add Outcome</button></div>
+    </div>
+</div>
+
+
+<div id="meta" style="width: 100%; height: 100%; overflow: auto; position: absolute;">
+    <div id="container" style="background: url(../app/bg/retina_wood.png); width: 5000px; height: 5000px; overflow: scroll; -webkit-overflow-scrolling: touch; position: absolute;">
+	<h1 contenteditable="true" style="font-size: 300%; text-shadow: 1px 1px 1px #fff; text-align: center">Is Irradiated or CMV negative indicated?</h1>
+    </div>
+</div>
+  
+</body>
+
 
 </html>
