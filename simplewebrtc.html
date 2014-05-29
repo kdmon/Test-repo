@@ -38,6 +38,18 @@
         remoteVideosEl: 'remoteVideos',
         // immediately ask for camera access
         autoRequestMedia: true
+        /*,
+        media: {
+          audio: true,
+          video: {
+            mandatory: {
+               maxWidth: 320,
+               maxHeight: 240,
+               minFrameRate: 15
+            }
+          }
+        }
+        */
       });
        // we have to wait until it's ready
       webrtc.on('readyToCall', function() {
