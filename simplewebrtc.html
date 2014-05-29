@@ -4,15 +4,22 @@
         <style>
             #remoteVideos video {
                 height: 150px;
+                background: black;
+                border: 2px solid black;
             }
             #localVideo {
                 height: 150px;
+                background: black;
+                border: 2px solid black;
             }
         </style>
     </head>
     <body>
       <h1>Video chat</h1>
+        <h2>Local video</h2>
         <video id="localVideo"></video>
+        
+        <h2>Remote video</h2>
         <div id="remoteVideos"></div>
         
         <script>
