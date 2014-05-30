@@ -38,7 +38,7 @@
         remoteVideosEl: 'remoteVideos',
         // immediately ask for camera access
         autoRequestMedia: true,
-        debug: true,
+        //debug: false,
         media: {audio: true, video: false}
       });
        // we have to wait until it's ready
@@ -46,8 +46,8 @@
         // you can name it anything
         webrtc.joinRoom('silkword');
       });
-      webrtc.on('joinRoom') {
-        alert ("entered room")
+      webrtc.on('joinRoom', function (room) {
+        console.log (room);
       }
     </script>
   </body>
