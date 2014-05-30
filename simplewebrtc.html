@@ -8,7 +8,7 @@
         background-size: cover;
       }
       #remoteVideos video {
-        height: 250px;
+        width: 640px;
         border: 2px solid black;
       }
       #localVideo {
@@ -37,19 +37,16 @@
         // the id/element dom element that will hold remote videos
         remoteVideosEl: 'remoteVideos',
         // immediately ask for camera access
-        autoRequestMedia: true
-        /*,
+        autoRequestMedia: true,
         media: {
           audio: true,
           video: {
             mandatory: {
                maxWidth: 320,
-               maxHeight: 240,
-               minFrameRate: 15
+               maxHeight: 240
             }
           }
         }
-        */
       });
        // we have to wait until it's ready
       webrtc.on('readyToCall', function() {
