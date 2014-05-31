@@ -687,13 +687,13 @@
           doc.on('shout', function(data) {
             switch (data.action) {
               case "chat":
-                $("#chathistory").prepend('<p> (' + timeSince(data.timestamp) + ') <em>' + data.user + '</em> ' + data.msg + '</p>');
+                $("#chathistory").prepend('<p> (' + timeSince(data.timestamp) + ') <em>' + data.user + '</em> said ' + data.msg + '</p>');
                 break;
             }
           });
           $("#saybutton").on('click', function() {
             var msg = $('#chatbox').val();
-            var stamp = new Date();
+            var stamp = new Date().toISOString();
             $('#chatbox').val('');
             doc.shout({
               action: "chat",
@@ -701,6 +701,7 @@
               user: account.username,
               msg : msg
             });
+            $("#chathistory").prepend('<p style="color: #aaa"> (' + timeSince(stamp) + ') <em>you</em> said ' + msg + '</p>');
             //$("#chathistory").prepend('<p>' +  '(' + stamp + ') ' + account.username + ': ' + msg + '</p>');
           });
         });
@@ -1221,6 +1222,7 @@ document.getElementById(iframeId).onload = function() {
       }
 
       function timeSince(datestamp) {
+        datestamp = datestamp.replace(/[.Z]\w+/, "Z");
         var elapsed = '';
         var date = new Date(datestamp)
         var seconds = Math.floor((new Date() - date) / 1000);
