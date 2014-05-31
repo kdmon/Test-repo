@@ -149,7 +149,7 @@
         background-size: 60px 75px;
         background-repeat: no-repeat;
         width: 60px;
-        height: 75px;
+        height: 80px;
         margin-left: 3px;
         margin-top: 3px;
         padding: 0px;
@@ -425,7 +425,7 @@
         addTab(file, fileCount);
         var htmlSnippet;
         htmlSnippet = '<div class="">';
-        htmlSnippet += '<div data-role="controlgroup" data-type="horizontal" data-mini="true">';
+        htmlSnippet += '<div data-role="controlgroup" data-type="horizontal" data-mini="true" style="margin-left: 5px">';
         htmlSnippet += '<a class="ui-not-disabled" title="Save" data-role="button" href="#commit"><i class="fa fa-save fa-2x"></i> <span class="menulabel">Save</span></a>';
         htmlSnippet += '<a style="margin-right: 5px;" href="#history" title="History" data-role="button"><i class="fa fa-history fa-2x"></i> <span class="menulabel">Revert</span></a>';
         htmlSnippet += '<a href="#undo" title="Undo" data-role="button"><i class="fa fa-reply fa-2x"></i> <span class="menulabel">Undo</span></a>';
@@ -484,7 +484,7 @@
         }
         //setTimeout(runCode, 2500);
       }
-      
+
       function deleteFile() {
         alert("Deleting files is not implemented yet.");
       }
@@ -687,7 +687,7 @@
           doc.on('shout', function(data) {
             switch (data.action) {
               case "chat":
-                var d = newDate (data.timestamp);
+                var d = newDate(data.timestamp);
                 stamp = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
                 $("#chathistory").prepend('<p> (' + stamp + ') <em>' + data.user + '</em> said ' + data.msg + '</p>');
                 break;
@@ -701,7 +701,7 @@
               action: "chat",
               timestamp: d.toISOString(),
               user: account.username,
-              msg : msg
+              msg: msg
             });
             stamp = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
             $("#chathistory").prepend('<p style="color: #aaa"> (' + stamp + ') <em>you</em> said ' + msg + '</p>');
@@ -1253,7 +1253,6 @@ document.getElementById(iframeId).onload = function() {
         if (interval >= 1 && elapsed.split(' ').length < 3) {
           elapsed += interval + "m ";
         }
-        
         return (elapsed || 'Mere seconds ') + " ago";
       }
        // end function declarations
@@ -1391,8 +1390,8 @@ document.getElementById(iframeId).onload = function() {
         $("#history").on("panelbeforeopen", changeLog);
         $("#errors").on("panelbeforeopen", changeLog);
         $("#collaborate").on("panelbeforeopen", function(event, ui) {
-          var previewUrl = document.getElementById("preview" + currentFile).src;
-          if (previewUrl) {
+          if (document.getElementById("preview" + currentFile)) {
+            var previewUrl = document.getElementById("preview" + currentFile).src;
             $("#qrcode").html('');
             var qrCode = new QRCode("qrcode", {
               text: previewUrl,
@@ -1715,16 +1714,14 @@ document.getElementById(iframeId).onload = function() {
               <h3>Instant messaging</h3>
               <div class="ui-grid-a">
                 <div class="ui-block-a" style="width: 72%">
-                  <input data-inline="true" type="text" value="Type message here." id="chatbox">
+                  <input style="font-size: 0.8em" data-inline="true" type="text" value="Type message here." id="chatbox">
                 </div>
-                <div class="ui-block-b" style="width: 28%">
-                  <a data-role="button" data-mini="true" id="saybutton">Say</a>
+                <div class="ui-block-b" style="width: 28%"> <a data-role="button" data-mini="true" id="saybutton">Say</a>
                 </div>
               </div>
               <div style="clear: both; height: 200px; max-height: 200px; font-size: 0.7em; padding: 2px; border: 1px solid #aaa; overflow:auto;" id="chathistory">
                 <p>Chat started.</p>
               </div>
-              
             </div>
             <div data-role="collapsible">
               <h3>Share URL</h3>
