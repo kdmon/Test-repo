@@ -1260,7 +1260,7 @@ document.getElementById(iframeId).onload = function() {
             }, function(data) {
               var list = '';
               if (openFiles[currentFile].path != "/") {
-                list = '<li data-role="divider">' + openFiles[currentFile].path + '</li><li data-icon="false"><a href="javascript: setPath (' + "'..',,true" + ')"><i class="fa fa-level-up"></i> .. (up a directory)</a></li>';
+                list = '<li data-role="divider">' + openFiles[currentFile].path + '</li><li data-icon="false"><a href="javascript: setPath (' + "'..',false,true" + ')"><i class="fa fa-level-up"></i> .. (up a directory)</a></li>';
               } else {
                 list = '<li data-icon="false"><a href="#pickrepo"><i class="fa fa-level-up"></i> Change repo</a></li>';
               }
