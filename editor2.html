@@ -1251,7 +1251,7 @@ document.getElementById(iframeId).onload = function() {
         $("#pickdir").on("panelbeforeopen", function(event, ui) {
           //console.log (openFiles[currentFile]);
           if (openFiles[currentFile].repository != '' && openFiles[currentFile].username != '') {
-            $("#dirheading").html(openFiles[currentFile].repository);
+            $("#dirheading").html(openFiles[currentFile].repository + openFiles[currentFile].path);
             GitWrap.getFiles({
               username: openFiles[currentFile].username,
               repository: openFiles[currentFile].repository,
@@ -1646,12 +1646,12 @@ document.getElementById(iframeId).onload = function() {
           <h3>Filepath</h3> <a href="#" data-rel="close" data-role="button" data-iconpos="notext" data-icon="arrow-l" class="ui-btn-right">Close</a>
         </div>
         <div role="main" class="ui-content">
-          <h3>Where would you like to save?</h3>
           <h3 id="dirheading"></h3>
+          <a href="#commit" data-role="button"><i class="fa fa-save"></i> Save to this location</a>
+          <p>Or pick another location below</p>
           <ul id="dirlist" data-role="listview" data-inset="true" style="max-height: 400px; clear: both; overflow-y: auto;">
             <li>Repo has no directories</li>
           </ul>
-          <a href="#commit" data-role="button"><i class="fa fa-save"></i> Save here</a>
           <a href="#" class="ui-disabled" data-role="button"><i class="fa fa-plus"></i> New folder</a>
         </div>
       </div>
