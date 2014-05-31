@@ -773,7 +773,13 @@
       function upload () {
         var file = document.getElementById('fileBox').files[0]; //Files[0] = 1st file
         var reader = new FileReader();
-        reader.readAsText(file, 'UTF-8');
+        if (file.type.match('text/plain')) {
+            reader.readAsText(file, 'UTF-8');
+        } else {
+            reader.readAsBinaryString(file, 'UTF-8');
+        }
+        
+        
         reader.onload = function (event) {
           var content = event.target.result;
           var message = document.getElementById("uploadmsg").value;
