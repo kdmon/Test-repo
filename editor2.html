@@ -528,6 +528,7 @@
         }
         // List files in repo
         if (fileBrowser.repository != '') {
+          $("#uploadbutton").show();
           $("#folder").html(fileBrowser.repository);
           var repoOwner = account.username;
           if (fileBrowser.owner) repoOwner = fileBrowser.owner;
@@ -578,7 +579,8 @@
         }
         // List user repos
         else {
-          $("#folder").html('User repos');
+          $("#folder").html('Your repositories');
+          $("#uploadbutton").hide();
           GitWrap.getRepos({
             username: account.username,
             accessToken: account.token
@@ -767,6 +769,36 @@
         }
         //$("#filebrowser").panel( "close" );
       }
+      
+      function upload () {
+        var file = document.getElementById('fileBox').files[0]; //Files[0] = 1st file
+        var reader = new FileReader();
+        reader.readAsText(file, 'UTF-8');
+        reader.onload = function (event) {
+          var content = event.target.result;
+          var message = document.getElementById("uploadmsg").value;
+          var repoOwner = account.username;
+          if (fileBrowser.owner) repoOwner = fileBrowser.owner;
+          GitWrap.commit({
+            username: repoOwner,
+            repository: fileBrowser.repository,
+            path: fileBrowser.path,
+            filename: file.name,
+            accessToken: account.token,
+            commitContent: content,
+            commitMessage: message,
+            committerName: account.username,
+            committerEmail: account.email
+          }, function(data) {
+            alert("Committed " + data.content.size + " bytes of data.");
+          });
+        };
+        //reader.onloadstart = ...
+        //reader.onprogress = ... <-- Allows you to update a progress bar.
+        //reader.onabort = ...
+        //reader.onerror = ...
+        //reader.onloadend = ...
+      };
 
       function absolutePath(filename) {
         if (!filename) return;
@@ -1392,7 +1424,6 @@ document.getElementById(iframeId).onload = function() {
           <div id="logo"></div>
         </a>
         <div data-role="controlgroup" data-mini="true" style="margin-top: 25px;"> <a data-role="button" href="#filebrowser"><i class="fa fa-folder-open fa-2x"></i> <span class="menulabel">Open</span></a>
-          <a data-role="button" href="#upload"><i class="fa fa-upload fa-2x"></i> <span class="menulabel">Upload</span></a>
           <a data-role="button" href="#options"><i class="fa fa-wrench fa-2x"></i> <span class="menulabel">Config</span></a>
           <a data-role="button" href="#collaborate" data-shadow="true"><i class="fa fa-comments fa-2x"></i> <span class="menulabel">Chat</span><span class="ui-li-count">999</span></a>
           <a data-role="button" href="#errors"><i class="fa fa-warning fa-2x"></i> <span class="menulabel">Errors</span> <span class="ui-li-count error">9</span></a>
@@ -1469,10 +1500,13 @@ document.getElementById(iframeId).onload = function() {
           <h3 id="folder">Your repos</h3>
           <ul id="filelist" data-role="listview" data-inset="true" style="max-height: 400px; clear: both; overflow-y: auto;">
             <li>None found</li>
-          </ul> <a href="javascript: getFiles();" data-role="button"><i class="fa fa-refresh"></i> Refresh</a>
-          <a href="javascript: getFiles();" class="ui-disabled" data-role="button"><i class="fa fa-plus"></i> New repo</a>
-          <a href="#upload" data-role="button" class="ui-disabled"><i class="fa fa-upload"></i> Upload</a>
-          <a href="javascript: getFiles();" class="ui-disabled" data-role="button"><i class="fa fa-code-fork"></i> Fork repo</a>
+          </ul>
+          <a href="#upload" id="uploadbutton" data-role="button"><i class="fa fa-upload"></i> Upload here</a>
+          <a href="javascript: getFiles();" data-role="button"><i class="fa fa-refresh"></i> Refresh</a>
+          <div style="display: none">
+            <a href="javascript: getFiles();" class="ui-disabled" data-role="button"><i class="fa fa-plus"></i> New repo</a>
+            <a href="javascript: getFiles();" class="ui-disabled" data-role="button"><i class="fa fa-code-fork"></i> Fork repo</a>
+          </div>
         </div>
       </div>
       <div data-role="panel" data-animate="false" data-swipe-close="false" id="history" data-dismissible="false">
@@ -1593,7 +1627,7 @@ document.getElementById(iframeId).onload = function() {
           <p>Reverting will reset the file to the last save. Unsaved changes will be lost!</p> <a href="javascript: pull(true);" data-role="button">Revert</a>
         </div>
       </div>
-      <div data-role="panel" data-dismissible="false" data-animate="false" data-swipe-close="false" id="commit">
+      <div id="commit" data-role="panel" data-dismissible="false" data-animate="false" data-swipe-close="false">
         <div data-role="header">
           <h1>Save file</h1>
         </div>
@@ -1604,13 +1638,11 @@ document.getElementById(iframeId).onload = function() {
           <div id="readytosave">
             <h3>Ready to save</h3>
             <p>Commit message (optional)</p>
-            <textarea id="commitmsg" cols=30 rows=3>Update file.</textarea> <a href="javascript:commit();" data-role="button"><i class="fa fa-save"></i> Save</a>
+            <textarea id="commitmsg" cols=30 rows=3>Update file.</textarea> <a href="javascript:commit();" data-role="button"><i class="fa fa-save"></i> Save now</a>
             <div data-role="fieldcontain">
               <label for="savefilename">File</label>
               <input id="savefilename" type="text">
-              <hr/>
               <label for="savefilepath">Path
-                <a href="#pickdir" style="position: absolute; right:2px;"></a>
               </label>
               <input class="ui-disabled" id="savefilepath" type="text">
               <label for="saverepo">Repo</label>
@@ -1622,6 +1654,20 @@ document.getElementById(iframeId).onload = function() {
           </div>
         </div>
       </div>
+      
+      <div id="upload" data-role="panel" data-dismissible="false" data-animate="false" data-swipe-close="false">
+        <div data-role="header">
+          <h1>Upload file</h1>
+        </div>
+        <div role="main" class="ui-content">
+        <h3>Upload</h3>
+          <p>Commit message (optional)</p>
+          <textarea id="uploadmsg" cols=30 rows=3>Uploaded file.</textarea>
+          <h3>Select a file for upload</h3>
+          <input id="fileBox" type="file" onchange="javascript: upload();"/>
+        </div>
+      </div>
+      
       <div data-role="panel" id="collaborate" data-position="left" data-animate="false" data-dismissible="false" data-swipe-close="false">
         <div data-role="header">
           <h3>Social</h3> <a href="#" data-rel="close" data-role="button" data-iconpos="notext" data-icon="arrow-l" class="ui-btn-right">Close</a>
