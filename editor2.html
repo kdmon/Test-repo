@@ -484,7 +484,7 @@
         }
         //setTimeout(runCode, 2500);
       }
-
+      
       function deleteFile() {
         alert("Deleting files is not implemented yet.");
       }
@@ -668,9 +668,42 @@
         return text;
       }
 
-      function say() {
-        var msg = $('#chatbox').val();
-        $('#chatbox').val('');
+      function startVideo() {
+        var chatroom = $("#chatroom").val();
+        var webrtc = new SimpleWebRTC({
+          // the id/element dom element that will hold "our" video
+          localVideoEl: 'localVideo',
+          // the id/element dom element that will hold remote videos
+          remoteVideosEl: 'remoteVideos',
+          // immediately ask for camera access
+          autoRequestMedia: true
+        });
+        // we have to wait until it's ready
+        webrtc.on('readyToCall', function() {
+          // you can name it anything
+          webrtc.joinRoom(chatroom);
+        });
+        connection.open(chatroom, 'text', function(error, doc) {
+          doc.on('shout', function(data) {
+            switch (data.action) {
+              case "chat":
+                $("#chathistory").prepend('<p> (' + timeSince(data.timestamp) + ') <em>' + data.user + '</em> ' + data.msg + '</p>');
+                break;
+            }
+          });
+          $("#saybutton").on('click', function() {
+            var msg = $('#chatbox').val();
+            var stamp = new Date();
+            $('#chatbox').val('');
+            doc.shout({
+              action: "chat",
+              timestamp: stamp,
+              user: account.username,
+              msg : msg
+            });
+            //$("#chathistory").prepend('<p>' +  '(' + stamp + ') ' + account.username + ': ' + msg + '</p>');
+          });
+        });
       }
 
       function scroll(up) {
@@ -769,18 +802,16 @@
         }
         //$("#filebrowser").panel( "close" );
       }
-      
-      function upload () {
+
+      function upload() {
         var file = document.getElementById('fileBox').files[0]; //Files[0] = 1st file
         var reader = new FileReader();
         if (file.type.match('text/plain')) {
-            reader.readAsText(file, 'UTF-8');
+          reader.readAsText(file, 'UTF-8');
         } else {
-            reader.readAsBinaryString(file, 'UTF-8');
+          reader.readAsBinaryString(file, 'UTF-8');
         }
-        
-        
-        reader.onload = function (event) {
+        reader.onload = function(event) {
           var content = event.target.result;
           var message = document.getElementById("uploadmsg").value;
           var repoOwner = account.username;
@@ -1096,9 +1127,6 @@ document.getElementById(iframeId).onload = function() {
               case "announce":
                 alert(data.msg);
                 break;
-              case "chat":
-                $("chathistory").prepend(data.msg);
-                break;
               case "cursor":
                 cursors[data.user] = {
                   row: data.row,
@@ -1238,14 +1266,6 @@ document.getElementById(iframeId).onload = function() {
         var params = getSearchParameters();
         document.title = 'Web App Editor';
         connection = new sharejs.Connection("http://it4se.com:8081/channel");
-        var webrtc = new SimpleWebRTC({
-          // the id/element dom element that will hold "our" video
-          localVideoEl: 'localVideo',
-          // the id/element dom element that will hold remote videos
-          remoteVideosEl: 'remoteVideos',
-          // immediately ask for camera access
-          autoRequestMedia: false
-        });
         if (localStorage.uitheme == "dark") {
           $("#frontpage").page("option", "theme", "b");
           $("#viewcontainer").css('background', 'url("/img/blackwood.png")');
@@ -1365,11 +1385,6 @@ document.getElementById(iframeId).onload = function() {
         $("#history").on("panelbeforeopen", changeLog);
         $("#errors").on("panelbeforeopen", changeLog);
         $("#collaborate").on("panelbeforeopen", function(event, ui) {
-          // we have to wait until it's ready
-          webrtc.on('readyToCall', function() {
-            // you can name it anything
-            webrtc.joinRoom('your awesome room name');
-          });
           var previewUrl = document.getElementById("preview" + currentFile).src;
           if (previewUrl) {
             $("#qrcode").html('');
@@ -1506,11 +1521,9 @@ document.getElementById(iframeId).onload = function() {
           <h3 id="folder">Your repos</h3>
           <ul id="filelist" data-role="listview" data-inset="true" style="max-height: 400px; clear: both; overflow-y: auto;">
             <li>None found</li>
-          </ul>
-          <a href="#upload" id="uploadbutton" data-role="button"><i class="fa fa-upload"></i> Upload here</a>
+          </ul> <a href="#upload" id="uploadbutton" data-role="button"><i class="fa fa-upload"></i> Upload here</a>
           <a href="javascript: getFiles();" data-role="button"><i class="fa fa-refresh"></i> Refresh</a>
-          <div style="display: none">
-            <a href="javascript: getFiles();" class="ui-disabled" data-role="button"><i class="fa fa-plus"></i> New repo</a>
+          <div style="display: none"> <a href="javascript: getFiles();" class="ui-disabled" data-role="button"><i class="fa fa-plus"></i> New repo</a>
             <a href="javascript: getFiles();" class="ui-disabled" data-role="button"><i class="fa fa-code-fork"></i> Fork repo</a>
           </div>
         </div>
@@ -1648,8 +1661,7 @@ document.getElementById(iframeId).onload = function() {
             <div data-role="fieldcontain">
               <label for="savefilename">File</label>
               <input id="savefilename" type="text">
-              <label for="savefilepath">Path
-              </label>
+              <label for="savefilepath">Path</label>
               <input class="ui-disabled" id="savefilepath" type="text">
               <label for="saverepo">Repo</label>
               <input class="ui-disabled" name="saverepo" id="saverepo" type="text">
@@ -1660,44 +1672,51 @@ document.getElementById(iframeId).onload = function() {
           </div>
         </div>
       </div>
-      
       <div id="upload" data-role="panel" data-dismissible="false" data-animate="false" data-swipe-close="false">
         <div data-role="header">
           <h1>Upload file</h1>
         </div>
         <div role="main" class="ui-content">
-        <h3>Upload</h3>
+          <h3>Upload</h3>
           <p>Commit message (optional)</p>
           <textarea id="uploadmsg" cols=30 rows=3>Uploaded file.</textarea>
           <h3>Select a file for upload</h3>
-          <input id="fileBox" type="file" onchange="javascript: upload();"/>
+          <input id="fileBox" type="file" onchange="javascript: upload();" />
         </div>
       </div>
-      
       <div data-role="panel" id="collaborate" data-position="left" data-animate="false" data-dismissible="false" data-swipe-close="false">
         <div data-role="header">
           <h3>Social</h3> <a href="#" data-rel="close" data-role="button" data-iconpos="notext" data-icon="arrow-l" class="ui-btn-right">Close</a>
         </div>
         <div role="main" class="ui-content">
+          <input type="text" id="chatroom" value="General chat room">
           <div data-inset="false" data-role="collapsible-set">
             <div data-role="collapsible" data-collapsed="false">
+              <h3>Audio/video chat</h3>
+              <div style="max-height: 500px; overflow: auto;">
+                <video id="localVideo"></video>
+                <div id="remoteVideos"></div>
+              </div>
+              <h3>Controls</h3>
+              <button data-inline="true" onclick="startVideo();">Join</button>
+              <button data-inline="true" onclick="webrtc.mute()">Leave</button>
+              <button data-inline="true" onclick="webrtc.pauseVideo()">Pause</button>
+              <button data-inline="true" onclick="webrtc.resumeVideo()">Resume</button>
+              <button data-inline="true" onclick="webrtc.mute()">Mute</button>
+              <button data-inline="true" onclick="webrtc.unmute()">Unmute</button>
+            </div>
+            <div data-role="collapsible">
               <h3>Instant messaging</h3>
-              <div style="max-height: 400px; font-size: 0.7em;" id="chathistory"></div>
+              <div style="max-height: 400px; font-size: 0.7em;" id="chathistory">
+                <p>Text goes here.</p>
+              </div>
               <hr/>
               <div class="ui-grid-a">
                 <div class="ui-block-a" style="width: 70%">
                   <input data-inline="true" type="text" value="Type message here." id="chatbox">
                 </div>
-                <div class="ui-block-b" style="width: 20%">
-                  <a data-role="button" data-mini="true" onclick="javascript: say()"><i class="fa fa-comment-o"></i> Say</a>
+                <div class="ui-block-b" style="width: 20%"> <a data-role="button" data-mini="true" id="saybutton"><i class="fa fa-comment-o"></i> Say</a>
                 </div>
-              </div>
-            </div>
-            <div data-role="collapsible">
-              <h3>Audio/video chat</h3>
-              <video id="localVideo"></video>
-              <div style="max-height: 500px;">
-                <div id="remoteVideos"></div>
               </div>
             </div>
             <div data-role="collapsible">
@@ -1706,8 +1725,7 @@ document.getElementById(iframeId).onload = function() {
               <center>
                 <div id="qrcode" style="width:200px; height: 200px; clear: both; display: block; border: 10px white solid;"></div>
               </center>
-              <a href="#" onclick="javascript: window.open($('#plainurl').val(), '_blank');" data-role="button">Open <i class="fa fa-external-link"></i></a> 
-              <input type="text" id="plainurl">
+              <input type="text" id="plainurl"> <a href="#" onclick="javascript: window.open($('#plainurl').val(), '_blank');" data-role="button">Open <i class="fa fa-external-link"></i></a> 
             </div>
           </div>
         </div>
