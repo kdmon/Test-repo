@@ -67,10 +67,10 @@
         display: inline;
       }
       #remoteVideos video {
-        width: 150px;
+        width: 320px;
       }
       #localVideo {
-        width: 150px;
+        width: 160px;
       }
       #viewcontainer {
         clear: both;
@@ -95,11 +95,11 @@
       #listmenu {
         position: absolute;
         top: 0px;
-        left: 3px;
+        left: 0px;
         z-index: 99999;
       }
       #listmenu .ui-btn {
-        left: 6px;
+        left: 0px;
         top: -20px;
         margin-bottom: 5px;
       }
@@ -397,21 +397,22 @@
         currentFile = fileCount;
         addTab(file, fileCount);
         var htmlSnippet;
-        htmlSnippet = '<div class="submenu">';
+        htmlSnippet = '<div class="">';
         htmlSnippet += '<div data-role="controlgroup" data-type="horizontal" data-mini="true">';
         htmlSnippet += '<a class="ui-not-disabled" title="Save" data-role="button" href="#commit"><i class="fa fa-save fa-2x"></i> <span class="menulabel">Save</span></a>';
-        htmlSnippet += '<a class="ui-disabled" data-role="button"></a>';
+        //htmlSnippet += '<a class="ui-disabled" data-role="button"></a>';
         htmlSnippet += '<a href="#undo" title="Undo" data-role="button"><i class="fa fa-reply fa-2x"></i> <span class="menulabel">Undo</span></a>';
         htmlSnippet += '<a href="#redo" title="Redo" data-role="button"><i class="fa fa-share fa-2x"></i> <span class="menulabel">Redo</span></a>';
-        htmlSnippet += '<a class="ui-disabled" data-role="button"></a>';
+        //htmlSnippet += '<a class="ui-disabled" data-role="button"></a>';
         htmlSnippet += '<a href="#" title="Cut" data-role="button" onclick="beautify();"><i class="fa fa-cut fa-2x"></i> <span class="menulabel">Beautify</span></a>';
         htmlSnippet += '<a href="#" title="Copy" data-role="button" onclick="scroll(true)"><i class="fa fa-copy fa-2x"></i> <span class="menulabel">Scroll up</span></a>';
         htmlSnippet += '<a href="#" title="Paste" data-role="button" onclick="scroll(false)"><i class="fa fa-paste fa-2x"></i> <span class="menulabel">Scroll down</span></a>';
-        htmlSnippet += '<a class="ui-disabled" data-role="button"></a>'
+        //htmlSnippet += '<a class="ui-disabled" data-role="button"></a>'
         htmlSnippet += '<a href="#" title="Search" data-role="button" onclick="scroll(false)"><i class="fa fa-search fa-2x"></i> <span class="menulabel">Scroll down</span></a>';
         htmlSnippet += '<a href="#" title="Beautify" data-role="button" onclick="beautify();"><i class="fa fa-tasks fa-2x"></i> <span class="menulabel">Beautify</span></a>';
         htmlSnippet += '<a href="#history" title="History" data-role="button"><i class="fa fa-history fa-2x"></i> <span class="menulabel">History</span></a>';
-        htmlSnippet += '<a class="ui-disabled" data-role="button"></a> <a href="javascript: runCode();" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-play fa-2x"></i></a>';
+        //htmlSnippet += '<a class="ui-disabled" data-role="button"></a>
+        htmlSnippet += '<a href="javascript: runCode();" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-play fa-2x"></i></a>';
         htmlSnippet += '<a href="javascript: runCode(true);" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-stop fa-2x"></i></a>';
         htmlSnippet += '<a href="javascript: runCode(true);" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-cog fa-2x"></i></a>';
         htmlSnippet += '<a href="#collaborate" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-external-link fa-2x"></i></a>';
@@ -668,7 +669,6 @@
 
       function setPath(path, append, saveProperties) {
         //console.log('Old path: ' + fileBrowser.path);
-        
         if (saveProperties) {
           if (path == ".." && openFiles[currentFile].path != "/") {
             var splitPath = openFiles[currentFile].path.split('/');
@@ -682,9 +682,7 @@
             openFiles[currentFile].path = '/' + path + '/';
           }
           $("#pickdir").trigger('panelbeforeopen');
-        }
-        
-        else {
+        } else {
           if (path == ".." && fileBrowser.path != "/") {
             var splitPath = fileBrowser.path.split('/');
             var newPath = splitPath.slice(0, splitPath.length - 2).join("/") + "/";
@@ -708,8 +706,7 @@
           openFiles[currentFile].username = owner;
           openFiles[currentFile].path = '/';
           $("#pickdir").panel('open');
-        }
-        else{
+        } else {
           fileBrowser.repository = repo;
           if (owner) fileBrowser.owner = owner;
           else fileBrowser.owner = null;
@@ -1233,11 +1230,10 @@ document.getElementById(iframeId).onload = function() {
             }
           }
         });
-        
         $("#pickrepo").on("panelbeforeopen", function(event, ui) {
           GitWrap.getRepos({
-              username: account.username,
-              accessToken: account.token
+            username: account.username,
+            accessToken: account.token
           }, function(data) {
             //console.log(data);
             var list = "";
@@ -1247,7 +1243,6 @@ document.getElementById(iframeId).onload = function() {
             $("#repolist").html(list).listview("refresh");
           });
         });
-        
         $("#pickdir").on("panelbeforeopen", function(event, ui) {
           //console.log (openFiles[currentFile]);
           if (openFiles[currentFile].repository != '' && openFiles[currentFile].username != '') {
@@ -1278,13 +1273,11 @@ document.getElementById(iframeId).onload = function() {
               }
               $("#dirlist").html(list).listview("refresh");
             });
-          }
-          else {
+          } else {
             $("#dirheader").text("Select a repo first!");
             $("#dirlist").html('list').listview("refresh");
           }
         });
-        
         $("#filebrowser").on("panelbeforeopen", function(event, ui) {
           getFiles(true);
         });
@@ -1295,8 +1288,7 @@ document.getElementById(iframeId).onload = function() {
           if (openFiles[currentFile].repository && openFiles[currentFile].filename && openFiles[currentFile].path) {
             $("#readytosave").show();
             $("#notreadytosave").hide();
-          }
-          else {
+          } else {
             $("#notreadytosave").show();
             $("#readytosave").hide();
           }
@@ -1364,10 +1356,11 @@ document.getElementById(iframeId).onload = function() {
           <span id="maintitle">Dashboard</span>
         </h1>
       </div>
-      <div id="listmenu" class="submenu">
-        <a href="#dashboard" onclick="$( '#tabmenu' ).tabs( 'option', 'active', 0);"><img src="/img/editorlogo.png" style="height: 65px; padding-left: 5px; padding-top: 10px; border: 0px solid green"></a>
-        <div data-role="controlgroup" data-mini="true" style="margin-top: 25px;">
-          <a data-role="button" href="#filebrowser"><i class="fa fa-folder-open fa-2x"></i> <span class="menulabel">Open</span></a>
+      <div id="listmenu" class="">
+        <a href="#dashboard" onclick="$( '#tabmenu' ).tabs( 'option', 'active', 0);">
+          <img src="/img/editorlogo.png" style="height: 65px; padding-left: 5px; padding-top: 10px; border: 0px solid green">
+        </a>
+        <div data-role="controlgroup" data-mini="true" style="margin-top: 25px;"> <a data-role="button" href="#filebrowser"><i class="fa fa-folder-open fa-2x"></i> <span class="menulabel">Open</span></a>
           <a data-role="button" href="#upload"><i class="fa fa-upload fa-2x"></i> <span class="menulabel">Upload</span></a>
           <a data-role="button" href="#options"><i class="fa fa-wrench fa-2x"></i> <span class="menulabel">Config</span></a>
           <a data-role="button" href="#collaborate" data-shadow="true"><i class="fa fa-comment fa-2x"></i> <span class="menulabel">Chat</span><span class="ui-li-count">999</span></a>
@@ -1575,43 +1568,24 @@ document.getElementById(iframeId).onload = function() {
         </div>
         <div role="main" class="ui-content">
           <div id="notreadytosave">
-            <h3>Select a location</h3>
-              <a data-role="button" href="#pickrepo"><i class="fa fa-folder-open"></i> Browse...</a>
+            <h3>Select a location</h3> <a data-role="button" href="#pickrepo"><i class="fa fa-folder-open"></i> Browse...</a>
           </div>
           <div id="readytosave">
             <h3>Ready to save</h3>
-            
             <p>Commit message (optional)</p>
-            <textarea id="commitmsg" cols=30 rows=3>Update file.</textarea>
-            <a href="javascript:commit();" data-role="button"><i class="fa fa-save"></i> Save</a>
-            
+            <textarea id="commitmsg" cols=30 rows=3>Update file.</textarea> <a href="javascript:commit();" data-role="button"><i class="fa fa-save"></i> Save</a>
             <div data-role="fieldcontain">
-            
-              <label for="savefilename">
-                File
-              </label>
-              
+              <label for="savefilename">File</label>
               <input id="savefilename" type="text">
-
               <hr/>
-              
-              <label for="savefilepath">
-                Path
+              <label for="savefilepath">Path
                 <a href="#pickdir" style="position: absolute; right:2px;"></a>
               </label>
-              
               <input class="ui-disabled" id="savefilepath" type="text">
-              
-              <label for="saverepo">
-                Repo
-                
-              </label>
+              <label for="saverepo">Repo</label>
               <input class="ui-disabled" name="saverepo" id="saverepo" type="text">
-              
-            </div>
-            <a data-mini="true" data-role="button" href="#pickrepo"><i class="fa fa-edit"></i> Edit location</a>
-            <div style="display: none;">
-              <a href="#filebrowser" data-role="button"><i class="fa fa-copy"></i> Save as</a>
+            </div> <a data-mini="true" data-role="button" href="#pickrepo"><i class="fa fa-edit"></i> Edit location</a>
+            <div style="display: none;"> <a href="#filebrowser" data-role="button"><i class="fa fa-copy"></i> Save as</a>
               <a href="#delete" data-role="button"><i class="fa fa-trash-o"></i> Delete</a>
             </div>
           </div>
@@ -1619,17 +1593,36 @@ document.getElementById(iframeId).onload = function() {
       </div>
       <div data-role="panel" id="collaborate" data-position="left" data-animate="false" data-dismissible="false" data-swipe-close="false">
         <div data-role="header">
-          <h3>Chat</h3> <a href="#" data-rel="close" data-role="button" data-iconpos="notext" data-icon="arrow-l" class="ui-btn-right">Close</a>
+          <h3>Social</h3> <a href="#" data-rel="close" data-role="button" data-iconpos="notext" data-icon="arrow-l" class="ui-btn-right">Close</a>
         </div>
         <div role="main" class="ui-content">
-          <video id="localVideo"></video>
-          <div id="remoteVideos"></div>
-          <p>Invite collaborators to edit the current file with you in real-time using the below URL.</p>
-          <center>
-            <div id="qrcode" style="width:200px; height: 200px; clear: both; display: block; border: 10px white solid;"></div>
-            <p>Scan the QR code to open a preview on your mobile device.</p>
-            <input type="text" id="plainurl"> <a href="#" onclick="javascript: window.open($('#plainurl').val(), '_blank');" data-role="button">Open <i class="fa fa-external-link"></i></a>
-          </center>
+          <div data-inset="false" data-role="collapsible-set">
+            <div data-role="collapsible" data-collapsed="false">
+              <h3>Instant messaging</h3>
+              <div style="max-height: 400px; font-size: 0.7em;">
+                <p>(Timestamp) <i>@username</i>: Messages goes here...</p>
+              </div>
+              <hr>
+              <input type="text" value="Your message here.">
+              <input type="submit" value="Say">
+            </div>
+            <div data-role="collapsible">
+              <h3>Audio/video chat</h3>
+              <video id="localVideo"></video>
+              <div style="max-height: 500px;">
+                <div id="remoteVideos"></div>
+              </div>
+            </div>
+            <div data-role="collapsible">
+              <h3>Share URL</h3>
+              <p>Invite collaborators to edit the current file with you in real-time using the below URL.</p>
+              <center>
+                <div id="qrcode" style="width:200px; height: 200px; clear: both; display: block; border: 10px white solid;"></div>
+                <p>Scan the QR code to open a preview on your mobile device.</p>
+                <input type="text" id="plainurl"> <a href="#" onclick="javascript: window.open($('#plainurl').val(), '_blank');" data-role="button">Open <i class="fa fa-external-link"></i></a>
+              </center>
+            </div>
+          </div>
         </div>
       </div>
       <div data-role="panel" id="pickrepo" data-position="left" data-animate="false" data-dismissible="false" data-swipe-close="false">
@@ -1648,13 +1641,11 @@ document.getElementById(iframeId).onload = function() {
           <h3>Filepath</h3> <a href="#" data-rel="close" data-role="button" data-iconpos="notext" data-icon="arrow-l" class="ui-btn-right">Close</a>
         </div>
         <div role="main" class="ui-content">
-          <h3 id="dirheading"></h3>
-          <a href="#commit" data-role="button"><i class="fa fa-save"></i> Save to this location</a>
+          <h3 id="dirheading"></h3> <a href="#commit" data-role="button"><i class="fa fa-save"></i> Save to this location</a>
           <p>Or pick another location below</p>
           <ul id="dirlist" data-role="listview" data-inset="true" style="max-height: 400px; clear: both; overflow-y: auto;">
             <li>Repo has no directories</li>
-          </ul>
-          <a href="#" class="ui-disabled" data-role="button"><i class="fa fa-plus"></i> New folder</a>
+          </ul> <a href="#" class="ui-disabled" data-role="button"><i class="fa fa-plus"></i> New folder</a>
         </div>
       </div>
       <div data-role="panel" id="error" data-dismissible="false" data-animate="false" data-swipe-close="false">
