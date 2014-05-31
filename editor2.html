@@ -59,7 +59,9 @@
         //    overflow: hidden;
 
       }
-      #repolist li .ui-btn, #dirlist li .ui-btn, #filelist li .ui-btn {
+      #repolist li .ui-btn,
+      #dirlist li .ui-btn,
+      #filelist li .ui-btn {
         font-size: 12px !important;
         padding: 8px 3px 8px 3px;
       }
@@ -102,7 +104,8 @@
         left: 0px;
         z-index: 99999;
       }
-      #changelog li, #changelog p{
+      #changelog li,
+      #changelog p {
         padding: 2px;
         margin: 0px;
         line-height: 1em;
@@ -144,18 +147,17 @@
       #logo {
         background: url("/img/logo2_active.png");
         background-size: 60px 75px;
-        background-repeat:no-repeat;
+        background-repeat: no-repeat;
         width: 60px;
         height: 75px;
-        margin-left:3px;
+        margin-left: 3px;
         margin-top: 3px;
         padding: 0px;
       }
-      
       #logo:hover {
         background: url("/img/logo2_inactive.png");
         background-size: 60px 75px;
-        background-repeat:no-repeat;
+        background-repeat: no-repeat;
       }
       #listmenu .ui-li-count,
       .submenu .ui-li-count {
@@ -426,17 +428,14 @@
         htmlSnippet += '<div data-role="controlgroup" data-type="horizontal" data-mini="true">';
         htmlSnippet += '<a class="ui-not-disabled" title="Save" data-role="button" href="#commit"><i class="fa fa-save fa-2x"></i> <span class="menulabel">Save</span></a>';
         htmlSnippet += '<a style="margin-right: 5px;" href="#history" title="History" data-role="button"><i class="fa fa-history fa-2x"></i> <span class="menulabel">Revert</span></a>';
-        
         htmlSnippet += '<a href="#undo" title="Undo" data-role="button"><i class="fa fa-reply fa-2x"></i> <span class="menulabel">Undo</span></a>';
         htmlSnippet += '<a href="#redo" title="Redo" data-role="button"><i class="fa fa-share fa-2x"></i> <span class="menulabel">Redo</span></a>';
         htmlSnippet += '<a style="margin-right: 5px;" href="#" title="Search" data-role="button" onclick="scroll(false)"><i class="fa fa-search fa-2x"></i> <span class="menulabel">Search</span></a>';
-
         htmlSnippet += '<a href="#" title="Cut" data-role="button" onclick="cut();"><i class="fa fa-cut fa-2x"></i> <span class="menulabel">Cut</span></a>';
         htmlSnippet += '<a href="#" title="Copy" data-role="button" onclick="copy()"><i class="fa fa-copy fa-2x"></i> <span class="menulabel">Copy</span></a>';
         htmlSnippet += '<a style="margin-right: 5px;" href="#" title="Paste" data-role="button" onclick="paste"><i class="fa fa-paste fa-2x"></i> <span class="menulabel">Paste</span></a>';
-
         htmlSnippet += '<a title="Run code" href="javascript: runCode();" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-play fa-2x"></i> <span class="menulabel">Run code</span></a>';
-//        htmlSnippet += '<a href="javascript: runCode(true);" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-stop fa-2x"></i></a>';
+        //        htmlSnippet += '<a href="javascript: runCode(true);" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-stop fa-2x"></i></a>';
         htmlSnippet += '<a title="Code preview settings" href="javascript: runCode(true);" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-cog fa-2x"></i> <span class="menulabel">Code preview settings</span></a>';
         htmlSnippet += '<a href="#" title="Beautify" data-role="button" onclick="beautify();"><i class="fa fa-tasks fa-2x"></i> <span class="menulabel">Beautify code</span></a>';
         //htmlSnippet += '<a href="#collaborate" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-external-link fa-2x"></i></a>';
@@ -665,6 +664,11 @@
         var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         for (var i = 0; i < length; i++) text += possible.charAt(Math.floor(Math.random() * possible.length));
         return text;
+      }
+
+      function say() {
+        var msg = $('#chatbox').val();
+        $('#chatbox').val('');
       }
 
       function scroll(up) {
@@ -1054,6 +1058,9 @@ document.getElementById(iframeId).onload = function() {
               case "announce":
                 alert(data.msg);
                 break;
+              case "chat":
+                $("chathistory").prepend(data.msg);
+                break;
               case "cursor":
                 cursors[data.user] = {
                   row: data.row,
@@ -1175,7 +1182,6 @@ document.getElementById(iframeId).onload = function() {
         if (interval >= 1 && elapsed.split(' ').length < 3) {
           elapsed += interval + "m ";
         }
-        
         return elapsed + " ago";
       }
        // end function declarations
@@ -1382,7 +1388,9 @@ document.getElementById(iframeId).onload = function() {
         </h1>
       </div>
       <div id="listmenu" class="">
-        <a href="#dashboard" onclick="$( '#tabmenu' ).tabs( 'option', 'active', 0);"><div id="logo"></div></a>
+        <a href="#dashboard" onclick="$( '#tabmenu' ).tabs( 'option', 'active', 0);">
+          <div id="logo"></div>
+        </a>
         <div data-role="controlgroup" data-mini="true" style="margin-top: 25px;"> <a data-role="button" href="#filebrowser"><i class="fa fa-folder-open fa-2x"></i> <span class="menulabel">Open</span></a>
           <a data-role="button" href="#upload"><i class="fa fa-upload fa-2x"></i> <span class="menulabel">Upload</span></a>
           <a data-role="button" href="#options"><i class="fa fa-wrench fa-2x"></i> <span class="menulabel">Config</span></a>
@@ -1622,12 +1630,16 @@ document.getElementById(iframeId).onload = function() {
           <div data-inset="false" data-role="collapsible-set">
             <div data-role="collapsible" data-collapsed="false">
               <h3>Instant messaging</h3>
-              <div style="max-height: 400px; font-size: 0.7em;">
-                <p>(Timestamp) <i>@username</i>: Messages goes here...</p>
+              <div style="max-height: 400px; font-size: 0.7em;" id="chathistory"></div>
+              <hr/>
+              <div class="ui-grid-a">
+                <div class="ui-block-a" style="width: 70%">
+                  <input data-inline="true" type="text" value="Type message here." id="chatbox">
+                </div>
+                <div class="ui-block-b" style="width: 20%">
+                  <input data-inline="true" data-mini="true" type="submit" onclick="javascript: say()" value="Say">
+                </div>
               </div>
-              <hr>
-              <input type="text" value="Your message here.">
-              <input type="submit" value="Say">
             </div>
             <div data-role="collapsible">
               <h3>Audio/video chat</h3>
@@ -1638,12 +1650,12 @@ document.getElementById(iframeId).onload = function() {
             </div>
             <div data-role="collapsible">
               <h3>Share URL</h3>
-              <p>Invite collaborators to edit the current file with you in real-time using the below URL.</p>
+              <p>Scan the QR code to open a preview on your mobile device.</p>
               <center>
                 <div id="qrcode" style="width:200px; height: 200px; clear: both; display: block; border: 10px white solid;"></div>
-                <p>Scan the QR code to open a preview on your mobile device.</p>
-                <input type="text" id="plainurl"> <a href="#" onclick="javascript: window.open($('#plainurl').val(), '_blank');" data-role="button">Open <i class="fa fa-external-link"></i></a>
               </center>
+              <a href="#" onclick="javascript: window.open($('#plainurl').val(), '_blank');" data-role="button">Open <i class="fa fa-external-link"></i></a> 
+              <input type="text" id="plainurl">
             </div>
           </div>
         </div>
