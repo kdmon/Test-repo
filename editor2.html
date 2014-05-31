@@ -59,12 +59,15 @@
         //    overflow: hidden;
 
       }
-      #filelist li .ui-btn {
+      #repolist li .ui-btn, #dirlist li .ui-btn, #filelist li .ui-btn {
         font-size: 12px !important;
         padding: 8px 3px 8px 3px;
       }
       #tablist li a {
         display: inline;
+      }
+      .ace_search .right {
+        right: 20px;
       }
       #remoteVideos video {
         width: 320px;
@@ -97,6 +100,11 @@
         top: 0px;
         left: 0px;
         z-index: 99999;
+      }
+      #changelog li, #changelog p{
+        padding: 2px;
+        margin: 0px;
+        line-height: 1em;
       }
       #listmenu .ui-btn {
         left: 0px;
@@ -131,6 +139,22 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+      }
+      #logo {
+        background: url("/img/logo2_active.png");
+        background-size: 60px 75px;
+        background-repeat:no-repeat;
+        width: 60px;
+        height: 75px;
+        margin-left:3px;
+        margin-top: 3px;
+        padding: 0px;
+      }
+      
+      #logo:hover {
+        background: url("/img/logo2_inactive.png");
+        background-size: 60px 75px;
+        background-repeat:no-repeat;
       }
       #listmenu .ui-li-count,
       .submenu .ui-li-count {
@@ -348,7 +372,7 @@
         }, function(data) {
           var history = "";
           for (i = 0; i < data.length; i++) {
-            history += '<li><p class="wrap">' + data[i].commit.author.date.replace("T", " ").replace("Z", "<br/>") + data[i].commit.author.name + ': <a href="' + data[i].html_url + '" target="_blank"> ' + data[i].commit.message + '</a></p></li>';
+            history += '<li><p class="wrap">' + timeSince(data[i].commit.author.date) + " <em>" + data[i].commit.author.name + '</em>: ' + data[i].commit.message + ' (<a href="' + data[i].html_url + '" target="_blank">More</a>)</p></li>';
           }
           $("#changelog").html(history).listview("refresh");
         });
@@ -400,22 +424,21 @@
         htmlSnippet = '<div class="">';
         htmlSnippet += '<div data-role="controlgroup" data-type="horizontal" data-mini="true">';
         htmlSnippet += '<a class="ui-not-disabled" title="Save" data-role="button" href="#commit"><i class="fa fa-save fa-2x"></i> <span class="menulabel">Save</span></a>';
-        //htmlSnippet += '<a class="ui-disabled" data-role="button"></a>';
+        htmlSnippet += '<a style="margin-right: 5px;" href="#history" title="History" data-role="button"><i class="fa fa-history fa-2x"></i> <span class="menulabel">Revert</span></a>';
+        
         htmlSnippet += '<a href="#undo" title="Undo" data-role="button"><i class="fa fa-reply fa-2x"></i> <span class="menulabel">Undo</span></a>';
         htmlSnippet += '<a href="#redo" title="Redo" data-role="button"><i class="fa fa-share fa-2x"></i> <span class="menulabel">Redo</span></a>';
-        //htmlSnippet += '<a class="ui-disabled" data-role="button"></a>';
-        htmlSnippet += '<a href="#" title="Cut" data-role="button" onclick="beautify();"><i class="fa fa-cut fa-2x"></i> <span class="menulabel">Beautify</span></a>';
-        htmlSnippet += '<a href="#" title="Copy" data-role="button" onclick="scroll(true)"><i class="fa fa-copy fa-2x"></i> <span class="menulabel">Scroll up</span></a>';
-        htmlSnippet += '<a href="#" title="Paste" data-role="button" onclick="scroll(false)"><i class="fa fa-paste fa-2x"></i> <span class="menulabel">Scroll down</span></a>';
-        //htmlSnippet += '<a class="ui-disabled" data-role="button"></a>'
-        htmlSnippet += '<a href="#" title="Search" data-role="button" onclick="scroll(false)"><i class="fa fa-search fa-2x"></i> <span class="menulabel">Scroll down</span></a>';
-        htmlSnippet += '<a href="#" title="Beautify" data-role="button" onclick="beautify();"><i class="fa fa-tasks fa-2x"></i> <span class="menulabel">Beautify</span></a>';
-        htmlSnippet += '<a href="#history" title="History" data-role="button"><i class="fa fa-history fa-2x"></i> <span class="menulabel">History</span></a>';
-        //htmlSnippet += '<a class="ui-disabled" data-role="button"></a>
-        htmlSnippet += '<a href="javascript: runCode();" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-play fa-2x"></i></a>';
-        htmlSnippet += '<a href="javascript: runCode(true);" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-stop fa-2x"></i></a>';
-        htmlSnippet += '<a href="javascript: runCode(true);" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-cog fa-2x"></i></a>';
-        htmlSnippet += '<a href="#collaborate" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-external-link fa-2x"></i></a>';
+        htmlSnippet += '<a style="margin-right: 5px;" href="#" title="Search" data-role="button" onclick="scroll(false)"><i class="fa fa-search fa-2x"></i> <span class="menulabel">Search</span></a>';
+
+        htmlSnippet += '<a href="#" title="Cut" data-role="button" onclick="cut();"><i class="fa fa-cut fa-2x"></i> <span class="menulabel">Cut</span></a>';
+        htmlSnippet += '<a href="#" title="Copy" data-role="button" onclick="copy()"><i class="fa fa-copy fa-2x"></i> <span class="menulabel">Copy</span></a>';
+        htmlSnippet += '<a style="margin-right: 5px;" href="#" title="Paste" data-role="button" onclick="paste"><i class="fa fa-paste fa-2x"></i> <span class="menulabel">Paste</span></a>';
+
+        htmlSnippet += '<a title="Run code" href="javascript: runCode();" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-play fa-2x"></i> <span class="menulabel">Run code</span></a>';
+//        htmlSnippet += '<a href="javascript: runCode(true);" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-stop fa-2x"></i></a>';
+        htmlSnippet += '<a title="Code preview settings" href="javascript: runCode(true);" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-cog fa-2x"></i> <span class="menulabel">Code preview settings</span></a>';
+        htmlSnippet += '<a href="#" title="Beautify" data-role="button" onclick="beautify();"><i class="fa fa-tasks fa-2x"></i> <span class="menulabel">Beautify code</span></a>';
+        //htmlSnippet += '<a href="#collaborate" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-external-link fa-2x"></i></a>';
         htmlSnippet += '</div></div>';
         $("#view" + fileCount).append('<div id="file' + fileCount + '">' + htmlSnippet + '<div id="editor' + fileCount + '" class="editor"></div>');
         htmlSnippet = '<div class="preview"><div id="iframecontainer' + fileCount + '"><iframe src="' + iframeUrl + '" name="preview' + fileCount + '" id="preview' + fileCount + '" src="javascript: ' + "'" + "Live preview window'" + '"></iframe></div>';
@@ -1143,15 +1166,16 @@ document.getElementById(iframeId).onload = function() {
           seconds -= 86400 * interval;
         }
         interval = Math.floor(seconds / 3600);
-        if (interval >= 1) {
+        if (interval >= 1 && elapsed.split(' ').length < 3) {
           elapsed += interval + "h ";
           seconds -= 3600 * interval;
         }
         interval = Math.floor(seconds / 60);
-        if (interval >= 1) {
+        if (interval >= 1 && elapsed.split(' ').length < 3) {
           elapsed += interval + "m ";
         }
-        return elapsed + "ago";
+        
+        return elapsed + " ago";
       }
        // end function declarations
        // Begin event bindings
@@ -1357,9 +1381,7 @@ document.getElementById(iframeId).onload = function() {
         </h1>
       </div>
       <div id="listmenu" class="">
-        <a href="#dashboard" onclick="$( '#tabmenu' ).tabs( 'option', 'active', 0);">
-          <img src="/img/editorlogo.png" style="height: 65px; padding-left: 5px; padding-top: 10px; border: 0px solid green">
-        </a>
+        <a href="#dashboard" onclick="$( '#tabmenu' ).tabs( 'option', 'active', 0);"><div id="logo"></div></a>
         <div data-role="controlgroup" data-mini="true" style="margin-top: 25px;"> <a data-role="button" href="#filebrowser"><i class="fa fa-folder-open fa-2x"></i> <span class="menulabel">Open</span></a>
           <a data-role="button" href="#upload"><i class="fa fa-upload fa-2x"></i> <span class="menulabel">Upload</span></a>
           <a data-role="button" href="#options"><i class="fa fa-wrench fa-2x"></i> <span class="menulabel">Config</span></a>
