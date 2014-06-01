@@ -1201,6 +1201,9 @@ document.getElementById(iframeId).onload = function() {
         account.avatar = data.avatar_url;
         account.name = data.name;
         account.email = data.email ? data.email : data.login + '@users.noreply.github.com';
+        GitWrap.getEmail (account.token, function(data) {
+          if (data.email) {account.email = data.email;}
+        });
         $("#account").html('<a href="javascript: signOut();" data-role="button" data-icon="power">Log off ' + account.username + '</a></span>').trigger("create");
         // List events performed by collaborators
         $.ajax({
