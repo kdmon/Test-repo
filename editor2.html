@@ -424,7 +424,7 @@
         currentFile = fileCount;
         addTab(file, fileCount);
         var htmlSnippet;
-        htmlSnippet = '<div class="">';
+        htmlSnippet = '<div id="contextmenu">';
         htmlSnippet += '<div data-role="controlgroup" data-type="horizontal" data-mini="true" style="margin-left: 5px">';
         htmlSnippet += '<a class="ui-not-disabled" title="Save" data-role="button" href="#commit"><i class="fa fa-save fa-2x"></i> <span class="menulabel">Save</span></a>';
         htmlSnippet += '<a style="margin-right: 5px;" href="#history" title="History" data-role="button"><i class="fa fa-history fa-2x"></i> <span class="menulabel">Revert</span></a>';
@@ -491,7 +491,7 @@
 
       function formatLayout(animate) {
         var totalWidth = $(".ui-panel-wrapper").outerWidth();
-        var totalHeight = $(window).height() - $(".ui-header").outerHeight() - $("#tablist").outerHeight() - $(".submenu").outerHeight() - 30;
+        var totalHeight = $(window).height() - $(".ui-header").outerHeight() - $("#tablist").outerHeight() - $("#contextmenu").outerHeight() - 30;
         if (animate == true) {
           //        if (!animate > 0) animate = 2500;
           $("#tabmenu").css("width", totalWidth + "px");
