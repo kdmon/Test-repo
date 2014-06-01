@@ -687,7 +687,7 @@
           doc.on('shout', function(data) {
             switch (data.action) {
               case "chat":
-                var d = newDate(data.timestamp);
+                var d = new Date(data.timestamp);
                 stamp = d.toLocaleTimeString();
                 $("#chathistory").append('<p> (' + stamp + ') <em>' + data.user + '</em> said ' + data.msg + '</p>').scrollTop(999999);
                 break;
