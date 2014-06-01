@@ -668,7 +668,7 @@
         return text;
       }
 
-      function startVideo() {
+      function startChat() {
         var chatroom = $("#chatroom").val();
         var webrtc = new SimpleWebRTC({
           // the id/element dom element that will hold "our" video
@@ -689,7 +689,7 @@
               case "chat":
                 var d = new Date(data.timestamp);
                 stamp = d.toLocaleTimeString();
-                $("#chathistory").append('<p> (' + stamp + ') <em>' + data.user + '</em> said ' + data.msg + '</p>').scrollTop(999999);
+                $("#chathistory").append('<p> (' + stamp + ') <em>' + data.user + '</em>: ' + data.msg + '</p>').scrollTop(999999);
                 break;
             }
           });
@@ -704,7 +704,7 @@
               msg: msg
             });
             stamp = d.toLocaleTimeString();
-            $("#chathistory").append('<p style="color: #aaa"> (' + stamp + ') <em>you</em> said ' + msg + '</p>').scrollTop(999999);
+            $("#chathistory").append('<p style="color: #aaa"> (' + stamp + ') <em>you</em>: ' + msg + '</p>').scrollTop(999999);
             //$("#chathistory").prepend('<p>' +  '(' + stamp + ') ' + account.username + ': ' + msg + '</p>');
           });
         });
@@ -1694,26 +1694,21 @@ document.getElementById(iframeId).onload = function() {
           <h3>Social</h3> <a href="#" data-rel="close" data-role="button" data-iconpos="notext" data-icon="arrow-l" class="ui-btn-right">Close</a>
         </div>
         <div role="main" class="ui-content">
-          <input type="text" id="chatroom" value="General chat room">
-          <div data-inset="false" data-role="collapsible-set">
-            <div data-role="collapsible" data-collapsed="false">
-              <h3>Audio/video chat</h3>
-              <div style="max-height: 500px; overflow: auto;">
-                <video id="localVideo"></video>
-                <div id="remoteVideos"></div>
-              </div>
-              <h3>Controls</h3>
-              <button data-inline="true" onclick="startVideo();">Join</button>
-              <button data-inline="true" onclick="webrtc.mute()">Leave</button>
-              <button data-inline="true" onclick="webrtc.pauseVideo()">Pause</button>
-              <button data-inline="true" onclick="webrtc.resumeVideo()">Resume</button>
-              <button data-inline="true" onclick="webrtc.mute()">Mute</button>
-              <button data-inline="true" onclick="webrtc.unmute()">Unmute</button>
+          <div class="ui-grid-a">
+            <div class="ui-block-a" style="width: 72%">
+              <input type="text" id="chatroom" value="General chat room">
             </div>
-            <div data-role="collapsible">
+            <div class="ui-block-b" style="width: 28%">
+              <a data-role="button" data-mini="true" onclick="startChat();">Join</a>
+            </div>
+          </div>
+          <div data-inset="false" data-role="collapsible-set" data-mini="true">
+          
+            <div data-role="collapsible" data-collapsed="false">
               <h3>Instant messaging</h3>
+              
               <div style="clear: both; height: 200px; max-height: 200px; font-size: 0.7em; padding: 2px; border: 1px solid #aaa; overflow:auto;" id="chathistory">
-                <p>Chat started.</p>
+                <p>Join a chat room.</p>
               </div>
               <div class="ui-grid-a">
                 <div class="ui-block-a" style="width: 72%">
@@ -1722,7 +1717,26 @@ document.getElementById(iframeId).onload = function() {
                 <div class="ui-block-b" style="width: 28%"> <a data-role="button" data-mini="true" id="saybutton">Say</a>
                 </div>
               </div>
+              <div style="max-height: 500px; overflow: auto;">
+                <video id="localVideo"></video>
+                <div id="remoteVideos"></div>
+              </div>
             </div>
+          
+            <div data-role="collapsible">
+              <h3>Participants</h3>
+              <p>None</p>
+            </div>
+            <div data-role="collapsible">
+              <h3>Controls</h3>
+              <button data-inline="true" onclick="startChat();">Start video chat</button>
+              <button data-inline="true" onclick="webrtc.mute()">Stop video chat</button>
+              <button data-inline="true" onclick="webrtc.pauseVideo()">Pause video stream</button>
+              <button data-inline="true" onclick="webrtc.resumeVideo()">Resume video stream</button>
+              <button data-inline="true" onclick="webrtc.mute()">Mute</button>
+              <button data-inline="true" onclick="webrtc.unmute()">Unmute</button>
+            </div>
+            
             <div data-role="collapsible">
               <h3>Share URL</h3>
               <p>Scan the QR code to open a preview on your mobile device.</p>
