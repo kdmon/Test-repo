@@ -72,11 +72,10 @@
         margin-left: 20px !important;
         margin-right: 20px !important;
       }
-      #remoteVideos video {
-        width: 320px;
-      }
-      #localVideo {
-        width: 160px;
+      #remoteVideos video, #localVideo {
+        width: 200px;
+        float: left;
+        margin: 5px;
       }
       #viewcontainer {
         clear: both;
@@ -294,6 +293,7 @@
       var liveEditing = true;
       var openFiles = {}; // important in tracking file details, like path and repo.
       var timer = setTimeout(function() {}, 10); // used for live editing
+      var webrtc;
        // End globals
        // Begin function declarations
       function addTab(title, tabCount) {
@@ -670,7 +670,7 @@
 
       function startChat() {
         var chatroom = $("#chatroom").val();
-        var webrtc = new SimpleWebRTC({
+        webrtc = new SimpleWebRTC({
           // the id/element dom element that will hold "our" video
           localVideoEl: 'localVideo',
           // the id/element dom element that will hold remote videos
@@ -1718,8 +1718,8 @@ document.getElementById(iframeId).onload = function() {
                 </div>
               </div>
               <div style="max-height: 500px; overflow: auto;">
-                <video id="localVideo"></video>
                 <div id="remoteVideos"></div>
+                <video id="localVideo"></video>
               </div>
             </div>
           
