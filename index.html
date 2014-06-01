@@ -29,14 +29,7 @@
     <script src="/js/beautify-css.js"></script>
     <script src="/js/beautify-html.js"></script>
     <script src="/js/jquery.ui.touch-punch.min.js"></script>
-    <script type="text/javascript" src="https://getfirebug.com/firebug-lite.js">
-      {
-          overrideConsole: false,
-          startInNewWindow: true,
-          startOpened: true,
-          enableTrace: true
-      }
-    </script>
+    <script type="text/javascript" src="https://ggetfirebug.com/firebug-lite.js"></script>
 
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css" />
@@ -935,20 +928,52 @@
           ifrm.document.open();
           ifrm.document.write('<h1>Execution stopped</h1>');
         } else {
-          /*
+          
+/*
 document.getElementById(iframeId).onload = function() {
   try {
+    document.getElementById(iframeId).onerror = function (msg) {
+      alert ("error " + msg);
+    }
     alert("loaded");
   } catch(e) {
     alert("Error: "+e);
   }
-}
-*/
+}*/
+
           //	currentUrl ="http://rawgithub.com/kdmon/Test-repo/master/cars.html";
           ifrm.document.open();
           ifrm.document.write('<h1>Executing...</h1>');
           ifrm.location.href = currentUrl;
           ifrm.document.close();
+          
+          ifrm.addEventListener('mouseup', function(event) {
+            var searchTerm = ifrm.getSelection().toString();
+            if (searchTerm != "") {
+              // delete one character at a time working towards the middle
+              var counter = 0;
+              while (!editors[currentFile].find(searchTerm) && searchTerm) {
+                counter++;
+                if (counter % 2 == 0) {
+                  searchTerm = searchTerm.substring(1);
+                } else {
+                  searchTerm = searchTerm.substring(0, searchTerm.length - 1);
+                }
+              }
+              editors[currentFile].focus();
+            }
+          }, false);
+          editors[currentFile].focus();
+          // prevent focus stealing for 3 seconds
+          var handler = function() {
+            editors[currentFile].focus();
+          };
+          editors[currentFile].on("blur", handler);
+          setTimeout(function() {
+            editors[currentFile].focus();
+            editors[currentFile].removeEventListener("blur", handler);
+          }, 3000);
+          
           /*
       alert (currentUrl);
 
@@ -1287,8 +1312,6 @@ document.getElementById(iframeId).onload = function() {
           $("#errorlog").prepend("<p>Error: " + msg + "\nURL: " + url + "\nLine: " + num+"</p>");
           return true;
       };
-
-anerror
 
        // Page events
       $(document).on("pagecreate", "#frontpage", function(event) {
