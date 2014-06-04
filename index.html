@@ -316,6 +316,8 @@
         } // tracks recent file history.
       var firefox = 'firefox'; //$.browser.mozilla; Should use feature detection with jqm 1.4.
       var liveEditing = false;
+      var loading = false;
+      var slowLoading;
       var mediaEnabled = false; // webrtc running?
       var openFiles = {}; // important in tracking file details, like path and repo.
       var timer = setTimeout(function() {}, 10); // used for live editing
@@ -425,10 +427,10 @@
           committerEmail: account.email
         }, function(data) {
           alert("Committed " + data.content.size + " bytes of data.");
-          $("#overlaydiv").hide();
+          toggleLoading();
         });
         $("#commit").panel("close");
-        $("#overlaydiv").show();
+        toggleLoading();
       }
 
       function createEditor(file, value, user, repo, path, collab) {
@@ -667,11 +669,11 @@
 
       function pullProxy(url, sameWindow) {
         //console.log("Pulling " + url);
-        $("#overlaydiv").show();
+        toggleLoading();
         GitWrap.pullProxy({
           url: url
         }, function(data) {
-          $("#overlaydiv").hide();
+          toggleLoading();
           //console.log("data received:" + data);
           if (typeof data == 'object') data = JSON.stringify(data, null, 2);
           if (!sameWindow) createEditor(fileBrowser.filename, data, fileBrowser.owner, fileBrowser.repository, fileBrowser.path);
@@ -703,6 +705,22 @@
         var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         for (var i = 0; i < length; i++) text += possible.charAt(Math.floor(Math.random() * possible.length));
         return text;
+      }
+      
+      function toggleLoading (disableLoading) {
+        slowLoading = null;
+        if (loading || disableLoading) {
+          $("#overlaydiv").hide();
+          loading = false;
+        }
+        else {
+          loading = true;
+          $("#overlaydiv").show();
+          $("#dismissloading").hide();
+          slowLoading = setTimeout(function() {
+            $("#dismissloading").show('slow');
+          }, 6000);
+        }
       }
 
       function toggleMedia(disableMedia) {
@@ -1584,12 +1602,15 @@ document.getElementById(iframeId).onload = function() {
             <br/>
             <center>
               <img src="/img/logo2_active.png" />
-              <br/>
+              <h3>Processing</h3>
               <img src="/img/spinner.gif" />
-              <h3>Page not loading?</h3>
-              <p>Some possible causes are: large file or unsupported file format, slow Internet connection or the GitHub API is down.</p>
-              <br/> <a data-role="button" data-mini="true" data-inline="true" href="#" onclick="$('#overlaydiv').hide();">Dismiss</a>
+              <div id="dismissloading">
+                <h3>Page not loading?</h3>
+                <p>This could be due to opening a large file or an unsupported file extension, a slow Internet connection or that the GitHub API is down.</p>
+                <br/> <a data-role="button" data-mini="true" data-inline="true" href="#" onclick="toggleLoading(true);">Dismiss</a>
+              </div>
             </center>
+            <br/>
           </div>
         </div>
       </div>
