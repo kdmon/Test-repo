@@ -30,7 +30,6 @@
     <script src="/js/beautify-html.js"></script>
     <script src="/js/jquery.ui.touch-punch.min.js"></script>
     <script type="text/javascript" src="https://ggetfirebug.com/firebug-lite.js"></script>
-
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css" />
     <style type="text/css" media="screen">
@@ -74,7 +73,8 @@
         margin-left: 20px !important;
         margin-right: 20px !important;
       }
-      #remoteVideos video, #localVideo {
+      #remoteVideos video,
+      #localVideo {
         width: 200px;
         float: left;
         margin: 5px;
@@ -280,7 +280,7 @@
     <script>
       // Begin globals
       var account = {}; // authenticated Github account.
-      var appSize = 320; // preview width in pixel.
+      var appSize = 0; // preview width in pixel.
       var appServer = "http://it4se.com:8080";
       var connection; // shareJS
       var documents = []; // shareJS
@@ -292,7 +292,7 @@
         } // tracks recent file history.
       var editors = {}; // array of editors, takes currentFile as index.
       var firefox = 'firefox'; //$.browser.mozilla; Should use feature detection with jqm 1.4.
-      var liveEditing = true;
+      var liveEditing = false;
       var openFiles = {}; // important in tracking file details, like path and repo.
       var timer = setTimeout(function() {}, 10); // used for live editing
        // End globals
@@ -429,18 +429,16 @@
         htmlSnippet += '<div data-role="controlgroup" data-type="horizontal" data-mini="true" style="margin-left: 5px">';
         htmlSnippet += '<a class="ui-not-disabled" title="Save" data-role="button" href="#commit"><i class="fa fa-save fa-2x"></i> <span class="menulabel">Save</span></a>';
         htmlSnippet += '<a style="margin-right: 5px;" href="#history" title="History" data-role="button"><i class="fa fa-history fa-2x"></i> <span class="menulabel">Revert</span></a>';
-
         htmlSnippet += '<a onclick="editors[fileCount].getSession().getUndoManager().undo();" href="#undo" title="Undo" data-role="button"><i class="fa fa-reply fa-2x"></i> <span class="menulabel">Undo</span></a>';
         htmlSnippet += '<a style="margin-right: 5px;" onclick="editors[fileCount].getSession().getUndoManager().redo();" href="#redo" title="Redo" data-role="button"><i class="fa fa-share fa-2x"></i> <span class="menulabel">Redo</span></a>';
-        
         htmlSnippet += '<a onclick="editors[fileCount].execCommand(' + "'find'" + ');" href="#" title="Search" data-role="button" onclick="scroll(false)"><i class="fa fa-search fa-2x"></i> <span class="menulabel">Search</span></a>';
         htmlSnippet += '<a style="margin-right: 5px;" href="#" title="Beautify" data-role="button" onclick="beautify();"><i class="fa fa-tasks fa-2x"></i> <span class="menulabel">Beautify code</span></a>';
-/*
+        /*
         htmlSnippet += '<a onclick="editors[fileCount].execCommand(' + "'cut'" + ');"href="#" title="Cut" data-role="button" onclick="cut();"><i class="fa fa-cut fa-2x"></i> <span class="menulabel">Cut</span></a>';
         htmlSnippet += '<a onclick="editors[fileCount].execCommand(' + "'copy'" + ');"href="#" title="Copy" data-role="button" onclick="copy()"><i class="fa fa-copy fa-2x"></i> <span class="menulabel">Copy</span></a>';
         htmlSnippet += '<a onclick="editors[fileCount].execCommand(' + "'paste'" + ');"style="margin-right: 5px;" href="#" title="Paste" data-role="button" onclick="paste"><i class="fa fa-paste fa-2x"></i> <span class="menulabel">Paste</span></a>';
 */
-        htmlSnippet += '<a title="Run code" href="javascript: runCode();" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-play fa-2x"></i> <span class="menulabel">Run code</span></a>';
+        htmlSnippet += '<a title="Run code" href="javascript: console.log(this); runCode(false, this);" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-play fa-2x"></i> <span class="menulabel">Run code</span></a>';
         //        htmlSnippet += '<a href="javascript: runCode(true);" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-stop fa-2x"></i></a>';
         htmlSnippet += '<a title="Code preview settings" href="javascript: runCode(true);" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-cog fa-2x"></i> <span class="menulabel">Code preview settings</span></a>';
         htmlSnippet += '<a href="#shareurl" data-role="button" class="nowrap" title="Share preview"><i class="fa fa-external-link fa-2x"></i> <span class="menulabel">Share preview</span></a>';
@@ -477,7 +475,7 @@
           if (liveEditing) {
             clearTimeout(timer);
             timer = setTimeout(function() {
-              runCode();
+              runCode(false);
             }, 2000);
           }
         });
@@ -725,7 +723,7 @@
       function setAppSize() {
         appSize = $("#appsize").val();
         var tmpTimer = setTimeout(function() {
-          formatLayout(true);
+          formatLayout(false);
         }, 400);
       }
 
@@ -918,18 +916,27 @@
         editors[currentFile].setValue(code, -1);
       }
 
-      function runCode(pause) {
+      function runCode (pause, elem) {
         var iframeId = 'preview' + currentFile;
         var ifrm = document.getElementById(iframeId);
         ifrm = (ifrm.contentWindow) ? ifrm.contentWindow : (ifrm.contentDocument.document) ? ifrm.contentDocument.document : ifrm.contentDocument;
         var currentUrl = document.getElementById(iframeId).src;
-        console.log("currenturl: " + currentUrl);
+        //console.log("currenturl: " + currentUrl);
         if (pause) {
+          appSize = 0;
+          formatLayout();
           ifrm.document.open();
           ifrm.document.write('<h1>Execution stopped</h1>');
-        } else {
-          
-/*
+          $(elem + "i").addClass('fa-play');
+          $(elem + "i").removeClass('fa-stop');
+        } 
+        
+        else {
+          $(elem + "i").removeClass('fa-play');
+          $(elem + "i").addClass('fa-stop');
+          setAppSize();
+
+          /*
 document.getElementById(iframeId).onload = function() {
   try {
     document.getElementById(iframeId).onerror = function (msg) {
@@ -940,13 +947,11 @@ document.getElementById(iframeId).onload = function() {
     alert("Error: "+e);
   }
 }*/
-
           //	currentUrl ="http://rawgithub.com/kdmon/Test-repo/master/cars.html";
           ifrm.document.open();
           ifrm.document.write('<h1>Executing...</h1>');
           ifrm.location.href = currentUrl;
           ifrm.document.close();
-          
           ifrm.addEventListener('mouseup', function(event) {
             var searchTerm = ifrm.getSelection().toString();
             if (searchTerm != "") {
@@ -973,7 +978,6 @@ document.getElementById(iframeId).onload = function() {
             editors[currentFile].focus();
             editors[currentFile].removeEventListener("blur", handler);
           }, 3000);
-          
           /*
       alert (currentUrl);
 
@@ -1235,8 +1239,10 @@ document.getElementById(iframeId).onload = function() {
         account.avatar = data.avatar_url;
         account.name = data.name;
         account.email = data.email ? data.email : data.login + '@users.noreply.github.com';
-        GitWrap.getEmail (account.token, function(data) {
-          if (data.email) {account.email = data.email;}
+        GitWrap.getEmail(account.token, function(data) {
+          if (data.email) {
+            account.email = data.email;
+          }
         });
         $("#account").html('<a href="javascript: signOut();" data-role="button" data-icon="power">Log off ' + account.username + '</a></span>').trigger("create");
         // List events performed by collaborators
@@ -1308,11 +1314,10 @@ document.getElementById(iframeId).onload = function() {
           return ("Did you remember to save? If not, 'stay on the page' and hit commit.");
         }*/
       }
-      window.onerror = function (msg, url, num) {
-          $("#errorlog").prepend("<p>Error: " + msg + "\nURL: " + url + "\nLine: " + num+"</p>");
-          return true;
+      window.onerror = function(msg, url, num) {
+        $("#errorlog").prepend("<p>Error: " + msg + "\nURL: " + url + "\nLine: " + num + "</p>");
+        return true;
       };
-
        // Page events
       $(document).on("pagecreate", "#frontpage", function(event) {
         var params = getSearchParameters();
@@ -1745,15 +1750,12 @@ document.getElementById(iframeId).onload = function() {
             <div class="ui-block-a" style="width: 72%">
               <input type="text" id="chatroom" value="General chat room">
             </div>
-            <div class="ui-block-b" style="width: 28%">
-              <a data-role="button" data-mini="true" onclick="startChat();">Join</a>
+            <div class="ui-block-b" style="width: 28%"> <a data-role="button" data-mini="true" onclick="startChat();">Join</a>
             </div>
           </div>
           <div data-inset="false" data-role="collapsible-set" data-mini="true">
-          
             <div data-role="collapsible" data-collapsed="false">
               <h3>Instant messaging</h3>
-              
               <div style="clear: both; height: 200px; max-height: 200px; font-size: 0.7em; padding: 2px; border: 1px solid #aaa; overflow:auto;" id="chathistory">
                 <p>Join a chat room.</p>
               </div>
@@ -1769,7 +1771,6 @@ document.getElementById(iframeId).onload = function() {
                 <video id="localVideo"></video>
               </div>
             </div>
-          
             <div data-role="collapsible">
               <h3>Participants</h3>
               <p>None</p>
@@ -1786,7 +1787,6 @@ document.getElementById(iframeId).onload = function() {
           </div>
         </div>
       </div>
-      
       <div data-role="panel" id="shareurl" data-position="left" data-animate="false" data-dismissible="false" data-swipe-close="false">
         <div data-role="header">
           <h3>Share URL</h3> <a href="#" data-rel="close" data-role="button" data-iconpos="notext" data-icon="arrow-l" class="ui-btn-right">Close</a>
