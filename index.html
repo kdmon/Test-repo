@@ -468,7 +468,7 @@
         htmlSnippet += '<a onclick="editors[fileCount].execCommand(' + "'copy'" + ');"href="#" title="Copy" data-role="button" onclick="copy()"><i class="fa fa-copy fa-2x"></i> <span class="menulabel">Copy</span></a>';
         htmlSnippet += '<a onclick="editors[fileCount].execCommand(' + "'paste'" + ');"style="margin-right: 5px;" href="#" title="Paste" data-role="button" onclick="paste"><i class="fa fa-paste fa-2x"></i> <span class="menulabel">Paste</span></a>';
 */
-        htmlSnippet += '<a title="Run code" href="javascript: console.log(this); runCode(false, this);" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-play fa-2x"></i> <span class="menulabel">Run code</span></a>';
+        htmlSnippet += '<a id="runbutton' + fileCount + '" title="Run code" href="togglePreview();" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-play fa-2x"></i> <span class="menulabel">Run code</span></a>';
         //        htmlSnippet += '<a href="javascript: runCode(true);" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-stop fa-2x"></i></a>';
         htmlSnippet += '<a title="Code preview settings" href="javascript: runCode(true);" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-cog fa-2x"></i> <span class="menulabel">Code preview settings</span></a>';
         htmlSnippet += '<a href="#shareurl" data-role="button" class="nowrap" title="Share preview"><i class="fa fa-external-link fa-2x"></i> <span class="menulabel">Share preview</span></a>';
@@ -705,15 +705,12 @@
         return text;
       }
 
-      function toggleMedia (disableMedia) {
-        
+      function toggleMedia(disableMedia) {
         if (mediaEnabled || disableMedia) {
           $("#mediabutton").text('Enable audio/video');
           $("#mediacontainer").hide();
           // code to end call goes here
-        }
-        
-        else {
+        } else {
           $("#mediabutton").text('Disable audio/video');
           $("#mediacontainer").show();
           webrtc = new SimpleWebRTC({
@@ -724,7 +721,6 @@
             // immediately ask for camera access
             autoRequestMedia: true
           });
-          
           webrtc.on('readyToCall', function() {
             var room = $("#chatroom").val();
             webrtc.joinRoom(room);
@@ -746,50 +742,30 @@
                   var d = new Date(data.timestamp);
                   stamp = d.toLocaleTimeString();
                   $("#chathistory").append('<p> (' + stamp + ') <b>: ' + data.msg + '</b></p>').scrollTop(999999);
-                break;
-                
+                  break;
                 case "say":
                   var d = new Date(data.timestamp);
                   stamp = d.toLocaleTimeString();
                   $("#chathistory").append('<p> (' + stamp + ') <em>' + data.user + '</em>: ' + data.msg + '</p>').scrollTop(999999);
-                break;
+                  break;
               }
             });
-            
             $("#saybutton").on('click', function() {
-              var msg = $('#chatbox').val();
-              var d = new Date();
-              $('#chatbox').val('').focus();
-              doc.shout({
-                action: "say",
-                timestamp: d.toISOString(),
-                user: account.username,
-                msg: msg
-              });
-              stamp = d.toLocaleTimeString();
-              $("#chathistory").append('<p style="color: #aaa"> (' + stamp + ') <em>you</em>: ' + msg + '</p>').scrollTop(999999);
-              //$("#chathistory").prepend('<p>' +  '(' + stamp + ') ' + account.username + ': ' + msg + '</p>');
+              say();
             });
-            
             var d = new Date();
             doc.shout({
               action: "announce",
               timestamp: d.toISOString(),
               msg: (account.username || 'guest') + " joined the room."
             });
-          
           });
-        }
-        
-        else {
-          
+        } else {
           chatting = false;
           $("#chatroom").removeClass('ui-disabled');
           $("#roombutton").text('Join');
           $("#mainchat").hide();
-        
           // code to close chat goes here
-          
         }
       }
 
@@ -994,22 +970,24 @@
         editors[currentFile].setValue(code, -1);
       }
 
-      function runCode(pause, elem) {
+      function togglePreview () {
         var iframeId = 'preview' + currentFile;
         var ifrm = document.getElementById(iframeId);
         ifrm = (ifrm.contentWindow) ? ifrm.contentWindow : (ifrm.contentDocument.document) ? ifrm.contentDocument.document : ifrm.contentDocument;
         var currentUrl = document.getElementById(iframeId).src;
         //console.log("currenturl: " + currentUrl);
-        if (pause) {
+        if (editors[currentFile].running) {
+          editors[currentFile].running = false;
           appSize = 0;
           formatLayout();
           ifrm.document.open();
           ifrm.document.write('<h1>Execution stopped</h1>');
-          $(elem + "i").addClass('fa-play');
-          $(elem + "i").removeClass('fa-stop');
+          $("#runbutton" + currentFile).html('<i class="fa fa-play"></i>');
+          $("#runbutton" + currentFile).attr('title','Run code');
         } else {
-          $(elem + "i").removeClass('fa-play');
-          $(elem + "i").addClass('fa-stop');
+          editors[currentFile].running = true;
+          $("#runbutton" + currentFile).html('<i class="fa fa-stop"></i>');
+          $("#runbutton" + currentFile).attr('title','Stop code preview');
           setAppSize();
           /*
 document.getElementById(iframeId).onload = function() {
@@ -1227,6 +1205,20 @@ document.getElementById(iframeId).onload = function() {
         returnArray.push("<div data-user='popup' class='ace_selection' style='", "border-radius: 30px; background: ", color, "; opacity:0.2;", "left:", left - 16, "px;", "top:", top - 11, "px;", "height:", 35, "px;", "width:", 35, "px; pointer-events: auto; cursor: help;' onmouseover='javascript: showAuthor(this, 1);' onmouseout='javascript: showAuthor(this);'></div><div id='popup' style='position:absolute; ", "top:", top - 25, "px;", "left:", left - 2, "px;", "background: white; border-radius: 10px; border: 1px solid ", color, "; padding: 2px; display: none;'><b>A user with a very long username</b></div>");
       }
 
+      function say() {
+        var msg = $('#chatbox').val();
+        var d = new Date();
+        $('#chatbox').val('').focus();
+        doc.shout({
+          action: "say",
+          timestamp: d.toISOString(),
+          user: account.username,
+          msg: msg
+        });
+        stamp = d.toLocaleTimeString();
+        $("#chathistory").append('<p> (' + stamp + ') <em>you</em>: ' + msg + '</p>').scrollTop(999999);
+      }
+
       function showAuthor(elem, show) {
         var id = $(elem).attr('data-user');
         if (show) $("#" + id).show();
@@ -1395,167 +1387,167 @@ document.getElementById(iframeId).onload = function() {
       };
        // Page events
       $(document).on("pagecreate", "#frontpage", function(event) {
-        var params = getSearchParameters();
-        document.title = 'Web App Editor';
-        connection = new sharejs.Connection("http://it4se.com:8081/channel");
-        if (localStorage.uitheme == "dark") {
-          $("#frontpage").page("option", "theme", "b");
-          $("#viewcontainer").css('background', 'url("/img/blackwood.png")');
-        } else {
-          $("#frontpage").page("option", "theme", "a");
-        }
-        $("#dashboard").sortable();
-        // Check for existing oauth token
-        if (localStorage.token) {
-          GitWrap.checkToken(localStorage.token, function(data) {
-            if (data.login) {
-              userLogin(data);
-            } else {
-              // ask user to login
-              alert("It appears your last session has expired. Please sign in again");
-              localStorage.removeItem('token');
-            }
-          });
-        }
-        // Attempt to create new token if none exists
-        else {
-          GitWrap.createToken(function(token) {
-            if (token) {
-              GitWrap.checkToken(token, function(data) {
-                if (data.login) {
-                  localStorage.token = token;
-                  userLogin(data);
-                } else {
-                  //	     alert ("Unable to retrieve your profile. Please login again.");
-                }
-              });
-            } else {
-              alert("There was a problem signing you in. Please try again.");
-            }
-          });
-        }
-        formatLayout();
-        var tmpTimer = setTimeout(function() {
-          formatLayout();
-        }, 1500);
-        // Panel events
-        $(".ui-panel").panel({
-          open: function() {
-            if ($(".ui-panel").hasClass("ui-panel-open") == true) {
-              formatLayout();
-            }
-          },
-          close: function() {
-            if ($(".ui-panel").hasClass("ui-panel-open") == false) {
-              formatLayout();
-            }
+          var params = getSearchParameters();
+          document.title = 'Web App Editor';
+          connection = new sharejs.Connection("http://it4se.com:8081/channel");
+          if (localStorage.uitheme == "dark") {
+            $("#frontpage").page("option", "theme", "b");
+            $("#viewcontainer").css('background', 'url("/img/blackwood.png")');
+          } else {
+            $("#frontpage").page("option", "theme", "a");
           }
-        });
-        $("#pickrepo").on("panelbeforeopen", function(event, ui) {
-          GitWrap.getRepos({
-            username: account.username,
-            accessToken: account.token
-          }, function(data) {
-            //console.log(data);
-            var list = "";
-            for (i = 0; i < data.length; i++) {
-              list += '<li data-icon="false"><a href="javascript: setRepo(' + "'" + data[i].name + "', '" + data[i].owner.login + "', true" + ')"><i class="fa fa-github"></i> ' + data[i].name + "</a></li>";
+          $("#dashboard").sortable();
+          // Check for existing oauth token
+          if (localStorage.token) {
+            GitWrap.checkToken(localStorage.token, function(data) {
+              if (data.login) {
+                userLogin(data);
+              } else {
+                // ask user to login
+                alert("It appears your last session has expired. Please sign in again");
+                localStorage.removeItem('token');
+              }
+            });
+          }
+          // Attempt to create new token if none exists
+          else {
+            GitWrap.createToken(function(token) {
+              if (token) {
+                GitWrap.checkToken(token, function(data) {
+                  if (data.login) {
+                    localStorage.token = token;
+                    userLogin(data);
+                  } else {
+                    //	     alert ("Unable to retrieve your profile. Please login again.");
+                  }
+                });
+              } else {
+                alert("There was a problem signing you in. Please try again.");
+              }
+            });
+          }
+          formatLayout();
+          var tmpTimer = setTimeout(function() {
+            formatLayout();
+          }, 1500);
+          // Panel events
+          $(".ui-panel").panel({
+            open: function() {
+              if ($(".ui-panel").hasClass("ui-panel-open") == true) {
+                formatLayout();
+              }
+            },
+            close: function() {
+              if ($(".ui-panel").hasClass("ui-panel-open") == false) {
+                formatLayout();
+              }
             }
-            $("#repolist").html(list).listview("refresh");
           });
-        });
-        $("#pickdir").on("panelbeforeopen", function(event, ui) {
-          //console.log (openFiles[currentFile]);
-          if (openFiles[currentFile].repository != '' && openFiles[currentFile].username != '') {
-            $("#dirheading").html(openFiles[currentFile].repository + openFiles[currentFile].path);
-            GitWrap.getFiles({
-              username: openFiles[currentFile].username,
-              repository: openFiles[currentFile].repository,
-              path: openFiles[currentFile].path,
+          $("#pickrepo").on("panelbeforeopen", function(event, ui) {
+            GitWrap.getRepos({
+              username: account.username,
               accessToken: account.token
             }, function(data) {
-              var list = '';
-              if (openFiles[currentFile].path != "/") {
-                list = '<li data-role="divider">' + openFiles[currentFile].path + '</li><li data-icon="false"><a href="javascript: setPath (' + "'..',false,true" + ')"><i class="fa fa-level-up"></i> .. (up a directory)</a></li>';
-              } else {
-                list = '<li data-icon="false"><a href="#pickrepo"><i class="fa fa-level-up"></i> Change repo</a></li>';
-              }
-              // add directories first
+              //console.log(data);
+              var list = "";
               for (i = 0; i < data.length; i++) {
-                if (data[i].type == "dir") {
-                  list += '<li data-icon="false"><a href="javascript: setPath (' + "'" + data[i].name + "'" + ', true, true)"><i class="fa fa-folder"></i> ' + data[i].name + "</a></li>";
-                }
+                list += '<li data-icon="false"><a href="javascript: setRepo(' + "'" + data[i].name + "', '" + data[i].owner.login + "', true" + ')"><i class="fa fa-github"></i> ' + data[i].name + "</a></li>";
               }
-              // then files
-              for (i = 0; i < data.length; i++) {
-                if (data[i].type != "dir") {
-                  list += '<li data-theme="b" class="ui-disabled"><a href="#"><i class="fa fa-file"></i> ' + data[i].name + "</a></li>";
+              $("#repolist").html(list).listview("refresh");
+            });
+          });
+          $("#pickdir").on("panelbeforeopen", function(event, ui) {
+            //console.log (openFiles[currentFile]);
+            if (openFiles[currentFile].repository != '' && openFiles[currentFile].username != '') {
+              $("#dirheading").html(openFiles[currentFile].repository + openFiles[currentFile].path);
+              GitWrap.getFiles({
+                username: openFiles[currentFile].username,
+                repository: openFiles[currentFile].repository,
+                path: openFiles[currentFile].path,
+                accessToken: account.token
+              }, function(data) {
+                var list = '';
+                if (openFiles[currentFile].path != "/") {
+                  list = '<li data-role="divider">' + openFiles[currentFile].path + '</li><li data-icon="false"><a href="javascript: setPath (' + "'..',false,true" + ')"><i class="fa fa-level-up"></i> .. (up a directory)</a></li>';
+                } else {
+                  list = '<li data-icon="false"><a href="#pickrepo"><i class="fa fa-level-up"></i> Change repo</a></li>';
                 }
-              }
-              $("#dirlist").html(list).listview("refresh");
-            });
-          } else {
-            $("#dirheader").text("Select a repo first!");
-            $("#dirlist").html('list').listview("refresh");
-          }
-        });
-        $("#filebrowser").on("panelbeforeopen", function(event, ui) {
-          getFiles(true);
-        });
-        $("#commit").on("panelbeforeopen", function(event, ui) {
-          $("#saverepo").val(openFiles[currentFile].repository);
-          $("#savefilepath").val(openFiles[currentFile].path);
-          $("#savefilename").val(openFiles[currentFile].filename);
-          if (openFiles[currentFile].repository && openFiles[currentFile].filename && openFiles[currentFile].path) {
-            $("#readytosave").show();
-            $("#notreadytosave").hide();
-          } else {
-            $("#notreadytosave").show();
-            $("#readytosave").hide();
-          }
-        });
-        $("#history").on("panelbeforeopen", changeLog);
-        //$("#errors").on("panelbeforeopen", changeLog);
-        $("#shareurl").on("panelbeforeopen", function(event, ui) {
-          if (document.getElementById("preview" + currentFile)) {
-            var previewUrl = document.getElementById("preview" + currentFile).src;
-            $("#qrcode").html('');
-            var qrCode = new QRCode("qrcode", {
-              text: previewUrl,
-              width: 200,
-              height: 200
-            });
-            $('input[id=plainurl]').val(previewUrl);
-          } else $("#qrcode").html('<h1>Sorry</h1><h3>No file to share. Please open a file first.</h3>');
-        });
-        // Button events
-        $("#newfile, #newtab").on("click", function(event) {
-          event.preventDefault();
-          event.stopImmediatePropagation();
-          createEditor('Untitled' + fileCount + '.html', '');
-        });
-        $("#tabmenu:not(ul)").on("dblclick", function(event) {
-          console.log(event);
-          var target = $(event.target).attr("id");
-          if (target == "tablist") {
-            event.preventDefault();
-            event.stopImmediatePropagation();
-            createEditor('Untitled' + fileCount + '.html', '');
-          } else if (target.search('tabitem') > -1) {
-            var name = prompt('Enter new filename: ', $("#" + target).text());
-            if (name) {
-              openFiles[currentFile].filename = name;
-              $("#" + target).text(name);
+                // add directories first
+                for (i = 0; i < data.length; i++) {
+                  if (data[i].type == "dir") {
+                    list += '<li data-icon="false"><a href="javascript: setPath (' + "'" + data[i].name + "'" + ', true, true)"><i class="fa fa-folder"></i> ' + data[i].name + "</a></li>";
+                  }
+                }
+                // then files
+                for (i = 0; i < data.length; i++) {
+                  if (data[i].type != "dir") {
+                    list += '<li data-theme="b" class="ui-disabled"><a href="#"><i class="fa fa-file"></i> ' + data[i].name + "</a></li>";
+                  }
+                }
+                $("#dirlist").html(list).listview("refresh");
+              });
+            } else {
+              $("#dirheader").text("Select a repo first!");
+              $("#dirlist").html('list').listview("refresh");
             }
-          }
-        });
-        $("#uitheme").on("slidestop", function(event, ui) {
-          setUiTheme();
-        });
-        if (params.collaborate) {
-          createEditor('Collaboration.html', '', '', '', '', params.collaborate);
-        }
-      });
+          });
+          $("#filebrowser").on("panelbeforeopen", function(event, ui) {
+            getFiles(true);
+          });
+          $("#commit").on("panelbeforeopen", function(event, ui) {
+            $("#saverepo").val(openFiles[currentFile].repository);
+            $("#savefilepath").val(openFiles[currentFile].path);
+            $("#savefilename").val(openFiles[currentFile].filename);
+            if (openFiles[currentFile].repository && openFiles[currentFile].filename && openFiles[currentFile].path) {
+              $("#readytosave").show();
+              $("#notreadytosave").hide();
+            } else {
+              $("#notreadytosave").show();
+              $("#readytosave").hide();
+            }
+          });
+          $("#history").on("panelbeforeopen", changeLog);
+          //$("#errors").on("panelbeforeopen", changeLog);
+          $("#shareurl").on("panelbeforeopen", function(event, ui) {
+            if (document.getElementById("preview" + currentFile)) {
+              var previewUrl = document.getElementById("preview" + currentFile).src;
+              $("#qrcode").html('');
+              var qrCode = new QRCode("qrcode", {
+                text: previewUrl,
+                width: 200,
+                height: 200
+              });
+              $('input[id=plainurl]').val(previewUrl);
+            } else $("#qrcode").html('<h1>Sorry</h1><h3>No file to share. Please open a file first.</h3>');
+          });
+          // Button events
+          $('chatmsg'.on("enterKey", function(e) {
+              say();
+            }); $("#newfile, #newtab").on("click", function(event) {
+              event.preventDefault();
+              event.stopImmediatePropagation();
+              createEditor('Untitled' + fileCount + '.html', '');
+            }); $("#tabmenu:not(ul)").on("dblclick", function(event) {
+              console.log(event);
+              var target = $(event.target).attr("id");
+              if (target == "tablist") {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                createEditor('Untitled' + fileCount + '.html', '');
+              } else if (target.search('tabitem') > -1) {
+                var name = prompt('Enter new filename: ', $("#" + target).text());
+                if (name) {
+                  openFiles[currentFile].filename = name;
+                  $("#" + target).text(name);
+                }
+              }
+            }); $("#uitheme").on("slidestop", function(event, ui) {
+              setUiTheme();
+            });
+            if (params.collaborate) {
+              createEditor('Collaboration.html', '', '', '', '', params.collaborate);
+            }
+          });
     </script>
     <title>Web App Editor</title>
   </head>
@@ -1840,12 +1832,10 @@ document.getElementById(iframeId).onload = function() {
             <div class="ui-block-a" style="width: 72%">
               <input type="text" id="chatroom" value="General chat room">
             </div>
-            <div class="ui-block-b" style="width: 28%">
-              <a data-role="button" id="roombutton" data-mini="true" onclick="toggleChat();">Join</a>
+            <div class="ui-block-b" style="width: 28%"> <a data-role="button" id="roombutton" data-mini="true" onclick="toggleChat();">Join</a>
             </div>
           </div>
-          <div id="mainchat" style="display: none;">
-            <a id="mediabutton" data-role="button" href="#" onclick="toggleMedia();" data-mini="true">Enable audio/video</a>
+          <div id="mainchat" style="display: none;"> <a id="mediabutton" data-role="button" href="#" onclick="toggleMedia();" data-mini="true">Enable audio/video</a>
             <div id="mediacontainer" style="display: none; max-height: 500px; overflow: auto;">
               <div id="mediacontrols" style="display:none;">
                 <button data-inline="true" onclick="startChat();">Start video chat</button>
