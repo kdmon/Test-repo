@@ -67,14 +67,14 @@
         top: 0;
         bottom: 0;
         z-index: 99099999;
-        background: rgba(155,155,155, 0.8);
+        background: rgba(155, 155, 155, 0.8);
         display: none;
       }
       #overlaycontainer {
         max-height: 92%;
         overflow: auto;
         border-radius: 25px;
-        background: rgba(155,155,155, 1);
+        background: rgba(155, 155, 155, 1);
         color: black;
         text-shadow: none;
         box-shadow: 0 0 12px 2px #000;
@@ -304,19 +304,22 @@
       var account = {}; // authenticated Github account.
       var appSize = 0; // preview width in pixel.
       var appServer = "http://it4se.com:8080";
+      var chatting = false; // user joined a chat room?
       var connection; // shareJS
       var documents = []; // shareJS
       var currentFile = ''; // important in tracking opened file.
+      var editors = {}; // array of editors, takes currentFile as index.
       var fileCount = 0; // tracks tabs and files.
       var fileBrowser = {
           repository: '',
           path: '/'
         } // tracks recent file history.
-      var editors = {}; // array of editors, takes currentFile as index.
       var firefox = 'firefox'; //$.browser.mozilla; Should use feature detection with jqm 1.4.
       var liveEditing = false;
+      var mediaEnabled = false; // webrtc running?
       var openFiles = {}; // important in tracking file details, like path and repo.
       var timer = setTimeout(function() {}, 10); // used for live editing
+      var webrtc;
        // End globals
        // Begin function declarations
       function addTab(title, tabCount) {
@@ -702,46 +705,92 @@
         return text;
       }
 
-      function startChat() {
-        var chatroom = $("#chatroom").val();
-        var webrtc = new SimpleWebRTC({
-          // the id/element dom element that will hold "our" video
-          localVideoEl: 'localVideo',
-          // the id/element dom element that will hold remote videos
-          remoteVideosEl: 'remoteVideos',
-          // immediately ask for camera access
-          autoRequestMedia: true
-        });
-        // we have to wait until it's ready
-        webrtc.on('readyToCall', function() {
-          // you can name it anything
-          webrtc.joinRoom(chatroom);
-        });
-        connection.open(chatroom, 'text', function(error, doc) {
-          doc.on('shout', function(data) {
-            switch (data.action) {
-              case "chat":
-                var d = new Date(data.timestamp);
-                stamp = d.toLocaleTimeString();
-                $("#chathistory").append('<p> (' + stamp + ') <em>' + data.user + '</em>: ' + data.msg + '</p>').scrollTop(999999);
+      function toggleMedia (disableMedia) {
+        
+        if (mediaEnabled || disableMedia) {
+          $("#mediabutton").text('Enable audio/video');
+          $("#mediacontainer").hide();
+          // code to end call goes here
+        }
+        
+        else {
+          $("#mediabutton").text('Disable audio/video');
+          $("#mediacontainer").show();
+          webrtc = new SimpleWebRTC({
+            // the id/element dom element that will hold "our" video
+            localVideoEl: 'localVideo',
+            // the id/element dom element that will hold remote videos
+            remoteVideosEl: 'remoteVideos',
+            // immediately ask for camera access
+            autoRequestMedia: true
+          });
+          
+          webrtc.on('readyToCall', function() {
+            var room = $("#chatroom").val();
+            webrtc.joinRoom(room);
+          });
+        }
+      }
+
+      function toggleChat() {
+        var room = $("#chatroom").val();
+        if (!chatting) {
+          chatting = true;
+          $("#chatroom").addClass('ui-disabled');
+          $("#roombutton").text('Exit');
+          $("#mainchat").show();
+          connection.open(room, 'text', function(error, doc) {
+            doc.on('shout', function(data) {
+              switch (data.action) {
+                case "announce":
+                  var d = new Date(data.timestamp);
+                  stamp = d.toLocaleTimeString();
+                  $("#chathistory").append('<p> (' + stamp + ') <b>: ' + data.msg + '</b></p>').scrollTop(999999);
                 break;
-            }
-          });
-          $("#saybutton").on('click', function() {
-            var msg = $('#chatbox').val();
-            var d = new Date();
-            $('#chatbox').val('').focus();
-            doc.shout({
-              action: "chat",
-              timestamp: d.toISOString(),
-              user: account.username,
-              msg: msg
+                
+                case "say":
+                  var d = new Date(data.timestamp);
+                  stamp = d.toLocaleTimeString();
+                  $("#chathistory").append('<p> (' + stamp + ') <em>' + data.user + '</em>: ' + data.msg + '</p>').scrollTop(999999);
+                break;
+              }
             });
-            stamp = d.toLocaleTimeString();
-            $("#chathistory").append('<p style="color: #aaa"> (' + stamp + ') <em>you</em>: ' + msg + '</p>').scrollTop(999999);
-            //$("#chathistory").prepend('<p>' +  '(' + stamp + ') ' + account.username + ': ' + msg + '</p>');
+            
+            $("#saybutton").on('click', function() {
+              var msg = $('#chatbox').val();
+              var d = new Date();
+              $('#chatbox').val('').focus();
+              doc.shout({
+                action: "say",
+                timestamp: d.toISOString(),
+                user: account.username,
+                msg: msg
+              });
+              stamp = d.toLocaleTimeString();
+              $("#chathistory").append('<p style="color: #aaa"> (' + stamp + ') <em>you</em>: ' + msg + '</p>').scrollTop(999999);
+              //$("#chathistory").prepend('<p>' +  '(' + stamp + ') ' + account.username + ': ' + msg + '</p>');
+            });
+            
+            var d = new Date();
+            doc.shout({
+              action: "announce",
+              timestamp: d.toISOString(),
+              msg: (account.username || 'guest') + " joined the room."
+            });
+          
           });
-        });
+        }
+        
+        else {
+          
+          chatting = false;
+          $("#chatroom").removeClass('ui-disabled');
+          $("#roombutton").text('Join');
+          $("#mainchat").hide();
+        
+          // code to close chat goes here
+          
+        }
       }
 
       function scroll(up) {
@@ -945,7 +994,7 @@
         editors[currentFile].setValue(code, -1);
       }
 
-      function runCode (pause, elem) {
+      function runCode(pause, elem) {
         var iframeId = 'preview' + currentFile;
         var ifrm = document.getElementById(iframeId);
         ifrm = (ifrm.contentWindow) ? ifrm.contentWindow : (ifrm.contentDocument.document) ? ifrm.contentDocument.document : ifrm.contentDocument;
@@ -958,13 +1007,10 @@
           ifrm.document.write('<h1>Execution stopped</h1>');
           $(elem + "i").addClass('fa-play');
           $(elem + "i").removeClass('fa-stop');
-        } 
-        
-        else {
+        } else {
           $(elem + "i").removeClass('fa-play');
           $(elem + "i").addClass('fa-stop');
           setAppSize();
-
           /*
 document.getElementById(iframeId).onload = function() {
   try {
@@ -1542,11 +1588,12 @@ document.getElementById(iframeId).onload = function() {
             <br/>
             <br/>
             <center>
-              <img src="/img/logo2_active.png" /><br/>
+              <img src="/img/logo2_active.png" />
+              <br/>
               <img src="/img/spinner.gif" />
               <h3>Page not loading?</h3>
-              <p>Some possible causes are: large file or unsupported file format, slow Internet connection or the GitHub API is down.</p><br/>
-              <a data-role="button" data-mini="true" data-inline="true" href="#" onclick="$('#overlaydiv').hide();">Dismiss</a>
+              <p>Some possible causes are: large file or unsupported file format, slow Internet connection or the GitHub API is down.</p>
+              <br/> <a data-role="button" data-mini="true" data-inline="true" href="#" onclick="$('#overlaydiv').hide();">Dismiss</a>
             </center>
           </div>
         </div>
@@ -1764,8 +1811,7 @@ document.getElementById(iframeId).onload = function() {
               <input class="ui-disabled" id="savefilepath" type="text">
               <label for="savefilename">File</label>
               <input id="savefilename" type="text">
-            </div>
-            <a href="javascript:commit();" data-role="button"><i class="fa fa-save"></i> Save now</a>
+            </div> <a href="javascript:commit();" data-role="button"><i class="fa fa-save"></i> Save now</a>
             <a data-mini="true" data-role="button" href="#pickrepo"><i class="fa fa-edit"></i> Edit location</a>
             <div style="display: none;"> <a href="#filebrowser" data-role="button"><i class="fa fa-copy"></i> Save as</a>
               <a href="#delete" data-role="button"><i class="fa fa-trash-o"></i> Delete</a>
@@ -1794,39 +1840,33 @@ document.getElementById(iframeId).onload = function() {
             <div class="ui-block-a" style="width: 72%">
               <input type="text" id="chatroom" value="General chat room">
             </div>
-            <div class="ui-block-b" style="width: 28%"> <a data-role="button" data-mini="true" onclick="startChat();">Join</a>
+            <div class="ui-block-b" style="width: 28%">
+              <a data-role="button" id="roombutton" data-mini="true" onclick="toggleChat();">Join</a>
             </div>
           </div>
-          <div data-inset="false" data-role="collapsible-set" data-mini="true">
-            <div data-role="collapsible" data-collapsed="false">
-              <h3>Instant messaging</h3>
-              <div style="clear: both; height: 200px; max-height: 200px; font-size: 0.7em; padding: 2px; border: 1px solid #aaa; overflow:auto;" id="chathistory">
-                <p>Join a chat room.</p>
+          <div id="mainchat" style="display: none;">
+            <a id="mediabutton" data-role="button" href="#" onclick="toggleMedia();" data-mini="true">Enable audio/video</a>
+            <div id="mediacontainer" style="display: none; max-height: 500px; overflow: auto;">
+              <div id="mediacontrols" style="display:none;">
+                <button data-inline="true" onclick="startChat();">Start video chat</button>
+                <button data-inline="true" onclick="webrtc.mute()">Stop video chat</button>
+                <button data-inline="true" onclick="webrtc.pauseVideo()">Pause video stream</button>
+                <button data-inline="true" onclick="webrtc.resumeVideo()">Resume video stream</button>
+                <button data-inline="true" onclick="webrtc.mute()">Mute</button>
+                <button data-inline="true" onclick="webrtc.unmute()">Unmute</button>
               </div>
-              <div class="ui-grid-a">
-                <div class="ui-block-a" style="width: 72%">
-                  <input style="font-size: 0.8em" data-inline="true" type="text" value="Type message here." id="chatbox">
-                </div>
-                <div class="ui-block-b" style="width: 28%"> <a data-role="button" data-mini="true" id="saybutton">Say</a>
-                </div>
-              </div>
-              <div style="max-height: 500px; overflow: auto;">
-                <div id="remoteVideos"></div>
-                <video id="localVideo"></video>
-              </div>
+              <video id="localVideo"></video>
+              <div id="remoteVideos"></div>
             </div>
-            <div data-role="collapsible">
-              <h3>Participants</h3>
-              <p>None</p>
+            <div id="chathistory" style="clear: both; height: 200px; max-height: 200px; font-size: 0.7em; padding: 2px; border: 1px solid #aaa; overflow:auto;">
+              <p>Join a chat room.</p>
             </div>
-            <div data-role="collapsible">
-              <h3>Controls</h3>
-              <button data-inline="true" onclick="startChat();">Start video chat</button>
-              <button data-inline="true" onclick="webrtc.mute()">Stop video chat</button>
-              <button data-inline="true" onclick="webrtc.pauseVideo()">Pause video stream</button>
-              <button data-inline="true" onclick="webrtc.resumeVideo()">Resume video stream</button>
-              <button data-inline="true" onclick="webrtc.mute()">Mute</button>
-              <button data-inline="true" onclick="webrtc.unmute()">Unmute</button>
+            <div class="ui-grid-a">
+              <div class="ui-block-a" style="width: 72%">
+                <input style="font-size: 0.8em" data-inline="true" type="text" value="Type message here." id="chatbox">
+              </div>
+              <div class="ui-block-b" style="width: 28%"> <a data-role="button" data-mini="true" id="saybutton">Say</a>
+              </div>
             </div>
           </div>
         </div>
