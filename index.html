@@ -426,7 +426,7 @@
           committerName: account.username,
           committerEmail: account.email
         }, function(data) {
-          alert("Committed " + data.content.size + " bytes of data.");
+          // alert("Committed " + data.content.size + " bytes of data.");
           toggleLoading();
         });
         $("#commit").panel("close");
