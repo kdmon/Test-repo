@@ -67,7 +67,7 @@
         top: 0;
         bottom: 0;
         z-index: 99099999;
-        background: rgba(155, 155, 155, 0.8);
+        background: rgba(0,0,0, 0.8);
         display: none;
       }
       #overlaycontainer {
@@ -413,7 +413,7 @@
         var content = editors[currentFile].getValue();
         var message = document.getElementById("commitmsg").value;
         openFiles[currentFile].filename = document.getElementById("savefilename").value;
-        $("#tabitem" + currentFile).text(openFiles[currentFile].filename);
+        $("#tabitem" + currentFile + " span").text(openFiles[currentFile].filename);
         $("#preview" + currentFile).attr("src", "/" + openFiles[currentFile].username + "/" + openFiles[currentFile].repository + "/master" + openFiles[currentFile].path + openFiles[currentFile].filename);
         GitWrap.commit({
           username: openFiles[currentFile].username,
