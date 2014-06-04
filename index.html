@@ -70,7 +70,7 @@
         top: 0px;
         bottom: 0px;
         z-index: 999999;
-        background: #aaa;
+        background: rgba(155,155,155,0.8);
         display: none;
       }
       #repolist li .ui-btn,
@@ -654,11 +654,13 @@
       }
 
       function pullProxy(url, sameWindow) {
-        console.log("Pulling " + url);
+        //console.log("Pulling " + url);
+        $("#overlaydiv").show();
         GitWrap.pullProxy({
           url: url
         }, function(data) {
-          console.log("data received:" + data);
+          $("#overlaydiv").hide();
+          //console.log("data received:" + data);
           if (typeof data == 'object') data = JSON.stringify(data, null, 2);
           if (!sameWindow) createEditor(fileBrowser.filename, data, fileBrowser.owner, fileBrowser.repository, fileBrowser.path);
           else editors[currentFile].setValue(data, -1);
@@ -1504,17 +1506,6 @@ document.getElementById(iframeId).onload = function() {
   </head>
 
   <body>
-  <div id="overlaydiv">
-    <br/>
-    <br/>
-    <br/>
-    <center>
-      <h1>Please wait...</h1>
-      <br/>
-      <br/>
-      <img src="/img/spinner.gif" />
-    </center>
-  </div>
     <div data-role="page" id="frontpage" class="ui-responsive-panel">
       <div data-role="header">
         <span style="float: left; font-size: 1.5em; margin-top: 5px; padding-left: 5px;">Web App
@@ -1539,6 +1530,19 @@ document.getElementById(iframeId).onload = function() {
         </div>
       </div>
       <div role="main" class="ui-content">
+        <div id="overlaydiv">
+          <br/>
+          <br/>
+          <center>
+            <img src="/img/logo2_active.png" />
+            <h1>Loading - Please wait...</h1>
+            <br/>
+            <img src="/img/spinner.gif" />
+            <br/>
+            <h3>Taking too long to load?</h3>
+            <a data-role="button" data-inline="true" href="javascript: $('#overlaydiv').hide();">Cancel</a>
+          </center>
+        </div>
         <div id="tabmenu" data-role="tabs">
           <ul id="tablist" style="margin-left: 4px; margin-top:2px;">
             <li style="display:none" class="stickytab"><a href="#dashboard" onclick="$( '#tabmenu' ).tabs( 'option', 'active', 0);" data-theme="b" data-mini="true" data-role="button" style="padding-right: 0px;"><i style="position: relative; left: -8px; top: 3px;" class="fa fa-home fa-2x"></i></a>
