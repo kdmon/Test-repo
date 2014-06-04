@@ -754,25 +754,24 @@
           $("#roombutton").text('Exit');
           $("#mainchat").show();
           connection.open(room, 'text', function(error, doc) {
-            doc.on('shout', function(data) {
+            chatroom = doc;
+            chatroom.on('shout', function(data) {
               switch (data.action) {
                 case "announce":
                   var d = new Date(data.timestamp);
-                  stamp = d.toLocaleTimeString();
+                  var stamp = d.toLocaleTimeString();
                   $("#chathistory").append('<p> (' + stamp + ') <b>: ' + data.msg + '</b></p>').scrollTop(999999);
                   break;
                 case "say":
                   var d = new Date(data.timestamp);
-                  stamp = d.toLocaleTimeString();
+                  var stamp = d.toLocaleTimeString();
                   $("#chathistory").append('<p> (' + stamp + ') <em>' + data.user + '</em>: ' + data.msg + '</p>').scrollTop(999999);
                   break;
               }
             });
-            $("#saybutton").on('click', function() {
-              say();
-            });
+            
             var d = new Date();
-            doc.shout({
+            chatroom.shout({
               action: "announce",
               timestamp: d.toISOString(),
               msg: (account.username || 'guest') + " joined the room."
@@ -1227,14 +1226,14 @@ document.getElementById(iframeId).onload = function() {
         var msg = $('#chatbox').val();
         var d = new Date();
         $('#chatbox').val('').focus();
-        doc.shout({
+        chatroom.shout({
           action: "say",
           timestamp: d.toISOString(),
           user: account.username,
           msg: msg
         });
-        stamp = d.toLocaleTimeString();
-        $("#chathistory").append('<p> (' + stamp + ') <em>you</em>: ' + msg + '</p>').scrollTop(999999);
+        var stamp = d.toLocaleTimeString();
+        $("#chathistory").append('<p><em>(' + stamp + ') you said: </em> ' + msg + '</p>').scrollTop(999999);
       }
 
       function showAuthor(elem, show) {
@@ -1539,7 +1538,12 @@ document.getElementById(iframeId).onload = function() {
           } else $("#qrcode").html('<h1>Sorry</h1><h3>No file to share. Please open a file first.</h3>');
         });
         // Button events
-        $('chatmsg').on("enterKey", function(e) {
+        $('#chatbox').keypress(function( event ) {
+          if ( event.which == 13 ) {
+            say();
+          }
+        });
+        $("#saybutton").on('click', function() {
           say();
         });
         $("#newfile, #newtab").on("click", function(event) {
@@ -1592,7 +1596,7 @@ document.getElementById(iframeId).onload = function() {
         <div data-role="controlgroup" data-mini="true" style="margin-top: 25px;"> <a data-role="button" href="#filebrowser"><i class="fa fa-folder-open fa-2x"></i> <span class="menulabel">Open</span></a>
           <a data-role="button" href="#options"><i class="fa fa-wrench fa-2x"></i> <span class="menulabel">Config</span></a>
           <a data-role="button" href="#collaborate" data-shadow="true"><i class="fa fa-comments fa-2x"></i> <span class="menulabel">Chat</span><span id="chatcount" class="ui-li-count"></span></a>
-          <a data-role="button" href="#errors"><i class="fa fa-warning fa-2x"></i> <span class="menulabel">Errors</span> <span id="errorcount" class="ui-li-count error"></span></a>
+          <a style="display: none" data-role="button" href="#errors"><i class="fa fa-warning fa-2x"></i> <span class="menulabel">Errors</span> <span id="errorcount" class="ui-li-count error"></span></a>
           <a style="display: none" data-role="button" href="#" onclick="scroll(true)"><i class="fa fa-long-arrow-up fa-2x"></i> <span class="menulabel">Scroll up</span></a>
           <a style="display: none" data-role="button" href="#" onclick="scroll(false)"><i class="fa fa-long-arrow-down fa-2x"></i> <span class="menulabel">Scroll down</span></a>
         </div>
@@ -1849,7 +1853,7 @@ document.getElementById(iframeId).onload = function() {
       </div>
       <div data-role="panel" id="collaborate" data-position="left" data-animate="false" data-dismissible="false" data-swipe-close="false">
         <div data-role="header">
-          <h3>Social</h3> <a href="#" data-rel="close" data-role="button" data-iconpos="notext" data-icon="arrow-l" class="ui-btn-right">Close</a>
+          <h3>Chat</h3> <a href="#" data-rel="close" data-role="button" data-iconpos="notext" data-icon="arrow-l" class="ui-btn-right">Close</a>
         </div>
         <div role="main" class="ui-content">
           <div class="ui-grid-a">
