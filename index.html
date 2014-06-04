@@ -71,7 +71,9 @@
         display: none;
       }
       #overlaycontainer {
-        border-radius: 50px;
+        max-height: 92%;
+        overflow: auto;
+        border-radius: 25px;
         background: rgba(155,155,155, 1);
         color: black;
         text-shadow: none;
@@ -1542,10 +1544,9 @@ document.getElementById(iframeId).onload = function() {
             <center>
               <img src="/img/logo2_active.png" /><br/>
               <img src="/img/spinner.gif" />
-              <h2>Loading. Please wait.</h2>
               <h3>Page not loading?</h3>
               <p>Some possible causes are: large file or unsupported file format, slow Internet connection or the GitHub API is down.</p><br/>
-              <a data-role="button" data-mini="true" data-inline="true" href="#" onclick="$('#overlaydiv').hide();">Continue</a>
+              <a data-role="button" data-mini="true" data-inline="true" href="#" onclick="$('#overlaydiv').hide();">Dismiss</a>
             </center>
           </div>
         </div>
