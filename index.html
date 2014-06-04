@@ -60,6 +60,19 @@
         //    overflow: hidden;
 
       }
+      #overlaydiv {
+        width: 100%;
+        height: 100%;
+        padding: 100px;
+        position: fixed;
+        left: 0px;
+        right: 0px;
+        top: 0px;
+        bottom: 0px;
+        z-index: 999999;
+        background: #aaa;
+        display: none;
+      }
       #repolist li .ui-btn,
       #dirlist li .ui-btn,
       #filelist li .ui-btn {
@@ -385,6 +398,9 @@
       function commit() {
         var content = editors[currentFile].getValue();
         var message = document.getElementById("commitmsg").value;
+        openFiles[currentFile].filename = document.getElementById("savefilename").value;
+        $("#tabitem" + currentFile).text(openFiles[currentFile].filename);
+        $("#preview" + currentFile).attr("src", "/" + openFiles[currentFile].username + "/" + openFiles[currentFile].repository + "/master" + openFiles[currentFile].path + openFiles[currentFile].filename);
         GitWrap.commit({
           username: openFiles[currentFile].username,
           repository: openFiles[currentFile].repository,
@@ -397,8 +413,10 @@
           committerEmail: account.email
         }, function(data) {
           alert("Committed " + data.content.size + " bytes of data.");
+          $("#overlaydiv").hide();
         });
         $("#commit").panel("close");
+        $("#overlaydiv").show();
       }
 
       function createEditor(file, value, user, repo, path, collab) {
@@ -1486,6 +1504,17 @@ document.getElementById(iframeId).onload = function() {
   </head>
 
   <body>
+  <div id="overlaydiv">
+    <br/>
+    <br/>
+    <br/>
+    <center>
+      <h1>Please wait...</h1>
+      <br/>
+      <br/>
+      <img src="/img/spinner.gif" />
+    </center>
+  </div>
     <div data-role="page" id="frontpage" class="ui-responsive-panel">
       <div data-role="header">
         <span style="float: left; font-size: 1.5em; margin-top: 5px; padding-left: 5px;">Web App
@@ -1585,7 +1614,7 @@ document.getElementById(iframeId).onload = function() {
           </div>
         </div>
       </div>
-      <div data-role="panel" data-animate="false" data-swipe-close="false" id="history" data-dismissible="false">
+      <div data-role="panel" data-animate="false" data-swipe-close="false" id="history" data-dismissible="true">
         <div data-role="header">
           <h1>History</h1>
         </div>
@@ -1714,15 +1743,17 @@ document.getElementById(iframeId).onload = function() {
           <div id="readytosave">
             <h3>Ready to save</h3>
             <p>Commit message (optional)</p>
-            <textarea id="commitmsg" cols=30 rows=3>Update file.</textarea> <a href="javascript:commit();" data-role="button"><i class="fa fa-save"></i> Save now</a>
+            <textarea id="commitmsg" cols=30 rows=3>Update file.</textarea>
             <div data-role="fieldcontain">
-              <label for="savefilename">File</label>
-              <input id="savefilename" type="text">
-              <label for="savefilepath">Path</label>
-              <input class="ui-disabled" id="savefilepath" type="text">
               <label for="saverepo">Repo</label>
               <input class="ui-disabled" name="saverepo" id="saverepo" type="text">
-            </div> <a data-mini="true" data-role="button" href="#pickrepo"><i class="fa fa-edit"></i> Edit location</a>
+              <label for="savefilepath">Path</label>
+              <input class="ui-disabled" id="savefilepath" type="text">
+              <label for="savefilename">File</label>
+              <input id="savefilename" type="text">
+            </div>
+            <a href="javascript:commit();" data-role="button"><i class="fa fa-save"></i> Save now</a>
+            <a data-mini="true" data-role="button" href="#pickrepo"><i class="fa fa-edit"></i> Edit location</a>
             <div style="display: none;"> <a href="#filebrowser" data-role="button"><i class="fa fa-copy"></i> Save as</a>
               <a href="#delete" data-role="button"><i class="fa fa-trash-o"></i> Delete</a>
             </div>
@@ -1787,7 +1818,7 @@ document.getElementById(iframeId).onload = function() {
           </div>
         </div>
       </div>
-      <div data-role="panel" id="shareurl" data-position="left" data-animate="false" data-dismissible="false" data-swipe-close="false">
+      <div data-role="panel" id="shareurl" data-position="left" data-animate="false" data-dismissible="true" data-swipe-close="false">
         <div data-role="header">
           <h3>Share URL</h3> <a href="#" data-rel="close" data-role="button" data-iconpos="notext" data-icon="arrow-l" class="ui-btn-right">Close</a>
         </div>
