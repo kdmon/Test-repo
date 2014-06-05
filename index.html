@@ -66,6 +66,7 @@
         display: none;
         padding-left: 10px;
         padding-right: 10px;
+        background: rgba(0,0,0, 0.8);
       }
       #overlaydiv {
         position: fixed;
@@ -736,8 +737,8 @@
         }
         else {
           $("#previewsettings").show();
-          $("#previewsettings").css("top", $("#previewsettingsbutton").position().top + 40 + "px");
-          $("#previewsettings").css("left" , $("#previewsettingsbutton").position().right - $("#previewsettings").width() + "px");
+          $("#previewsettings").css("top", $("#previewsettingsbutton").position().top + $("#previewsettingsbutton").height() + 75 + "px");
+          $("#previewsettings").css("left" , $("#previewsettingsbutton").position().left - $("#previewsettings").width() + 32 + "px");
         }
       }
       
@@ -1655,7 +1656,7 @@ document.getElementById(iframeId).onload = function() {
       </div>
       <div role="main" class="ui-content">
               
-        <div id="previewsettings" class="ui-panel">
+        <div id="previewsettings">
         
           <select name="select-choice-a" id="appsize" onchange="setAppSize()" data-native-menu="false" size="20">
             <option>Mobile device resolution</option>
