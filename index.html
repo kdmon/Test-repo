@@ -66,7 +66,10 @@
         display: none;
         padding-left: 10px;
         padding-right: 10px;
-        background: rgba(0,0,0, 0.8);
+        background: rgba(0,0,0, 0.9);
+        text-shadow: none;
+        color: white;
+        border-radius: 15px;
       }
       #overlaydiv {
         position: fixed;
@@ -738,7 +741,7 @@
         else {
           $("#previewsettings").show();
           $("#previewsettings").css("top", $("#previewsettingsbutton").position().top + $("#previewsettingsbutton").height() + 75 + "px");
-          $("#previewsettings").css("left" , $("#previewsettingsbutton").position().left - $("#previewsettings").width() + 32 + "px");
+          $("#previewsettings").css("left" , $("#previewsettingsbutton").position().left - $("#previewsettings").width()/2 + "px");
         }
       }
       
@@ -1626,7 +1629,7 @@ document.getElementById(iframeId).onload = function() {
         </h1>
       </div>
       <div id="listmenu" class="">
-        <a href="#dashboard" onclick="$( '#tabmenu' ).tabs( 'option', 'active', 0);">
+        <a href="#dashboard" onclick="$('#previewsettings').hide(); $( '#tabmenu' ).tabs( 'option', 'active', 0);">
           <div id="logo"></div>
         </a>
         <div data-role="controlgroup" data-mini="true" style="margin-top: 25px;"> <a data-role="button" href="#filebrowser"><i class="fa fa-folder-open fa-2x"></i> <span class="menulabel">Open</span></a>
@@ -1657,24 +1660,28 @@ document.getElementById(iframeId).onload = function() {
       <div role="main" class="ui-content">
               
         <div id="previewsettings">
-        
-          <select name="select-choice-a" id="appsize" onchange="setAppSize()" data-native-menu="false" size="20">
-            <option>Mobile device resolution</option>
-            <option value="0">Hide preview</option>
-            <option value="320" selected>320 (iPhone)</option>
-            <option value="360">360 (Galaxy S3)</option>
-            <option value="360">384 (Nexus 4, Lumia 925)</option>
-            <option value="400">400 (Galaxy Note)</option>
-            <option value="600">600 (Galaxy Tab, Kindle 1)</option>
-            <option value="768">768 (iPad)</option>
-            <option value="800">800 (Nexus 10, Kindle HD)</option>
-            <option value="1024">1024 (iPad landscape)</option>
-          </select>
-          <label for="live">Live preview:</label>
-          <select name="live" id="livecoding" data-role="slider" onchange="setLiveCoding()">
-            <option value="on">On</option>
-            <option value="off">Off</option>
-          </select>
+          <center>
+            <h3>Preview settings</h3>
+            <select name="select-choice-a" id="appsize" onchange="setAppSize()" data-native-menu="false" size="20">
+              <option>Mobile device resolution</option>
+              <option value="0">Hide preview</option>
+              <option value="320" selected>320 (iPhone)</option>
+              <option value="360">360 (Galaxy S3)</option>
+              <option value="360">384 (Nexus 4, Lumia 925)</option>
+              <option value="400">400 (Galaxy Note)</option>
+              <option value="600">600 (Galaxy Tab, Kindle 1)</option>
+              <option value="768">768 (iPad)</option>
+              <option value="800">800 (Nexus 10, Kindle HD)</option>
+              <option value="1024">1024 (iPad landscape)</option>
+            </select>
+            <label for="live">Live preview:</label>
+            <select name="live" id="livecoding" data-role="slider" onchange="setLiveCoding()">
+              <option value="on">On</option>
+              <option value="off">Off</option>
+            </select>
+            <br/>
+            <a href="#" data-mini="true" data-inline="true" data-role="button" onclick="$('previewsettings').hide()">Close</a>
+          </center>
         </div>
 
         <div id="tabmenu" data-role="tabs">
