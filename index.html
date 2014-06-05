@@ -60,6 +60,13 @@
         //    overflow: hidden;
 
       }
+      #previewsettings {
+        z-index: 9999;
+        position: absolute;
+        display: none;
+        padding-left: 10px;
+        padding-right: 10px;
+      }
       #overlaydiv {
         position: fixed;
         left: 0;
@@ -470,8 +477,23 @@
         htmlSnippet += '<a onclick="editors[fileCount].execCommand(' + "'paste'" + ');"style="margin-right: 5px;" href="#" title="Paste" data-role="button" onclick="paste"><i class="fa fa-paste fa-2x"></i> <span class="menulabel">Paste</span></a>';
 */
         htmlSnippet += '<a id="runbutton' + fileCount + '" title="Run code" href="#" onclick="togglePreview();" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-play fa-2x"></i> <span class="menulabel">Run code</span></a>';
+/*        
+        htmlSnippet += '<select name="select-choice-a" id="appsize" onchange="setAppSize()" data-native-menu="false" size="20">';
+        htmlSnippet += '<option>Mobile device resolution</option>';
+        htmlSnippet += '<option value="0">Hide preview</option>';
+        htmlSnippet += '<option value="320" selected>320 (iPhone)</option>';
+        htmlSnippet += '<option value="360">360 (Galaxy S3)</option>';
+        htmlSnippet += '<option value="360">384 (Nexus 4, Lumia 925)</option>';
+        htmlSnippet += '<option value="400">400 (Galaxy Note)</option>';
+        htmlSnippet += '<option value="600">600 (Galaxy Tab, Kindle 1)</option>';
+        htmlSnippet += '<option value="768">768 (iPad)</option>';
+        htmlSnippet += '<option value="800">800 (Nexus 10, Kindle HD)</option>';
+        htmlSnippet += '<option value="1024">1024 (iPad landscape)</option>';
+        htmlSnippet += '</select>';
+  */
+  
         //        htmlSnippet += '<a href="javascript: runCode(true);" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-stop fa-2x"></i></a>';
-        htmlSnippet += '<a title="Code preview settings" href="#" onclick="togglePreview()" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-cog fa-2x"></i> <span class="menulabel">Code preview settings</span></a>';
+        htmlSnippet += '<a title="Code preview settings" id="previewsettingsbutton" href="#" onclick="togglePreviewSettings()" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-cog fa-2x"></i> <span class="menulabel">Code preview settings</span></a>';
         htmlSnippet += '<a href="#shareurl" data-role="button" class="nowrap" title="Share preview"><i class="fa fa-external-link fa-2x"></i> <span class="menulabel">Share preview</span></a>';
         htmlSnippet += '</div></div>';
         $("#view" + fileCount).append('<div id="file' + fileCount + '">' + htmlSnippet + '<div id="editor' + fileCount + '" class="editor"></div>');
@@ -704,6 +726,19 @@
         var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         for (var i = 0; i < length; i++) text += possible.charAt(Math.floor(Math.random() * possible.length));
         return text;
+      }
+      
+      
+      function togglePreviewSettings (disableSettings) {
+
+        if ($("#previewsettings").is(':visible') || disableSettings) {
+          $("#previewsettings").hide();
+        }
+        else {
+          $("#previewsettings").show();
+          $("#previewsettings").css("top", $("#previewsettingsbutton").position().top + 40 + "px");
+          $("#previewsettings").css("left" , $("#previewsettingsbutton").position().right - $("#previewsettings").width() + "px");
+        }
       }
       
       function toggleLoading (disableLoading) {
@@ -1619,6 +1654,28 @@ document.getElementById(iframeId).onload = function() {
         </div>
       </div>
       <div role="main" class="ui-content">
+              
+        <div id="previewsettings" class="ui-panel">
+        
+          <select name="select-choice-a" id="appsize" onchange="setAppSize()" data-native-menu="false" size="20">
+            <option>Mobile device resolution</option>
+            <option value="0">Hide preview</option>
+            <option value="320" selected>320 (iPhone)</option>
+            <option value="360">360 (Galaxy S3)</option>
+            <option value="360">384 (Nexus 4, Lumia 925)</option>
+            <option value="400">400 (Galaxy Note)</option>
+            <option value="600">600 (Galaxy Tab, Kindle 1)</option>
+            <option value="768">768 (iPad)</option>
+            <option value="800">800 (Nexus 10, Kindle HD)</option>
+            <option value="1024">1024 (iPad landscape)</option>
+          </select>
+          <label for="live">Live preview:</label>
+          <select name="live" id="livecoding" data-role="slider" onchange="setLiveCoding()">
+            <option value="on">On</option>
+            <option value="off">Off</option>
+          </select>
+        </div>
+
         <div id="tabmenu" data-role="tabs">
           <ul id="tablist" style="margin-left: 4px; margin-top:2px;">
             <li style="display:none" class="stickytab"><a href="#dashboard" onclick="$( '#tabmenu' ).tabs( 'option', 'active', 0);" data-theme="b" data-mini="true" data-role="button" style="padding-right: 0px;"><i style="position: relative; left: -8px; top: 3px;" class="fa fa-home fa-2x"></i></a>
@@ -1710,23 +1767,6 @@ document.getElementById(iframeId).onload = function() {
           <h1>Options</h1>
         </div>
         <div role="main" class="ui-content">
-          <select name="select-choice-a" id="appsize" onchange="setAppSize()" data-native-menu="false" size="20">
-            <option>Mobile device resolution</option>
-            <option value="0">Hide preview</option>
-            <option value="320" selected>320 (iPhone)</option>
-            <option value="360">360 (Galaxy S3)</option>
-            <option value="360">384 (Nexus 4, Lumia 925)</option>
-            <option value="400">400 (Galaxy Note)</option>
-            <option value="600">600 (Galaxy Tab, Kindle 1)</option>
-            <option value="768">768 (iPad)</option>
-            <option value="800">800 (Nexus 10, Kindle HD)</option>
-            <option value="1024">1024 (iPad landscape)</option>
-          </select>
-          <label for="live">Live preview:</label>
-          <select name="live" id="livecoding" data-role="slider" onchange="setLiveCoding()">
-            <option value="on">On</option>
-            <option value="off">Off</option>
-          </select>
           <label for="uitheme">UI Theme:</label>
           <select name="uitheme" id="uitheme" data-role="slider">
             <option value="light">Light</option>
