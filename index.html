@@ -29,7 +29,6 @@
     <script src="/js/beautify-css.js"></script>
     <script src="/js/beautify-html.js"></script>
     <script src="/js/jquery.ui.touch-punch.min.js"></script>
-    <script type="text/javascript" src="https://ggetfirebug.com/firebug-lite.js"></script>
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css" />
     <style type="text/css" media="screen">
@@ -71,6 +70,7 @@
         color: black;
         border-radius: 15px;
         box-shadow: 0 0 12px 5px #555;
+        width: 280px;
       }
       #overlaydiv {
         position: fixed;
@@ -498,7 +498,7 @@
   */
   
         //        htmlSnippet += '<a href="javascript: runCode(true);" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-stop fa-2x"></i></a>';
-        htmlSnippet += '<a title="Code preview settings" id="previewsettingsbutton" href="#" onclick="togglePreviewSettings()" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-cog fa-2x"></i> <span class="menulabel">Code preview settings</span></a>';
+        htmlSnippet += '<a title="Code preview settings" class="previewsettingsbutton" id="previewsettingsbutton" href="#" onclick="togglePreviewSettings()" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-cog fa-2x"></i> <span class="menulabel">Code preview settings</span></a>';
         htmlSnippet += '<a href="#shareurl" data-role="button" class="nowrap" title="Share preview"><i class="fa fa-external-link fa-2x"></i> <span class="menulabel">Share preview</span></a>';
         htmlSnippet += '</div></div>';
         $("#view" + fileCount).append('<div id="file' + fileCount + '">' + htmlSnippet + '<div id="editor' + fileCount + '" class="editor"></div>');
@@ -741,8 +741,13 @@
         }
         else {
           $("#previewsettings").show();
-          $("#previewsettings").css("top", $("#previewsettingsbutton").position().top + $("#previewsettingsbutton").height() + 75 + "px");
-          $("#previewsettings").css("left" , $("#previewsettingsbutton").position().left - $("#previewsettings").width()/2 + "px");
+          $("#previewsettings").css({
+            "top": "150px",
+            "left": "250px"
+          });
+          
+          //$("#previewsettings").css("top", $(".previewsettingsbutton").position().top + $(".previewsettingsbutton").height() + 75 + "px");
+          //$("#previewsettings").css("left" , $(".previewsettingsbutton").position().left - $(".previewsettings").width()/2 + 25 + "px");
         }
       }
       
@@ -1040,6 +1045,7 @@
           ifrm.document.write('<h1>Execution stopped</h1>');
           $("#runbutton" + currentFile).html('<i class="fa fa-play fa-2x"></i>');
           $("#runbutton" + currentFile).attr('title', 'Run code');
+          ifrm.document.close();
         } else {
           editors[currentFile].running = true;
           $("#runbutton" + currentFile).html('<i class="fa fa-pause fa-2x"></i>');
@@ -1660,31 +1666,6 @@ document.getElementById(iframeId).onload = function() {
       </div>
       <div role="main" class="ui-content">
               
-        <div id="previewsettings">
-          <center>
-            <h3>Preview settings</h3>
-            <select name="select-choice-a" id="appsize" onchange="setAppSize()" data-native-menu="false" size="20">
-              <option>Mobile device resolution</option>
-              <option value="0">Hide preview</option>
-              <option value="320" selected>320 (iPhone)</option>
-              <option value="360">360 (Galaxy S3)</option>
-              <option value="360">384 (Nexus 4, Lumia 925)</option>
-              <option value="400">400 (Galaxy Note)</option>
-              <option value="600">600 (Galaxy Tab, Kindle 1)</option>
-              <option value="768">768 (iPad)</option>
-              <option value="800">800 (Nexus 10, Kindle HD)</option>
-              <option value="1024">1024 (iPad landscape)</option>
-            </select>
-            <label for="live">Live preview:</label>
-            <select name="live" id="livecoding" data-role="slider" onchange="setLiveCoding()">
-              <option value="on">On</option>
-              <option value="off">Off</option>
-            </select>
-            <br/>
-            <a href="#" data-mini="true" data-inline="true" data-role="button" onclick="$('previewsettings').hide()">Close</a>
-          </center>
-        </div>
-
         <div id="tabmenu" data-role="tabs">
           <ul id="tablist" style="margin-left: 4px; margin-top:2px;">
             <li style="display:none" class="stickytab"><a href="#dashboard" onclick="$( '#tabmenu' ).tabs( 'option', 'active', 0);" data-theme="b" data-mini="true" data-role="button" style="padding-right: 0px;"><i style="position: relative; left: -8px; top: 3px;" class="fa fa-home fa-2x"></i></a>
@@ -1744,6 +1725,32 @@ document.getElementById(iframeId).onload = function() {
             </ul>
           </div>
         </div>
+        
+        <div id="previewsettings">
+          <center>
+            <h3>Preview settings</h3>
+            <select name="select-choice-a" id="appsize" onchange="setAppSize()" data-native-menu="false" data-mini="true" size="20">
+              <option>Preview width in pixels</option>
+              <option value="0">Hide preview</option>
+              <option value="320" selected>320 (iPhone)</option>
+              <option value="360">360 (Galaxy S3)</option>
+              <option value="360">384 (Nexus 4, Lumia 925)</option>
+              <option value="400">400 (Galaxy Note)</option>
+              <option value="600">600 (Galaxy Tab, Kindle 1)</option>
+              <option value="768">768 (iPad)</option>
+              <option value="800">800 (Nexus 10, Kindle HD)</option>
+              <option value="1024">1024 (iPad landscape)</option>
+            </select>
+            <label for="live">Live preview:</label>
+            <select name="live" id="livecoding" data-role="slider" onchange="setLiveCoding()">
+              <option value="on">On</option>
+              <option value="off">Off</option>
+            </select>
+            <br/>
+            <a href="#" data-mini="true" data-inline="true" data-role="button" onclick="togglePreviewSettings();">Close</a>
+          </center>
+        </div>
+
       </div>
       <div data-role="panel" data-animate="false" data-swipe-close="false" id="filebrowser" data-dismissible="false">
         <div data-role="header">
