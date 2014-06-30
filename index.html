@@ -57,8 +57,10 @@
         padding: 0px;
         margin: 0px;
         //    overflow: hidden;
-
       }
+       #tablist li .ui-btn {
+         margin: 0px;
+       }
       #previewsettings {
         z-index: 9999;
         position: absolute;
@@ -99,9 +101,7 @@
         font-size: 12px !important;
         padding: 8px 3px 8px 3px;
       }
-      #tablist li a {
-        display: inline;
-      }
+      
       .ace_search {
         margin-left: 20px !important;
         margin-right: 20px !important;
@@ -124,7 +124,7 @@
       }
       #tablist {
         width: 100%;
-        line-height: 2em;
+        //line-height: 2em;
         background: rgba(155, 155, 155, 0.2);
         box-shadow: 0 0 10px 2px rgba(155, 155, 155, 0.5);
       }
@@ -173,7 +173,9 @@
         margin: 0px;
       }
       .tablabel {
-        width: 100px;
+        display: block;
+        margin-right: 15px;
+        max-width: 150px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -348,7 +350,7 @@
           }
         });
         // insert tab at last position
-        tabs.find(".ui-tabs-nav li:last").after('<li><a id="tabitem' + tabCount + '" href="#view' + tabCount + '" data-role="button" data-mini="true" data-ajax="false" class="ui-state-persist"><span class="tablabel" id="tabitemtext' + tabCount + '">' + title + '</span> <i style="position: relative; top: 4px; left: 4px;" class="closetab fa fa-times-circle fa-2x"></i></a></li>');
+        tabs.find(".ui-tabs-nav li:last").after('<li><a id="tabitem' + tabCount + '" href="#view' + tabCount + '" data-role="button" data-mini="true" data-ajax="false" class="ui-state-persist"><span class="tablabel" id="tabitemtext' + tabCount + '">' + title + '</span> <i style="position: absolute; top: 4px; right: 4px;" class="closetab fa fa-times-circle fa-2x"></i></a></li>');
         $("#tablist").trigger('create');
         // create view associated with tab
         $("#viewcontainer").append('<div id="view' + tabCount + '"></div>');
@@ -1670,7 +1672,7 @@ document.getElementById(iframeId).onload = function() {
           <ul id="tablist" style="margin-left: 4px; margin-top:2px;">
             <li style="display:none" class="stickytab"><a href="#dashboard" onclick="$( '#tabmenu' ).tabs( 'option', 'active', 0);" data-theme="b" data-mini="true" data-role="button" style="padding-right: 0px;"><i style="position: relative; left: -8px; top: 3px;" class="fa fa-home fa-2x"></i></a>
             </li>
-            <li class="stickytab"><a href="#" id="newtab" data-theme="b" data-mini="true" data-role="button" style="margin-left: 4px; padding-right: 0px;"><i style="position: relative; left: -8px; top: 3px;" class="fa fa-file fa-2x"></i><i style="position: relative; left: -5px;" class="fa fa-plus"></i></a>
+            <li class="stickytab"><a href="#" id="newtab" data-theme="b" data-mini="true" data-role="button" style="padding: 5px; padding-left:8px;"><i style="position: relative; left: -4px; top: 1px;" class="fa fa-file fa-2x"></i><i style="position: relative; left: -1px; top: -2px;" class="fa fa-plus"></i></a>
             </li>
           </ul>
           <div id="viewcontainer">
@@ -1701,15 +1703,15 @@ document.getElementById(iframeId).onload = function() {
                 <ul data-role="listview" data-inset="true">
                   <li data-icon="false"><a href="javascript: resume('tutorial1.html', '/kdmon/Test-repo/master/cars.html', true);"><i class="fa fa-cogs"></i> Variables and functions</a>
                   </li>
-                  <li data-icon="false"><a href="javascript: openSample('examples/jquerymobile.html');"><i class="fa fa-mobile"></i> jQuery Mobile</a>
+                  <li data-icon="false"><a href="javascript: openSample('/examples/vars-and-functions.html');"><i class="fa fa-mobile"></i> jQuery Mobile</a>
                   </li>
-                  <li data-icon="false"><a href="javascript: openSample('examples/json.html');"><i class="fa fa-exchange"></i> JSON</a>
+                  <li data-icon="false"><a href="javascript: openSample('/examples/json.html');"><i class="fa fa-exchange"></i> JSON</a>
                   </li>
-                  <li data-icon="false"><a href="javascript: openSample('examples/map.html');"><i class="fa fa-map-marker"></i> Geolocation</a>
+                  <li data-icon="false"><a href="javascript: openSample('/examples/map.html');"><i class="fa fa-map-marker"></i> Geolocation</a>
                   </li>
-                  <li data-icon="false"><a href="javascript: openSample('examples/rss.html');"><i class="fa fa-rss"></i> RSS news reader</a>
+                  <li data-icon="false"><a href="javascript: openSample('/examples/rss.html');"><i class="fa fa-rss"></i> RSS news reader</a>
                   </li>
-                  <li data-icon="false"><a href="javascript: openSample('examples/music.html');"><i class="fa fa-music"></i> Audio player</a>
+                  <li data-icon="false"><a href="javascript: openSample('/examples/music.html');"><i class="fa fa-music"></i> Audio player</a>
                   </li>
                   <li data-icon="false"><a class="ui-disabled" href="#"><i class="fa fa-rocket"></i> Box2D physics library</a>
                   </li>
