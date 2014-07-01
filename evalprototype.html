@@ -5,161 +5,51 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>Knockoutjs.com - Control types example - jsFiddle demo</title>
     <script type='text/javascript' src='//code.jquery.com/jquery-1.9.1.js'></script>
-    <link rel="stylesheet" type="text/css" href="/css/normalize.css">
-    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
     <script type='text/javascript' src="http://knockoutjs.com/downloads/knockout-3.0.0.js"></script>
     <script type='text/javascript' src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
     <link rel="stylesheet" type="text/css" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
-    <style type='text/css'>
-    </style>
   </head>
 
   <body>
     <div data-role="page" id="front">
-      <div data-role="header"> <a href="#next" data-role="button">Next</a>
-        <h3>Hello</h3>
+      <div data-role="header">
+        <h3>Question 1/16</h3>
       </div>
       <div data-role="main" class="ui-content">
-        <h1>HTML controls</h1>
-        <table>
-          <tr>
-            <td class="label">Text value (updates on change):</td>
-            <td>
-              <input data-bind="value: stringValue" />
-            </td>
-          </tr>
-          <tr>
-            <td class="label">Text value (updates on keystroke):</td>
-            <td>
-              <input data-bind='value: stringValue, valueUpdate: "afterkeydown"' />
-            </td>
-          </tr>
-          <tr>
-            <td class="label">Text value (multi-line):</td>
-            <td>
-              <textarea data-bind="value: stringValue"></textarea>
-            </td>
-          </tr>
-          <tr>
-            <td class="label">Password:</td>
-            <td>
-              <input type="password" data-bind="value: passwordValue" />
-            </td>
-          </tr>
-          <tr>
-            <td class="label">Checkbox:</td>
-            <td>
-              <label>Yes?
-                <input type="checkbox" data-bind="checked: booleanValue" name="checkbox-0" />
-              </label>
-            </td>
-          </tr>
-          <tr>
-            <td class="label">Drop-down list:</td>
-            <td>
-              <select data-native-menu="false" data-bind="options: optionValues, value: selectedOptionValue"></select>
-            </td>
-          </tr>
-          <tr>
-            <td class="label">Radio buttons:</td>
-            <td>
-              <fieldset data-role="controlgroup">
-                <label>
-                  <input type="radio" name="radio-choice" id="radio-choice-1" value="Alpha" data-bind="checked: radioSelectedOptionValue" />Alpha</label>
-                <label>
-                  <input name="radio-choice" id="radio-choice-2" type="radio" value="Beta" data-bind="checked: radioSelectedOptionValue" />Beta</label>
-                <label>
-                  <input name="radio-choice" id="radio-choice-3" type="radio" value="Gamma" data-bind="checked: radioSelectedOptionValue" />Gamma</label>
-              </fieldset>
-            </td>
-          </tr>
-          <tr>
-            <td>Slider</td>
-            <td>
-              <input type="range" data-bind="value: quantity, slider: quantity" name="quantity-slider" id="quantity-slider" min="0" max="1000" />
-            </td>
-          </tr>
-        </table>
-        <table>
-          <tr>
-            <td class="label">Text value:</td>
-            <td data-bind="text: stringValue"></td>
-          </tr>
-          <tr>
-            <td class="label">Password:</td>
-            <td data-bind="text: passwordValue"></td>
-          </tr>
-          <tr>
-            <td class="label">Bool value:</td>
-            <td data-bind='text: booleanValue() ? "True" : "False"'></td>
-          </tr>
-          <tr>
-            <td class="label">Slider value:</td>
-            <td data-bind="text: quantity"></td>
-          </tr>
-          <tr>
-            <td class="label">Selected option:</td>
-            <td data-bind="text: selectedOptionValue"></td>
-          </tr>
-          <tr>
-            <td class="label">Radio button selection:</td>
-            <td data-bind="text: radioSelectedOptionValue"></td>
-          </tr>
-        </table>
+        
+        <ul style="margin:0px; padding: 0px" data-bind="foreach: questionBank">
+          <li data-bind="text: value" style="list-style: none;"></li>
+          <select data-inline="true" data-native-menu="false" data-bind="options: options, value: selected"></select>
+          <button data-inline="true">Save</button>
+          <hr/>
+        </ul>
+        
+        
       </div>
     </div>
-    <div data-role="page" id="next">
-      <div data-role="header"> <a href="#front" data-role="button">Front</a>
-        <h3>Next</h3>
-      </div>
-    </div>
+    
+    
     <script type='text/javascript'>
-      //<![CDATA[ 
-      /* custom binding handler thanks to Varun http://stackoverflow.com/a/16493161/2308978 */
-      ko.bindingHandlers.slider = {
-        init: function(element, valueAccessor) {
-          console.log("init");
-          // use setTimeout with 0 to run this after Knockout is done
-          setTimeout(function() {
-            // $(element) doesn't work as that has been removed from the DOM
-            var curSlider = $('#' + element.id);
-            // helper function that updates the slider and refreshes the thumb location
-            function setSliderValue(newValue) {
-              curSlider.val(newValue).slider('refresh');
-            }
-            // subscribe to the bound observable and update the slider when it changes
-            valueAccessor().subscribe(setSliderValue);
-            // set up the initial value, which of course is NOT stored in curSlider, but the original element :\
-            setSliderValue($(element).val());
-            // subscribe to the slider's change event and update the bound observable
-            curSlider.bind('change', function() {
-              valueAccessor()(curSlider.val());
-            });
-          }, 250);
-        }
-      };
+    
       var viewModel = {
         stringValue: ko.observable("Hello"),
-        passwordValue: ko.observable("mypass"),
-        quantity: ko.observable(6),
-        booleanValue: ko.observable(true),
-        optionValues: ["Alpha", "Beta", "Gamma"],
-        selectedOptionValue: ko.observable("Gamma"),
-        radioSelectedOptionValue: ko.observable("Beta")
+        questionBank: ko.observableArray([
+          {
+            id: 0,
+            value: "Leucodepletion is as effective as irradiation in preventing TA-GvHD.",
+            options: ["Please select", "True", "False","Don't know"],
+            selected: ko.observable("Please select")
+          },
+          {
+            id: 1,
+            value: "Platelets, white cells and red cells are examples of cellular blood components.",
+            options: ["Please select", "True", "False","Don't know"],
+            selected: ko.observable("Please select")
+          }
+        ])
       };
       ko.applyBindings(viewModel);
-      /*
-$(document).on('pagebeforeshow', '#slider-page', function(){
-    $('#quantity-slider').val(viewModel.quantity());
-    $('#quantity-slider').slider('refresh');
-});
-*/
-      var c = 0;
-      setInterval(function() {
-        c += 10;
-        viewModel.quantity(c);
-      }, 200)
-       //]]>
+      
     </script>
   </body>
 
