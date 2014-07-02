@@ -9,140 +9,184 @@
     <script type='text/javascript' src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
     <link rel="stylesheet" type="text/css" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-   </head>
+  </head>
 
   <body>
     <div data-role="page" id="front" style="padding: 0px;">
-
       <div data-role="main" class="ui-content" style="min-height:600px; padding: 0px;">
-      
         <div id="questionContainer" style="padding: 10px;">
           <div style="height: 3px; background: #0F0; border: 1px solid black;" data-bind="style: {width: 100/questionBank.pageCount() * (questionBank.currentPage()-1) + '%'}"></div>
           <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank.currentPageData">
-            <li>
-              <b>Is the statement true or false?</b>
-                
+            <li> <b data-bind="text: question"></b>
             </li>
-            <li>
-              <em data-bind="text: id + '. ' + value"></em><br/>
-              <a href="#" data-role="button" data-bind="visible: $root.questionBank.currentPage() > 1, click: $root.questionBank.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
-              <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select>
-              <a href="#" data-theme="b" data-role="button" data-bind="visible: selected() !== 'Please select', click: $root.questionBank.moveNext" data-inline="true">Next</a>
+            <li>"<i data-bind="text: value"></i>"
+              <br/> <a href="#" data-role="button" data-bind="visible: $root.questionBank.currentPage() > 1, click: $root.questionBank.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
+              <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select> <a href="#" data-theme="b" data-role="button" data-bind="visible: selected() !== 'Please select', click: $root.questionBank.moveNext" data-inline="true">Next</a>
             </li>
           </ul>
-        </div>
-        Use the app when answering:
-        <iframe id="help" src="http://optimalblooduse.eu/app/#front" width="100%" height="100%" style="min-height:600px; border: 0px; border-top: 5px solid black;"></iframe>   
-
+        </div>Use the app when answering:
+        <iframe id="help" src="http://optimalblooduse.eu/app/#front" width="100%" height="100%" style="min-height:600px; border: 0px; border-top: 5px solid black;"></iframe>
       </div>
     </div>
-    
     <script type='text/javascript'>
-    
-    // http://jsfiddle.net/zeelux/B4vN2/
-    (function() {
-    'use strict';
-    ko.extenders.paging = function(target, pageSize) {
-        var _pageSize = ko.observable(pageSize || 10),
+      // http://jsfiddle.net/zeelux/B4vN2/
+      (function() {
+        'use strict';
+        ko.extenders.paging = function(target, pageSize) {
+          var _pageSize = ko.observable(pageSize || 10),
             // default pageSize to 10
             _currentPage = ko.observable(1); // default current page to 1
-        target.pageSize = ko.computed({
+          target.pageSize = ko.computed({
             read: _pageSize,
             write: function(newValue) {
-                if (newValue > 0) {
-                    _pageSize(newValue);
-                }
-                else {
-                    _pageSize(10);
-                }
+              if (newValue > 0) {
+                _pageSize(newValue);
+              } else {
+                _pageSize(10);
+              }
             }
-        });
-
-        target.currentPage = ko.computed({
+          });
+          target.currentPage = ko.computed({
             read: _currentPage,
             write: function(newValue) {
-                if (newValue > target.pageCount()) {
-                    _currentPage(target.pageCount());
-                }
-                else if (newValue <= 0) {
-                    _currentPage(1);
-                }
-                else {
-                    _currentPage(newValue);
-                }
-                $("#questionContainer").trigger("create");
-                $("#selector").selectmenu();
+              if (newValue > target.pageCount()) {
+                _currentPage(target.pageCount());
+              } else if (newValue <= 0) {
+                _currentPage(1);
+              } else {
+                _currentPage(newValue);
+              }
+              $("#questionContainer").trigger("create");
+              $("#selector").selectmenu();
             }
-        });
-
-        target.pageCount = ko.computed(function() {
+          });
+          target.pageCount = ko.computed(function() {
             return Math.ceil(target().length / target.pageSize()) || 1;
-        });
-
-        target.currentPageData = ko.computed(function() {
+          });
+          target.currentPageData = ko.computed(function() {
             var pageSize = _pageSize(),
-                pageIndex = _currentPage(),
-                startIndex = pageSize * (pageIndex - 1),
-                endIndex = pageSize * pageIndex;
-
+              pageIndex = _currentPage(),
+              startIndex = pageSize * (pageIndex - 1),
+              endIndex = pageSize * pageIndex;
             return target().slice(startIndex, endIndex);
-        });
-
-        target.moveFirst = function() {
+          });
+          target.moveFirst = function() {
             target.currentPage(1);
-        };
-        target.movePrevious = function() {
+          };
+          target.movePrevious = function() {
             target.currentPage(target.currentPage() - 1);
-        };
-        target.moveNext = function() {
+          };
+          target.moveNext = function() {
             target.currentPage(target.currentPage() + 1);
-        };
-        target.moveLast = function() {
+          };
+          target.moveLast = function() {
             target.currentPage(target.pageCount());
+          };
+          return target;
         };
-
-        return target;
-    };
-}());
-
-ko.bindingHandlers.jqmEnhance = {
-    update: function (element, valueAccessor) {
-        // Get jQuery Mobile to enhance elements within this element
-        $(element).trigger("create");
-    }
-};
-
-var ViewModel = function() {
-    this.questionBank = ko.observableArray([
-      {
-            id: 1,
-            value: "Leucodepletion is as effective as irradiation in preventing TA-GvHD.",
-            options: ["Please select", "True", "False","Don't know"],
-            selected: ko.observable("Please select")
-          },
-          {
-            id: 2,
-            value: "Platelets, white cells and red cells are examples of cellular blood components.",
-            options: ["Please select", "True", "False","Don't know"],
-            selected: ko.observable("Please select")
-          },
-          {
-            id: 3,
-            value: "Platelets, white cells and red cells are examples of cellular blood components.",
-            options: ["Please select", "Irradiated and CMV-negative", "Irradiated", "CMV-negative", "Special component not required", "Don't know"],
-            selected: ko.observable("Please select")
-          }
-        ]).extend({
+      }());
+      ko.bindingHandlers.jqmEnhance = {
+        update: function(element, valueAccessor) {
+          // Get jQuery Mobile to enhance elements within this element
+          $(element).trigger("create");
+        }
+      };
+      var ViewModel = function() {
+        this.questionBank = ko.observableArray([{
+          question: "Is the statement true or false?",
+          value: "Removal of leucocytes from platelets and red cells reduces risk of CMV transmission.",
+          options: ["Please select", "True", "False", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          question: "Is the statement true or false?",
+          value: "In the UK only red cells and platelets for patients with special requirements is leucodepleted.",
+          options: ["Please select", "True", "False", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          question: "Is the statement true or false?",
+          value: "Leucodepletion is as effective as irradiation in the prevention of TA-GvHD.",
+          options: ["Please select", "True", "False", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          question: "Is the statement true or false?",
+          value: "Some patients require CMV-negative components, even when leucodepleted.",
+          options: ["Please select", "True", "False", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          question: "Is the statement true or false?",
+          value: "All red cell concentrate in the UK is irradiated.",
+          options: ["Please select", "True", "False", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          question: "Is the statement true or false?",
+          value: "Platelets, white cells and red cells are examples of cellular blood components.",
+          options: ["Please select", "True", "False", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          question: "Is the statement true or false?",
+          value: "Fresh Frozen Plasma is an example of a non-cellular blood component.",
+          options: ["Please select", "True", "False", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          question: "Is the statement true or false?",
+          value: "Non-cellular components are unlikely to be associated with GvHD or CMV infection.",
+          options: ["Please select", "True", "False", "Don't know"],
+          selected: ko.observable("Please select")
+        },
+        
+        {
+          question: "Is this a risk factor for TA-GvHD?",
+          value: "Viable donor lymphocytes in component.",
+          options: ["Please select", "Yes", "No", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          question: "Is this a risk factor for TA-GvHD?",
+          value: "Recipient with low haemoglobin level.",
+          options: ["Please select", "Yes", "No", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          question: "Is this a risk factor for TA-GvHD?",
+          value: "Shared HLA haplotype between donor and recipient",
+          options: ["Please select", "Yes", "No", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          question: "Is this a risk factor for TA-GvHD?",
+          value: "Age of blood component.",
+          options: ["Please select", "Yes", "No", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          question: "Is this a risk factor for TA-GvHD?",
+          value: "Recipient with HIV/AIDS.",
+          options: ["Please select", "Yes", "No", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          question: "Is this a risk factor for TA-GvHD?",
+          value: "Granulocyte component.",
+          options: ["Please select", "Yes", "No", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          question: "Is this a risk factor for TA-GvHD?",
+          value: "Fresh Frozen Plasma (FFP).",
+          options: ["Please select", "Yes", "No", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          question: "Is this a risk factor for TA-GvHD?",
+          value: "Recipient with severe T-lymphocyte immunodeficiency.",
+          options: ["Please select", "Yes", "No", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          question: "Is this a risk factor for TA-GvHD?",
+          value: "Non-cellular components are unlikely to be associated with GvHD or CMV infection.",
+          options: ["Please select", "Irradiated and CMV-negative", "Irradiated", "CMV-negative", "Special component not required", "Don't know"],
+          selected: ko.observable("Please select")
+        }]).extend({
           paging: 1
         })
       };
-      
       ko.applyBindings(new ViewModel());
-      
-      window.onload = function () {
-        $("#pdfviewer").css("height", $(window).height() - $("#questionContainer").outerHeight() - $("#header").outerHeight()  + "px");
+      window.onload = function() {
+        $("#pdfviewer").css("height", $(window).height() - $("#questionContainer").outerHeight() - $("#header").outerHeight() + "px");
       }
-      
     </script>
   </body>
 
