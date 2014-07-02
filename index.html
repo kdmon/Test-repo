@@ -123,7 +123,7 @@
         background: url("/img/wood.png");
       }
       #tablist {
-        width: 95%;
+        width: 98%;
         display: inline-block;
         overflow: auto;
         white-space: nowrap;
@@ -480,6 +480,7 @@
         htmlSnippet += '<a onclick="editors[fileCount].getSession().getUndoManager().undo();" href="#undo" title="Undo" data-role="button"><i class="fa fa-reply fa-2x"></i> <span class="menulabel">Undo</span></a>';
         htmlSnippet += '<a style="margin-right: 5px;" onclick="editors[fileCount].getSession().getUndoManager().redo();" href="#redo" title="Redo" data-role="button"><i class="fa fa-share fa-2x"></i> <span class="menulabel">Redo</span></a>';
         htmlSnippet += '<a onclick="editors[fileCount].execCommand(' + "'find'" + ');" href="#" title="Search" data-role="button" onclick="scroll(false)"><i class="fa fa-search fa-2x"></i> <span class="menulabel">Search</span></a>';
+        htmlSnippet += '<a onclick="editors[fileCount].execCommand(' + "'gotoline'" + ');" href="#" title="Go to line" data-role="button" "><i class="fa fa-terminal fa-2x"></i> <span class="menulabel">Goto line</span></a>';
         htmlSnippet += '<a style="margin-right: 5px;" href="#" title="Beautify" data-role="button" onclick="beautify();"><i class="fa fa-tasks fa-2x"></i> <span class="menulabel">Beautify code</span></a>';
         /*
         htmlSnippet += '<a onclick="editors[fileCount].execCommand(' + "'cut'" + ');"href="#" title="Cut" data-role="button" onclick="cut();"><i class="fa fa-cut fa-2x"></i> <span class="menulabel">Cut</span></a>';
@@ -503,8 +504,8 @@
   */
   
         //        htmlSnippet += '<a href="javascript: runCode(true);" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-stop fa-2x"></i></a>';
-        htmlSnippet += '<a title="Code preview settings" class="previewsettingsbutton" id="previewsettingsbutton" href="#" onclick="togglePreviewSettings()" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-cog fa-2x"></i> <span class="menulabel">Code preview settings</span></a>';
-        htmlSnippet += '<a href="#shareurl" data-role="button" class="nowrap" title="Share preview"><i class="fa fa-external-link fa-2x"></i> <span class="menulabel">Share preview</span></a>';
+        htmlSnippet += '<a title="Code preview settings" class="previewsettingsbutton" id="previewsettingsbutton" href="#" onclick="togglePreviewSettings()" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-arrows-h fa-2x"></i> <span class="menulabel">Code preview settings</span></a>';
+        htmlSnippet += '<a href="#shareurl" data-role="button" class="nowrap" title="Share preview"><i class="fa fa-expand fa-2x"></i> <span class="menulabel">Share preview</span></a>';
         htmlSnippet += '</div></div>';
         $("#view" + fileCount).append('<div id="file' + fileCount + '">' + htmlSnippet + '<div id="editor' + fileCount + '" class="editor"></div>');
         htmlSnippet = '<div class="preview"><div id="iframecontainer' + fileCount + '"><iframe src="' + iframeUrl + '" name="preview' + fileCount + '" id="preview' + fileCount + '" src="javascript: ' + "'" + "Live preview window'" + '"></iframe></div>';
@@ -1053,7 +1054,7 @@
           ifrm.document.close();
         } else {
           editors[currentFile].running = true;
-          $("#runbutton" + currentFile).html('<i class="fa fa-pause fa-2x"></i>');
+          $("#runbutton" + currentFile).html('<i class="fa fa-gear fa-spin fa-2x"></i>');
           $("#runbutton" + currentFile).attr('title', 'Stop code preview');
           setAppSize();
           /*
@@ -1950,11 +1951,9 @@ document.getElementById(iframeId).onload = function() {
           </div>
         </div>
       </div>
-      <div data-role="panel" id="shareurl" data-position="left" data-animate="false" data-dismissible="true" data-swipe-close="false">
-        <div data-role="header">
-          <h3>Share URL</h3> <a href="#" data-rel="close" data-role="button" data-iconpos="notext" data-icon="arrow-l" class="ui-btn-right">Close</a>
-        </div>
-        <div role="main" class="ui-content">
+      <div data-role="panel" data-display="overlay" id="shareurl" data-position="right" data-animate="false" data-dismissible="true" data-swipe-close="false">
+        
+        <div role="main" class="ui-content" style="background: #fff; color: #000; text-shadow: none;" >
           <h3>Share preview</h3>
           <p>Scan the QR code to open a preview on your mobile device.</p>
           <center>
