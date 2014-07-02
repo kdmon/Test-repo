@@ -20,9 +20,9 @@
       <div data-role="main" class="ui-content">
       
         <div id="questionContainer">
-          <ul style="margin:0px; padding-left: 0px" data-bind="foreach: questionBank.currentPageData">
-            <li data-bind="text: value" style="list-style: none;"></li>
-            <select data-mini="true" data-inline="true" data-native-menu="false" data-bind="options: options, value: selected"></select>
+          <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank.currentPageData">
+            <li data-bind="text: value"></li>
+            <li><select id="selector" data-mini="true" data-inline="true" data-native-menu="false" data-bind="options: options, value: selected"></select></li>
           </ul>
           <a href="#" data-role="button" data-bind="click: questionBank.movePrevious" data-mini="true" data-inline="true">Prev</a>
           <a href="#" data-role="button" data-bind="click: questionBank.moveNext" data-mini="true" data-inline="true">Next</a>
@@ -66,6 +66,7 @@
                 else {
                     _currentPage(newValue);
                 }
+                $("#selector").selectmenu();
             }
         });
 
