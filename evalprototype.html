@@ -8,27 +8,31 @@
     <script type='text/javascript' src="http://knockoutjs.com/downloads/knockout-3.0.0.js"></script>
     <script type='text/javascript' src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
     <link rel="stylesheet" type="text/css" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
-  </head>
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+   </head>
 
   <body>
-    <div data-role="page" id="front">
+    <div data-role="page" id="front" style="padding: 0px;">
 
-      <div data-role="header" id="header">
-        <h3>Question</h3>
-      </div>
+      <div data-role="main" class="ui-content" style="min-height:600px; padding: 0px;">
       
-      <div data-role="main" class="ui-content">
-      
-        <div id="questionContainer">
+        <div id="questionContainer" style="padding: 10px;">
+          <div style="height: 3px; background: #0F0; border: 1px solid black;" data-bind="style: {width: 100/questionBank.pageCount() * (questionBank.currentPage()-1) + '%'}"></div>
           <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank.currentPageData">
-            <li data-bind="text: value"></li>
-            <li><select id="selector" data-mini="true" data-inline="true" data-native-menu="false" data-bind="options: options, value: selected"></select></li>
+            <li>
+              <b>Is the statement true or false?</b>
+                
+            </li>
+            <li>
+              <em data-bind="text: id + '. ' + value"></em><br/>
+              <a href="#" style="background: #AAF;" data-role="button" data-bind="visible: $root.questionBank.currentPage() > 1, click: $root.questionBank.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
+              <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select>
+              <a href="#" data-theme="b" data-role="button" data-bind="visible: selected() !== 'Please select', click: $root.questionBank.moveNext" data-inline="true">Next</a>
+            </li>
           </ul>
-          <a href="#" data-role="button" data-bind="click: questionBank.movePrevious" data-mini="true" data-inline="true">Prev</a>
-          <a href="#" data-role="button" data-bind="click: questionBank.moveNext" data-mini="true" data-inline="true">Next</a>
         </div>
         
-        <iframe id="pdfviewer" src="hhttps://docs.google.com/file/d/0B9oB9mOYNnmgRS1fRmtnanV1cms/preview" width="100%" height="100%"></iframe>   
+        <iframe id="help" src="http://optimalblooduse.eu/app/#front" width="100%" height="100%" style="min-height:600px; border: 0px;"></iframe>   
 
       </div>
     </div>
@@ -66,6 +70,7 @@
                 else {
                     _currentPage(newValue);
                 }
+                $("#questionContainer").trigger("create");
                 $("#selector").selectmenu();
             }
         });
@@ -110,19 +115,19 @@ ko.bindingHandlers.jqmEnhance = {
 var ViewModel = function() {
     this.questionBank = ko.observableArray([
       {
-            id: 0,
+            id: 1,
             value: "Leucodepletion is as effective as irradiation in preventing TA-GvHD.",
             options: ["Please select", "True", "False","Don't know"],
             selected: ko.observable("Please select")
           },
           {
-            id: 1,
+            id: 2,
             value: "Platelets, white cells and red cells are examples of cellular blood components.",
             options: ["Please select", "True", "False","Don't know"],
             selected: ko.observable("Please select")
           },
           {
-            id: 2,
+            id: 3,
             value: "Platelets, white cells and red cells are examples of cellular blood components.",
             options: ["Please select", "Irradiated and CMV-negative", "Irradiated", "CMV-negative", "Special component not required", "Don't know"],
             selected: ko.observable("Please select")
