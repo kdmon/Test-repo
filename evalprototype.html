@@ -24,8 +24,8 @@
             <li data-bind="text: value" style="list-style: none;"></li>
             <select data-mini="true" data-inline="true" data-native-menu="false" data-bind="options: options, value: selected"></select>
           </ul>
-          <button data-bind="click: function() { filter('1') }">Filter</button>
-          <a href="#" data-role="button" data-bind="click: questionBank.moveNext" data-mini="true" data-inline="true">Save</a>
+          <a href="#" data-role="button" data-bind="click: questionBank.movePrevious" data-mini="true" data-inline="true">Prev</a>
+          <a href="#" data-role="button" data-bind="click: questionBank.moveNext" data-mini="true" data-inline="true">Next</a>
         </div>
         
         <iframe id="pdfviewer" src="hhttps://docs.google.com/file/d/0B9oB9mOYNnmgRS1fRmtnanV1cms/preview" width="100%" height="100%"></iframe>   
