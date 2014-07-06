@@ -1704,16 +1704,17 @@
           <h1>Options</h1>
         </div>
         <div role="main" class="ui-content">
-      
+          <h3>Options</h3>
           <label for="live">Live coding:</label>
-          <select name="live" id="livecoding" onchange="setLiveCoding()">
+          <select data-mini="true" name="live" id="livecoding" onchange="setLiveCoding()">
             <option value="on">On (default)</option>
             <option value="off">Off</option>
           </select>
           <br/>
           
-          <label for="livedelay">Live coding delay:</label>
-          <select name="livedelay" id="livecodingdelay" onchange="setLiveCodingDelay()">
+          <label for="livedelay">Delay:</label>
+          <select data-mini="true" name="livedelay" id="livecodingdelay" onchange="setLiveCodingDelay()">
+            <option value="500">0.5s</option>
             <option value="1000">1s</option>
             <option value="2000">2s</option>
             <option value="3000">3s (default)</option>
@@ -1724,7 +1725,7 @@
           <br/>
           
           <label for="uitheme">UI Theme:</label>
-          <select name="uitheme" id="uitheme" onchange="setUiTheme()">
+          <select data-mini="true" name="uitheme" id="uitheme" onchange="setUiTheme()">
             <option value="light">Light (default)</option>
             <option value="dark">Dark</option>
           </select>
