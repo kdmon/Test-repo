@@ -1582,7 +1582,7 @@
       <div role="main" class="ui-content">
               
         <div id="tabmenu" data-role="tabs">
-          <ul id="tablist" style="margin-left: 4px; margin-top:2px;">
+          <ul id="tablist">
             <li style="display:none" class="stickytab"><a href="#dashboard" onclick="$( '#tabmenu' ).tabs( 'option', 'active', 0);" data-theme="b" data-mini="true" data-role="button" style="padding-right: 0px;"><i style="position: relative; left: -8px; top: 3px;" class="fa fa-home fa-2x"></i></a>
             </li>
             <li class="stickytab"><a href="#" id="newtab" data-theme="b" data-mini="true" data-role="button" style="padding: 4px; padding-left:8px;"><i style="position: relative; left: -4px; top: 1px;" class="fa fa-file fa-2x"></i><i style="position: relative; left: -1px; top: -2px;" class="fa fa-plus"></i></a>
@@ -1888,9 +1888,9 @@
           </div>
         </div>
       </div>
-      <div data-role="panel" data-display="overlay" id="shareurl" data-position="right" data-animate="false" data-dismissible="true" data-swipe-close="false">
+      <div data-role="panel" data-display="overlay" style="background: white !important" id="shareurl" data-position="right" data-animate="false" data-dismissible="true" data-swipe-close="false">
         
-        <div role="main" class="ui-content" style="background: #fff; color: #000; text-shadow: none;" >
+        <div role="main" class="ui-content" style="background: #fff; color: #000; text-shadow: none; min-height: 100%;" >
           <h3>Full screen preview</h3>
           <p>Scan the QR code to open a preview on your mobile device.</p>
           <center>
