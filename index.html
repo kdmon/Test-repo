@@ -1259,7 +1259,7 @@
       function signOut() {
         var token = localStorage.token;
         localStorage.removeItem('token');
-        window.location = 'logout.php?token=' + token;
+        window.location = 'logout?token=' + token;
         //  window.location.replace(window.location.pathname);
       }
 
