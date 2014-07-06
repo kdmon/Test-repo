@@ -36,20 +36,17 @@
       .ui-mobile body {
         height: 100% !important;
       }
-      .editor,
-      .preview,
-      .preview iframe {
-        text-shadow: none;
-        float: left;
+      .editor {
+        float:left;
       }
-      .preview iframe {
+      .preview {
         overflow: hidden;
         border: none;
         background: rgba(155, 155, 155, 0.3);
+        margin: 0px;
+        padding: 0px;
       }
-      .preview iframe:hover {
-        overflow: auto;
-      }
+      
       #tablist,
       #tablist li {
         list-style-type: none;
@@ -300,30 +297,17 @@
         white-space: nowrap !important;
         overflow: visible !important;
       }
-      .preview iframe::-webkit-scrollbar {
-        width: 6px;
-      }
-      .preview iframe::-webkit-scrollbar-track {
-        background-color: #ddd;
-        border-left: 1px solid #aaa;
-      }
-      .preview iframe::-webkit-scrollbar-thumb {
-        background-color: #999;
-        border: 1px solid #444;
-      }
-      .preview iframe::-webkit-scrollbar-thumb:hover {
-        background-color: #bbb;
-      }
+      
     </style>
     <script>
       // Begin globals
       var account = {}; // authenticated Github account.
-      var appSize = 0; // preview width in pixel.
+      var appSize = localStorage.appSize || 320; // 320px preview width default.
       var appServer = "http://it4se.com:8080";
       var chatting = false; // user joined a chat room?
       var connection; // shareJS
       var documents = []; // shareJS
-      var currentFile = ''; // important in tracking opened file.
+      var currentFile = 'none'; // important in tracking opened file.
       var editors = {}; // array of editors, takes currentFile as index.
       var fileCount = 0; // tracks tabs and files.
       var fileBrowser = {
@@ -331,12 +315,14 @@
           path: '/'
         } // tracks recent file history.
       var firefox = 'firefox'; //$.browser.mozilla; Should use feature detection with jqm 1.4.
-      var liveEditing = false;
+      var fontSize = localStorage.fontSize || 12;
+      var liveCoding = localStorage.liveCoding || true; // enable by default
+      var liveCodingDelay = localStorage.liveCodingDelay || 3000; // 3s by default
+      var liveCodingTimer = setTimeout(function() {}, 100); // used for live editing
       var loading = true;
       var slowLoading;
       var mediaEnabled = false; // webrtc running?
       var openFiles = {}; // important in tracking file details, like path and repo.
-      var timer = setTimeout(function() {}, 10); // used for live editing
       var webrtc;
        // End globals
        // Begin function declarations
@@ -473,7 +459,7 @@
         currentFile = fileCount;
         addTab(file, fileCount);
         var htmlSnippet;
-        htmlSnippet = '<div id="contextmenu">';
+        htmlSnippet = '<div id="contextmenu' + currentFile + '">';
         htmlSnippet += '<div data-role="controlgroup" data-type="horizontal" data-mini="true" style="margin-left: 5px">';
         htmlSnippet += '<a class="ui-not-disabled" title="Save" data-role="button" href="#commit"><i class="fa fa-save fa-2x"></i> <span class="menulabel">Save</span></a>';
         htmlSnippet += '<a style="margin-right: 5px;" href="#history" title="History" data-role="button"><i class="fa fa-history fa-2x"></i> <span class="menulabel">Revert</span></a>';
@@ -488,41 +474,34 @@
         htmlSnippet += '<a onclick="editors[fileCount].execCommand(' + "'paste'" + ');"style="margin-right: 5px;" href="#" title="Paste" data-role="button" onclick="paste"><i class="fa fa-paste fa-2x"></i> <span class="menulabel">Paste</span></a>';
 */
         htmlSnippet += '<a id="runbutton' + fileCount + '" title="Run code" href="#" onclick="togglePreview();" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-play fa-2x"></i> <span class="menulabel">Run code</span></a>';
-/*        
-        htmlSnippet += '<select name="select-choice-a" id="appsize" onchange="setAppSize()" data-native-menu="false" size="20">';
-        htmlSnippet += '<option>Mobile device resolution</option>';
-        htmlSnippet += '<option value="0">Hide preview</option>';
-        htmlSnippet += '<option value="320" selected>320 (iPhone)</option>';
-        htmlSnippet += '<option value="360">360 (Galaxy S3)</option>';
-        htmlSnippet += '<option value="360">384 (Nexus 4, Lumia 925)</option>';
-        htmlSnippet += '<option value="400">400 (Galaxy Note)</option>';
-        htmlSnippet += '<option value="600">600 (Galaxy Tab, Kindle 1)</option>';
-        htmlSnippet += '<option value="768">768 (iPad)</option>';
-        htmlSnippet += '<option value="800">800 (Nexus 10, Kindle HD)</option>';
-        htmlSnippet += '<option value="1024">1024 (iPad landscape)</option>';
-        htmlSnippet += '</select>';
-  */
-  
-        //        htmlSnippet += '<a href="javascript: runCode(true);" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-stop fa-2x"></i></a>';
         htmlSnippet += '<a title="Code preview settings" class="previewsettingsbutton" id="previewsettingsbutton" href="#" onclick="togglePreviewSettings()" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-arrows-h fa-2x"></i> <span class="menulabel">Code preview settings</span></a>';
         htmlSnippet += '<a href="#shareurl" data-role="button" class="nowrap" title="Share preview"><i class="fa fa-expand fa-2x"></i> <span class="menulabel">Share preview</span></a>';
         htmlSnippet += '</div></div>';
-        $("#view" + fileCount).append('<div id="file' + fileCount + '">' + htmlSnippet + '<div id="editor' + fileCount + '" class="editor"></div>');
-        htmlSnippet = '<div class="preview"><div id="iframecontainer' + fileCount + '"><iframe src="' + iframeUrl + '" name="preview' + fileCount + '" id="preview' + fileCount + '" src="javascript: ' + "'" + "Live preview window'" + '"></iframe></div>';
-        $("#view" + fileCount).append(htmlSnippet).trigger("create");
-        /*  $("#view" + fileCount).append('<fieldset data-role="controlgroup" data-type="horizontal"><input type="checkbox" value="true" name="play" id="play"/><label for="play"><i class="fa fa-play"></i></label><input type="checkbox" value="true" name="autorun" id="autorun"/><label for="autorun"><i class="fa fa-refresh"></i></label></fieldset>').trigger('create');
-         */
+        
+        var iframeCode = '<iframe class="preview" src="' + iframeUrl + '" name="preview' + fileCount + '" id="preview' + fileCount + '" src="javascript: ' + "'" + "Live preview window'" + '"></iframe>';
+        
+        $("#view" + fileCount).append('<div id="file' + fileCount + '">' + htmlSnippet + '<div id="editor' + fileCount + '" class="editor"></div>' + iframeCode).trigger("create");
+        
         //  console.log(window.frames[fileCount-1].onerror = function (msg, url, line) {alert (msg)});
         var modelist = ace.require('ace/ext/modelist');
         var UndoManager = ace.require("ace/undomanager").UndoManager;
         ace.require("ace/ext/emmet");
         editors[fileCount] = ace.edit("editor" + fileCount);
         editors[fileCount].setBehavioursEnabled(true);
-        if (localStorage.uitheme == "dark") {
-          editors[fileCount].setTheme("ace/theme/vibrant_ink");
-        } else {
-          editors[fileCount].setTheme("ace/theme/chrome");
+        
+        if (localStorage.editorTheme) {editors[fileCount].setTheme(localStorage.editorTheme);}
+        else {
+            
+          if (localStorage.uitheme == "dark") {
+            editors[fileCount].setTheme("ace/theme/vibrant_ink");
+          } else {
+            editors[fileCount].setTheme("ace/theme/chrome");
+          }
         }
+        
+        
+        if (localStorage.fontSize) {$(".editor").css("font-size", localStorage.fontSize + "px");}
+        
         editors[fileCount].setOptions({
           enableBasicAutocompletion: true
         });
@@ -532,62 +511,48 @@
         editors[fileCount].setOption("enableEmmet", true);
         editors[fileCount].getSession().setUseWrapMode(false);
         editors[fileCount].getSession().setTabSize(2);
-        // only show preview if appropriate
-        //  if (mode == "ace/mode/html") { 
-        editors[fileCount].getSession().on('change', function(e) {
-          if (liveEditing) {
-            clearTimeout(timer);
-            timer = setTimeout(function() {
-              runCode(false);
-            }, 2000);
-          }
-        });
-        //  runCode();
-        //}
-        setTitle();
-        formatLayout();
         
         //editors[fileCount].session.setValue(value);
         editors[fileCount].setValue(value, -1);
         editors[fileCount].getSession().setUndoManager(new UndoManager());
         
-        
-        //setTimeout(runCode, 2500);
-      }
-
-      function deleteFile() {
-        alert("Deleting files is not implemented yet.");
-      }
-
-      function formatLayout(animate) {
-        var totalWidth = $(".ui-panel-wrapper").outerWidth();
-        var totalHeight = $(window).height() - $(".ui-header").outerHeight() - $("#tablist").outerHeight() - $("#contextmenu").outerHeight() - 30;
-        if (animate == true) {
-          //        if (!animate > 0) animate = 2500;
-          $("#tabmenu").css("width", totalWidth + "px");
-          $(".editor").animate({
-            width: totalWidth - appSize + "px",
-            height: totalHeight + "px"
-          }, animate);
-          $(".preview").animate({
-            width: appSize + "px",
-            height: totalHeight + "px"
-          }, animate);
-          $(".preview iframe").animate({
-            width: appSize + "px",
-            height: totalHeight - 48 + "px"
-          }, animate, function() {
-            formatLayout();
-          });
-        } else {
-          $("#tabmenu").css("width", totalWidth + "px");
-          $(".editor").css("width", totalWidth - appSize - 11 + "px").css("height", totalHeight + "px");
-          $(".preview").css("width", appSize + "px").css("height", totalHeight + "px");
-          $(".preview iframe").css("width", appSize + "px").css("height", totalHeight + "px");
-        }
-        $.each(editors, function(key, value) {
-          editors[key].resize();
+        editors[fileCount].getSession().on('change', function(e) {
+          // alert ("livecoding: " + liveCoding + "\nDelay:" + liveCodingDelay + "\nrunning?" + editors[currentFile].running);
+          if (liveCoding && editors[currentFile].running) {
+            clearTimeout(liveCodingTimer);
+            liveCodingTimer = setTimeout(function() {
+              runCode(false);
+            }, liveCodingDelay);
+          }
         });
+        
+        runCode(true);
+        setTitle();
+        formatLayout();
+        
+      }
+
+      function formatLayout() {
+        var totalWidth = $(".ui-panel-wrapper").innerWidth();
+        $("#tabmenu").css("width", totalWidth + "px");
+
+        if (currentFile != "none") {
+          var totalHeight = $(window).height() - $(".ui-header").outerHeight() - $("#tablist").outerHeight() - $("#contextmenu" + currentFile).outerHeight() - 30;
+
+          if (editors[currentFile].running) {
+            $("#editor"  + currentFile).css("width", totalWidth - appSize - 11 + "px").css("height", totalHeight + "px");
+            $("#preview" + currentFile).css("width", appSize + "px").css("height", totalHeight + "px");
+          }
+          
+          else {
+            $("#editor" + currentFile).css("width", totalWidth - 11 + "px").css("height", totalHeight + "px");
+            $("#preview" + currentFile).css("width", "0px").css("height", "0px");
+          }
+          
+          editors[currentFile].resize();
+          
+        }
+        
       }
 
       function getFiles(reset) {
@@ -844,21 +809,32 @@
 
       function setAppSize() {
         appSize = $("#appsize").val();
-        var tmpTimer = setTimeout(function() {
-          formatLayout(false);
-        }, 400);
+        localStorage.appSize = appSize;
+        if (editors[currentFile].running) {
+          var tmpTimer = setTimeout(function() {
+            formatLayout();
+          }, 400);
+        }
       }
 
+
       function setFontSize() {
-        $(".editor").css("font-size", $("#fontsize").slider().val() + "px");
+        var fontSize = $("#fontsize").slider().val();
+        localStorage.fontSize = fontSize;
+        $(".editor").css("font-size", fontsize + "px");
       }
 
       function setLiveCoding() {
-        if ($("#livecoding").slider().val() == "on") {
-          liveEditing = true;
+        if ($("#livecoding").val() == "on") {
+          liveCoding = true;
         } else {
-          liveEditing = false;
+          liveCoding = false;
         }
+      }
+      
+      function setLiveCodingDelay() {
+        liveCodingDelay = $("#livecodingdelay").val();
+        localStorage.liveCodingDelay = liveCodingDelay;
       }
 
       function setPath(path, append, saveProperties) {
@@ -909,6 +885,7 @@
       }
 
       function setTheme(theme) {
+        localStorage.editorTheme = theme;
         $.each(editors, function(key, value) {
           editors[key].setTheme(theme);
         });
@@ -1037,43 +1014,28 @@
         }
         editors[currentFile].setValue(code, -1);
       }
-
-      function togglePreview() {
+      
+      
+      function runCode (stop) {
+      
         var iframeId = 'preview' + currentFile;
         var ifrm = document.getElementById(iframeId);
         ifrm = (ifrm.contentWindow) ? ifrm.contentWindow : (ifrm.contentDocument.document) ? ifrm.contentDocument.document : ifrm.contentDocument;
         var currentUrl = document.getElementById(iframeId).src;
-        //console.log("currenturl: " + currentUrl);
-        if (editors[currentFile].running) {
-          editors[currentFile].running = false;
-          appSize = 0;
-          formatLayout();
+        
+        if (stop) {
           ifrm.document.open();
           ifrm.document.write('<h1>Execution stopped</h1>');
-          $("#runbutton" + currentFile).html('<i class="fa fa-play fa-2x"></i>');
-          $("#runbutton" + currentFile).attr('title', 'Run code');
           ifrm.document.close();
-        } else {
-          editors[currentFile].running = true;
-          $("#runbutton" + currentFile).html('<i class="fa fa-gear fa-spin fa-2x"></i>');
-          $("#runbutton" + currentFile).attr('title', 'Stop code preview');
-          setAppSize();
-          /*
-document.getElementById(iframeId).onload = function() {
-  try {
-    document.getElementById(iframeId).onerror = function (msg) {
-      alert ("error " + msg);
-    }
-    alert("loaded");
-  } catch(e) {
-    alert("Error: "+e);
-  }
-}*/
-          //	currentUrl ="http://rawgithub.com/kdmon/Test-repo/master/cars.html";
+        }
+        
+        else {
+          
           ifrm.document.open();
           ifrm.document.write('<h1>Executing...</h1>');
           ifrm.location.href = currentUrl;
           ifrm.document.close();
+          
           ifrm.addEventListener('mouseup', function(event) {
             var searchTerm = ifrm.getSelection().toString();
             if (searchTerm != "") {
@@ -1090,153 +1052,43 @@ document.getElementById(iframeId).onload = function() {
               editors[currentFile].focus();
             }
           }, false);
+          
           editors[currentFile].focus();
           // prevent focus stealing for 3 seconds
           var handler = function() {
             editors[currentFile].focus();
           };
+          
           editors[currentFile].on("blur", handler);
+          
           setTimeout(function() {
             editors[currentFile].focus();
             editors[currentFile].removeEventListener("blur", handler);
           }, 3000);
-          /*
-      alert (currentUrl);
-
-      $("#iframecontainer" + currentFile).empty();
-      $("#iframecontainer" + currentFile).append('<iframe src="' + currentUrl + '" name="preview' + fileCount + '" id="preview' + fileCount + '"></iframe>');
-*/
-          /*
+          
+        }
+        
       formatLayout();
-*/
-          //      document.getElementById(iframeId).src = currentUrl + "?tmp123=" + new Date().getTime();
-          //      currentUrl = "http://it4se.com";
-          //      document.getElementById(iframeId).reload(true);
-          //      $("#" + iframeId).attr('src', currentUrl);
-          //      $("#" + iframeId).attr('src', $("#" + iframeId).attr('src'));
-          //        document.getElementById(iframeId).src = currentUrl + "?tmp123=" + new Date().getTime();
-          console.log("Setting iframe to: " + currentUrl);
-          /*
-      var tmpFrame = $("#" + iframeId);
-      $("#" + iframeId).remove();
-      $("#view" + currentFile + " .preview").append(tmpFrame);
-*/
-          //        ifrm.location.href = currentUrl;
-          //	ifrm.location.reload();
-          //	var _theframe = document.getElementById(iframeId);
-          //	_theframe.contentWindow.location.href = _theframe.src;
-          //      document.getElementById(iframeId).src = ''; // prevent firefox caching!?
-          //      document.getElementById('ifr').contentWindow.location.href=document.getElementById('ifr').src
-        }
-        return;
-        var editor = editors[currentFile];
-        finalCode = editor.getValue();
-        // Firefox doesn't support push state history in iframes
-        // so we need to add some jquery mobile options and rely
-        // on to href attributes for data-rel back buttons.
-        if (navigator.userAgent.search("Firefox") > -1) {
-          var patched = '<scri' + 'pt>$(document).bind("mobileinit", function(){';
-          patched += '$.mobile.pushStateEnabled = false; $.mobile.ajaxEnabled = false;';
-          patched += '$.mobile.hashListeningEnabled = false;});'
-          patched += "$(document).bind('pageinit', function() { $(this).find('a[data-rel=";
-          patched += '"back"]' + "').click(function(event) {event.stopPropagation(); $.mobile.changePage($(this).attr('href')); return false}); });";
-          patched += "</scri" + "pt>";
-          var location = finalCode.search(/<script[\s\S]*?(jquery-)[\s\S]*?>[\s\S]*?<\/script\>/i);
-          if (location > -1) {
-            var entry = finalCode.substr(location).search(/<\/script>/i) + 9 + location;
-            finalCode = finalCode.slice(0, entry) + patched + finalCode.slice(entry);
-          }
-        }
-        // TODO: Make relative urls absolute, using the rawgit.com service
-        // "http://it4se.com/app/preview.php?user=" + openFiles[currentFile].username +
-        if (openFiles[currentFile].filename == "Example.html") {
-          finalCode = finalCode.replace(/(<html|<head|<body|<title|<\/html|<br\\|<\/body|<\/title|<\/head)/ig, '$1a');
-          var finalCode2 = $("<div>" + finalCode + "</div>");
-          //   var finalCode2 = $(finalCode);
-          // Links
-          finalCode2.find('a').not('[href^="http"],[href^="https"],[href^="mailto:"],[href^="//"],[href^="#"]').each(function() {
-            $(this).attr('href', absolutePath($(this).attr('href')));
-          });
-          // Styles
-          finalCode2.find('link').not('[href^="http"],[href^="https"],[href^="//"]').each(function() {
-            $(this).attr('href', absolutePath($(this).attr('href')));
-          });
-          // Scripts
-          finalCode2.find('script').not('[src^="http"],[src^="https"],[src^="//"]').each(function() {
-            $(this).attr('src', absolutePath($(this).attr('src')));
-          });
-          // Images
-          finalCode2.find('img').not('[src^="http"],[src^="https"],[src^="//"]').each(function() {
-            $(this).attr('src', absolutePath($(this).attr('src')));
-          });
-          //console.log(finalCode2);
-          finalCode = finalCode2.prop('innerHTML');
-          finalCode = finalCode.replace(/(<html|<head|<body|<title|<\/html|<br\\<\/body|<\/title|<\/head)./ig, '$1');
-        }
-        // return to last app page viewed
-        // var ifrm2 = document.getElementsByTagName('iframe')[0];
-        //window.history.pushState('', '', "/" + openFiles[currentFile].username + "/" +  openFiles[currentFile].repository +"/master" +  openFiles[currentFile].path +  openFiles[currentFile].filename + document.location.search );
-        window.history.pushState(null, null, '/examples/test2.html');
-        var iframeId = 'preview' + currentFile;
-        var ifrm = document.getElementById(iframeId);
-        ifrm = (ifrm.contentWindow) ? ifrm.contentWindow : (ifrm.contentDocument.document) ? ifrm.contentDocument.document : ifrm.contentDocument;
-        var pastPage = ifrm.document.activeElement.attributes.id;
-        if (pastPage != undefined) {
-          var anchor = pastPage.nodeValue;
-          var location = finalCode.search(/<script[\s\S]*?(jquery-)[\s\S]*?>[\s\S]*?<\/script\>/i);
-          if (location > -1) {
-            var entry = finalCode.substr(location).search(/<\/script>/i) + 9 + location;
-            var jumpPageCode = '<scr' + 'ipt type="text/javascript">var notRun = true; $(document).on("pageinit", function(){if (notRun) {$.mobile.changePage("#' + anchor + '"); notRun = false;} });</scr' + 'ipt>';
-            finalCode = finalCode.slice(0, entry) + jumpPageCode + finalCode.slice(entry);
-          }
-        }
-        ifrm.document.open();
-        ifrm.src = "/" + openFiles[currentFile].username + "/" + openFiles[currentFile].repository + "/master" + openFiles[currentFile].path + openFiles[currentFile].filename + document.location.search;
-        //ifrm.history.replaceState('', '', "/" + openFiles[currentFile].username + "/" +  openFiles[currentFile].repository +"/master" +  openFiles[currentFile].path +  openFiles[currentFile].filename + document.location.search );
-        //console.log(ifrm);
-        //ifrm.onload = function () {
-        //  history.replaceState('', '', "/" + openFiles[currentFile].username + "/" +  openFiles[currentFile].repository +"/master" +  openFiles[currentFile].path +  openFiles[currentFile].filename + document.location.search );
-        //};
-        var someDelay = setTimeout(function() {
-          ifrm.document.write(finalCode);
-          // Allow word search via select
-          $(iframeId).contents().find('body').css({
-            "-webkit-touch-callout": "text !important",
-            "-webkit-user-select": "text !important",
-            "-khtml-user-select": "text !important",
-            "-moz-user-select": "text !important",
-            "-ms-user-select": "text !important",
-            "user-select": "text !important"
-          });
-          ifrm.document.close();
-          ifrm.addEventListener('mouseup', function(event) {
-            var searchTerm = ifrm.getSelection().toString();
-            if (searchTerm != "") {
-              // delete one character at a time working towards the middle
-              var counter = 0;
-              while (!editor.find(searchTerm) && searchTerm) {
-                counter++;
-                if (counter % 2 == 0) {
-                  searchTerm = searchTerm.substring(1);
-                } else {
-                  searchTerm = searchTerm.substring(0, searchTerm.length - 1);
-                }
-              }
-              editors[fileCount].focus();
-            }
-          }, false);
-          editors[fileCount].focus();
-          // prevent focus stealing for 3 seconds
-          var handler = function() {
-            editors[fileCount].focus();
-          };
-          editors[fileCount].on("blur", handler);
-          setTimeout(function() {
-            editors[fileCount].focus();
-            editors[fileCount].removeEventListener("blur", handler);
-          }, 3000);
-        }, 500);
       }
+
+      function togglePreview() {
+        
+        if (editors[currentFile].running) {
+          editors[currentFile].running = false;
+          $("#runbutton" + currentFile).html('<i class="fa fa-play fa-2x"></i>');
+          $("#runbutton" + currentFile).attr('title', 'Run code');
+          runCode(true);
+        }
+        
+        else {
+          editors[currentFile].running = true;
+          $("#runbutton" + currentFile).html('<i class="fa fa-gear fa-spin fa-2x"></i>');
+          $("#runbutton" + currentFile).attr('title', 'Stop code preview');
+          runCode();
+        }
+        
+      }
+      
       var cursors = {};
       var selections = {};
       var cursorHash = [];
@@ -1348,16 +1200,33 @@ document.getElementById(iframeId).onload = function() {
           });
         });
       }
+      
+      function restorePreferences () {
+        
+        $('#uitheme').val(localStorage.uitheme || "light").selectmenu('refresh');
+        
+        $('#editor').val(localStorage.uitheme || "light").selectmenu('refresh');
+        
+        $('#livecode').val(localStorage.liveCoding || "On").selectmenu('refresh');
+        
+        $('#livecodedelay').val(localStorage.liveCodeDelay || "3000").selectmenu('refresh');
+        
+        $('#fontsize').val(localStorage.fontSize || "12").selectmenu('refresh');
+        
+      }
 
       function setUiTheme() {
-        if (localStorage.uitheme != $("#uitheme").slider().val()) {
-          if (confirm("Setting requires a restart. Do you want to restart?")) {
-            if ($("#uitheme").slider().val() == "light") {
+        if (localStorage.uitheme != $("#uitheme").val()) {
+          if (confirm("Setting requires a restart. Do you want to restart? WARNING: You will lose any unsaved changes!")) {
+            if ($("#uitheme").val() == "light") {
               localStorage.uitheme = "light";
             } else {
               localStorage.uitheme = "dark"
             }
             location.reload();
+          }
+          else {
+            $('#uitheme').val(localStorage.uitheme || "light").selectmenu('refresh');
           }
         }
       }
@@ -1442,9 +1311,9 @@ document.getElementById(iframeId).onload = function() {
        // end function declarations
        // Begin event bindings
        // Window events
-      $(window).resize(formatLayout);
-      $(window).on("orientationchange", formatLayout);
-      window.onload = function () {toggleLoading(false)};
+      $(window).resize(formatLayout());
+      $(window).on("orientationchange", formatLayout());
+      window.onload = function () {toggleLoading(false); restorePreferences(); };
       window.onbeforeunload = function() {
         /*if ("Unsaved changes" == "Unsaved changes") {
           alert("Did you remember to save? If not, 'stay on the page' and hit commit.");
@@ -1488,7 +1357,7 @@ document.getElementById(iframeId).onload = function() {
                   localStorage.token = token;
                   userLogin(data);
                 } else {
-                  //	     alert ("Unable to retrieve your profile. Please login again.");
+                  //         alert ("Unable to retrieve your profile. Please login again.");
                 }
               });
             } else {
@@ -1735,25 +1604,18 @@ document.getElementById(iframeId).onload = function() {
         
         <div id="previewsettings">
           <center>
-            <h3>Preview settings</h3>
+            <h3>Preview width</h3>
             <select name="select-choice-a" id="appsize" onchange="setAppSize()" data-native-menu="false" data-mini="true" size="20">
               <option>Preview width in pixels</option>
-              <option value="0">Hide preview</option>
               <option value="320" selected>320 (iPhone)</option>
               <option value="360">360 (Galaxy S3)</option>
               <option value="360">384 (Nexus 4, Lumia 925)</option>
               <option value="400">400 (Galaxy Note)</option>
               <option value="600">600 (Galaxy Tab, Kindle 1)</option>
-              <option value="768">768 (iPad)</option>
+              <option value="768">768 (iPad Portrait)</option>
               <option value="800">800 (Nexus 10, Kindle HD)</option>
               <option value="1024">1024 (iPad landscape)</option>
             </select>
-            <label for="live">Live preview:</label>
-            <select name="live" id="livecoding" data-role="slider" onchange="setLiveCoding()">
-              <option value="on">On</option>
-              <option value="off">Off</option>
-            </select>
-            <br/>
             <a href="#" data-mini="true" data-inline="true" data-role="button" onclick="togglePreviewSettings();">Close</a>
           </center>
         </div>
@@ -1790,9 +1652,28 @@ document.getElementById(iframeId).onload = function() {
           <h1>Options</h1>
         </div>
         <div role="main" class="ui-content">
+      
+          <label for="live">Live coding:</label>
+          <select name="live" id="livecoding" onchange="setLiveCoding()">
+            <option value="on">On (default)</option>
+            <option value="off">Off</option>
+          </select>
+          <br/>
+          
+          <label for="live">Live coding delay:</label>
+          <select name="live" id="livecodingdelay" onchange="setLiveCodingDelay()">
+            <option value="1000">1s</option>
+            <option value="2000">2s</option>
+            <option value="3000">3s (default)</option>
+            <option value="4000">4s</option>
+            <option value="5000">5s</option>
+            <option value="10000">10s</option>
+          </select>
+          <br/>
+          
           <label for="uitheme">UI Theme:</label>
-          <select name="uitheme" id="uitheme" data-role="slider">
-            <option value="light">Light</option>
+          <select name="uitheme" id="uitheme" onchange="setUiTheme()">
+            <option value="light">Light (default)</option>
             <option value="dark">Dark</option>
           </select>
           <br/>
@@ -1801,12 +1682,12 @@ document.getElementById(iframeId).onload = function() {
           <br/>
           <p>Editor theme:</p>
           <div style="height: 200px; overflow-x: hidden; overflow-y: scroll;">
-            <ul data-role="listview" data-icon="search" name="themelist">
+            <ul data-role="listview" data-icon="search" data-mini="true" name="themelist">
               <li><a href="javascript: setTheme('ace/theme/ambiance');">Ambiance</a>
               </li>
               <li><a href="javascript: setTheme('ace/theme/chaos');">Chaos</a>
               </li>
-              <li><a href="javascript: setTheme('ace/theme/chrome');">Chrome (default)</a>
+              <li><a href="javascript: setTheme('ace/theme/chrome');">Chrome (light default)</a>
               </li>
               <li><a href="javascript: setTheme('ace/theme/clouds');">Clouds</a>
               </li>
@@ -1858,7 +1739,7 @@ document.getElementById(iframeId).onload = function() {
               </li>
               <li><a href="javascript: setTheme('ace/theme/twilight');">Twilight</a>
               </li>
-              <li><a href="javascript: setTheme('ace/theme/vibrant_ink');">Vibrant Ink</a>
+              <li><a href="javascript: setTheme('ace/theme/vibrant_ink');">Vibrant Ink (dark default)</a>
               </li>
               <li><a href="javascript: setTheme('ace/theme/xcode');">Xcode</a>
               </li>
@@ -1993,7 +1874,7 @@ document.getElementById(iframeId).onload = function() {
         <div role="main" class="ui-content">
           <ul id="errorlog" data-role="listview">
             <li>No entries</li>
-          </ul>
+          </ul> 
           <br/> <a href="javascript: clearErrors();" data-role="button">Clear</a>
         </div>
       </div>
