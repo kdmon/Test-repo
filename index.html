@@ -116,6 +116,7 @@
       #viewcontainer {
         clear: both;
         margin: 4px;
+        margin-top: 0px;
         padding: 0px;
         overflow: hidden;
         box-shadow: 0px 0px 10px 2px rgba(155, 155, 155, 0.5);
@@ -124,13 +125,16 @@
         background: url("/img/wood.png");
       }
       #tablist {
-        width: 98%;
+        width: 99%;
+        height: 45px;
+        padding-right: 10px;
         display: inline-block;
-        overflow: auto;
+        overflow-x: auto;
+        overflow-y: hidden;
         white-space: nowrap;
         //line-height: 2em;
         background: rgba(155, 155, 155, 0.2);
-        box-shadow: 0 0 10px 2px rgba(155, 155, 155, 0.5);
+        //box-shadow: 0 0 10px 2px rgba(155, 155, 155, 0.5);
       }
       #tabmenu {
         float: left;
@@ -157,6 +161,9 @@
       .ui-panel {
         margin-left: 65px;
         background: url("/img/paper.png");
+      }
+      .ui-panel-wrapper {
+        margin-right: 15px;
       }
       .menulabel {
         display: none;
@@ -226,7 +233,7 @@
         font-size: 0.9em;
       }
       .bigdashlet {
-        width: 43%;
+        width: 90%;
         min-width: 360px;
       }
       .ui-listview > .ui-li-has-count > .ui-btn,
@@ -457,7 +464,7 @@
         
         var htmlSnippet;
         htmlSnippet = '<div id="contextmenu' + currentFile + '">';
-        htmlSnippet += '<div data-role="controlgroup" data-type="horizontal" data-mini="true" style="margin-left: 5px">';
+        htmlSnippet += '<div data-role="controlgroup" data-type="horizontal" data-mini="true" style="margin: 0px;">';
         htmlSnippet += '<a class="ui-not-disabled" title="Open" data-role="button" href="#filebrowser"><i class="fa fa-folder-open fa-2x"></i> <span class="menulabel">Open</span></a>';
         htmlSnippet += '<a class="ui-not-disabled" title="Save" data-role="button" href="#commit"><i class="fa fa-save fa-2x"></i> <span class="menulabel">Save</span></a>';
         htmlSnippet += '<a class="ui-not-disabled" title="Collaborate" data-role="button" href="#collaborate"><i class="fa fa-comments fa-2x"></i> <span class="menulabel">Collaborate</span></a>';
@@ -538,7 +545,7 @@
         $("#tabmenu").css("width", totalWidth + "px");
 
         if (currentFile != "none") {
-          var totalHeight = $(window).height() - $(".ui-header").outerHeight() - $("#tablist").outerHeight() - $("#contextmenu" + currentFile).outerHeight() - 30;
+          var totalHeight = $(window).height() - $(".ui-header").outerHeight() - $("#tablist").outerHeight() - $("#contextmenu" + currentFile).outerHeight() - 25;
 
           if (editors[currentFile].running) {
             $("#editor"  + currentFile).css("width", totalWidth - appSize - 11 + "px").css("height", totalHeight + "px");
@@ -1225,6 +1232,8 @@
         
         $('#livecode').val(localStorage.liveCoding || "On").selectmenu('refresh');
         
+        $('#appsize').val(localStorage.appSize || "320").selectmenu('refresh');
+        
         $('#livecodedelay').val(localStorage.liveCodeDelay || "3000").selectmenu('refresh');
         
         $('#fontsize').val(localStorage.fontSize || "12").selectmenu('refresh');
@@ -1270,26 +1279,25 @@
         $.ajax({
           url: "https://api.github.com/users/" + account.username + "/received_events"
         }).done(function(data) {
-          var collaboratorEvents = '<li class="dashlet bigdashlet"><h3><i class="fa fa-users fa-2x"></i> Collaborator activity</h3><div style="max-height: 80px; overflow: auto;"><ul>';
+          var collaboratorEvents = '<ul>';
           $.each(data, function(index, value) {
             if (value.type == "PushEvent") {
               collaboratorEvents += '<li>' + timeSince(value.created_at) + ' ' + value.actor.login + " modified <i>" + value.repo.name + '</i>:<br/> -- ' + value.payload.commits[0].message + ' (<a href="https://github.com/' + value.repo.name + "/commit/" + value.payload.head + '" target="_blank">More</a>)</li>';
             }
           });
-          $("#dashboard").prepend(collaboratorEvents + '</ul></div></ul>');
+          $("#collaboratoractivity").prepend(collaboratorEvents + '</ul>');
         });
         // List events performed by a user
         $.ajax({
           url: "https://api.github.com/users/" + account.username + "/events"
         }).done(function(data) {
-          var yourEvents = '<li class="dashlet bigdashlet"><h3><i class="fa fa-user fa-2x"></i> Your recent activity</h3><div style="max-height: 80px; overflow: auto;"><ul>';
+          var yourEvents = '<ul>';
           $.each(data, function(index, value) {
-            console.log(value);
             if (value.type == "PushEvent") {
               yourEvents += '<li>' + timeSince(value.created_at) + ' you modified <i>' + value.repo.name + '</i>:<br/> -- ' + value.payload.commits[0].message + ' (<a href="https://github.com/' + value.repo.name + "/commit/" + value.payload.head + '" target="_blank">More</a>)</li>';
             }
           });
-          $("#dashboard").prepend(yourEvents + '</ul></div></ul>');
+          $("#dashboardactivity").prepend(yourEvents + '</ul>');
         });
       }
 
@@ -1562,19 +1570,32 @@
           <ul id="tablist" style="margin-left: 4px; margin-top:2px;">
             <li style="display:none" class="stickytab"><a href="#dashboard" onclick="$( '#tabmenu' ).tabs( 'option', 'active', 0);" data-theme="b" data-mini="true" data-role="button" style="padding-right: 0px;"><i style="position: relative; left: -8px; top: 3px;" class="fa fa-home fa-2x"></i></a>
             </li>
-            <li class="stickytab"><a href="#" id="newtab" data-theme="b" data-mini="true" data-role="button" style="padding: 5px; padding-left:8px;"><i style="position: relative; left: -4px; top: 1px;" class="fa fa-file fa-2x"></i><i style="position: relative; left: -1px; top: -2px;" class="fa fa-plus"></i></a>
+            <li class="stickytab"><a href="#" id="newtab" data-theme="b" data-mini="true" data-role="button" style="padding: 4px; padding-left:8px;"><i style="position: relative; left: -4px; top: 1px;" class="fa fa-file fa-2x"></i><i style="position: relative; left: -1px; top: -2px;" class="fa fa-plus"></i></a>
             </li>
           </ul>
           <div id="viewcontainer">
             <ul id="dashboard" style="overflow: auto; position: relative;">
             
-              <li class="dashlet">
+              <li class="dashlet bigdashlet">
                 <h2><i class="fa fa-home fa-2x"></i> Dashboard home</h2>
                 <a href="#filebrowser" data-role="button" data-inline="true"><i class="fa fa-folder-open fa-3x"></i><br/>Open file</a>
                 <a href="javascript: createEditor ('Untitled' + fileCount +  '.html', '');" data-role="button" data-inline="true"><i class="fa fa-plus fa-3x"></i><br/>New file</a>
                 <a href="#collaborate" data-role="button" data-inline="true"><i class="fa fa-comments fa-3x"></i><br/>Collaborate</a>
                 <a href="#options" data-role="button" data-inline="true"><i class="fa fa-wrench fa-3x"></i><br/>Options</a>
+                <div style="clear: both;">
+                  <div style="width: 49%; float: left;">
+                    <h3><i class="fa fa-user fa-2x"></i> Your recent activity</h3>
+                    <div id="dashboardactivity" style="max-height: 150px; overflow: auto;">
+                    </div>
+                  </div>
+                  <div style="width: 49%; float: left;">
+                    <h3><i class="fa fa-users fa-2x"></i> Collaborator activity</h3>
+                    <div id="collaboratoractivity" style="max-height: 150px; overflow: auto;">
+                    </div>
+                  </div>
+                </div>
               </li>
+              
               <li id="signinsplash" class="dashlet" style="background: rgba(155,155,250,0.2);">
                 <img src="/img/octocat.png" style="float: right; margin: 0px; width: 130px;" title="GitHub Integration">
                 <h2><i class="fa fa-cubes fa-2x"></i> Integration</h2>
@@ -1629,7 +1650,7 @@
               <option value="800">800 (Nexus 10, Kindle HD)</option>
               <option value="1024">1024 (iPad landscape)</option>
             </select>
-            <a href="#" data-mini="true" data-role="button" onclick="togglePreviewSettings();">Save</a>
+            <a href="#" data-mini="true" data-role="button" onclick="togglePreviewSettings();">Close</a>
           </center>
         </div>
 
