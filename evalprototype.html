@@ -10,10 +10,32 @@
     <link rel="stylesheet" type="text/css" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <style>
-    #ggcindications td, #ggcindications th {
+    
+    @media ( min-width: 40em ) {
+      /* Show the table header rows and set all cells to display: table-cell */
+      #ggcindications td,
+      #ggcindications th,
+      #ggcindications tbody th,
+      #ggcindications tbody td,
+      #ggcindications thead td,
+      #ggcindications thead th {
+        border: 1px solid #000;
+        display: table-cell;
+        margin: 0;
+      }
+      
+      /* Hide the labels in each cell */
+      #ggcindications td .ui-table-cell-label,
+      #ggcindications th .ui-table-cell-label {
+        display: none;
+      }
+    }
+
+    #ggcindications tr, #ggcindications th {
       border: 1px solid #000;
       text-align: left;
     }
+    
     </style>
   </head>
 
@@ -24,15 +46,24 @@
           <div style="border: 1px solid #aaa;">
             <div style="background: #0F0; white-space: nowrap; line-height: 1em;  text-align: center; font-size: 0.7em;" data-bind="style: {width: 100/questionBank.pageCount() * (questionBank.currentPage()-1) + 1 + '%'}, text:  Math.round(100/questionBank.pageCount() * (questionBank.currentPage()-1)) + 1 + '% completed' "></div>
           </div>
-          <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank.currentPageData">
-            <li>"<i data-bind="text: value"></i>" <b data-bind="text: question"></b> 
+          
+           <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank.currentPageData">
+            <li>"<i data-bind="text: value"></i>" <b data-bind="text: question"></b>
               <br/> <a href="#" data-role="button" data-bind="visible: $root.questionBank.currentPage() > 1, click: $root.questionBank.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
               <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select> <a href="#" data-theme="b" data-role="button" data-bind="visible: selected() !== 'Please select', click: $root.questionBank.moveNext" data-inline="true">Next</a>
             </li>
             <li></li>
           </ul>
+          
+          <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank.currentPageData">
+            <li>- "<i data-bind="text: value"></i>" 
+              <br/>
+              <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select>
+            </li>
+          </ul>
+          <a href="#" data-theme="b" data-role="button" data-bind="click: $root.questionBank.moveNext" data-inline="true">Next</a>
         </div>
-        <p>Please answer as fast and accurately as possible without consulting any external resources.</p>
+        <p>Please answer as fast as possible without consulting any external resources.</p>
         <iframe id="help" src="http://optimalblooduse.eu/app/#front" width="100%" style="min-height:2600px; border: 0px; border-top: 5px solid black;"></iframe>
         
         <div style="padding: 10px;border: 0px; border-top: 5px solid black;" id="ggc">
@@ -51,8 +82,9 @@
             <li>To outline how errors should be reported if they arise.</li>
           </ul>
           <p>
-           Advice on blood transfusion may be obtained from Biomedical Scientist (BMS) staff in Blood Bank, from Haematology Medical Staff and from hospital Transfusion Practitioners. <i>Blood Bank contact details not reproduced in this extract.</i>
+           Advice on blood transfusion may be obtained from Biomedical Scientist (BMS) staff in Blood Bank, from Haematology Medical Staff and from hospital Transfusion Practitioners.
           </p>
+          <b><i>[NB: Contact details not reproduced in this extract.]</i></b>
           <p>
             This policy has been prepared for the GG&amp;C Overarching Transfusion Committee and represents current standards. 
             It will be reviewed every two years to accommodate future changes in the provision of health care in GG&amp;C and in the provision of blood and blood components.
@@ -94,9 +126,11 @@
           <p>
             As CMV is a common virus and the prevalence of anti-CMV in the UK adult population is 50-60%, it
             not possible to provide CMV seronegative products for all recipients. Components that have been
-            leucocyte depleted to less than 5 x 106/unit have a significant reduction in the risk of CMV
-            transmission. <i>Section on IgA Deficiency is not reproduced in this extract.</i>
+            leucocyte depleted to less than 5 x 10^6/unit have a significant reduction in the risk of CMV
+            transmission.
           </p>
+          
+          <i><b>[NB: IgA Deficiency section not reproduced in this extract.]</b></i>
           
           <h3>Irradiated Components</h3>
           <p>
@@ -106,7 +140,7 @@
             presents with fever, rash, diarrhoea, hepatitis and pancytopenia 4-30 days after transfusion. This
             complication of transfusion is eliminated by inactivation of donor lymphocytes by irradiation. The risk
             associated with individual transfusions depends on the number and viability of contaminating
-            lymphocytes, susceptibility of the hosts immune system to their engraftment and the degree of
+            lymphocytes, susceptibility of the host's immune system to their engraftment and the degree of
             immunological disparity between donor and recipient. 
             <sup><a href="#ref2">2</a>,<a href="#ref3">3</a></sup>
           </p>
@@ -115,12 +149,14 @@
             seronegative components and the length of time these are required.
           </p>
           
-          <table id="ggcindications">
-            <tr>
-              <th>Condition</th>
-              <th>Cytomegalovirus<br/>CMV Seronegative</th>
-              <th>Irradiated</th>
-            </tr>
+          <table id="ggcindications" data-role="table">
+            <thead>
+              <tr>
+                <th>Condition:</th>
+                <th>Cytomegalovirus CMV Seronegative:</th>
+                <th>Irradiated:</th>
+              </tr>
+            </thead>
             
             <tr>
               <td>Neonates up to 28 days post EDD</td>
@@ -169,13 +205,13 @@
             <li>All intrauterine transfusions.</li>
             <li>All exchange or top-up transfusions in infants where there has been a previous intra-uterine transfusion, until 6 months after the expected delivery date.</li>
             <li>Exchange transfusion, with no previous intra-uterine transfusion; irradiated blood is recommended provided this does not unduly delay transfusion.</li>
-            <li>Proven or suspected congenital immunodeficiency states (including Severe Combined Immunodeficiency (SCID), Di Georges syndrome, Wiskott-Aldrich syndrome, purine nucleoside phosphorylase deficiency, reticular dysgenesis, cell- mediated immunodeficiency (not otherwise classified), primary T lymphocyte immunodeficiencies, adenosine deaminase deficiency, MHC Class I and II deficiency, leucocyte adhesion deficiency, immunodeficiency with eosinophilia, ataxia telangiectasia, chronic mucocutaneous candidiasis).</li>
+            <li>Proven or suspected congenital immunodeficiency states (including Severe Combined Immunodeficiency (SCID), Di George's syndrome, Wiskott-Aldrich syndrome, purine nucleoside phosphorylase deficiency, reticular dysgenesis, cell- mediated immunodeficiency (not otherwise classified), primary T lymphocyte immunodeficiencies, adenosine deaminase deficiency, MHC Class I and II deficiency, leucocyte adhesion deficiency, immunodeficiency with eosinophilia, ataxia telangiectasia, chronic mucocutaneous candidiasis).</li>
             <li>All autologous bone marrow or peripheral blood stem cell transplant recipients from start of conditioning until at least three months after transplant (or until at least six months after transplant if total body irradiation has been given).</li>
             <li>All allogeneic bone marrow or peripheral blood stem cell transplant recipients from start of conditioning until a minimum of six months after transplant; possibly longer at the discretion of the haematologist e.g. chronic GvHD.</li>
             <li>Blood transfused to allogeneic bone marrow or peripheral blood stem-cell donors for 7 days before the harvest and until after the last collection.</li>
             <li>Blood transfused to patients undergoing autologous bone marrow harvest for the 7 days before the harvest and until after the harvest.</li>
             <li>Blood transfused to patients undergoing autologous peripheral blood stem-cell mobilisation from commencement of the mobilising chemotherapy regimen and until the last collection.</li>
-            <li>Patients with Hodgkins disease, indefinitely.</li>
+            <li>Patients with Hodgkin's disease, indefinitely.</li>
             <li>Patients treated with the purine analogue drugs Fludarabine, Deoxycoformycin, Cladribine, Clofarabine and Bendamustine, indefinitely.</li>
             <li>All transfusions from first- or second-degree relatives, even if the patient is immunocompetent.</li>
             <li>All HLA-matched platelet transfusions, even if the patient is immunocompetent.</li>
@@ -445,7 +481,7 @@
             selected: ko.observable("Please select")
           },
         ]).extend({
-          paging: 1
+          paging: 4
         })
       };
       ko.applyBindings(new ViewModel());
