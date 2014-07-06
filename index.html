@@ -477,10 +477,10 @@
         htmlSnippet += '<div data-role="controlgroup" data-type="horizontal" data-mini="true" style="margin-left: 5px">';
         htmlSnippet += '<a class="ui-not-disabled" title="Save" data-role="button" href="#commit"><i class="fa fa-save fa-2x"></i> <span class="menulabel">Save</span></a>';
         htmlSnippet += '<a style="margin-right: 5px;" href="#history" title="History" data-role="button"><i class="fa fa-history fa-2x"></i> <span class="menulabel">Revert</span></a>';
-        htmlSnippet += '<a onclick="editors[fileCount].getSession().getUndoManager().undo();" href="#undo" title="Undo" data-role="button"><i class="fa fa-reply fa-2x"></i> <span class="menulabel">Undo</span></a>';
-        htmlSnippet += '<a style="margin-right: 5px;" onclick="editors[fileCount].getSession().getUndoManager().redo();" href="#redo" title="Redo" data-role="button"><i class="fa fa-share fa-2x"></i> <span class="menulabel">Redo</span></a>';
-        htmlSnippet += '<a onclick="editors[fileCount].execCommand(' + "'find'" + ');" href="#" title="Search" data-role="button" onclick="scroll(false)"><i class="fa fa-search fa-2x"></i> <span class="menulabel">Search</span></a>';
-        htmlSnippet += '<a onclick="editors[fileCount].execCommand(' + "'gotoline'" + ');" href="#" title="Go to line" data-role="button" "><i class="fa fa-terminal fa-2x"></i> <span class="menulabel">Goto line</span></a>';
+        htmlSnippet += '<a onclick="editors[currentFile].getSession().getUndoManager().undo();" href="#undo" title="Undo" data-role="button"><i class="fa fa-reply fa-2x"></i> <span class="menulabel">Undo</span></a>';
+        htmlSnippet += '<a style="margin-right: 5px;" onclick="editors[currentFile].getSession().getUndoManager().redo();" href="#redo" title="Redo" data-role="button"><i class="fa fa-share fa-2x"></i> <span class="menulabel">Redo</span></a>';
+        htmlSnippet += '<a onclick="editors[currentFile].execCommand(' + "'find'" + ');" href="#" title="Search" data-role="button" onclick="scroll(false)"><i class="fa fa-search fa-2x"></i> <span class="menulabel">Search</span></a>';
+        htmlSnippet += '<a onclick="editors[currentFile].execCommand(' + "'gotoline'" + ');" href="#" title="Go to line" data-role="button" "><i class="fa fa-terminal fa-2x"></i> <span class="menulabel">Goto line</span></a>';
         htmlSnippet += '<a style="margin-right: 5px;" href="#" title="Beautify" data-role="button" onclick="beautify();"><i class="fa fa-tasks fa-2x"></i> <span class="menulabel">Beautify code</span></a>';
         /*
         htmlSnippet += '<a onclick="editors[fileCount].execCommand(' + "'cut'" + ');"href="#" title="Cut" data-role="button" onclick="cut();"><i class="fa fa-cut fa-2x"></i> <span class="menulabel">Cut</span></a>';
@@ -532,7 +532,6 @@
         editors[fileCount].setOption("enableEmmet", true);
         editors[fileCount].getSession().setUseWrapMode(false);
         editors[fileCount].getSession().setTabSize(2);
-        editors[fileCount].getSession().setUndoManager(new UndoManager());
         // only show preview if appropriate
         //  if (mode == "ace/mode/html") { 
         editors[fileCount].getSession().on('change', function(e) {
@@ -547,10 +546,12 @@
         //}
         setTitle();
         formatLayout();
-        if (!collab) {
-          //editors[fileCount].session.setValue(value);
-          editors[fileCount].setValue(value, -1);
-        }
+        
+        //editors[fileCount].session.setValue(value);
+        editors[fileCount].setValue(value, -1);
+        editors[fileCount].getSession().setUndoManager(new UndoManager());
+        
+        
         //setTimeout(runCode, 2500);
       }
 
