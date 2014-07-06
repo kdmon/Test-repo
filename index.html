@@ -1489,14 +1489,14 @@
         //$("#errors").on("panelbeforeopen", changeLog);
         $("#shareurl").on("panelbeforeopen", function(event, ui) {
           if (document.getElementById("preview" + currentFile)) {
-            var previewUrl = openFiles[currentFile].iframeUrl;
+            var previewUrl = "http://it4se.com:8080" + openFiles[currentFile].iframeUrl;
             $("#qrcode").html('');
             var qrCode = new QRCode("qrcode", {
               text: previewUrl,
               width: 200,
               height: 200
             });
-            $('input[id=plainurl]').val(openFiles[currentFile].iframeUrl);
+            $('input[id=plainurl]').val(previewUrl);
           } else $("#qrcode").html('<h1>Sorry</h1><h3>No file to share. Please open a file first.</h3>');
         });
         // Button events
