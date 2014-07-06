@@ -458,8 +458,12 @@
         var htmlSnippet;
         htmlSnippet = '<div id="contextmenu' + currentFile + '">';
         htmlSnippet += '<div data-role="controlgroup" data-type="horizontal" data-mini="true" style="margin-left: 5px">';
+        htmlSnippet += '<a class="ui-not-disabled" title="Open" data-role="button" href="#filebrowser"><i class="fa fa-folder-open fa-2x"></i> <span class="menulabel">Open</span></a>';
         htmlSnippet += '<a class="ui-not-disabled" title="Save" data-role="button" href="#commit"><i class="fa fa-save fa-2x"></i> <span class="menulabel">Save</span></a>';
-        htmlSnippet += '<a style="margin-right: 5px;" href="#history" title="History" data-role="button"><i class="fa fa-history fa-2x"></i> <span class="menulabel">Revert</span></a>';
+        htmlSnippet += '<a class="ui-not-disabled" title="Collaborate" data-role="button" href="#collaborate"><i class="fa fa-comments fa-2x"></i> <span class="menulabel">Collaborate</span></a>';
+        htmlSnippet += '<a style="margin-right: 5px;" href="#options" title="Options" data-role="button"><i class="fa fa-wrench fa-2x"></i> <span class="menulabel">Options</span></a>';
+        
+        htmlSnippet += '<a href="#history" title="History" data-role="button"><i class="fa fa-history fa-2x"></i> <span class="menulabel">Revert</span></a>';
         htmlSnippet += '<a onclick="editors[currentFile].getSession().getUndoManager().undo();" href="#undo" title="Undo" data-role="button"><i class="fa fa-reply fa-2x"></i> <span class="menulabel">Undo</span></a>';
         htmlSnippet += '<a style="margin-right: 5px;" onclick="editors[currentFile].getSession().getUndoManager().redo();" href="#redo" title="Redo" data-role="button"><i class="fa fa-share fa-2x"></i> <span class="menulabel">Redo</span></a>';
         htmlSnippet += '<a onclick="editors[currentFile].execCommand(' + "'find'" + ');" href="#" title="Search" data-role="button" onclick="scroll(false)"><i class="fa fa-search fa-2x"></i> <span class="menulabel">Search</span></a>';
@@ -472,7 +476,7 @@
 */
         htmlSnippet += '<a id="runbutton' + fileCount + '" title="Run code" href="#" onclick="togglePreview();" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-play fa-2x"></i> <span class="menulabel">Run code</span></a>';
         htmlSnippet += '<a title="Code preview settings" class="previewsettingsbutton" id="previewsettingsbutton" href="#" onclick="togglePreviewSettings()" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-arrows-h fa-2x"></i> <span class="menulabel">Code preview settings</span></a>';
-        htmlSnippet += '<a href="#shareurl" data-role="button" class="nowrap" title="Share preview"><i class="fa fa-expand fa-2x"></i> <span class="menulabel">Share preview</span></a>';
+        htmlSnippet += '<a href="#shareurl" data-role="button" class="nowrap" title="Full screen preview"><i class="fa fa-expand fa-2x"></i> <span class="menulabel">Full screen preview</span></a>';
         htmlSnippet += '</div></div>';
         
         var iframeCode = '<iframe class="preview" name="preview' + fileCount + '" id="preview' + fileCount + '" src="javascript: ' + "'" + "Live preview window'" + '"></iframe>';
@@ -1517,7 +1521,7 @@
           <em>Editor</em>
         </span>
         <span id="account" style="float: right; display: inline; height: 1em; position: relative; top: -3px; right: 5px;"> <a href="https://github.com/login/oauth/authorize?client_id=c08a9a01c72d7b380f06&scope=user,public_repo" data-role="button" data-icon="lock">Sign in with GitHub</a>
-        </span> <a href="#share" data-rel="popup" data-position-to="window" style="display: none; float: right; padding: 4px; background: #55b; height: 1.4em; right: 120px; color: #fff; text-shadow: 0px 1px 5px #000; padding-right: 4px; text-decoration: none; border-radius: 5px; border: 1px solid #888;"><i class="fa fa-share"></i> Share preview</a>
+        </span> <a href="#share" data-rel="popup" data-position-to="window" style="display: none; float: right; padding: 4px; background: #55b; height: 1.4em; right: 120px; color: #fff; text-shadow: 0px 1px 5px #000; padding-right: 4px; text-decoration: none; border-radius: 5px; border: 1px solid #888;"><i class="fa fa-share"></i> Full screen preview</a>
         <h1>
           <span id="maintitle">Dashboard</span>
         </h1>
@@ -1526,9 +1530,9 @@
         <a href="#dashboard" onclick="$('#previewsettings').hide(); $( '#tabmenu' ).tabs( 'option', 'active', 0);">
           <div id="logo"></div>
         </a>
-        <div data-role="controlgroup" data-mini="true" style="margin-top: 25px;"> <a data-role="button" href="#filebrowser"><i class="fa fa-folder-open fa-2x"></i> <span class="menulabel">Open</span></a>
-          <a data-role="button" href="#options"><i class="fa fa-wrench fa-2x"></i> <span class="menulabel">Config</span></a>
-          <a data-role="button" href="#collaborate" data-shadow="true"><i class="fa fa-comments fa-2x"></i> <span class="menulabel">Chat</span><span id="chatcount" class="ui-li-count"></span></a>
+        <div data-role="controlgroup" data-mini="true" style="margin-top: 25px;">
+          <a style="display: none" data-role="button" href="#filebrowser"><i class="fa fa-folder-open fa-2x"></i> <span class="menulabel">Open</span></a>
+          <a style="display: none" data-role="button" href="#collaborate" data-shadow="true"><i class="fa fa-comments fa-2x"></i> <span class="menulabel">Chat</span><span id="chatcount" class="ui-li-count"></span></a>
           <a style="display: none" data-role="button" href="#errors"><i class="fa fa-warning fa-2x"></i> <span class="menulabel">Errors</span> <span id="errorcount" class="ui-li-count error"></span></a>
           <a style="display: none" data-role="button" href="#" onclick="scroll(true)"><i class="fa fa-long-arrow-up fa-2x"></i> <span class="menulabel">Scroll up</span></a>
           <a style="display: none" data-role="button" href="#" onclick="scroll(false)"><i class="fa fa-long-arrow-down fa-2x"></i> <span class="menulabel">Scroll down</span></a>
@@ -1562,17 +1566,15 @@
           </ul>
           <div id="viewcontainer">
             <ul id="dashboard" style="overflow: auto; position: relative;">
+            
               <li class="dashlet">
                 <h2><i class="fa fa-home fa-2x"></i> Dashboard home</h2>
-                <h3>Recent files</h3>
-                <ul>
-                  <li>Another path to a file.html</li>
-                  <li>A path to a file.html</li>
-                </ul> <a href="javascript: createEditor ('Untitled' + fileCount +  '.html', '');" data-role="button" data-inline="true"><i class="fa fa-plus"></i> New file</a>
-                <a href="#filebrowser" data-role="button" data-inline="true"><i class="fa fa-folder-open"></i> Open file</a>
-                <a href="javascript: openSample('index.html');" data-role="button" data-inline="true"><i class="fa fa-edit"></i> Edit the editor!</a>
+                <a href="#filebrowser" data-role="button" data-inline="true"><i class="fa fa-folder-open fa-3x"></i><br/>Open file</a>
+                <a href="javascript: createEditor ('Untitled' + fileCount +  '.html', '');" data-role="button" data-inline="true"><i class="fa fa-plus fa-3x"></i><br/>New file</a>
+                <a href="#collaborate" data-role="button" data-inline="true"><i class="fa fa-comments fa-3x"></i><br/>Collaborate</a>
+                <a href="#options" data-role="button" data-inline="true"><i class="fa fa-wrench fa-3x"></i><br/>Options</a>
               </li>
-              <li class="dashlet" style="background: rgba(155,155,250,0.2);">
+              <li id="signinsplash" class="dashlet" style="background: rgba(155,155,250,0.2);">
                 <img src="/img/octocat.png" style="float: right; margin: 0px; width: 130px;" title="GitHub Integration">
                 <h2><i class="fa fa-cubes fa-2x"></i> Integration</h2>
                 <p>Sign in to edit your files on <a href="http://github.com" target="_blank">GitHub</a>.</p>
@@ -1808,12 +1810,12 @@
       </div>
       <div data-role="panel" id="collaborate" data-position="left" data-animate="false" data-dismissible="false" data-swipe-close="false">
         <div data-role="header">
-          <h3>Chat</h3> <a href="#" data-rel="close" data-role="button" data-iconpos="notext" data-icon="arrow-l" class="ui-btn-right">Close</a>
+          <h3>Collaborate</h3> <a href="#" data-rel="close" data-role="button" data-iconpos="notext" data-icon="arrow-l" class="ui-btn-right">Close</a>
         </div>
         <div role="main" class="ui-content">
           <div class="ui-grid-a">
             <div class="ui-block-a" style="width: 72%">
-              <input type="text" id="chatroom" value="General chat room">
+              <input type="text" id="chatroom" value="Public channel">
             </div>
             <div class="ui-block-b" style="width: 28%"> <a data-role="button" id="roombutton" data-mini="true" onclick="toggleChat();">Join</a>
             </div>
@@ -1831,7 +1833,7 @@
               <video id="localVideo"></video>
               <div id="remoteVideos"></div>
             </div>
-            <div id="chathistory" style="clear: both; height: 200px; max-height: 200px; font-size: 0.7em; padding: 2px; border: 1px solid #aaa; overflow:auto;">
+            <div id="chathistory" style="background: rgba(155,155,155,0.5); color: #000; clear: both; height: 200px; max-height: 200px; font-size: 0.7em; padding: 2px; border: 1px solid #aaa; overflow:auto;">
               <p>Chat started.</p>
             </div>
             <div class="ui-grid-a">
@@ -1857,10 +1859,11 @@
       </div>
       <div data-role="panel" id="pickrepo" data-position="left" data-animate="false" data-dismissible="false" data-swipe-close="false">
         <div data-role="header">
-          <h3>Save file</h3> <a href="#" data-rel="close" data-role="button" data-iconpos="notext" data-icon="arrow-l" class="ui-btn-right">Close</a>
+          <h3>Save file</h3>
+          <a href="#" data-rel="close" data-role="button" data-icon="arrow-l" class="ui-btn-right">Close</a>
         </div>
         <div role="main" class="ui-content">
-          <h3>Select a repo</h3>
+          <h3>Select repository</h3>
           <ul id="repolist" data-role="listview" data-inset="true" style="max-height: 400px; clear: both; overflow-y: auto;">
             <li>No repos found</li>
           </ul>
