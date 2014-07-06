@@ -47,6 +47,10 @@
         padding: 0px;
       }
       
+      .stickytab {
+        float: left;
+      }
+      
       #tablist,
       #tablist li {
         list-style-type: none;
@@ -344,22 +348,7 @@
         // create view associated with tab
         $("#viewcontainer").append('<div id="view' + tabCount + '"></div>');
         tabs.tabs("refresh");
-        // listen for tab delete clicks
-        $("#tabitem" + tabCount).on('click', ".closetab", function(event) {
-          event.preventDefault();
-          event.stopImmediatePropagation();
-          editors[currentFile].destroy();
-          var element = $(this).parent().attr('href');
-          $(element).remove();
-          $(this).parent().parent().remove();
-          $("#tabmenu").tabs("refresh");
-          if ($("#tablist li").length > 2) {
-            $("#tablist li:last-child a").trigger('click');
-          } else {
-            $('#tabmenu').tabs('option', 'active', 0)
-          }
-          formatLayout();
-        });
+        
         // listen for tab click events
         $("#tabitem" + tabCount).on('click', function() {
           // call function to swap file context
@@ -388,6 +377,7 @@
         });
         //switch to new tab
         $('#tabitem' + tabCount).trigger('click');
+        return (tabCount)
       }
 
       function changeFileContext(file) {
@@ -446,18 +436,25 @@
           "collaboration": collab,
           "modified": false
         };
+        
+        
         var iframeUrl = "/tmp/" + randomString(20);
         if (user && repo && path && file) {
           iframeUrl = "/" + user + "/" + repo + "/master" + path + file;
         }
+        
+        openFiles[fileCount].iframeUrl = iframeUrl;
+        
+        currentFile = fileCount;
+        var tabCount = addTab(file, fileCount);
+        
         if (collab) {
-          startCollaboration(collab, fileCount, false);
+          startCollaboration(tabCount, collab, fileCount, false);
         } else {
-          startCollaboration(encodeURIComponent(iframeUrl), fileCount, true);
+          startCollaboration(tabCount, encodeURIComponent(iframeUrl), fileCount, true);
           // startCollaboration (GitWrap._base64_encode(iframeUrl), fileCount, true);
         }
-        currentFile = fileCount;
-        addTab(file, fileCount);
+        
         var htmlSnippet;
         htmlSnippet = '<div id="contextmenu' + currentFile + '">';
         htmlSnippet += '<div data-role="controlgroup" data-type="horizontal" data-mini="true" style="margin-left: 5px">';
@@ -478,7 +475,7 @@
         htmlSnippet += '<a href="#shareurl" data-role="button" class="nowrap" title="Share preview"><i class="fa fa-expand fa-2x"></i> <span class="menulabel">Share preview</span></a>';
         htmlSnippet += '</div></div>';
         
-        var iframeCode = '<iframe class="preview" src="' + iframeUrl + '" name="preview' + fileCount + '" id="preview' + fileCount + '" src="javascript: ' + "'" + "Live preview window'" + '"></iframe>';
+        var iframeCode = '<iframe class="preview" name="preview' + fileCount + '" id="preview' + fileCount + '" src="javascript: ' + "'" + "Live preview window'" + '"></iframe>';
         
         $("#view" + fileCount).append('<div id="file' + fileCount + '">' + htmlSnippet + '<div id="editor' + fileCount + '" class="editor"></div>' + iframeCode).trigger("create");
         
@@ -821,7 +818,7 @@
       function setFontSize() {
         var fontSize = $("#fontsize").slider().val();
         localStorage.fontSize = fontSize;
-        $(".editor").css("font-size", fontsize + "px");
+        $(".editor").css("font-size", fontSize + "px");
       }
 
       function setLiveCoding() {
@@ -1021,20 +1018,13 @@
         var iframeId = 'preview' + currentFile;
         var ifrm = document.getElementById(iframeId);
         ifrm = (ifrm.contentWindow) ? ifrm.contentWindow : (ifrm.contentDocument.document) ? ifrm.contentDocument.document : ifrm.contentDocument;
-        var currentUrl = document.getElementById(iframeId).src;
         
         if (stop) {
-          ifrm.document.open();
-          ifrm.document.write('<h1>Execution stopped</h1>');
-          ifrm.document.close();
+          ifrm.location.href = '/stopped.html';
         }
         
         else {
-          
-          ifrm.document.open();
-          ifrm.document.write('<h1>Executing...</h1>');
-          ifrm.location.href = currentUrl;
-          ifrm.document.close();
+          ifrm.location.href = openFiles[currentFile].iframeUrl;
           
           ifrm.addEventListener('mouseup', function(event) {
             var searchTerm = ifrm.getSelection().toString();
@@ -1146,11 +1136,12 @@
         else $("#" + id).hide();
       }
 
-      function startCollaboration(url, index, preserveContent, username, cursorColor) {
+      function startCollaboration(tabCount, url, index, preserveContent, username, cursorColor) {
         if (!username) {
           username = account.username ? account.username : 'Guest' + Math.floor(Math.random() * 1000000);
         }
         if (!cursorColor) color = "red";
+        
         connection.open(url, 'text', function(error, doc) {
           doc.attach_ace(editors[index], preserveContent, username, color);
           doc.shout({
@@ -1176,6 +1167,26 @@
                 break;
             }
           });
+            
+          // listen for tab delete clicks
+          $("#tabitem" + tabCount).on('click', ".closetab", function(event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+    				doc.close();
+            doc.detach_ace();
+            editors[currentFile].destroy();
+            var element = $(this).parent().attr('href');
+            $(element).remove();
+            $(this).parent().parent().remove();
+            $("#tabmenu").tabs("refresh");
+            if ($("#tablist li").length > 2) {
+              $("#tablist li:last-child a").trigger('click');
+            } else {
+              $('#tabmenu').tabs('option', 'active', 0)
+            }
+            formatLayout();
+          });
+          
           editors[index].selection.on("changeCursor", function(data) {
             var position = editors[index].selection.getCursor();
             doc.shout({
@@ -1311,7 +1322,7 @@
        // end function declarations
        // Begin event bindings
        // Window events
-      $(window).resize(formatLayout());
+      $(window).resize(formatLayout);
       $(window).on("orientationchange", formatLayout());
       window.onload = function () {toggleLoading(false); restorePreferences(); };
       window.onbeforeunload = function() {
