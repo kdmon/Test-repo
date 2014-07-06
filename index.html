@@ -1473,14 +1473,14 @@
         //$("#errors").on("panelbeforeopen", changeLog);
         $("#shareurl").on("panelbeforeopen", function(event, ui) {
           if (document.getElementById("preview" + currentFile)) {
-            var previewUrl = document.getElementById("preview" + currentFile).src;
+            var previewUrl = openFiles[currentFile].iframeUrl;
             $("#qrcode").html('');
             var qrCode = new QRCode("qrcode", {
               text: previewUrl,
               width: 200,
               height: 200
             });
-            $('input[id=plainurl]').val(previewUrl);
+            $('input[id=plainurl]').val(openFiles[currentFile].iframeUrl);
           } else $("#qrcode").html('<h1>Sorry</h1><h3>No file to share. Please open a file first.</h3>');
         });
         // Button events
@@ -1870,7 +1870,7 @@
       <div data-role="panel" data-display="overlay" id="shareurl" data-position="right" data-animate="false" data-dismissible="true" data-swipe-close="false">
         
         <div role="main" class="ui-content" style="background: #fff; color: #000; text-shadow: none;" >
-          <h3>Share preview</h3>
+          <h3>Full screen preview</h3>
           <p>Scan the QR code to open a preview on your mobile device.</p>
           <center>
             <div id="qrcode" style="width:200px; height: 200px; clear: both; display: block; border: 10px white solid;"></div>
