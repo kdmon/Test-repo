@@ -320,11 +320,12 @@
       var documents = []; // shareJS
       var currentFile = 'none'; // important in tracking opened file.
       var editors = {}; // array of editors, takes currentFile as index.
-      var fileCount = 0; // tracks tabs and files.
       var fileBrowser = {
           repository: '',
           path: '/'
         } // tracks recent file history.
+      var fileCount = 0; // tracks tabs and files.
+      var fileWhitelist = ['.htm','.html','.txt','.json','.js','.css','.md'];
       var firefox = 'firefox'; //$.browser.mozilla; Should use feature detection with jqm 1.4.
       var fontSize = localStorage.fontSize || 12;
       var liveCoding = localStorage.liveCoding || true; // enable by default
@@ -920,17 +921,39 @@
           var path = "/" + fileBrowser.owner + "/" + fileBrowser.repository + "/master" + fileBrowser.path + file;
           
           // check if already open, and if so switch to it
-          var match = -1;
+          var opened = false;
+          var whiteListed = false;
           
           $.each(openFiles, function(index, value) {
             if (path == "/" + value.username + "/" + value.repository + "/master" + value.path + value.filename) {
-              match = index;
+              opened = index;
               return (false);
             }
           });
           
-          if (match == -1) pullProxy(path);
-          else alert ("This file is already open!");
+          $.each(fileWhitelist, function(index, value) {
+            
+            if (file.toLowerCase().indexOf(value) > -1) {
+              whiteListed = true;
+              return (false);
+            }
+          });
+          
+          if (opened) {
+            alert ("This file is already open!");
+          }
+          else if (!whiteListed) {
+            if (confirm ("This file format cannot be edited.\nWould you like to display the file in a new window?")){
+              window.open("http://it4se.com:8080" + path, "_blank");
+            } 
+            else {
+              return;
+              
+            }
+          }
+          else {
+            pullProxy(path);
+          }
         }
       }
 
