@@ -943,12 +943,13 @@
             alert ("This file is already open!");
           }
           else if (!whiteListed) {
-            if (confirm ("This file format cannot be edited.\nWould you like to display the file in a new window?")){
+            if (confirm ("This file may be unsuitable for text editing.\nWould you like to preview the file in a new window instead?")){
               window.open("http://it4se.com:8080" + path, "_blank");
             } 
             else {
-              return;
-              
+              if (confirm ("Would you still like to try to open the file in the text editor?")){
+                pullProxy(path);
+              } 
             }
           }
           else {
