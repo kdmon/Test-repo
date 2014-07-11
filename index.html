@@ -1379,10 +1379,7 @@
       $(window).on("orientationchange", formatLayout());
       window.onload = function () {toggleLoading(false); restorePreferences(); };
       window.onbeforeunload = function() {
-        if ("Unsaved changes" == "Unsaved changes") {
-          alert("Did you remember to save? If not, 'stay on the page' and hit commit.");
           return ("Did you remember to save? If not, 'stay on the page' and hit commit.");
-        }
       }
       window.onerror = function(msg, url, num) {
         $("#errorlog").prepend("<p>Error: " + msg + "\nURL: " + url + "\nLine: " + num + "</p>");
