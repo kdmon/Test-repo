@@ -1,0 +1,967 @@
+
+<!doctype html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <title>Physics</title>
+    <script src="Box2dWeb-2.1.a.3.js"></script>
+    <script src="jquery-1.8.2.min.js"></script>
+    <script src="stats.min.js"></script>
+    <script src="anglevel.js"></script>
+    <script src="anglevel2.js"></script>
+    
+    <style>z
+      body {
+        -webkit-transform: translateZ(0);
+      }
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      /* to remove the top and left whitespace */
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+      }
+      /* just to be sure these are full screen*/
+      canvas {
+        display: block;
+      }
+      /* To remove the scrollbars */
+    </style>
+    
+    <script>
+      // TEMPLATE FOR A PHYSICS BASED APP GAME
+       //1 metre of box2d equals x pixels on canvas
+      var scale = 32;
+      var debugDraw = false;
+      var tilewidth;
+      var tileheight;
+      var mouseJoint = null;
+      var travelTime = null;
+      var mouseOriginX;
+      var mouseOriginY;
+      var ready = true;
+      var timers = {};
+      var objCount = 0;
+      var buildList = {};
+      var removeList = {};
+      var textures = {
+        "default": {
+          x: 0,
+          y: 0
+        }
+      };
+      
+       // Method to remove index from array
+      Array.prototype.unset = function(value) {
+        if (this.indexOf(value) != -1) { // Make sure the value exists
+          this.splice(this.indexOf(value), 1);
+        }
+      }
+      
+       // World objects
+      var b2Vec2 = Box2D.Common.Math.b2Vec2,
+        b2BodyDef = Box2D.Dynamics.b2BodyDef,
+        b2Body = Box2D.Dynamics.b2Body,
+        b2FixtureDef = Box2D.Dynamics.b2FixtureDef,
+        b2Fixture = Box2D.Dynamics.b2Fixture,
+        b2World = Box2D.Dynamics.b2World,
+        b2MassData = Box2D.Collision.Shapes.b2MassData,
+        b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape,
+        b2CircleShape = Box2D.Collision.Shapes.b2CircleShape,
+        b2MouseJointDef = Box2D.Dynamics.Joints.b2MouseJointDef,
+        b2RevoluteJointDef = Box2D.Dynamics.Joints.b2RevoluteJointDef;
+
+      function bTest(intervalRate, adaptive, width, height) {
+        this.intervalRate = parseInt(intervalRate);
+        this.adaptive = adaptive;
+        this.width = width;
+        this.height = height;
+        this.bodiesMap = {};
+        this.world = new b2World(new b2Vec2(0, 0), //gravity
+          true //allow sleep
+        );
+        this.fixDef = new b2FixtureDef;
+        this.fixDef.density = 1.0;
+        this.fixDef.friction = 1;
+        this.fixDef.restitution = 0;
+      }
+      bTest.prototype.update = function() {
+        var start = Date.now();
+        var stepRate = (this.adaptive) ? (Date.now() - this.lastTimestamp) / 1000 : (1 / this.intervalRate);
+        this.world.Step(stepRate, //frame-rate
+          1, //velocity iterations
+          1 //position iterations
+        );
+        this.world.ClearForces();
+        return (Date.now() - start);
+      }
+      bTest.prototype.getState = function() {
+        var state = {};
+        for (var b = this.world.GetBodyList(); b; b = b.m_next) {
+          if (b.IsActive() && typeof b.GetUserData() !== 'undefined' && b.GetUserData() != null) {
+            state[b.GetUserData()] = this.getBodySpec(b);
+          }
+        }
+        return state;
+      }
+      bTest.prototype.getBodySpec = function(b) {
+        return {
+          x: b.GetPosition().x,
+          y: b.GetPosition().y,
+          a: b.GetAngle(),
+          c: {
+            x: b.GetWorldCenter().x,
+            y: b.GetWorldCenter().y
+          }
+        };
+      }
+      bTest.prototype.setAngle = function(bodyId, angle, velocity) {
+        velocity = (velocity) ? velocity : 0;
+        var b = this.bodiesMap[bodyId];
+        b.SetAngularVelocity(velocity);
+        b.SetAngle(angle);
+        //console.log(b.GetPosition());
+        //b.SetTransform(data, angle);
+      }
+      bTest.prototype.setPosition = function(bodyId, position) {
+        var b = this.bodiesMap[bodyId];
+        b.SetPosition(position);
+      }
+      bTest.prototype.getSpeed = function(bodyId) {
+        var body = this.bodiesMap[bodyId];
+        return ((Math.round(10 * Math.sqrt(Math.pow(body.GetLinearVelocity().x, 2) + Math.pow(body.GetLinearVelocity().y, 2)))) / 10).toFixed(1);
+      }
+      bTest.prototype.getVelocity = function(bodyId) {
+        var body = this.bodiesMap[bodyId];
+        return ({
+          x: body.GetLinearVelocity().x,
+          y: body.GetLinearVelocity().y
+        });
+      }
+      bTest.prototype.getVelocityAngle = function(bodyId) {
+        var body = this.bodiesMap[bodyId];
+        var angleRad = Math.atan2(body.GetLinearVelocity().x, -body.GetLinearVelocity().y);
+        if (angleRad < 0) {
+          angleRad += 2 * Math.PI;
+        }
+        var angle = angleRad * 180 / Math.PI;
+        return (angle);
+      }
+      bTest.prototype.removeBody = function(id) {
+        this.world.DestroyBody(this.bodiesMap[id]);
+      }
+      bTest.prototype.setBody = function(entity) {
+        var bodyDef = new b2BodyDef;
+        if (entity.rolling) {
+          
+          bodyDef.angularDamping = 1.2;
+        }
+        if (entity.type == 'fixture') {
+          
+          bodyDef.type = b2Body.b2_staticBody;
+        } else {
+          bodyDef.type = b2Body.b2_dynamicBody;
+        }
+        bodyDef.position.x = entity.x;
+        bodyDef.position.y = entity.y;
+        bodyDef.userData = entity.id;
+        bodyDef.angle = entity.angle;
+        bodyDef.density = entity.mass;
+        var body = this.registerBody(bodyDef);
+        if (entity.radius) {
+          this.fixDef = new b2FixtureDef;
+          this.fixDef.density = entity.mass;
+          //this.fixDef.friction = entity.friction;
+          //this.fixDef.restitution = entity.restitution;
+          this.fixDef.shape = new b2CircleShape(entity.radius);
+          body.CreateFixture(this.fixDef);
+        } else if (entity.polys) {
+          for (var j = 0; j < entity.polys.length; j++) {
+            var points = entity.polys[j];
+            var vecs = [];
+            for (var i = 0; i < points.length; i++) {
+              var vec = new b2Vec2();
+              vec.Set(points[i].x, points[i].y);
+              vecs[i] = vec;
+            }
+            this.fixDef.shape = new b2PolygonShape;
+            this.fixDef.shape.SetAsArray(vecs, vecs.length);
+            body.CreateFixture(this.fixDef);
+          }
+        } else {
+          this.fixDef.shape = new b2PolygonShape;
+          this.fixDef.shape.SetAsBox(entity.width, entity.height);
+          this.fixDef.density = entity.mass;
+          body.CreateFixture(this.fixDef);
+        }
+      }
+      bTest.prototype.setBodies = function(bodyEntities) {
+        for (var id in bodyEntities) {
+          this.setBody(bodyEntities[id]);
+        }
+        this.ready = true;
+      }
+      bTest.prototype.registerBody = function(bodyDef) {
+        var body = this.world.CreateBody(bodyDef);
+        this.bodiesMap[body.GetUserData()] = body;
+        return body;
+      }
+      bTest.prototype.addContactListener = function(callbacks) {
+        var listener = new Box2D.Dynamics.b2ContactListener;
+        if (callbacks.BeginContact) listener.BeginContact = function(contact) {
+          callbacks.BeginContact(contact.GetFixtureA().GetBody().GetUserData(), contact.GetFixtureB().GetBody().GetUserData());
+        }
+        if (callbacks.EndContact) listener.EndContact = function(contact) {
+          callbacks.EndContact(contact.GetFixtureA().GetBody().GetUserData(), contact.GetFixtureB().GetBody().GetUserData());
+        }
+        if (callbacks.PostSolve) listener.PostSolve = function(contact, impulse) {
+          callbacks.PostSolve(contact.GetFixtureA().GetBody().GetUserData(), contact.GetFixtureB().GetBody().GetUserData(), impulse.normalImpulses[0]);
+        }
+        this.world.SetContactListener(listener);
+      }
+      bTest.prototype.addRevoluteJoint = function(body1Id, body2Id, params) {
+        var revolute_joint = new b2RevoluteJointDef();
+        revolute_joint.bodyA = box.bodiesMap[body1Id];
+        revolute_joint.bodyB = box.bodiesMap[body2Id];
+        var xvec = box.bodiesMap[body1Id].GetPosition().x - box.bodiesMap[body2Id].GetPosition().x;
+        var yvec = box.bodiesMap[body1Id].GetPosition().y - box.bodiesMap[body2Id].GetPosition().y;
+        //        revolute_joint.localAnchorA = box.bodiesMap[body1Id];
+        revolute_joint.localAnchorA = new b2Vec2(-xvec, -yvec);
+        revolute_joint.motorSpeed = params.motorSpeed;
+        revolute_joint.maxMotorTorque = params.maxMotorTorque;
+        revolute_joint.enableMotor = true;
+        this.world.CreateJoint(revolute_joint);
+      }
+      bTest.prototype.applyImpulse = function(bodyId, degrees, power) {
+        var body = this.bodiesMap[bodyId];
+        body.ApplyImpulse(new b2Vec2(Math.cos(degrees * (Math.PI / 180)) * power / scale, Math.sin(degrees * (Math.PI / 180)) * power / scale), body.GetWorldCenter());
+      }
+    </script>
+    
+    
+    <script>
+      // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+      window.requestAnimFrame = (function() {
+        return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback, element) {
+          window.setTimeout(callback, 1000 / 60);
+        };
+      })();
+    </script>
+  </head>
+
+  <body>
+    <canvas id="c0" width="100%" height="100%"></canvas>
+    <script>
+      function Entity(id, x, y, angle, center, texture, type, alpha, mass) {
+        this.id = id;
+        this.x = x;
+        this.y = y;
+        this.angle = angle || 0;
+        this.center = center;
+        this.texture = texture || "default";
+        this.type = type;
+        this.alpha = alpha;
+        this.mass = (mass > 0) ? mass : 0.2;
+        this.isHit = false;
+      }
+      Entity.prototype.update = function(state) {
+        this.x = state.x;
+        this.y = state.y;
+        this.center = state.c;
+        this.angle = state.a;
+      }
+      Entity.prototype.hit = function(impulse, source) {
+        if (!impulse || !source) return;
+        this.isHit = true;
+        if (this.id == "player" && source.id == "player") {}
+        else if (this.id == "player" && source.id == "goal") {
+          alert ("Well done you won!");
+          // bug: todo: fix: can trigger during simulation step, thus crash. 
+          // Add to event list to be executed on next frame.
+          //init(); //box.setPosition("player", new b2Vec2(0,0));
+          scene.load(levelmap2);
+        }
+        
+      }
+      
+      Entity.prototype.cull = function() {
+        var viewBounds = {
+          x: box.bodiesMap["player"].GetPosition().x - canvasWidth / scale / scene.zoom / 2,
+          x2: box.bodiesMap["player"].GetPosition().x + canvasWidth / scale / scene.zoom / 2,
+          y: box.bodiesMap["player"].GetPosition().y - canvasHeight / scale / scene.zoom / 2,
+          y2: box.bodiesMap["player"].GetPosition().y + canvasHeight / scale / scene.zoom / 2
+        };
+        if (this.x < viewBounds.x || this.x > viewBounds.x2 || this.y < viewBounds.y || this.y > viewBounds.y2) return true;
+        return false;
+      }
+      Entity.prototype.draw = function(ctx) {
+        // show center of gravity for all objects
+        
+        if (debugDraw) {
+      ctx.fillStyle = 'black';
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, 4/scale, 0, Math.PI * 2, true);
+      ctx.closePath();
+      ctx.fill();
+      
+      ctx.fillStyle = 'yellow';
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, 2/scale, 0, Math.PI * 2, true);
+      ctx.closePath();
+      ctx.fill();
+      
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = "yellow";
+      ctx.font="1px Arial";
+      ctx.fillText(this.id,this.x,this.y);
+
+      if (this.isHit) {
+        
+      ctx.fillStyle = 'black';
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, 4/scale, 0, Math.PI * 2, true);
+      ctx.closePath();
+      ctx.fill();
+      
+      ctx.fillStyle = 'yellow';
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, 2/scale, 0, Math.PI * 2, true);
+      ctx.closePath();
+      ctx.fill();
+        }
+          
+        }
+      }
+      Entity.build = function(def) {
+        if (def.radius) {
+          return new CircleEntity(def.id, def.x, def.y, def.angle, NULL_CENTER, def.texture, def.radius, def.type, def.alpha, def.mass, def.rolling, def.lifespan);
+        } else if (def.polys) {
+          return new PolygonEntity(def.id, def.x, def.y, def.angle, NULL_CENTER, def.texture, def.polys, def.type, def.alpha, def.mass);
+        } else {
+          return new RectangleEntity(def.id, def.x + def.width / 2, def.y + def.height / 2, def.angle, NULL_CENTER, def.texture, def.width / 2, def.height / 2, def.type, def.alpha, def.mass);
+        }
+      }
+
+      function CircleEntity(id, x, y, angle, center, texture, radius, type, alpha, mass, rolling, lifespan) {
+        texture = texture || 'default';
+        Entity.call(this, id, x, y, angle, center, texture, type, alpha, mass);
+        this.radius = radius;
+        this.rolling = rolling;
+        this.lifespan = framecount + lifespan * 60;
+      }
+      CircleEntity.prototype = new Entity();
+      CircleEntity.prototype.constructor = CircleEntity;
+      CircleEntity.prototype.draw = function(ctx) {
+        // fixtures and joints don't have textures!
+        if (this.type == 'fixture' || this.type == 'joint') {
+          return
+        };
+        //this.radius = (this.radius * TILESIZE) * CAMERA.fov;
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
+        ctx.translate(-(this.x), -(this.y));
+        switch (this.id) {
+          case "player":
+            ctx.drawImage(playerSprite, 0, 0, 55, 55, this.x - this.radius, this.y - this.radius, this.radius * 2, this.radius * 2);
+            break;
+          default:
+          break;
+        }
+        ctx.restore();
+        Entity.prototype.draw.call(this, ctx);
+      }
+
+      function RectangleEntity(id, x, y, angle, center, texture, width, height, type, alpha, mass) {
+        Entity.call(this, id, x, y, angle, center, texture, type, alpha, mass);
+        this.width = width;
+        this.height = height;
+      }
+      RectangleEntity.prototype = new Entity();
+      RectangleEntity.prototype.constructor = RectangleEntity;
+      RectangleEntity.prototype.draw = function(ctx) {
+        // fixtures and joints don't have textures!
+        if (this.type == 'fixture' || this.type == 'joint') {
+          return
+        };
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
+        ctx.translate(-(this.x), -(this.y));
+        
+        ctx.restore();
+        Entity.prototype.draw.call(this, ctx);
+      }
+
+      function PolygonEntity(id, x, y, angle, center, texture, polys, type) {
+        Entity.call(this, id, x, y, angle, center, texture, type);
+        this.polys = polys;
+      }
+      PolygonEntity.prototype = new Entity();
+      PolygonEntity.prototype.constructor = PolygonEntity;
+      PolygonEntity.prototype.draw = function(ctx) {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
+        ctx.translate(-(this.x), -(this.y));
+        ctx.fillStyle = this.texture;
+        for (var i = 0; i < this.polys.length; i++) {
+          var points = this.polys[i];
+          ctx.beginPath();
+          ctx.moveTo(this.x + points[0].x, this.y + points[0].y);
+          for (var j = 1; j < points.length; j++) {
+            ctx.lineTo(points[j].x + this.x, points[j].y + this.y);
+          }
+          ctx.lineTo(this.x + points[0].x, this.y + points[0].y);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+        }
+        ctx.restore();
+        Entity.prototype.draw.call(this, ctx);
+      }
+      
+      
+      
+      
+      
+      var canvas = document.getElementById("c0");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      var ctx = document.getElementById("c0").getContext("2d");
+      ctx.scale(scale, scale);
+      var canvasWidth = ctx.canvas.width;
+      var canvasHeight = ctx.canvas.height;
+       // resize the canvas to fill browser window dynamically
+      window.addEventListener('resize', function() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        ctx.scale(scale, scale);
+        canvasWidth = ctx.canvas.width;
+        canvasHeight = ctx.canvas.height;
+      });
+      var airbubbles;
+      var jointsList = [];
+      var staticBodies = [];
+      var initialState = [];
+      var NULL_CENTER = {
+        x: null,
+        y: null
+      };
+      var world = {};
+      var bodiesState = null;
+      var box = null;
+      var running = true;
+      var start = false;
+      var restart = false;
+      
+       // textures
+
+      var playerSprite = new Image;
+      playerSprite.src = "playersprite.png";
+      
+       // animation counters
+      var acount = 0;
+      var framecount = 0;
+
+      function init() {
+        score = 0;
+        scene.reachedTarget = true;
+        world = {};
+        // 1. Add static bodies
+        for (var i = 0; i < staticBodies.length; i++) {
+          world[staticBodies[i].id] = Entity.build(staticBodies[i]);
+        }
+        // 2. Then dynamic bodies
+        for (var i = 0; i < initialState.length; i++) {
+          world[initialState[i].id] = Entity.build(initialState[i]);
+        }
+        // frame rate 60 fps
+        box = new bTest(60, false, canvasWidth, canvasHeight);
+        box.setBodies(world);
+        // 3. Finally joints 
+        var joint = new b2RevoluteJointDef();
+        for (var i = 0; i < jointsList.length; i++) {
+          box.addRevoluteJoint(jointsList[i].bodya, jointsList[i].bodyb, {
+            motorSpeed: 5,
+            maxMotorTorque: 50
+          });
+        }
+        // listen for collisions
+        box.addContactListener({
+          BeginContact: function(idA, idB) {},
+          PostSolve: function(idA, idB, impulse) {
+            //console.log('p');
+            if (impulse < 0.01) return;
+            var entityA = world[idA];
+            var entityB = world[idB];
+            entityA.hit(impulse, entityB);
+            entityB.hit(impulse, entityA);
+          }
+        });
+      
+        (function loop() {
+          stats.begin();
+          if (start) {
+            //box.applyImpulse("player", parseInt(angleElem.value), parseInt(powerElem.value));
+            start = false;
+          }
+          if (restart) {
+            init();
+            restart = false;
+          }
+          requestAnimFrame(loop);
+          framecount++;
+          cullObjects();
+          
+          draw();
+          step();
+          //if (Math.random () > 0.95) 
+          moveObjects();
+          stats.end();
+          //setTimeout(function () {loop();}, 1000/60);
+        })()
+        
+      }
+      var DRAGSTART = {
+        x: 0,
+        y: 0
+      };
+      var DRAGSTOP = {
+        x: 0,
+        y: 0
+      };
+      var DRAWING = false;
+       // detect touch capabilities
+      var touchAvailable = ('createTouch' in document) || ('ontouchstart' in window);
+       // attach the touchstart, touchmove, touchend event listeners.
+      if (touchAvailable) {
+        canvas.addEventListener('touchstart', function(event) {
+          movePlayer(event.touches[0].pageX, event.touches[0].pageY);
+        }, false);
+        canvas.addEventListener('touchmove', function(event) {
+          movePlayer(event.touches[0].pageX, event.touches[0].pageY);
+        }, false);
+        /*
+        canvas.addEventListener('touchmove', function (event) {
+            updateTarget(event.touches[0].pageX, event.touches[0].pageY);
+          },false);
+        canvas.addEventListener('touchend', function (event) {
+          releasePlayer();
+        },false);*/
+      }
+       // attach the mousedown, mousemove, mouseup event listeners.
+       else {
+        canvas.addEventListener('mousedown', function(event) {
+          // left click
+          if (event.which == 1) {
+            movePlayer(event.pageX, event.pageY);
+          }
+        }, false);
+        canvas.addEventListener('mousemove', function(event) {
+          movePlayer(event.pageX, event.pageY);
+        }, false);
+        canvas.addEventListener('mouseup', function(event) {}, false);
+      }
+
+      function movePlayer(x, y) {
+
+        var xcomp = box.bodiesMap["player"].GetPosition().x;
+        var ycomp = box.bodiesMap["player"].GetPosition().y;
+        scene.targetx = (x / scale / scene.zoom) - scene.camerax + xcomp;
+        scene.targety = (y / scale / scene.zoom) - scene.cameray + ycomp;
+        world["cursor"] = Entity.build({
+          id: "cursor",
+          x: scene.targetx,
+          y: scene.targety,
+          radius: 0.5,
+          texture: 'cross',
+          type: "rolling",
+          alpha: 1,
+          mass: 2
+        });
+        scene.reachedTarget = false;
+      }
+
+      function updateTarget(x, y) {
+        //console.log (mouseJoint);
+        if (mouseJoint) {
+          var targetx = mouseOriginX - x;
+          var targety = mouseOriginY - y;
+          var targetx = (canvasWidth / 2) - x;
+          var targety = (canvasHeight / 2) - y;
+          //console.log (targetx + " " + targety);
+          mouseJoint.SetTarget(new b2Vec2(targetx, targety));
+        }
+      }
+
+      function releasePlayer() {
+        mouseOriginX = 0;
+        mouseOriginY = 0;
+        //console.log ("released");
+        box.world.DestroyJoint(mouseJoint);
+        mouseJoint = null;
+      }
+       // prevent elastic scrolling
+      document.addEventListener('touchmove', function(event) {
+        event.preventDefault();
+      }, false);
+      document.onkeydown = function(key) {
+        key = key || window.event;
+        // move down
+        if (key.keyCode == '40') {
+          scene.cameray--;
+        }
+        // move up
+        else if (key.keyCode == '38') {
+          scene.cameray++;
+        }
+        // move left
+        else if (key.keyCode == '37') {
+          scene.camerax++;
+        }
+        // move right
+        else if (key.keyCode == '39') {
+          scene.camerax--;
+        }
+        // page up
+        else if (key.keyCode == '33') {
+          scene.zoom -= 0.1;
+          scene.camerax = (canvasWidth / scale / scene.zoom) / 2;
+          scene.cameray = (canvasHeight / scale / scene.zoom) / 2;
+        }
+        // page down
+        else if (key.keyCode == '34') {
+          scene.zoom += 0.1;
+          scene.camerax = (canvasWidth / scale / scene.zoom) / 2;
+          scene.cameray = (canvasHeight / scale / scene.zoom) / 2;
+        }
+      }
+      
+
+      function step() {
+        box.update();
+        bodiesState = box.getState();
+        // update objects
+        for (var id in bodiesState) {
+          if (world[id]) world[id].update(bodiesState[id]);
+        }
+      }
+
+
+      function cullObjects() {
+        bodiesState = box.getState();
+        // update objects
+        for (var id in bodiesState) {
+          var entity = world[id];
+          if (entity && entity.lifespan) {
+            // remove dead objects
+            if (framecount > entity.lifespan) {
+              //console.log ("Culled " + id);
+              box.removeBody(id);
+              //box.world.DestroyBody(id);
+              delete world[id];
+            }
+          }
+        }
+      }
+
+      function removeObject(body) {
+        world[body.id].lifespan = framecount - 1;
+        //      removeList [body.id] = body;
+      }
+
+      function moveObjects() {
+        if (!scene.reachedTarget) {
+          if (box.getSpeed("player") > 0.3) {
+            box.setAngle("player", (box.getVelocityAngle("player")) / 180 * Math.PI);
+          }
+          var deltax = -(box.bodiesMap["player"].GetPosition().x - scene.targetx);
+          var deltay = -(box.bodiesMap["player"].GetPosition().y - scene.targety);
+          // target is reached
+          if (Math.abs(deltax) + Math.abs(deltay) < 0.5) {
+            delete world["cursor"];
+            scene.reachedTarget = true;
+          } else {
+            var xvelocity = box.bodiesMap["player"].GetLinearVelocity().x;
+            var yvelocity = box.bodiesMap["player"].GetLinearVelocity().y;
+            var deltax = -(box.bodiesMap["player"].GetPosition().x + (xvelocity * 1 / 3) - scene.targetx);
+            var deltay = -(box.bodiesMap["player"].GetPosition().y + (yvelocity * 1 / 3) - scene.targety);
+            var strength = Math.sqrt(deltax * deltax + deltay * deltay) * 50 * box.bodiesMap["player"].GetMass();
+            var angleRad = Math.atan2(deltay, deltax);
+            if (angleRad < 0) {
+              angleRad += 2 * Math.PI;
+            }
+            var angle = (angleRad * 180 / Math.PI)
+            box.applyImpulse("player", angle, strength);
+          }
+          var trigger = (box.getSpeed("player") > 1) ? 10 - box.getSpeed("player") : 0;
+          // advance animation
+          if (trigger < 1) {
+            acount = (acount + 1) % 7;
+          }
+          if (trigger > 0) {
+            acount = 0;
+          }
+        }
+        
+      }
+
+      function draw() {
+        // repaint canvas
+        //alert (box.getVelocityAngle("player"));
+        ctx.save();
+        //scene.zoom += -0.01 + (box.getVelocityAngle("player")/20000);
+        ctx.scale(scene.zoom, scene.zoom);
+        ctx.globalAlpha = 1;
+        var xcomp = box.bodiesMap["player"].GetPosition().x;
+        var ycomp = box.bodiesMap["player"].GetPosition().y;
+        ctx.translate(scene.camerax - xcomp, scene.cameray - ycomp);
+        ctx.fillStyle = "#000000";
+        ctx.fillRect(xcomp - scene.camerax, ycomp - scene.cameray, 100 / scene.zoom, 100 / scene.zoom);
+        var gradient = ctx.createLinearGradient(0, -30, 0, -10);
+        gradient.addColorStop(0, "#000044"); // first color
+        gradient.addColorStop(1, "#000000"); // second
+        ctx.fillStyle = gradient;
+        ctx.fillRect(-10000, -20000, 20000, 20000);
+        //ctx.translate(((canvasWidth/scale/2) * 1/scene.zoom) -world["player"].x, ((canvasHeight/scale/2) * 1/scene.zoom) -world["player"].y);
+        /*
+      ctx.translate(-(box.bodiesMap["player"].GetPosition().x)/scale + scene.camerax, -( box.bodiesMap["player"].GetPosition().y)/scale + scene.cameray);*/
+        //ctx.drawImage(bg, 0, 0, 1920, 1200, -canvasWidth/scale/2 - box.bodiesMap["player"].GetPosition().x/5, -15 + canvasHeight/scale/2 - box.bodiesMap["player"].GetPosition().y/5,  canvasWidth/scale*2, canvasHeight/scale*2);
+        scene.draw();
+        ctx.restore();
+      }
+    </script>
+    <script>
+      // https://gist.github.com/shaneriley/4078905
+      var s = {};
+      var scene = {
+        reachedTarget: true,
+        targetx: 2,
+        targety: 2,
+        zoom: 1.5,
+        camerax: Math.floor(canvasWidth / scale / 1.5) / 2,
+        cameray: Math.floor(canvasHeight / scale  / 1.5) / 2,
+        layers: [],
+        draw: function() {
+          var l = 0;
+          for (var layer in s) {
+            var viewBounds = {
+              x: box.bodiesMap["player"].GetPosition().x - canvasWidth / scale / scene.zoom / 2,
+              x2: box.bodiesMap["player"].GetPosition().x + canvasWidth / scale / scene.zoom / 2,
+              y: box.bodiesMap["player"].GetPosition().y - canvasHeight / scale / scene.zoom / 2,
+              y2: box.bodiesMap["player"].GetPosition().y + canvasHeight / scale / scene.zoom / 2
+            };
+            ctx.globalAlpha = s[layer].opacity;
+            if (0 < viewBounds.x || s[layer].canvas.width / scale > viewBounds.x2 || 0 < viewBounds.y || s[layer].canvas.width / scale > viewBounds.y2) ctx.drawImage(s[layer].canvas, 0, 0, s[layer].canvas.width, s[layer].canvas.height, 0, 0, s[layer].canvas.width / scale, s[layer].canvas.height / scale);
+            if (s[l].type == "objectLayer") {
+              //alert ("rendering objects");
+              // repaint canvas
+              for (var id in world) {
+                var entity = world[id];
+                ctx.globalAlpha = (world[id].alpha) ? world[id].alpha : 1;
+                if (!entity.cull()) entity.draw(ctx);
+              }
+            }
+            l++;
+          }
+        },
+        // data: [array of tiles, 1-based, position of sprite from top-left]
+        // height: integer, height in number of sprites
+        // name: "string", internal name of layer
+        // opacity: integer
+        // type: "string", layer type (tile, object)
+        // visible: boolean
+        // width: integer, width in number of sprites
+        // x: integer, starting x position
+        // y: integer, starting y position
+        renderLayers: function(layers) {
+          var tmpBuffer = {};
+          layers = $.isArray(layers) ? layers : this.data.layers;
+          layers.forEach(function(layer, l) {
+            tmpBuffer[l] = document.createElement('canvas');
+            tmpBuffer[l].width = scene.data.width * scene.data.tilewidth;
+            tmpBuffer[l].height = scene.data.height * scene.data.tileheight;
+            s[l] = tmpBuffer[l].getContext("2d");
+            if (layer.type == "tilelayer") {
+              size = scene.data.tilewidth;
+              s[l].opacity = scene.data.layers[l].opacity;
+              if (scene.layers.length < scene.data.layers.length) {
+                layer.data.forEach(function(tile_idx, i) {
+                  if (!tile_idx) {
+                    return;
+                  }
+                  var img_x, img_y, s_x, s_y,
+                    tile = scene.data.tilesets[0];
+                  // We are dealing with a rotated tile if the 
+                  // tile ID integer is a 32-bit binary number.
+                  var tileRotation = 0;
+                  var binLength = 32 - (tile_idx).toString(2).length;
+                  if (binLength < 2) {
+                    //11000000000000000000000001100010
+                    //
+                    // The first four bits indicate rotation and
+                    // mirroring, but only rotation is actioned here:
+                    // 
+                    // http://mainroach.blogspot.com/2013/02/
+                    // fast-html5-canvas-rendering-tiled-maps.html
+                    var bits = "a" + tile_idx.toString(2).substr(0, 4);
+                    switch (bits) {
+                      case 'a1010':
+                        tileRotation = 90;
+                        break;
+                      case 'a1100':
+                        tileRotation = 180;
+                        break;
+                    }
+                    if (binLength == 1) {
+                      tileRotation = 270;
+                    }
+                    // Strip the first four bits to retrieve the true tile ID:
+                    var tileGID = tile_idx.toString(2).substr(5);
+                    tileGID = tileGID.substr(tileGID.search('1'));
+                    tile_idx = parseInt(tileGID, 2);
+                  }
+                  tile_idx--;
+                  img_x = (tile_idx % (tile.imagewidth / size)) * size;
+                  img_y = ~~ (tile_idx / (tile.imagewidth / size)) * size;
+                  s_x = (i % layer.width) * size;
+                  s_y = ~~ (i / layer.width) * size;
+                  var rotatedTile = document.createElement('canvas');
+                  rotatedTile.width = size;
+                  rotatedTile.height = size;
+                  rotatedTileImage = rotatedTile.getContext("2d");
+                  if (tileRotation > 0) {
+                    rotatedTileImage.rotate((tileRotation * Math.PI) / 180);
+                    switch (tileRotation) {
+                      case 90:
+                        rotatedTileImage.translate(0, -size);
+                        break;
+                      case 180:
+                        rotatedTileImage.translate(-size, -size);
+                        break;
+                      case 270:
+                        rotatedTileImage.translate(-size, 0);
+                        break;
+                    }
+                    rotatedTileImage.drawImage(scene.tileset, img_x, img_y, size, size, 0, 0, size, size);
+                    s[l].drawImage(rotatedTileImage.canvas, 0, 0, size, size, s_x, s_y, size, size);
+                  } else {
+                    s[l].drawImage(scene.tileset, img_x, img_y, size, size, s_x, s_y, size, size);
+                  }
+                });
+                this.draw;
+              }
+            } else if (layer.type == "objectgroup") {
+              s[l].type = "objectLayer";
+              var objects = layer.objects;
+              objects.forEach(function(object, i) {
+                object.name = (object.name) ? object.name : "unnamed" + i;
+                object.properties.alpha = (object.properties.alpha) ? object.properties.alpha : 1;
+                object.properties.angle = (object.properties.angle) ? object.properties.angle : 0;
+                object.properties.mass = (object.properties.mass) ? object.properties.mass : 1;
+                object.properties.texture = (object.properties.texture) ? object.properties.texture : "default";
+                //object.type = (object.type) ? object.type : "dynamic";
+                if (object.ellipse) {
+                  object.properties.rolling = (object.properties.rolling) ? object.properties.rolling : true;
+                  initialState.unshift({
+                    id: object.name,
+                    x: (object.x + object.width / 2) / scale,
+                    y: (object.y + object.height / 2) / scale,
+                    radius: object.width / 2 / scale,
+                    texture: object.properties.texture,
+                    type: object.type,
+                    rolling: object.properties.rolling,
+                    angle: object.properties.angle,
+                    alpha: object.properties.alpha,
+                    mass: object.properties.mass
+                  });
+                  //console.log(initialState);
+                } else if (object.polygon) {
+                  console.log("polygon " + object.name);
+                } else if (object.polyline) {
+                  jointsList.push({
+                    id: object.name,
+                    x: object.polyline[0].x,
+                    y: object.polyline[0].y,
+                    x2: object.polyline[1].x,
+                    y2: object.polyline[1].y,
+                    bodya: object.properties.bodya,
+                    bodyb: object.properties.bodyb,
+                    type: object.type
+                  });
+                  //console.log ("polyline joint between " + object.properties.bodya + " and " + object.properties.bodyb);
+                } else {
+                  // static objects need to be added before dynamic ones
+                  if (object.type == "fixture") {
+                    staticBodies.push({
+                      id: object.name,
+                      x: object.x / scale,
+                      y: object.y / scale,
+                      width: object.width / scale,
+                      height: object.height / scale,
+                      texture: object.properties.texture,
+                      type: object.type,
+                      alpha: object.properties.alpha,
+                      mass: object.properties.mass
+                    });
+                  } else {
+                    initialState.unshift({
+                      id: object.name,
+                      x: object.x / scale,
+                      y: object.y / scale,
+                      width: object.width / scale,
+                      height: object.height / scale,
+                      texture: object.properties.texture,
+                      type: object.type,
+                      alpha: object.properties.alpha,
+                      mass: object.properties.mass
+                    });
+                  }
+                }
+              });
+              //console.log(initialState);
+            }
+          });
+          // start level once map is loaded
+          init();
+        },
+        loadTileset: function(json) {
+          this.data = json;
+          tilewidth = this.data.tilewidth;
+          tileheight = this.data.tileheight;
+          this.tileset = $("<img />", {
+            src: json.tilesets[0].image
+          })[0]
+          this.tileset.onload = $.proxy(this.renderLayers, this);
+        },
+        load: function(mapname) {
+          
+          s = {};
+          this.loadTileset (mapname);
+          /*
+          return $.ajax({
+          url: name + ".json",
+          type: "JSON"
+        }).done($.proxy(this.loadTileset, this));
+        */
+        
+        }
+      };
+      var stats = new Stats();
+      stats.setMode(0); // 0: fps, 1: ms
+       // Align top-left
+      stats.domElement.style.position = 'absolute';
+      stats.domElement.style.left = '0px';
+      stats.domElement.style.top = '0px';
+      document.body.appendChild(stats.domElement);
+      scene.load(levelmap)
+    </script>
+    
+  </body>
+
+</html>
