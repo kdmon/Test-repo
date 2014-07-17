@@ -46,19 +46,21 @@
       <div data-role="main" class="ui-content" style="min-height:600px; padding: 0px;">
         <div id="questionContainer" style="padding: 10px;">
           <div id="progressbar" style="border: 1px solid #aaa;">
-            <div style="background: #0F0; white-space: nowrap; line-height: 1em;  text-align: center; font-size: 0.7em;" data-bind="style: {width: 100/questionBank.pageCount() * (questionBank.currentPage()-1) + 1 + '%'}, text:  Math.round(100/questionBank.pageCount() * (questionBank.currentPage()-1)) + 1 + '% completed' "></div>
+            <div style="background: #0F0; white-space: nowrap; line-height: 1em;  text-align: center; font-size: 0.7em;" data-bind="style: {width: progress() + 1 + '%'}, text: progress() + 1 + '% completed' "></div>
           </div>
-          <p style="font-weight:bold">Please answer the following questions as fast as possible without consulting any external resources.</p>
-          <a href="#" data-role="button" data-bind="visible: $root.questionBank.currentPage() > 1, click: $root.questionBank.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
-          <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank.currentPageData">
-            <li>
-              "<i data-bind="text: value"></i>"
-              <b data-bind="text: question"></b>
+         <p>Please answer to your best ability without consulting external resources.</p>
+          <p><b data-bind="text: questionHeading()[$root.questionBank1.currentPage()-1]"></b></p>
+               
+          <a href="#" data-role="button" data-bind="visible: $root.questionBank1.currentPage() > 1, click: $root.questionBank1.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
+          <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank1.currentPageData">
+            <li style="border: 1px solid #aaa; padding: 5px; margin: 5px;" data-bind="style: {opacity: selected() == 'Please select' ? '0.5': '1'}">
+              "<span data-bind="text: statement"></span>"
               <br/>
               <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select>
             </li>
           </ul>
-          <a href="#" data-theme="b" data-role="button" data-bind="visible: $root.pageCompleted(), click: $root.questionBank.moveNext" data-inline="true">Next</a>
+          <p data-bind="visible: !$root.questionBank1.pageCompleted();"> You must answer all questions before you can proceed.</p>
+          <a href="#" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted(), click: $root.questionBank1.moveNext" data-inline="true">Next</a>
 
         </div>
         <iframe id="help" src="http://optimalblooduse.eu/app/#front" width="100%" style="display:none; min-height:2600px; border: 0px; border-top: 5px solid black;"></iframe>
@@ -184,7 +186,7 @@
               <h3><u>NOTIFICATION TO THE LABORATORY OF PATIENTS WITH SPECIAL REQUIREMENTS</u>
               </h3>
               <p>Once a patient has been identified as having a requirement for special blood components, a standard form, used throughout GG&amp;C (see appendix 1 <b><i>[NB: request form not reproduced in this extract]</i></b>), should be fully completed and sent to the local Blood Bank. The information held on this form will be shared with all Blood Banks throughout GG&amp;C.</p>
-              <p>The form should be signed by the Consultant in charge of the patients care. It should be photocopied and a copy filed in the case records with the second copy forwarded to Blood Bank. If the patient has been identified as having special blood component requirements out with core working hours and a Consultant is not available, the requirement can be requested on a regular transfusion form and the special requirements form forwarded at the earliest possible opportunity. The information will not be disseminated throughout the Health Board Blood Banks until a Consultant signed copy of the special requirements form is received by the hospital Blood Bank.</p>
+              <p>The form should be signed by the Consultant in charge of the patient's care. It should be photocopied and a copy filed in the case records with the second copy forwarded to Blood Bank. If the patient has been identified as having special blood component requirements out with core working hours and a Consultant is not available, the requirement can be requested on a regular transfusion form and the special requirements form forwarded at the earliest possible opportunity. The information will not be disseminated throughout the Health Board Blood Banks until a Consultant signed copy of the special requirements form is received by the hospital Blood Bank.</p>
               <p>If the need for the special blood components changes, an updated form should be forwarded to the hospital Blood Bank so their records can be amended.</p>
               <h3>Laboratory Dissemination of Information</h3>
               <p>As patients regularly transfer between hospital sites it is important that their transfusion requirement information is available throughout the Health Board Blood Banks. Once a Consultant signed form is received at a local Blood Bank, the form will be scanned and emailed to the Blood Bank managers in the South, North, Clyde and the Golden Jubilee Hospital so that their computer systems can be updated accordingly (as per the Blood Bank special requirements SOP).</p>
@@ -201,13 +203,13 @@
               <li> Transfusion Transmitted Infection. Chapter 13. Practical Transfusion Medicine. Third Edition. P122-145. Murphy MF, Pamphilon DH.</li>
               <li> <a id="ref2"></a> Clinical Blood Transfusion. Chapter 16 Postgraduate Haematology Sixth Edition. P268-300. Hoffbrand AV, Catovsky D, Tuddenham EDD, Green AR.</li>
               <li> <a id="ref3"></a> Guidelines on the use of irradiated blood components prepared by the British Committee for Standards in Haematology blood transfusion task force British Journal of Haematology 2011, 152, 35  51</li>
-              <li> NHS QIS Clinical Standards  Blood Transfusion <a href="http://www.healthcareimprovementscotland.org/previous_resources/standards/clinical_standards_-_blood_tra.aspx" target="_blank">http://www.healthcareimprovementscotland.org/previous_resources/standards/clinical_standards_-_blood_tra.aspx</a></li>
+              <li> NHS QIS Clinical Standards - Blood Transfusion <a href="http://www.healthcareimprovementscotland.org/previous_resources/standards/clinical_standards_-_blood_tra.aspx" target="_blank">http://www.healthcareimprovementscotland.org/previous_resources/standards/clinical_standards_-_blood_tra.aspx</a></li>
               <li> Serious Hazards of Transfusion <a href="http://www.shotuk.org" target="_blank">http://www.shotuk.org/</a></li>
-              <li> Transfusion guidelines for neonates and older children British Journal of Haematology 2004, 124, 433  453</li>
+              <li> Transfusion guidelines for neonates and older children British Journal of Haematology 2004, 124, 433 - 453</li>
               <li> Advisory Committee on the Safety of Blood, Tissues and Organs (SaBTO) <a href="http://www.dh.gov.uk/prod_consum_dh/groups/dh_digitalassets/@dh/@en/documents/digitalasset/dh_133086.pdf" target="_blank">http://www.dh.gov.uk/prod_consum_dh/groups/dh_digitalassets/@dh/@en/documents/digitalasset/dh_133086.pdf</a></li>
               </ol>
         </div>
-        <div style="padding: 10px;border: 0px; border-top: 5px solid black;" id="lothian"> <i>Extract from NHS Lothian, Blood Transfusion Clinical Policy and Procedures 2013 (v.4), Appendic C: Special Requirements, pages 45-46:</i>
+        <div style="display:none; padding: 10px;border: 0px; border-top: 5px solid black;" id="lothian"> <i>Extract from NHS Lothian, Blood Transfusion Clinical Policy and Procedures 2013 (v.4), Appendic C: Special Requirements, pages 45-46:</i>
           <h3>Irradiated Components</h3>
           <p>For at-risk patients, all red cell, platelet and granulocyte concentrates should be irradiated. It is not necessary to irradiate FFP, cryoprecipitate or fractionated plasma products.</p>
           <ul>
@@ -299,198 +301,197 @@
           $(element).trigger("create");
         }
       };
+      
+      // Randomly allocate questions into two groups
+      
+      
+      
       var ViewModel = function() {
         var self = this;
-        self.questionBank = ko.observableArray([
+        self.questionHeading =  ko.observableArray([
+          "1. Are the statements true or false?",
+          "2. What aspects of blood components or recipients are risk factors for TA-GvHD?",
+          "3. What problems involving special components have been reported by haemovigilance schemes?",
+          "4. How would you specify the blood component when transfusing..."
+          ]),
+        self.questionBank1 = ko.observableArray([
           // Theme 1 - cellular
           {
-            question: "Is the statement true or false?",
-            value: "Removal of leucocytes from platelets and red cells reduces risk of CMV transmission.",
+            statement: "Removal of leucocytes from platelets and red cells reduces risk of CMV transmission.",
             options: ["Please select", "True", "False", "Don't know"],
             selected: ko.observable("Please select")
           }, {
-            question: "Is the statement true or false?",
-            value: "In the UK only red cells and platelets for patients with special requirements is leucodepleted.",
+            statement: "In the UK only red cells and platelets for patients with special requirements is leucodepleted.",
             options: ["Please select", "True", "False", "Don't know"],
             selected: ko.observable("Please select")
           }, {
-            question: "Is the statement true or false?",
-            value: "Leucodepletion is as effective as irradiation in the prevention of TA-GvHD.",
+            statement: "Leucodepletion is as effective as irradiation in the prevention of TA-GvHD.",
             options: ["Please select", "True", "False", "Don't know"],
             selected: ko.observable("Please select")
           }, {
-            question: "Is the statement true or false?",
-            value: "Some patients require CMV-negative components, even when leucodepleted.",
+            statement: "Some patients require CMV-negative components, even when leucodepleted.",
             options: ["Please select", "True", "False", "Don't know"],
             selected: ko.observable("Please select")
           }, {
-            question: "Is the statement true or false?",
-            value: "All red cell concentrate in the UK is irradiated.",
+            statement: "All red cell concentrate in the UK is irradiated.",
             options: ["Please select", "True", "False", "Don't know"],
             selected: ko.observable("Please select")
           }, {
-            question: "Is the statement true or false?",
-            value: "Platelets, white cells and red cells are examples of cellular blood components.",
+            statement: "Platelets, white cells and red cells are examples of cellular blood components.",
             options: ["Please select", "True", "False", "Don't know"],
             selected: ko.observable("Please select")
           }, {
-            question: "Is the statement true or false?",
-            value: "Fresh Frozen Plasma is an example of a non-cellular blood component.",
+            statement: "Fresh Frozen Plasma is an example of a non-cellular blood component.",
             options: ["Please select", "True", "False", "Don't know"],
             selected: ko.observable("Please select")
           }, {
-            question: "Is the statement true or false?",
-            value: "Non-cellular components are unlikely to be associated with GvHD or CMV infection.",
+            statement: "Non-cellular components are unlikely to be associated with GvHD or CMV infection.",
             options: ["Please select", "True", "False", "Don't know"],
             selected: ko.observable("Please select")
           },
+          
+          
+          
           // Theme 2 + TAGvHD
           {
-            question: "Reports of unnecessary risks to patients with special requirements have been caused by...?",
-            question: "What problems involving irradiated and CMV-negative blood been reported?",
-            value: "Haemovigilance data suggests there is a lack of knowledge of the indications for special blood components among clinicians.",
+            statement: "Viable donor lymphocytes in component.",
             options: ["Please select", "Yes", "No", "Don't know"],
             selected: ko.observable("Please select")
           }, {
-            question: "What problems involving special components have been reported?",
-            value: "Failure to request blood according to local guidelines.",
+            statement: "Recipient with low haemoglobin level.",
             options: ["Please select", "Yes", "No", "Don't know"],
             selected: ko.observable("Please select")
           }, {
-            question: "What problems involving special components have been reported?",
-            value: "Poor communication between clinicians during shared patient care.",
+            statement: "Shared HLA haplotype between donor and recipient",
             options: ["Please select", "Yes", "No", "Don't know"],
             selected: ko.observable("Please select")
           }, {
-            question: "What problems involving special components have been reported?",
-            value: "Radiation effects after transfusion of irradiated blood.",
+            statement: "Age of blood component.",
             options: ["Please select", "Yes", "No", "Don't know"],
             selected: ko.observable("Please select")
           }, {
-            question: "What problems involving special components have been reported?",
-            value: "Mistaken patient identity at component collection and transfusion.",
+            statement: "Recipient with HIV/AIDS.",
             options: ["Please select", "Yes", "No", "Don't know"],
             selected: ko.observable("Please select")
           }, {
-            question: "What problems involving special components have been reported?",
-            value: "Transfusion of incorrectly stored components.",
+            statement: "Granulocyte component.",
             options: ["Please select", "Yes", "No", "Don't know"],
             selected: ko.observable("Please select")
           }, {
-            question: "What problems involving special components have been reported?",
-            value: "Erroneous data in laboratory information systems.",
+            statement: "Fresh Frozen Plasma (FFP).",
             options: ["Please select", "Yes", "No", "Don't know"],
             selected: ko.observable("Please select")
           }, {
-            question: "What problems involving special components have been reported?",
-            value: "Unnecessary requests for special blood components.",
+            statement: "Recipient with severe T-lymphocyte immunodeficiency.",
             options: ["Please select", "Yes", "No", "Don't know"],
             selected: ko.observable("Please select")
           },
-          // OLD
+          
+          
+          
+          // Haemovigilance data
+          
           {
-            question: "Is this a risk factor for TA-GvHD?",
-            value: "Viable donor lymphocytes in component.",
+            statement: "Lack of knowledge about the indications for special components.",
             options: ["Please select", "Yes", "No", "Don't know"],
             selected: ko.observable("Please select")
           }, {
-            question: "Is this a risk factor for TA-GvHD?",
-            value: "Recipient with low haemoglobin level.",
+            statement: "Failure to request blood according to local guidelines.",
             options: ["Please select", "Yes", "No", "Don't know"],
             selected: ko.observable("Please select")
           }, {
-            question: "Is this a risk factor for TA-GvHD?",
-            value: "Shared HLA haplotype between donor and recipient",
+            statement: "Poor communication between clinicians during shared patient care.",
             options: ["Please select", "Yes", "No", "Don't know"],
             selected: ko.observable("Please select")
           }, {
-            question: "Is this a risk factor for TA-GvHD?",
-            value: "Age of blood component.",
+            statement: "Radiation effects after transfusion of irradiated blood.",
             options: ["Please select", "Yes", "No", "Don't know"],
             selected: ko.observable("Please select")
           }, {
-            question: "Is this a risk factor for TA-GvHD?",
-            value: "Recipient with HIV/AIDS.",
+            statement: "Mistaken patient identity at component collection and transfusion.",
             options: ["Please select", "Yes", "No", "Don't know"],
             selected: ko.observable("Please select")
           }, {
-            question: "Is this a risk factor for TA-GvHD?",
-            value: "Granulocyte component.",
+            statement: "Transfusion of incorrectly stored components.",
             options: ["Please select", "Yes", "No", "Don't know"],
             selected: ko.observable("Please select")
           }, {
-            question: "Is this a risk factor for TA-GvHD?",
-            value: "Fresh Frozen Plasma (FFP).",
+            statement: "Erroneous data in laboratory information systems.",
             options: ["Please select", "Yes", "No", "Don't know"],
             selected: ko.observable("Please select")
           }, {
-            question: "Is this a risk factor for TA-GvHD?",
-            value: "Recipient with severe T-lymphocyte immunodeficiency.",
+            statement: "Unnecessary requests for special blood components.",
             options: ["Please select", "Yes", "No", "Don't know"],
             selected: ko.observable("Please select")
           },
-          // Theme 3 - SHOT
+          
+          
+          
+          // Theme 4 - Prescription scenarios
           {
             question: "Is this a risk factor for TA-GvHD?",
-            value: "Non-cellular components are unlikely to be associated with GvHD or CMV infection.",
+            statement: "Non-cellular components are unlikely to be associated with GvHD or CMV infection.",
             options: ["Please select", "Irradiated and CMV-negative", "Irradiated", "CMV-negative", "Special component not required", "Don't know"],
             selected: ko.observable("Please select")
           }, {
             question: "Is this a risk factor for TA-GvHD?",
-            value: "Non-cellular components are unlikely to be associated with GvHD or CMV infection.",
+            statement: "Non-cellular components are unlikely to be associated with GvHD or CMV infection.",
             options: ["Please select", "Irradiated and CMV-negative", "Irradiated", "CMV-negative", "Special component not required", "Don't know"],
             selected: ko.observable("Please select")
           }, {
             question: "Is this a risk factor for TA-GvHD?",
-            value: "Non-cellular components are unlikely to be associated with GvHD or CMV infection.",
+            statement: "Non-cellular components are unlikely to be associated with GvHD or CMV infection.",
             options: ["Please select", "Irradiated and CMV-negative", "Irradiated", "CMV-negative", "Special component not required", "Don't know"],
             selected: ko.observable("Please select")
           }, {
             question: "Is this a risk factor for TA-GvHD?",
-            value: "Non-cellular components are unlikely to be associated with GvHD or CMV infection.",
+            statement: "Non-cellular components are unlikely to be associated with GvHD or CMV infection.",
             options: ["Please select", "Irradiated and CMV-negative", "Irradiated", "CMV-negative", "Special component not required", "Don't know"],
             selected: ko.observable("Please select")
           }, {
             question: "Is this a risk factor for TA-GvHD?",
-            value: "Non-cellular components are unlikely to be associated with GvHD or CMV infection.",
+            statement: "Non-cellular components are unlikely to be associated with GvHD or CMV infection.",
             options: ["Please select", "Irradiated and CMV-negative", "Irradiated", "CMV-negative", "Special component not required", "Don't know"],
             selected: ko.observable("Please select")
           }, {
             question: "Is this a risk factor for TA-GvHD?",
-            value: "Non-cellular components are unlikely to be associated with GvHD or CMV infection.",
+            statement: "Non-cellular components are unlikely to be associated with GvHD or CMV infection.",
             options: ["Please select", "Irradiated and CMV-negative", "Irradiated", "CMV-negative", "Special component not required", "Don't know"],
             selected: ko.observable("Please select")
           }, {
             question: "Is this a risk factor for TA-GvHD?",
-            value: "Non-cellular components are unlikely to be associated with GvHD or CMV infection.",
+            statement: "Non-cellular components are unlikely to be associated with GvHD or CMV infection.",
             options: ["Please select", "Irradiated and CMV-negative", "Irradiated", "CMV-negative", "Special component not required", "Don't know"],
             selected: ko.observable("Please select")
           }, {
             question: "Is this a risk factor for TA-GvHD?",
-            value: "Non-cellular components are unlikely to be associated with GvHD or CMV infection.",
+            statement: "Non-cellular components are unlikely to be associated with GvHD or CMV infection.",
             options: ["Please select", "Irradiated and CMV-negative", "Irradiated", "CMV-negative", "Special component not required", "Don't know"],
             selected: ko.observable("Please select")
           },
           // Theme 4 - Indications
           {
             question: "Is this a risk factor for TA-GvHD?",
-            value: "Non-cellular components are unlikely to be associated with GvHD or CMV infection.",
+            statement: "Non-cellular components are unlikely to be associated with GvHD or CMV infection.",
             options: ["Please select", "Irradiated and CMV-negative", "Irradiated", "CMV-negative", "Special component not required", "Don't know"],
             selected: ko.observable("Please select")
           }, {
             question: "Is this a risk factor for TA-GvHD?",
-            value: "Non-cellular components are unlikely to be associated with GvHD or CMV infection.",
+            statement: "Non-cellular components are unlikely to be associated with GvHD or CMV infection.",
             options: ["Please select", "Irradiated and CMV-negative", "Irradiated", "CMV-negative", "Special component not required", "Don't know"],
             selected: ko.observable("Please select")
           },
         ]).extend({
           paging: 4
         }),
-        self.pageCompleted = ko.computed(function(){
+        self.progress = ko.computed(function(){
+          return Math.round (100/self.questionBank1.pageCount() * (self.questionBank1.currentPage()-1));
+        }),
+        self.questionBank1.pageCompleted = ko.computed(function(){
           //console.log(self.questionBank.currentPage() * self.questionBank.pageSize());
           var passed = true;
-          for (i=(self.questionBank.currentPage()-1) * self.questionBank.pageSize(); i < self.questionBank.currentPage() * self.questionBank.pageSize(); i++){
-            if (self.questionBank()[i].selected() == 'Please select') passed = false;
+          for (i=(self.questionBank1.currentPage()-1) * self.questionBank1.pageSize(); i < self.questionBank1.currentPage() * self.questionBank1.pageSize(); i++){
+            if (self.questionBank1()[i].selected() == 'Please select') passed = false;
           }
           return passed;
         })
