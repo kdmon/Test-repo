@@ -45,27 +45,19 @@
     <div data-role="page" id="front" style="padding: 0px;">
       <div data-role="main" class="ui-content" style="min-height:600px; padding: 0px;">
         <div id="questionContainer" style="padding: 10px;">
-          <div style="border: 1px solid #aaa;">
+          <div id="progressbar" style="border: 1px solid #aaa;">
             <div style="background: #0F0; white-space: nowrap; line-height: 1em;  text-align: center; font-size: 0.7em;" data-bind="style: {width: 100/questionBank.pageCount() * (questionBank.currentPage()-1) + 1 + '%'}, text:  Math.round(100/questionBank.pageCount() * (questionBank.currentPage()-1)) + 1 + '% completed' "></div>
           </div>
+          <p style="font-weight:bold">Please answer the following questions as fast as possible without consulting any external resources.</p>
           <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank.currentPageData">
             <li>"<i data-bind="text: value"></i>" <b data-bind="text: question"></b>
               <br/> <a href="#" data-role="button" data-bind="visible: $root.questionBank.currentPage() > 1, click: $root.questionBank.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
               <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select> <a href="#" data-theme="b" data-role="button" data-bind="visible: selected() !== 'Please select', click: $root.questionBank.moveNext" data-inline="true">Next</a>
             </li>
-            <li></li>
           </ul>
-          <hr>
-          <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank.currentPageData">
-            <li>- "<i data-bind="text: value"></i>"
-              <br/>
-              <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select>
-            </li>
-          </ul> <a href="#" data-theme="b" data-role="button" data-bind="click: $root.questionBank.moveNext" data-inline="true">Next</a>
         </div>
-        <p>Please answer as fast as possible without consulting any external resources.</p>
-        <iframe id="help" src="http://optimalblooduse.eu/app/#front" width="100%" style="min-height:2600px; border: 0px; border-top: 5px solid black;"></iframe>
-        <div style="padding: 10px;border: 0px; border-top: 5px solid black;" id="ggc"> <i>Extract from NHS Greater Glasgow and Clyde Blood Transfusion Special Requirements Guideline (March 2013, issue 1), pages 1-8:</i>
+        <iframe id="help" src="http://optimalblooduse.eu/app/#front" width="100%" style="display:none; min-height:2600px; border: 0px; border-top: 5px solid black;"></iframe>
+        <div id="ggc" style="display: none; padding: 10px;border: 0px; border-top: 5px solid black;"> <i>Extract from NHS Greater Glasgow and Clyde Blood Transfusion Special Requirements Guideline (March 2013, issue 1), pages 1-8:</i>
           <h3><u>INTRODUCTION</u>
           </h3>
           <p>This guideline is for all staff involved in prescribing, supplying and administering blood and blood components throughout Greater Glasgow and Clyde Health Board (GG&amp;C). It should be used in conjunction with the GG&amp;C Clinical Transfusion Policy. The aim of the Clinical Transfusion policy is to ensure that the <b>right</b> blood is given to the <b>right</b> patient at the <b>right</b> time, <b>every</b> time. This policy focuses on those patients who have a special requirement for transfusion and it aims:</p>
@@ -303,7 +295,8 @@
         }
       };
       var ViewModel = function() {
-        this.questionBank = ko.observableArray([
+        var self = this;
+        self.questionBank = ko.observableArray([
           // Theme 1 - cellular
           {
             question: "Is the statement true or false?",
@@ -490,9 +483,6 @@
         })
       };
       ko.applyBindings(new ViewModel());
-      window.onload = function() {
-        $("#pdfviewer").css("height", $(window).height() - $("#questionContainer").outerHeight() - $("#header").outerHeight() + "px");
-      }
     </script>
   </body>
 
