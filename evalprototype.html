@@ -49,12 +49,17 @@
             <div style="background: #0F0; white-space: nowrap; line-height: 1em;  text-align: center; font-size: 0.7em;" data-bind="style: {width: 100/questionBank.pageCount() * (questionBank.currentPage()-1) + 1 + '%'}, text:  Math.round(100/questionBank.pageCount() * (questionBank.currentPage()-1)) + 1 + '% completed' "></div>
           </div>
           <p style="font-weight:bold">Please answer the following questions as fast as possible without consulting any external resources.</p>
+          <a href="#" data-role="button" data-bind="visible: $root.questionBank.currentPage() > 1, click: $root.questionBank.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
           <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank.currentPageData">
-            <li>"<i data-bind="text: value"></i>" <b data-bind="text: question"></b>
-              <br/> <a href="#" data-role="button" data-bind="visible: $root.questionBank.currentPage() > 1, click: $root.questionBank.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
-              <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select> <a href="#" data-theme="b" data-role="button" data-bind="visible: selected() !== 'Please select', click: $root.questionBank.moveNext" data-inline="true">Next</a>
+            <li>
+              "<i data-bind="text: value"></i>"
+              <b data-bind="text: question"></b>
+              <br/>
+              <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select>
             </li>
           </ul>
+          <a href="#" data-theme="b" data-role="button" data-bind="visible: $root.pageCompleted(), click: $root.questionBank.moveNext" data-inline="true">Next</a>
+
         </div>
         <iframe id="help" src="http://optimalblooduse.eu/app/#front" width="100%" style="display:none; min-height:2600px; border: 0px; border-top: 5px solid black;"></iframe>
         <div id="ggc" style="display: none; padding: 10px;border: 0px; border-top: 5px solid black;"> <i>Extract from NHS Greater Glasgow and Clyde Blood Transfusion Special Requirements Guideline (March 2013, issue 1), pages 1-8:</i>
@@ -480,6 +485,14 @@
           },
         ]).extend({
           paging: 4
+        }),
+        self.pageCompleted = ko.computed(function(){
+          //console.log(self.questionBank.currentPage() * self.questionBank.pageSize());
+          var passed = true;
+          for (i=(self.questionBank.currentPage()-1) * self.questionBank.pageSize(); i < self.questionBank.currentPage() * self.questionBank.pageSize(); i++){
+            if (self.questionBank()[i].selected() == 'Please select') passed = false;
+          }
+          return passed;
         })
       };
       ko.applyBindings(new ViewModel());
