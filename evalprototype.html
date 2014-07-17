@@ -38,22 +38,28 @@
       #ggcindications th {
         border: 1px solid #000;
       }
+      .completed {
+        background: #EFE;
+      }
+      .notcompleted {
+        background: #FEE;
+      }
     </style>
   </head>
 
   <body>
-    <div data-role="page" id="front" style="padding: 0px;">
+    <div data-role="page" id="front" style="padding: 0px; background: #fff; font-size: 0.8em;">
       <div data-role="main" class="ui-content" style="min-height:600px; padding: 0px;">
         <div id="questionContainer" style="padding: 10px;">
           <div id="progressbar" style="border: 1px solid #aaa;">
             <div style="background: #0F0; white-space: nowrap; line-height: 1em;  text-align: center; font-size: 0.7em;" data-bind="style: {width: progress() + 1 + '%'}, text: progress() + 1 + '% completed' "></div>
           </div>
-         <p>Please answer to your best ability without consulting external resources.</p>
+          <p>Answer without consulting external resources.</p>
           <p><b data-bind="text: questionHeading()[$root.questionBank1.currentPage()-1]"></b></p>
                
           <a href="#" data-role="button" data-bind="visible: $root.questionBank1.currentPage() > 1, click: $root.questionBank1.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
           <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank1.currentPageData">
-            <li style="border: 1px solid #aaa; padding: 5px; margin: 5px;" data-bind="style: {opacity: selected() == 'Please select' ? '0.5': '1'}">
+            <li style="border: 1px solid #aaa; padding: 5px; margin: 5px;" data-bind="class: {completed : selected() == 'Please select'}">
               "<span data-bind="text: statement"></span>"
               <br/>
               <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select>
