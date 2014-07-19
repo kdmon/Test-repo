@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <style>
+    
       @media (min-width: 30em) {
         /* Show the table header rows and set all cells to display: table-cell */
         #ggcindications td,
@@ -39,34 +40,57 @@
         border: 1px solid #000;
       }
       .completed {
-        background: #EFE;
+        background: #fff !important;
+        opacity: 1;
       }
-      .notcompleted {
-        background: #FEE;
+      .statement {
+        border: 1px #ddd solid;
+        border-radius: 5px;
+        background: #fee;
+        padding: 5px;
+        padding-bottom: 0px;
+        margin: 5px;
+        text-align: center;
+      }
+      #progressbar {
+        font-weight: bold;
+        padding: 2px;
+        margin: 0px;
+        background: #5e5;
+        white-space: nowrap;
+        text-align: center;
+        line-height: 1em;
+        font-size: 0.8em;
+      }
+      .ui-page {
+        padding: 0px;
+        background: #FDFDFD;
+        font-size: 1.2em;
       }
     </style>
   </head>
 
   <body>
-    <div data-role="page" id="front" style="padding: 0px; background: #fff; font-size: 0.8em;">
+    <div data-role="page" id="front">
       <div data-role="main" class="ui-content" style="min-height:600px; padding: 0px;">
         <div id="questionContainer" style="padding: 10px;">
-          <div id="progressbar" style="border: 1px solid #aaa;">
-            <div style="background: #0F0; white-space: nowrap; line-height: 1em;  text-align: center; font-size: 0.7em;" data-bind="style: {width: progress() + 1 + '%'}, text: progress() + 1 + '% completed' "></div>
+          <div style="border: 1px solid #aaa; background: #EFE;">
+            <p id="progressbar" data-bind="style: {width: progress() + 1 + '%'}, text: progress() + 1 + '% completed' "></p>
           </div>
-          <p>Answer without consulting external resources.</p>
-          <p><b data-bind="text: questionHeading()[$root.questionBank1.currentPage()-1]"></b></p>
-               
-          <a href="#" data-role="button" data-bind="visible: $root.questionBank1.currentPage() > 1, click: $root.questionBank1.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
+          <h3 data-bind="text: questionHeading()[$root.questionBank1.currentPage()-1]"></h3>
+          <a  href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank1.currentPage() > 1, click: $root.questionBank1.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
           <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank1.currentPageData">
-            <li style="border: 1px solid #aaa; padding: 5px; margin: 5px;" data-bind="class: {completed : selected() == 'Please select'}">
-              "<span data-bind="text: statement"></span>"
+            <li class="statement" data-bind="css: {completed: selected() !== 'Please select'}">
+              <span data-bind="text: statement"></span>
+              <i class="fa fa-certificate" style="color: red;" data-bind="visible: selected() == 'Please select'"></i>
               <br/>
               <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select>
             </li>
           </ul>
-          <p data-bind="visible: !$root.questionBank1.pageCompleted();"> You must answer all questions before you can proceed.</p>
-          <a href="#" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted(), click: $root.questionBank1.moveNext" data-inline="true">Next</a>
+          <p data-bind="visible: !$root.questionBank1.pageCompleted();">
+            You must answer all mandatory questions (<i class="fa fa-certificate" style="color: red;"></i>) before proceeding.
+          </p>
+          <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted(), click: $root.questionBank1.moveNext" data-inline="true">Next page</a>
 
         </div>
         <iframe id="help" src="http://optimalblooduse.eu/app/#front" width="100%" style="display:none; min-height:2600px; border: 0px; border-top: 5px solid black;"></iframe>
@@ -274,6 +298,7 @@
               }
               $("#questionContainer").trigger("create");
               $("#selector").selectmenu();
+              $(window).scrollTop(0);
             }
           });
           target.pageCount = ko.computed(function() {
@@ -469,13 +494,18 @@
             selected: ko.observable("Please select")
           }
         ]).extend({
-          paging: 4
+          paging: 8
         }),
         self.progress = ko.computed(function(){
-          return Math.round (100/self.questionBank1.pageCount() * (self.questionBank1.currentPage()-1));
+
+          var count = 0;
+          for (i=0; i < self.questionBank1.pageCount() * self.questionBank1.pageSize(); i++){
+            if (self.questionBank1()[i].selected() !== 'Please select') count++;
+          }
+          return Math.round ( 100/(self.questionBank1.pageCount() * self.questionBank1.pageSize()) * count);
         }),
         self.questionBank1.pageCompleted = ko.computed(function(){
-          //console.log(self.questionBank.currentPage() * self.questionBank.pageSize());
+
           var passed = true;
           for (i=(self.questionBank1.currentPage()-1) * self.questionBank1.pageSize(); i < self.questionBank1.currentPage() * self.questionBank1.pageSize(); i++){
             if (self.questionBank1()[i].selected() == 'Please select') passed = false;
