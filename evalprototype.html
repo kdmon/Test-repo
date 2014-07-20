@@ -76,7 +76,7 @@
           <div style="border: 1px solid #aaa; background: #EFE;">
             <p id="progressbar" data-bind="style: {width: progress() + 1 + '%'}, text: progress() + 1 + '% completed' "></p>
           </div>
-          <div data-bind="">
+          <div data-bind="visible: section == 1">
             <h3 data-bind="text: questionHeading()[$root.questionBank1.currentPage()-1]"></h3> <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank1.currentPage() > 1, click: $root.questionBank1.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
             <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank1.currentPageData">
               <li class="statement" data-bind="css: {completed: selected() !== 'Please select'}">
@@ -87,16 +87,20 @@
             </ul>
             <p data-bind="visible: !$root.questionBank1.pageCompleted();">You must answer all mandatory questions (<i class="fa fa-certificate" style="color: red;"></i>) before proceeding.</p> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted(), click: $root.questionBank1.moveNext" data-inline="true">Next page</a>
           </div>
-          <p data-bind="text: questionHeading()[$root.questionBank2.currentPage()-1]"></p> <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank1.currentPage() > 1, click: $root.questionBank1.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
-          <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank2.currentPageData">
-            <li class="statement" data-bind="css: {completed: selected() !== 'Please select'}">
-              <span data-bind="text: statement"></span> <i class="fa fa-certificate" style="color: red;" data-bind="visible: selected() == 'Please select'"></i>
-              <br/>
-              <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank2.pageCompleted(), click: $root.questionBank2.moveNext" data-inline="true">Next</a>
-            </li>
-          </ul>
+          
+          <div data-bind="visible: section == 2">
+            <p data-bind="text: questionHeading()[$root.questionBank2.currentPage()-1]"></p>
+            <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank1.currentPage() > 1, click: $root.questionBank1.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
+            <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank2.currentPageData">
+              <li class="statement" data-bind="css: {completed: selected() !== 'Please select'}">
+                <span data-bind="text: statement"></span> <i class="fa fa-certificate" style="color: red;" data-bind="visible: selected() == 'Please select'"></i>
+                <br/>
+                <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank2.pageCompleted(), click: $root.questionBank2.moveNext" data-inline="true">Next</a>
+              </li>
+            </ul>
+          </div>
         </div>
-        <iframe id="help" src="http://optimalblooduse.eu/app/#front" width="100%" style="display:block; border: 0px; border-top: 5px solid black;"></iframe>
+        <iframe data-bind="visible: section == 2 || section == 3" id="help" src="http://optimalblooduse.eu/app/#front" width="100%" style="border: 0px; border-top: 5px solid black;"></iframe>
         <div id="ggc" style="display: none; padding: 10px;border: 0px; border-top: 5px solid black;"> <i>Extract from NHS Greater Glasgow and Clyde Blood Transfusion Special Requirements Guideline (March 2013, issue 1), pages 1-8:</i>
           <h3><u>INTRODUCTION</u>
           </h3>
@@ -505,41 +509,42 @@
       questions.theme2.shuffle();
       questions.theme3.shuffle();
       questions.theme4.shuffle();
-      var treatment = queryString
+
       var ViewModel = function() {
         var self = this;
-        self.treatment = ko.observable(getUrlParameter('treatment')),
-        self.role = ko.observable(getUrlParameter('role')),
-        self.hospital = ko.observable(getUrlParameter('hospital')),
-        self.specialty = ko.observable(getUrlParameter('specialty')),
-        self.questionHeading = ko.observableArray(["1. Are the statements true or false?", "2. What aspects of blood components or recipients are risk factors for TA-GvHD?", "3. What problems involving special components have been reported by haemovigilance schemes?", "4. How would you specify the blood component when transfusing..."]),
+        self.section = ko.observable(1);
+        self.treatment = ko.observable(getUrlParameter('treatment'));
+        self.role = ko.observable(getUrlParameter('role'));
+        self.hospital = ko.observable(getUrlParameter('hospital'));
+        self.specialty = ko.observable(getUrlParameter('specialty'));
+        self.questionHeading = ko.observableArray(["1. Are the statements true or false?", "2. What aspects of blood components or recipients are risk factors for TA-GvHD?", "3. What problems involving special components have been reported by haemovigilance schemes?", "4. How would you specify the blood component when transfusing..."]);
         self.questionBank1 = ko.observableArray(questions.theme1.splice(0, 4).concat(questions.theme2.splice(0, 4)).concat(questions.theme3.splice(0, 4)).concat(questions.theme4.splice(0, 4))).extend({
           paging: 4
-        }),
+        });
         self.questionBank2 = ko.observableArray(questions.theme1.splice(0, 4).concat(questions.theme2.splice(0, 4)).concat(questions.theme3.splice(0, 4)).concat(questions.theme4.splice(0, 4))).extend({
           paging: 1
-        }),
+        });
         self.progress = ko.computed(function() {
           var count = 0;
           for (i = 0; i < self.questionBank1.pageCount() * self.questionBank1.pageSize(); i++) {
             if (self.questionBank1()[i].selected() !== 'Please select') count++;
           }
           return Math.round(100 / (self.questionBank1.pageCount() * self.questionBank1.pageSize()) * count);
-        }),
+        });
         self.questionBank1.pageCompleted = ko.computed(function() {
           var passed = true;
           for (i = (self.questionBank1.currentPage() - 1) * self.questionBank1.pageSize(); i < self.questionBank1.currentPage() * self.questionBank1.pageSize(); i++) {
             if (self.questionBank1()[i].selected() == 'Please select') passed = false;
           }
           return passed;
-        }),
+        });
         self.questionBank2.pageCompleted = ko.computed(function() {
           var passed = true;
           for (i = (self.questionBank2.currentPage() - 1) * self.questionBank2.pageSize(); i < self.questionBank2.currentPage() * self.questionBank2.pageSize(); i++) {
             if (self.questionBank2()[i].selected() == 'Please select') passed = false;
           }
           return passed;
-        })
+        });
       };
       ko.applyBindings(new ViewModel());
     </script>
