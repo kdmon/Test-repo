@@ -101,7 +101,9 @@
           </div>
         </div>
         <iframe data-bind="visible: section() == 2 && treatment() == 'app'" id="help" src="http://optimalblooduse.eu/app/#front" width="100%" style="border: 0px; border-top: 5px solid black;"></iframe>
-        <div data-bind="visible: section() == 2 && treatment() == 'ggc'" id="ggc" style=" padding: 10px;border: 0px; border-top: 5px solid black;"> <i>Extract from NHS Greater Glasgow and Clyde Blood Transfusion Special Requirements Guideline (March 2013, issue 1), pages 1-8:</i>
+        <div data-bind="visible: section() == 2 && treatment() == 'ggc'" id="ggc" style=" padding: 10px;border: 0px; border-top: 5px solid black;">
+        <p>Search guideline: <input data-inline="true" size="10" data-bind="value: searchterm"></p>
+        <i>Extract from NHS Greater Glasgow and Clyde Blood Transfusion Special Requirements Guideline (March 2013, issue 1), pages 1-8:</i>
           <h3><u>INTRODUCTION</u>
           </h3>
           <p>This guideline is for all staff involved in prescribing, supplying and administering blood and blood components throughout Greater Glasgow and Clyde Health Board (GG&amp;C). It should be used in conjunction with the GG&amp;C Clinical Transfusion Policy. The aim of the Clinical Transfusion policy is to ensure that the <b>right</b> blood is given to the <b>right</b> patient at the <b>right</b> time, <b>every</b> time. This policy focuses on those patients who have a special requirement for transfusion and it aims:</p>
@@ -512,8 +514,12 @@
 
       var ViewModel = function() {
         var self = this;
+        self.searchterm = ko.observable('');
+        self.findall = ko.computed (function () {
+          $("#ggc:contains ('" + seachterm() + "')").css( "background", "yellow";
+        });
         self.section = ko.observable(2);
-        self.treatment = ko.observable(getUrlParameter('treatment'));
+        self.treatment = ko.observable(getUrlParameter('treatment') || "ggc");
         self.role = ko.observable(getUrlParameter('role'));
         self.hospital = ko.observable(getUrlParameter('hospital'));
         self.specialty = ko.observable(getUrlParameter('specialty'));
