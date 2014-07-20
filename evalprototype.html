@@ -40,8 +40,8 @@
         border: 1px solid #000;
       }
       .completed {
-        background: #fff !important;
-        opacity: 1;
+        border: none !important;
+        background: none !important;
       }
       .statement {
         border: 1px #ddd solid;
@@ -87,11 +87,27 @@
               <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select>
             </li>
           </ul>
-          <p data-bind="visible: !$root.questionBank1.pageCompleted();">
+    <p data-bind="visible: !$root.questionBank1.pageCompleted();">
             You must answer all mandatory questions (<i class="fa fa-certificate" style="color: red;"></i>) before proceeding.
           </p>
           <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted(), click: $root.questionBank1.moveNext" data-inline="true">Next page</a>
 
+          <h3 data-bind="text: questionHeading()[$root.questionBank1.currentPage()-1]"></h3>
+          <a  href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank1.currentPage() > 1, click: $root.questionBank1.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
+          <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank2.currentPageData">
+            <li class="statement" data-bind="css: {completed: selected() !== 'Please select'}">
+              <span data-bind="text: statement"></span>
+              <i class="fa fa-certificate" style="color: red;" data-bind="visible: selected() == 'Please select'"></i>
+              <br/>
+              <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select>
+            </li>
+          </ul>
+    <p data-bind="visible: !$root.questionBank2.pageCompleted();">
+            You must answer all mandatory questions (<i class="fa fa-certificate" style="color: red;"></i>) before proceeding.
+          </p>
+          <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank2.pageCompleted(), click: $root.questionBank2.moveNext" data-inline="true">Next page</a>
+
+      
         </div>
         <iframe id="help" src="http://optimalblooduse.eu/app/#front" width="100%" style="display:none; min-height:2600px; border: 0px; border-top: 5px solid black;"></iframe>
         <div id="ggc" style="display: none; padding: 10px;border: 0px; border-top: 5px solid black;"> <i>Extract from NHS Greater Glasgow and Clyde Blood Transfusion Special Requirements Guideline (March 2013, issue 1), pages 1-8:</i>
@@ -269,6 +285,7 @@
       </div>
     </div>
     <script type='text/javascript'>
+      
       // http://jsfiddle.net/zeelux/B4vN2/
       (function() {
         'use strict';
@@ -334,57 +351,60 @@
       };
       
       // Randomly allocate questions into two groups
-      
-      
-      
-      var ViewModel = function() {
-        var self = this;
-        self.questionHeading =  ko.observableArray([
-          "1. Are the statements true or false?",
-          "2. What aspects of blood components or recipients are risk factors for TA-GvHD?",
-          "3. What problems involving special components have been reported by haemovigilance schemes?",
-          "4. How would you specify the blood component when transfusing..."
-          ]),
-        self.questionBank1 = ko.observableArray([
-          // Theme 1 - cellular
-          {
-            statement: "Removal of leucocytes from platelets and red cells reduces risk of CMV transmission.",
-            options: ["Please select", "True", "False", "Don't know"],
-            selected: ko.observable("Please select")
-          }, {
-            statement: "In the UK only red cells and platelets for patients with special requirements is leucodepleted.",
-            options: ["Please select", "True", "False", "Don't know"],
-            selected: ko.observable("Please select")
-          }, {
-            statement: "Leucodepletion is as effective as irradiation in the prevention of TA-GvHD.",
-            options: ["Please select", "True", "False", "Don't know"],
-            selected: ko.observable("Please select")
-          }, {
-            statement: "Some patients require CMV-negative components, even when leucodepleted.",
-            options: ["Please select", "True", "False", "Don't know"],
-            selected: ko.observable("Please select")
-          }, {
-            statement: "All red cell concentrate in the UK is irradiated.",
-            options: ["Please select", "True", "False", "Don't know"],
-            selected: ko.observable("Please select")
-          }, {
-            statement: "Platelets, white cells and red cells are examples of cellular blood components.",
-            options: ["Please select", "True", "False", "Don't know"],
-            selected: ko.observable("Please select")
-          }, {
-            statement: "Fresh Frozen Plasma is an example of a non-cellular blood component.",
-            options: ["Please select", "True", "False", "Don't know"],
-            selected: ko.observable("Please select")
-          }, {
-            statement: "Non-cellular components are unlikely to be associated with GvHD or CMV infection.",
-            options: ["Please select", "True", "False", "Don't know"],
-            selected: ko.observable("Please select")
-          },
-          
-          
-          
-          // Theme 2 + TAGvHD
-          {
+
+      // Randomise array ordering
+      Array.prototype.shuffle = function() {
+              var i = this.length, j, temp;
+              if ( i == 0 ) return this;
+              while ( --i ) {
+                      j = Math.floor( Math.random() * ( i + 1 ) );
+                      temp = this[i];
+                      this[i] = this[j];
+                      this[j] = temp;
+              }
+              return this;
+      }
+
+      var q = {test : [1,2,3], test2 : [4,5,6]};
+    
+      var questions = {
+          theme1 : [
+              
+            {
+              statement: "Removal of leucocytes from platelets and red cells reduces risk of CMV transmission.",
+              options: ["Please select", "True", "False", "Don't know"],
+              selected: ko.observable("Please select")
+            }, {
+              statement: "In the UK only red cells and platelets for patients with special requirements is leucodepleted.",
+              options: ["Please select", "True", "False", "Don't know"],
+              selected: ko.observable("Please select")
+            }, {
+              statement: "Leucodepletion is as effective as irradiation in the prevention of TA-GvHD.",
+              options: ["Please select", "True", "False", "Don't know"],
+              selected: ko.observable("Please select")
+            }, {
+              statement: "Some patients require CMV-negative components, even when leucodepleted.",
+              options: ["Please select", "True", "False", "Don't know"],
+              selected: ko.observable("Please select")
+            }, {
+              statement: "All red cell concentrate in the UK is irradiated.",
+              options: ["Please select", "True", "False", "Don't know"],
+              selected: ko.observable("Please select")
+            }, {
+              statement: "Platelets, white cells and red cells are examples of cellular blood components.",
+              options: ["Please select", "True", "False", "Don't know"],
+              selected: ko.observable("Please select")
+            }, {
+              statement: "Fresh Frozen Plasma is an example of a non-cellular blood component.",
+              options: ["Please select", "True", "False", "Don't know"],
+              selected: ko.observable("Please select")
+            }, {
+              statement: "Non-cellular components are unlikely to be associated with GvHD or CMV infection.",
+              options: ["Please select", "True", "False", "Don't know"],
+              selected: ko.observable("Please select")
+            }],
+            
+          theme2: [{
             statement: "Viable donor lymphocytes in component.",
             options: ["Please select", "Yes", "No", "Don't know"],
             selected: ko.observable("Please select")
@@ -416,13 +436,11 @@
             statement: "Recipient with severe T-lymphocyte immunodeficiency.",
             options: ["Please select", "Yes", "No", "Don't know"],
             selected: ko.observable("Please select")
-          },
+          }],
           
           
-          
-          // Haemovigilance data
-          
-          {
+          theme3 : [
+            {
             statement: "Lack of knowledge about the indications for special components.",
             options: ["Please select", "Yes", "No", "Don't know"],
             selected: ko.observable("Please select")
@@ -454,47 +472,69 @@
             statement: "Unnecessary requests for special blood components.",
             options: ["Please select", "Yes", "No", "Don't know"],
             selected: ko.observable("Please select")
-          },
+          }],
           
           
           
-          // Theme 4 - Prescription scenarios
-          {
+          theme4 : [
+            {
             statement: "Red cells known to be from a second degree relative of the patient.",
-            options: ["Please select", "Irradiated and CMV-negative", "Irradiated", "CMV-negative", "Special component not required", "Don't know"],
+            options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
             selected: ko.observable("Please select")
           }, {
             
             statement: "Red cells for patients on Fludarabine or Alemtuzmab (Campath).",
-            options: ["Please select", "Irradiated and CMV-negative", "Irradiated", "CMV-negative", "Special component not required", "Don't know"],
+            options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
             selected: ko.observable("Please select")
           }, {
             statement: "Elective red cell transfusion for a pregnant woman in second trimester.",
-            options: ["Please select", "Irradiated and CMV-negative", "Irradiated", "CMV-negative", "Special component not required", "Don't know"],
+            options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
             selected: ko.observable("Please select")
           }, {
             statement: "Fresh frozen plasma for a patient with Hodgkin's lymphoma.",
-            options: ["Please select", "Irradiated and CMV-negative", "Irradiated", "CMV-negative", "Special component not required", "Don't know"],
+            options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
             selected: ko.observable("Please select")
           }, {
             statement: "HLA-matched platelets for a patient with refractoriness.",
-            options: ["Please select", "Irradiated and CMV-negative", "Irradiated", "CMV-negative", "Special component not required", "Don't know"],
+            options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
             selected: ko.observable("Please select")
           }, {
             statement: "Red cells for an infant who had an intrauterine transfusion (IUT) a year ago.",
-            options: ["Please select", "Irradiated and CMV-negative", "Irradiated", "CMV-negative", "Special component not required", "Don't know"],
+            options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
             selected: ko.observable("Please select")
           }, {
             statement: "Red cells for a patient receiving bone marrow transplant in the last 3 months.",
-            options: ["Please select", "Irradiated and CMV-negative", "Irradiated", "CMV-negative", "Special component not required", "Don't know"],
+            options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
             selected: ko.observable("Please select")
           }, {
             statement: "Platelets for a non-emergency bleeding cancer patient on purine analogues.",
-            options: ["Please select", "Irradiated and CMV-negative", "Irradiated", "CMV-negative", "Special component not required", "Don't know"],
+            options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
             selected: ko.observable("Please select")
-          }
-        ]).extend({
-          paging: 8
+          }]
+          };
+    
+      questions.theme1.shuffle();
+      questions.theme2.shuffle();
+      questions.theme3.shuffle();
+      questions.theme4.shuffle();
+      
+      var ViewModel = function() {
+        var self = this;
+        self.questionHeading =  ko.observableArray([
+          "1. Are the statements true or false?",
+          "2. What aspects of blood components or recipients are risk factors for TA-GvHD?",
+          "3. What problems involving special components have been reported by haemovigilance schemes?",
+          "4. How would you specify the blood component when transfusing..."
+          ]),
+        self.questionBank1 = ko.observableArray(
+          questions.theme1.splice(0,4).concat(questions.theme2.splice(0,4)).concat(questions.theme3.splice(0,4)).concat(questions.theme4.splice(0,4))
+          ).extend({
+          paging: 4
+        }),
+        self.questionBank2 = ko.observableArray(
+          questions.theme1.splice(0,4).concat(questions.theme2.splice(0,4)).concat(questions.theme3.splice(0,4)).concat(questions.theme4.splice(0,4))
+          ).extend({
+          paging: 4
         }),
         self.progress = ko.computed(function(){
 
@@ -509,6 +549,14 @@
           var passed = true;
           for (i=(self.questionBank1.currentPage()-1) * self.questionBank1.pageSize(); i < self.questionBank1.currentPage() * self.questionBank1.pageSize(); i++){
             if (self.questionBank1()[i].selected() == 'Please select') passed = false;
+          }
+          return passed;
+        }),
+        self.questionBank2.pageCompleted = ko.computed(function(){
+
+          var passed = true;
+          for (i=(self.questionBank2.currentPage()-1) * self.questionBank2.pageSize(); i < self.questionBank2.currentPage() * self.questionBank2.pageSize(); i++){
+            if (self.questionBank2()[i].selected() == 'Please select') passed = false;
           }
           return passed;
         })
