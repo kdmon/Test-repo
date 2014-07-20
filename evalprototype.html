@@ -69,6 +69,11 @@
       .highlight {
         background-color: yellow;
       }
+      .positive {
+        background: #0B0 !important;
+        box-shadow: 0px 2px 2px #ccc;
+        border: 1px #555 solid !important;
+      }
     </style>
   </head>
 
@@ -88,7 +93,8 @@
                 <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select>
               </li>
             </ul>
-            <p data-bind="visible: !$root.questionBank1.pageCompleted();">You must answer all mandatory questions (<i class="fa fa-certificate" style="color: red;"></i>) before proceeding.</p> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted(), click: $root.questionBank1.moveNext" data-inline="true">Next page</a>
+            <p data-bind="visible: !$root.questionBank1.pageCompleted();">You must answer all mandatory questions (<i class="fa fa-certificate" style="color: red;"></i>) before proceeding.</p>
+            <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted(), click: $root.questionBank1.moveNext" data-inline="true">Next page</a>
           </div>
           <div data-bind="visible: section() == 2">
             <p data-bind="text: questionHeading()[$root.questionBank2.currentPage()-1]"></p> <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank1.currentPage() > 1, click: $root.questionBank1.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
@@ -96,7 +102,8 @@
               <li class="statement" data-bind="css: {completed: selected() !== 'Please select'}">
                 <span data-bind="text: statement"></span> <i class="fa fa-certificate" style="color: red;" data-bind="visible: selected() == 'Please select'"></i>
                 <br/>
-                <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank2.pageCompleted(), click: $root.questionBank2.moveNext" data-inline="true">Next</a>
+                <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select>
+                <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank2.pageCompleted(), click: $root.questionBank2.moveNext" data-inline="true">Next</a>
               </li>
             </ul>
           </div>
@@ -106,8 +113,8 @@
           <i>Extract from NHS Greater Glasgow and Clyde Blood Transfusion Special Requirements Guideline (March 2013, issue 1), pages 1-8:</i>
           <div>
             <a href="#" style="position: absolute; margin-top:0px; right: 0px;" data-role="button" data-inline="true" data-bind="click: findall"><i class="fa fa-search"></i></a> 
-            <input style="font-size: 1.2em;" placeholder="Search guidelines" type="text" data-inline="true" data-bind="value: searchterm, valueUpdate: 'keyup'"> 
-            <a href="#" data-role="button" data-inline="true" data-bind="visible: searchterm(), click: clearsearch">Clear search</a>
+            <a href="#" style="position: absolute; margin-top:0px; left: 10px;"data-role="button" data-inline="true" data-bind="visible: searchterm(), click: clearsearch">x</a>
+            <input class="searchbar" style="margin-left: 2em; font-size: 1.2em;" placeholder="Search guidelines" type="text" data-inline="true" data-bind="value: searchterm, valueUpdate: 'keyup'"> 
           </div>
           <hr/>
           <h3><u>INTRODUCTION</u>
@@ -554,7 +561,7 @@
             if (occurrances < 1) {alert ("Search term not found"); return;}
             else {
               $(window).scrollTop($(".highlight:first").offset().top);}
-              alert ("Found and highlighted " + occurrances + " occurrances of search term.");
+              alert ("Found " + occurrances + " occurrances of search term.");
             }
           else {
             alert ("Search term must be two characters or more");
@@ -598,6 +605,12 @@
       };
       var model = new ViewModel();
       ko.applyBindings(model);
+      
+      $(".searchbar").on('keypress', function(e) {
+	      if(e.keyCode==13){
+	        model.findall();
+	      }
+      });
     </script>
   </body>
 
