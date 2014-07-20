@@ -65,7 +65,7 @@
       .ui-page {
         padding: 0px;
         background: #FDFDFD;
-        font-size: 1em;
+        font-size: 0.9em;
       }
       .highlight {
         background-color: yellow;
@@ -95,8 +95,8 @@
               </li>
             </ul>
             <p data-bind="visible: !$root.questionBank1.pageCompleted();">You must answer all mandatory questions (<i class="fa fa-certificate" style="color: red;"></i>) before proceeding.</p>
-            <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted() && $root.questionBank1.currentPage() < 4, click: $root.questionBank1.moveNext">Next page</a>
-            <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted() && $root.questionBank1.currentPage() == 4, click: $root.questionBank1.moveNext">Next section</a>
+            <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted() && $root.questionBank1.currentPage() <  $root.questionBank1.pageCount(), click: $root.questionBank1.moveNext">Next page</a>
+            <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted() && $root.questionBank1.currentPage() ==  $root.questionBank1.pageCount(), click: $root.nextSection">Next section</a>
           </div>
           <div data-bind="visible: section() == 2">
             <p data-bind="text: questionHeading()[$root.questionBank2.currentPage()-1]"></p> <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank1.currentPage() > 1, click: $root.questionBank1.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
@@ -105,7 +105,8 @@
                 <span data-bind="text: statement"></span> <i class="fa fa-certificate" style="color: red;" data-bind="visible: selected() == 'Please select'"></i>
                 <br/>
                 <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select>
-                <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank2.pageCompleted(), click: $root.questionBank2.moveNext" data-inline="true">Next</a>
+                <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank2.pageCompleted() && $root.questionBank2.currentPage() <  $root.questionBank2.pageCount(), click: $root.questionBank2.moveNext" data-inline="true">Next</a>
+                 <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank2.pageCompleted() && $root.questionBank2.currentPage() == $root.questionBank2.pageCount(), click: $root.nextSection" data-inline="true">Next section</a>
               </li>
             </ul>
           </div>
@@ -540,6 +541,10 @@
       };
       var ViewModel = function() {
         var self = this;
+        self.nextSection = function () {
+          self.section(self.section() + 1);
+          $(window).scrollTop(0);
+        }
         self.clearsearch = function () {
           $(".highlight").replaceWith(function() {
             return $(this).contents();
@@ -588,7 +593,11 @@
           for (i = 0; i < self.questionBank1.pageCount() * self.questionBank1.pageSize(); i++) {
             if (self.questionBank1()[i].selected() !== 'Please select') count++;
           }
-          return Math.round(100 / (self.questionBank1.pageCount() * self.questionBank1.pageSize()) * count);
+          
+          for (i = 0; i < self.questionBank2.pageCount() * self.questionBank2.pageSize(); i++) {
+            if (self.questionBank2()[i].selected() !== 'Please select') count++;
+          }
+          return Math.round(100 / ((self.questionBank1.pageCount() * self.questionBank1.pageSize()) + (self.questionBank2.pageCount() * self.questionBank2.pageSize())) * count);
         });
         self.questionBank1.pageCompleted = ko.computed(function() {
           var passed = true;
