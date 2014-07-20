@@ -66,6 +66,9 @@
         background: #FDFDFD;
         font-size: 1em;
       }
+      .highlight {
+        background-color: yellow;
+      }
     </style>
   </head>
 
@@ -87,10 +90,8 @@
             </ul>
             <p data-bind="visible: !$root.questionBank1.pageCompleted();">You must answer all mandatory questions (<i class="fa fa-certificate" style="color: red;"></i>) before proceeding.</p> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted(), click: $root.questionBank1.moveNext" data-inline="true">Next page</a>
           </div>
-          
           <div data-bind="visible: section() == 2">
-            <p data-bind="text: questionHeading()[$root.questionBank2.currentPage()-1]"></p>
-            <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank1.currentPage() > 1, click: $root.questionBank1.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
+            <p data-bind="text: questionHeading()[$root.questionBank2.currentPage()-1]"></p> <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank1.currentPage() > 1, click: $root.questionBank1.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
             <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank2.currentPageData">
               <li class="statement" data-bind="css: {completed: selected() !== 'Please select'}">
                 <span data-bind="text: statement"></span> <i class="fa fa-certificate" style="color: red;" data-bind="visible: selected() == 'Please select'"></i>
@@ -102,8 +103,13 @@
         </div>
         <iframe data-bind="visible: section() == 2 && treatment() == 'app'" id="help" src="http://optimalblooduse.eu/app/#front" width="100%" style="border: 0px; border-top: 5px solid black;"></iframe>
         <div data-bind="visible: section() == 2 && treatment() == 'ggc'" id="ggc" style=" padding: 10px;border: 0px; border-top: 5px solid black;">
-        <p>Search guideline: <input data-inline="true" size="10" data-bind="value: searchterm"></p>
-        <i>Extract from NHS Greater Glasgow and Clyde Blood Transfusion Special Requirements Guideline (March 2013, issue 1), pages 1-8:</i>
+          <i>Extract from NHS Greater Glasgow and Clyde Blood Transfusion Special Requirements Guideline (March 2013, issue 1), pages 1-8:</i>
+          <div>
+            <a href="#" style="position: absolute; margin-top:0px; right: 0px;" data-role="button" data-inline="true" data-bind="click: findall"><i class="fa fa-search"></i></a> 
+            <input style="font-size: 1.2em;" placeholder="Search guidelines" type="text" data-inline="true" data-bind="value: searchterm, valueUpdate: 'keyup'"> 
+            <a href="#" data-role="button" data-inline="true" data-bind="visible: searchterm(), click: clearsearch">Clear search</a>
+          </div>
+          <hr/>
           <h3><u>INTRODUCTION</u>
           </h3>
           <p>This guideline is for all staff involved in prescribing, supplying and administering blood and blood components throughout Greater Glasgow and Clyde Health Board (GG&amp;C). It should be used in conjunction with the GG&amp;C Clinical Transfusion Policy. The aim of the Clinical Transfusion policy is to ensure that the <b>right</b> blood is given to the <b>right</b> patient at the <b>right</b> time, <b>every</b> time. This policy focuses on those patients who have a special requirement for transfusion and it aims:</p>
@@ -358,7 +364,6 @@
           }
         }
       }
-      
        // Randomise array ordering
       Array.prototype.shuffle = function() {
         var i = this.length,
@@ -511,13 +516,52 @@
       questions.theme2.shuffle();
       questions.theme3.shuffle();
       questions.theme4.shuffle();
-
+       // highlight text
+      jQuery.fn.highlight = function(str, className) {
+        var regex = new RegExp(str, "gi");
+        return this.each(function() {
+          $(this).contents().filter(function() {
+            return this.nodeType == 3;
+          }).replaceWith(function() {
+            return (this.nodeValue || "").replace(regex, function(match) {
+              return "<span class=\"" + className + "\">" + match + "</span>";
+            });
+          });
+        });
+      };
       var ViewModel = function() {
         var self = this;
+        self.clearsearch = function () {
+          $(".highlight").replaceWith(function() {
+            return $(this).contents();
+          });
+          self.searchterm('');
+        };
         self.searchterm = ko.observable('');
-        self.findall = ko.computed (function () {
-          $("#ggc:contains ('" + seachterm() + "')").css( "background", "yellow";
-        });
+        self.findall = function() {
+          var term = self.searchterm();
+          // Clear existing highlights
+          $(".highlight").replaceWith(function() {
+            return $(this).contents();
+          });
+          // New search
+          if (term.length > 1) {
+            
+            $("#ggc *").highlight(term, "highlight");
+            
+            var occurrances = $(".highlight") ? $(".highlight").length : 0;
+            
+            if (occurrances < 1) {alert ("Search term not found"); return;}
+            else {
+              $(window).scrollTop($(".highlight:first").offset().top);}
+              alert ("Found and highlighted " + occurrances + " occurrances of search term.");
+            }
+          else {
+            alert ("Search term must be two characters or more");
+            
+          }
+            
+        };
         self.section = ko.observable(2);
         self.treatment = ko.observable(getUrlParameter('treatment') || "ggc");
         self.role = ko.observable(getUrlParameter('role'));
