@@ -40,6 +40,7 @@
       }
       .completed {
         border: none !important;
+        border-bottom: 1px solid #ddd !important;
         background: none !important;
       }
       .statement {
@@ -94,7 +95,8 @@
               </li>
             </ul>
             <p data-bind="visible: !$root.questionBank1.pageCompleted();">You must answer all mandatory questions (<i class="fa fa-certificate" style="color: red;"></i>) before proceeding.</p>
-            <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted(), click: $root.questionBank1.moveNext" data-inline="true">Next page</a>
+            <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted() && $root.questionBank1.currentPage() < 4, click: $root.questionBank1.moveNext">Next page</a>
+            <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted() && $root.questionBank1.currentPage() == 4, click: $root.questionBank1.moveNext">Next section</a>
           </div>
           <div data-bind="visible: section() == 2">
             <p data-bind="text: questionHeading()[$root.questionBank2.currentPage()-1]"></p> <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank1.currentPage() > 1, click: $root.questionBank1.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
@@ -569,7 +571,7 @@
           }
             
         };
-        self.section = ko.observable(2);
+        self.section = ko.observable(1);
         self.treatment = ko.observable(getUrlParameter('treatment') || "ggc");
         self.role = ko.observable(getUrlParameter('role'));
         self.hospital = ko.observable(getUrlParameter('hospital'));
