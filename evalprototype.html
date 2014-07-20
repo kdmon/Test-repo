@@ -76,7 +76,7 @@
           <div style="border: 1px solid #aaa; background: #EFE;">
             <p id="progressbar" data-bind="style: {width: progress() + 1 + '%'}, text: progress() + 1 + '% completed' "></p>
           </div>
-          <div data-bind="visible: section == 1">
+          <div data-bind="visible: section() == 1">
             <h3 data-bind="text: questionHeading()[$root.questionBank1.currentPage()-1]"></h3> <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank1.currentPage() > 1, click: $root.questionBank1.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
             <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank1.currentPageData">
               <li class="statement" data-bind="css: {completed: selected() !== 'Please select'}">
@@ -88,7 +88,7 @@
             <p data-bind="visible: !$root.questionBank1.pageCompleted();">You must answer all mandatory questions (<i class="fa fa-certificate" style="color: red;"></i>) before proceeding.</p> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted(), click: $root.questionBank1.moveNext" data-inline="true">Next page</a>
           </div>
           
-          <div data-bind="visible: section == 2">
+          <div data-bind="visible: section() == 2">
             <p data-bind="text: questionHeading()[$root.questionBank2.currentPage()-1]"></p>
             <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank1.currentPage() > 1, click: $root.questionBank1.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
             <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank2.currentPageData">
@@ -100,7 +100,7 @@
             </ul>
           </div>
         </div>
-        <iframe data-bind="visible: section == 2 || section == 3" id="help" src="http://optimalblooduse.eu/app/#front" width="100%" style="border: 0px; border-top: 5px solid black;"></iframe>
+        <iframe data-bind="visible: section() == 2 || section() == 3" id="help" src="http://optimalblooduse.eu/app/#front" width="100%" style="border: 0px; border-top: 5px solid black;"></iframe>
         <div id="ggc" style="display: none; padding: 10px;border: 0px; border-top: 5px solid black;"> <i>Extract from NHS Greater Glasgow and Clyde Blood Transfusion Special Requirements Guideline (March 2013, issue 1), pages 1-8:</i>
           <h3><u>INTRODUCTION</u>
           </h3>
@@ -546,7 +546,8 @@
           return passed;
         });
       };
-      ko.applyBindings(new ViewModel());
+      var model = new ViewModel();
+      ko.applyBindings(model);
     </script>
   </body>
 
