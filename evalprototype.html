@@ -10,7 +10,6 @@
     <link rel="stylesheet" type="text/css" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <style>
-    
       @media (min-width: 30em) {
         /* Show the table header rows and set all cells to display: table-cell */
         #ggcindications td,
@@ -65,7 +64,7 @@
       .ui-page {
         padding: 0px;
         background: #FDFDFD;
-        font-size: 1.2em;
+        font-size: 1em;
       }
     </style>
   </head>
@@ -77,39 +76,27 @@
           <div style="border: 1px solid #aaa; background: #EFE;">
             <p id="progressbar" data-bind="style: {width: progress() + 1 + '%'}, text: progress() + 1 + '% completed' "></p>
           </div>
-          <h3 data-bind="text: questionHeading()[$root.questionBank1.currentPage()-1]"></h3>
-          <a  href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank1.currentPage() > 1, click: $root.questionBank1.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
-          <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank1.currentPageData">
-            <li class="statement" data-bind="css: {completed: selected() !== 'Please select'}">
-              <span data-bind="text: statement"></span>
-              <i class="fa fa-certificate" style="color: red;" data-bind="visible: selected() == 'Please select'"></i>
-              <br/>
-              <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select>
-            </li>
-          </ul>
-    <p data-bind="visible: !$root.questionBank1.pageCompleted();">
-            You must answer all mandatory questions (<i class="fa fa-certificate" style="color: red;"></i>) before proceeding.
-          </p>
-          <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted(), click: $root.questionBank1.moveNext" data-inline="true">Next page</a>
-
-          <h3 data-bind="text: questionHeading()[$root.questionBank1.currentPage()-1]"></h3>
-          <a  href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank1.currentPage() > 1, click: $root.questionBank1.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
+          <div data-bind="">
+            <h3 data-bind="text: questionHeading()[$root.questionBank1.currentPage()-1]"></h3> <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank1.currentPage() > 1, click: $root.questionBank1.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
+            <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank1.currentPageData">
+              <li class="statement" data-bind="css: {completed: selected() !== 'Please select'}">
+                <span data-bind="text: statement"></span> <i class="fa fa-certificate" style="color: red;" data-bind="visible: selected() == 'Please select'"></i>
+                <br/>
+                <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select>
+              </li>
+            </ul>
+            <p data-bind="visible: !$root.questionBank1.pageCompleted();">You must answer all mandatory questions (<i class="fa fa-certificate" style="color: red;"></i>) before proceeding.</p> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted(), click: $root.questionBank1.moveNext" data-inline="true">Next page</a>
+          </div>
+          <p data-bind="text: questionHeading()[$root.questionBank2.currentPage()-1]"></p> <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank1.currentPage() > 1, click: $root.questionBank1.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
           <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank2.currentPageData">
             <li class="statement" data-bind="css: {completed: selected() !== 'Please select'}">
-              <span data-bind="text: statement"></span>
-              <i class="fa fa-certificate" style="color: red;" data-bind="visible: selected() == 'Please select'"></i>
+              <span data-bind="text: statement"></span> <i class="fa fa-certificate" style="color: red;" data-bind="visible: selected() == 'Please select'"></i>
               <br/>
-              <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select>
+              <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank2.pageCompleted(), click: $root.questionBank2.moveNext" data-inline="true">Next</a>
             </li>
           </ul>
-    <p data-bind="visible: !$root.questionBank2.pageCompleted();">
-            You must answer all mandatory questions (<i class="fa fa-certificate" style="color: red;"></i>) before proceeding.
-          </p>
-          <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank2.pageCompleted(), click: $root.questionBank2.moveNext" data-inline="true">Next page</a>
-
-      
         </div>
-        <iframe id="help" src="http://optimalblooduse.eu/app/#front" width="100%" style="display:none; min-height:2600px; border: 0px; border-top: 5px solid black;"></iframe>
+        <iframe id="help" src="http://optimalblooduse.eu/app/#front" width="100%" style="display:block; border: 0px; border-top: 5px solid black;"></iframe>
         <div id="ggc" style="display: none; padding: 10px;border: 0px; border-top: 5px solid black;"> <i>Extract from NHS Greater Glasgow and Clyde Blood Transfusion Special Requirements Guideline (March 2013, issue 1), pages 1-8:</i>
           <h3><u>INTRODUCTION</u>
           </h3>
@@ -170,8 +157,8 @@
                 </tr>
                 <tr>
                   <td>Severe T lymphocyte immunodeficiency syndromes including Di George and Severe Combined Immunodeficiency</td>
-                  <td>&#10003;  </td>
-                  <td>&#10003;  </td>
+                  <td>&#10003;</td>
+                  <td>&#10003;</td>
                 </tr>
                 <tr>
                   <td>Recipients of haemopoietic stem cell transplantation (HSCT)</td>
@@ -220,40 +207,46 @@
               <p>** The requirement for irradiation after IUT remains until 6 months after 40 weeks gestation</p>
               <p>*** Products for neonatal ET must be irradiated when there has been a previous IUT or if the donation is from a first or second-degree relative.
                 <br/>For other neonatal ET, irradiation is recommended if irradiation will not delay transfusion</p>
-              <p>  Whilst a diagnosis of severe T lymphocyte immunodeficiency is considered all components transfused should be irradiated and CMV seronegative whilst further tests are being undertaken</p>
+              <p>Whilst a diagnosis of severe T lymphocyte immunodeficiency is considered all components transfused should be irradiated and CMV seronegative whilst further tests are being undertaken</p>
               <p?Q more detailed requirements for transplant recipients are as follows:</p>
-              <div style="margin-left:25px"> <b><i>allografts</i></b> - irradiated components should be given indefinitely
-                <br/> <b><i>autografts</i></b> - irradiated components should be given until 6 months post transplant</div>
-              <p><b><i>[NB: Plasma reduced components section not reproduced in this extract.]</i></b>
-              </p>
-              <p><b>If there is any doubt as to whether or not a patient has a requirement for 
+                <div style="margin-left:25px"> <b><i>allografts</i></b> - irradiated components should be given indefinitely
+                  <br/> <b><i>autografts</i></b> - irradiated components should be given until 6 months post transplant</div>
+                <p><b><i>[NB: Plasma reduced components section not reproduced in this extract.]</i></b>
+                </p>
+                <p><b>If there is any doubt as to whether or not a patient has a requirement for 
         special blood components please discuss with the on call Haematologist at your local site.</b>
-              </p>
-              <h3><u>NOTIFICATION TO THE LABORATORY OF PATIENTS WITH SPECIAL REQUIREMENTS</u>
-              </h3>
-              <p>Once a patient has been identified as having a requirement for special blood components, a standard form, used throughout GG&amp;C (see appendix 1 <b><i>[NB: request form not reproduced in this extract]</i></b>), should be fully completed and sent to the local Blood Bank. The information held on this form will be shared with all Blood Banks throughout GG&amp;C.</p>
-              <p>The form should be signed by the Consultant in charge of the patient's care. It should be photocopied and a copy filed in the case records with the second copy forwarded to Blood Bank. If the patient has been identified as having special blood component requirements out with core working hours and a Consultant is not available, the requirement can be requested on a regular transfusion form and the special requirements form forwarded at the earliest possible opportunity. The information will not be disseminated throughout the Health Board Blood Banks until a Consultant signed copy of the special requirements form is received by the hospital Blood Bank.</p>
-              <p>If the need for the special blood components changes, an updated form should be forwarded to the hospital Blood Bank so their records can be amended.</p>
-              <h3>Laboratory Dissemination of Information</h3>
-              <p>As patients regularly transfer between hospital sites it is important that their transfusion requirement information is available throughout the Health Board Blood Banks. Once a Consultant signed form is received at a local Blood Bank, the form will be scanned and emailed to the Blood Bank managers in the South, North, Clyde and the Golden Jubilee Hospital so that their computer systems can be updated accordingly (as per the Blood Bank special requirements SOP).</p>
-              <p>The form will be returned to the requesting Consultant to ensure they are aware the laboratory tasks have been completed.</p>
-              <h3><u>PATIENT COUNSELLING AND CONSENT</u>
-              </h3>
-              <p>It is not a legal requirement in the United Kingdom that written consent is obtained before a transfusion of blood components; however, it is considered a required standard of good transfusion practice to ensure that the patient/parent/carer receives adequate information regarding the transfusion. This standard is laid down in the NHS QIS Clinical Standards (2006) now known as Healthcare Improvement Scotland and compliance is monitored. 4 This discussion should include information about the risks and benefits of transfusion as well as information relating to available alternatives, for example, iron supplementation and must be documented in the case records. Nursing and medical staff therefore, have a professional duty to ensure that they have adequate knowledge of transfusion related issues or that they can access the information and support required by patients undergoing a transfusion.</p>
-              <p>Booklets are available specifically for patients who require irradiated components and all patients receiving irradiated components should be given these before their first transfusion. They should also be counselled and told to inform nursing and medical staff of this requirement before any future transfusions. Patients should be given a card to carry documenting their special transfusion requirement. An adhesive sticker, taken from the information leaflet, should be placed on the front of case records detailing the requirement. It is the responsibility of the prescribing practitioner to ensure these steps are undertaken.</p>
-              <h3>INCIDENT REPORTING</h3>
-              <p>There have been 13 reported cases of TaGVHD since 1996 but no cases in the last 8 years. 2 cases have been reported in leucodepleted components (1998-99 and 2000-01) indicating that while leucodepletion significantly reduces, it does not eradicate the risk of this condition. It is important therefore that appropriate products are provided for patients at risk.</p>
-              <p>Errors do occur and the Serous Hazards of Transfusion (SHOT) report 2010 documents 74 cases where special requirements were not met. The majority of these (59 cases) were patients who required irradiated products but did not receive them. 5 It is important that any errors are documented appropriately to ensure that steps can be taken to avoid them in the future. If it becomes apparent that a patient has failed to receive appropriate components the hospital Blood Bank must be informed immediately. The incident will be fully investigated and reported on DATIX and to SHOT.</p>
-              <h3><u>REFERENCES</u></h3>
-              <ol>
-              <li> Transfusion Transmitted Infection. Chapter 13. Practical Transfusion Medicine. Third Edition. P122-145. Murphy MF, Pamphilon DH.</li>
-              <li> <a id="ref2"></a> Clinical Blood Transfusion. Chapter 16 Postgraduate Haematology Sixth Edition. P268-300. Hoffbrand AV, Catovsky D, Tuddenham EDD, Green AR.</li>
-              <li> <a id="ref3"></a> Guidelines on the use of irradiated blood components prepared by the British Committee for Standards in Haematology blood transfusion task force British Journal of Haematology 2011, 152, 35  51</li>
-              <li> NHS QIS Clinical Standards - Blood Transfusion <a href="http://www.healthcareimprovementscotland.org/previous_resources/standards/clinical_standards_-_blood_tra.aspx" target="_blank">http://www.healthcareimprovementscotland.org/previous_resources/standards/clinical_standards_-_blood_tra.aspx</a></li>
-              <li> Serious Hazards of Transfusion <a href="http://www.shotuk.org" target="_blank">http://www.shotuk.org/</a></li>
-              <li> Transfusion guidelines for neonates and older children British Journal of Haematology 2004, 124, 433 - 453</li>
-              <li> Advisory Committee on the Safety of Blood, Tissues and Organs (SaBTO) <a href="http://www.dh.gov.uk/prod_consum_dh/groups/dh_digitalassets/@dh/@en/documents/digitalasset/dh_133086.pdf" target="_blank">http://www.dh.gov.uk/prod_consum_dh/groups/dh_digitalassets/@dh/@en/documents/digitalasset/dh_133086.pdf</a></li>
-              </ol>
+                </p>
+                <h3><u>NOTIFICATION TO THE LABORATORY OF PATIENTS WITH SPECIAL REQUIREMENTS</u>
+                </h3>
+                <p>Once a patient has been identified as having a requirement for special blood components, a standard form, used throughout GG&amp;C (see appendix 1 <b><i>[NB: request form not reproduced in this extract]</i></b>), should be fully completed and sent to the local Blood Bank. The information held on this form will be shared with all Blood Banks throughout GG&amp;C.</p>
+                <p>The form should be signed by the Consultant in charge of the patient's care. It should be photocopied and a copy filed in the case records with the second copy forwarded to Blood Bank. If the patient has been identified as having special blood component requirements out with core working hours and a Consultant is not available, the requirement can be requested on a regular transfusion form and the special requirements form forwarded at the earliest possible opportunity. The information will not be disseminated throughout the Health Board Blood Banks until a Consultant signed copy of the special requirements form is received by the hospital Blood Bank.</p>
+                <p>If the need for the special blood components changes, an updated form should be forwarded to the hospital Blood Bank so their records can be amended.</p>
+                <h3>Laboratory Dissemination of Information</h3>
+                <p>As patients regularly transfer between hospital sites it is important that their transfusion requirement information is available throughout the Health Board Blood Banks. Once a Consultant signed form is received at a local Blood Bank, the form will be scanned and emailed to the Blood Bank managers in the South, North, Clyde and the Golden Jubilee Hospital so that their computer systems can be updated accordingly (as per the Blood Bank special requirements SOP).</p>
+                <p>The form will be returned to the requesting Consultant to ensure they are aware the laboratory tasks have been completed.</p>
+                <h3><u>PATIENT COUNSELLING AND CONSENT</u>
+                </h3>
+                <p>It is not a legal requirement in the United Kingdom that written consent is obtained before a transfusion of blood components; however, it is considered a required standard of good transfusion practice to ensure that the patient/parent/carer receives adequate information regarding the transfusion. This standard is laid down in the NHS QIS Clinical Standards (2006) now known as Healthcare Improvement Scotland and compliance is monitored. 4 This discussion should include information about the risks and benefits of transfusion as well as information relating to available alternatives, for example, iron supplementation and must be documented in the case records. Nursing and medical staff therefore, have a professional duty to ensure that they have adequate knowledge of transfusion related issues or that they can access the information and support required by patients undergoing a transfusion.</p>
+                <p>Booklets are available specifically for patients who require irradiated components and all patients receiving irradiated components should be given these before their first transfusion. They should also be counselled and told to inform nursing and medical staff of this requirement before any future transfusions. Patients should be given a card to carry documenting their special transfusion requirement. An adhesive sticker, taken from the information leaflet, should be placed on the front of case records detailing the requirement. It is the responsibility of the prescribing practitioner to ensure these steps are undertaken.</p>
+                <h3>INCIDENT REPORTING</h3>
+                <p>There have been 13 reported cases of TaGVHD since 1996 but no cases in the last 8 years. 2 cases have been reported in leucodepleted components (1998-99 and 2000-01) indicating that while leucodepletion significantly reduces, it does not eradicate the risk of this condition. It is important therefore that appropriate products are provided for patients at risk.</p>
+                <p>Errors do occur and the Serous Hazards of Transfusion (SHOT) report 2010 documents 74 cases where special requirements were not met. The majority of these (59 cases) were patients who required irradiated products but did not receive them. 5 It is important that any errors are documented appropriately to ensure that steps can be taken to avoid them in the future. If it becomes apparent that a patient has failed to receive appropriate components the hospital Blood Bank must be informed immediately. The incident will be fully investigated and reported on DATIX and to SHOT.</p>
+                <h3><u>REFERENCES</u>
+                </h3>
+                <ol>
+                  <li>Transfusion Transmitted Infection. Chapter 13. Practical Transfusion Medicine. Third Edition. P122-145. Murphy MF, Pamphilon DH.</li>
+                  <li>
+                    <a id="ref2"></a>Clinical Blood Transfusion. Chapter 16 Postgraduate Haematology Sixth Edition. P268-300. Hoffbrand AV, Catovsky D, Tuddenham EDD, Green AR.</li>
+                  <li>
+                    <a id="ref3"></a>Guidelines on the use of irradiated blood components prepared by the British Committee for Standards in Haematology blood transfusion task force British Journal of Haematology 2011, 152, 35  51</li>
+                  <li>NHS QIS Clinical Standards - Blood Transfusion <a href="http://www.healthcareimprovementscotland.org/previous_resources/standards/clinical_standards_-_blood_tra.aspx" target="_blank">http://www.healthcareimprovementscotland.org/previous_resources/standards/clinical_standards_-_blood_tra.aspx</a>
+                  </li>
+                  <li>Serious Hazards of Transfusion <a href="http://www.shotuk.org" target="_blank">http://www.shotuk.org/</a>
+                  </li>
+                  <li>Transfusion guidelines for neonates and older children British Journal of Haematology 2004, 124, 433 - 453</li>
+                  <li>Advisory Committee on the Safety of Blood, Tissues and Organs (SaBTO) <a href="http://www.dh.gov.uk/prod_consum_dh/groups/dh_digitalassets/@dh/@en/documents/digitalasset/dh_133086.pdf" target="_blank">http://www.dh.gov.uk/prod_consum_dh/groups/dh_digitalassets/@dh/@en/documents/digitalasset/dh_133086.pdf</a>
+                  </li>
+                </ol>
         </div>
         <div style="display:none; padding: 10px;border: 0px; border-top: 5px solid black;" id="lothian"> <i>Extract from NHS Lothian, Blood Transfusion Clinical Policy and Procedures 2013 (v.4), Appendic C: Special Requirements, pages 45-46:</i>
           <h3>Irradiated Components</h3>
@@ -285,7 +278,6 @@
       </div>
     </div>
     <script type='text/javascript'>
-      
       // http://jsfiddle.net/zeelux/B4vN2/
       (function() {
         'use strict';
@@ -349,213 +341,201 @@
           $(element).trigger("create");
         }
       };
-      
-      // Randomly allocate questions into two groups
 
-      // Randomise array ordering
-      Array.prototype.shuffle = function() {
-              var i = this.length, j, temp;
-              if ( i == 0 ) return this;
-              while ( --i ) {
-                      j = Math.floor( Math.random() * ( i + 1 ) );
-                      temp = this[i];
-                      this[i] = this[j];
-                      this[j] = temp;
-              }
-              return this;
+      function getUrlParameter(sParam) {
+        var sPageURL = window.location.search.substring(1);
+        var sURLVariables = sPageURL.split('&');
+        for (var i = 0; i < sURLVariables.length; i++) {
+          var sParameterName = sURLVariables[i].split('=');
+          if (sParameterName[0] == sParam) {
+            return sParameterName[1];
+          }
+        }
       }
-
-      var q = {test : [1,2,3], test2 : [4,5,6]};
-    
+      
+       // Randomise array ordering
+      Array.prototype.shuffle = function() {
+        var i = this.length,
+          j, temp;
+        if (i == 0) return this;
+        while (--i) {
+          j = Math.floor(Math.random() * (i + 1));
+          temp = this[i];
+          this[i] = this[j];
+          this[j] = temp;
+        }
+        return this;
+      }
       var questions = {
-          theme1 : [
-              
-            {
-              statement: "Removal of leucocytes from platelets and red cells reduces risk of CMV transmission.",
-              options: ["Please select", "True", "False", "Don't know"],
-              selected: ko.observable("Please select")
-            }, {
-              statement: "In the UK only red cells and platelets for patients with special requirements is leucodepleted.",
-              options: ["Please select", "True", "False", "Don't know"],
-              selected: ko.observable("Please select")
-            }, {
-              statement: "Leucodepletion is as effective as irradiation in the prevention of TA-GvHD.",
-              options: ["Please select", "True", "False", "Don't know"],
-              selected: ko.observable("Please select")
-            }, {
-              statement: "Some patients require CMV-negative components, even when leucodepleted.",
-              options: ["Please select", "True", "False", "Don't know"],
-              selected: ko.observable("Please select")
-            }, {
-              statement: "All red cell concentrate in the UK is irradiated.",
-              options: ["Please select", "True", "False", "Don't know"],
-              selected: ko.observable("Please select")
-            }, {
-              statement: "Platelets, white cells and red cells are examples of cellular blood components.",
-              options: ["Please select", "True", "False", "Don't know"],
-              selected: ko.observable("Please select")
-            }, {
-              statement: "Fresh Frozen Plasma is an example of a non-cellular blood component.",
-              options: ["Please select", "True", "False", "Don't know"],
-              selected: ko.observable("Please select")
-            }, {
-              statement: "Non-cellular components are unlikely to be associated with GvHD or CMV infection.",
-              options: ["Please select", "True", "False", "Don't know"],
-              selected: ko.observable("Please select")
-            }],
-            
-          theme2: [{
-            statement: "Viable donor lymphocytes in component.",
-            options: ["Please select", "Yes", "No", "Don't know"],
-            selected: ko.observable("Please select")
-          }, {
-            statement: "Recipient with low haemoglobin level.",
-            options: ["Please select", "Yes", "No", "Don't know"],
-            selected: ko.observable("Please select")
-          }, {
-            statement: "Shared HLA haplotype between donor and recipient",
-            options: ["Please select", "Yes", "No", "Don't know"],
-            selected: ko.observable("Please select")
-          }, {
-            statement: "Age of blood component.",
-            options: ["Please select", "Yes", "No", "Don't know"],
-            selected: ko.observable("Please select")
-          }, {
-            statement: "Recipient with HIV/AIDS.",
-            options: ["Please select", "Yes", "No", "Don't know"],
-            selected: ko.observable("Please select")
-          }, {
-            statement: "Granulocyte component.",
-            options: ["Please select", "Yes", "No", "Don't know"],
-            selected: ko.observable("Please select")
-          }, {
-            statement: "Fresh Frozen Plasma (FFP).",
-            options: ["Please select", "Yes", "No", "Don't know"],
-            selected: ko.observable("Please select")
-          }, {
-            statement: "Recipient with severe T-lymphocyte immunodeficiency.",
-            options: ["Please select", "Yes", "No", "Don't know"],
-            selected: ko.observable("Please select")
-          }],
-          
-          
-          theme3 : [
-            {
-            statement: "Lack of knowledge about the indications for special components.",
-            options: ["Please select", "Yes", "No", "Don't know"],
-            selected: ko.observable("Please select")
-          }, {
-            statement: "Failure to request blood according to local guidelines.",
-            options: ["Please select", "Yes", "No", "Don't know"],
-            selected: ko.observable("Please select")
-          }, {
-            statement: "Poor communication between clinicians during shared patient care.",
-            options: ["Please select", "Yes", "No", "Don't know"],
-            selected: ko.observable("Please select")
-          }, {
-            statement: "Radiation effects after transfusion of irradiated blood.",
-            options: ["Please select", "Yes", "No", "Don't know"],
-            selected: ko.observable("Please select")
-          }, {
-            statement: "Mistaken patient identity at component collection and transfusion.",
-            options: ["Please select", "Yes", "No", "Don't know"],
-            selected: ko.observable("Please select")
-          }, {
-            statement: "Transfusion of incorrectly stored components.",
-            options: ["Please select", "Yes", "No", "Don't know"],
-            selected: ko.observable("Please select")
-          }, {
-            statement: "Erroneous data in laboratory information systems.",
-            options: ["Please select", "Yes", "No", "Don't know"],
-            selected: ko.observable("Please select")
-          }, {
-            statement: "Unnecessary requests for special blood components.",
-            options: ["Please select", "Yes", "No", "Don't know"],
-            selected: ko.observable("Please select")
-          }],
-          
-          
-          
-          theme4 : [
-            {
-            statement: "Red cells known to be from a second degree relative of the patient.",
-            options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
-            selected: ko.observable("Please select")
-          }, {
-            
-            statement: "Red cells for patients on Fludarabine or Alemtuzmab (Campath).",
-            options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
-            selected: ko.observable("Please select")
-          }, {
-            statement: "Elective red cell transfusion for a pregnant woman in second trimester.",
-            options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
-            selected: ko.observable("Please select")
-          }, {
-            statement: "Fresh frozen plasma for a patient with Hodgkin's lymphoma.",
-            options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
-            selected: ko.observable("Please select")
-          }, {
-            statement: "HLA-matched platelets for a patient with refractoriness.",
-            options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
-            selected: ko.observable("Please select")
-          }, {
-            statement: "Red cells for an infant who had an intrauterine transfusion (IUT) a year ago.",
-            options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
-            selected: ko.observable("Please select")
-          }, {
-            statement: "Red cells for a patient receiving bone marrow transplant in the last 3 months.",
-            options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
-            selected: ko.observable("Please select")
-          }, {
-            statement: "Platelets for a non-emergency bleeding cancer patient on purine analogues.",
-            options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
-            selected: ko.observable("Please select")
-          }]
-          };
-    
+        theme1: [{
+          statement: "Removal of leucocytes from platelets and red cells reduces risk of CMV transmission.",
+          options: ["Please select", "True", "False", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "In the UK only red cells and platelets for patients with special requirements is leucodepleted.",
+          options: ["Please select", "True", "False", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Leucodepletion is as effective as irradiation in the prevention of TA-GvHD.",
+          options: ["Please select", "True", "False", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Some patients require CMV-negative components, even when leucodepleted.",
+          options: ["Please select", "True", "False", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "All red cell concentrate in the UK is irradiated.",
+          options: ["Please select", "True", "False", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Platelets, white cells and red cells are examples of cellular blood components.",
+          options: ["Please select", "True", "False", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Fresh Frozen Plasma is an example of a non-cellular blood component.",
+          options: ["Please select", "True", "False", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Non-cellular components are unlikely to be associated with GvHD or CMV infection.",
+          options: ["Please select", "True", "False", "Don't know"],
+          selected: ko.observable("Please select")
+        }],
+        theme2: [{
+          statement: "Viable donor lymphocytes in component.",
+          options: ["Please select", "Yes", "No", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Recipient with low haemoglobin level.",
+          options: ["Please select", "Yes", "No", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Shared HLA haplotype between donor and recipient",
+          options: ["Please select", "Yes", "No", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Age of blood component.",
+          options: ["Please select", "Yes", "No", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Recipient with HIV/AIDS.",
+          options: ["Please select", "Yes", "No", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Granulocyte component.",
+          options: ["Please select", "Yes", "No", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Fresh Frozen Plasma (FFP).",
+          options: ["Please select", "Yes", "No", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Recipient with severe T-lymphocyte immunodeficiency.",
+          options: ["Please select", "Yes", "No", "Don't know"],
+          selected: ko.observable("Please select")
+        }],
+        theme3: [{
+          statement: "Lack of knowledge about the indications for special components.",
+          options: ["Please select", "Yes", "No", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Failure to request blood according to local guidelines.",
+          options: ["Please select", "Yes", "No", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Poor communication between clinicians during shared patient care.",
+          options: ["Please select", "Yes", "No", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Radiation effects after transfusion of irradiated blood.",
+          options: ["Please select", "Yes", "No", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Mistaken patient identity at component collection and transfusion.",
+          options: ["Please select", "Yes", "No", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Transfusion of incorrectly stored components.",
+          options: ["Please select", "Yes", "No", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Erroneous data in laboratory information systems.",
+          options: ["Please select", "Yes", "No", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Unnecessary requests for special blood components.",
+          options: ["Please select", "Yes", "No", "Don't know"],
+          selected: ko.observable("Please select")
+        }],
+        theme4: [{
+          statement: "Red cells known to be from a second degree relative of the patient.",
+          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Red cells for patients on Fludarabine or Alemtuzmab (Campath).",
+          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Elective red cell transfusion for a pregnant woman in second trimester.",
+          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Fresh frozen plasma for a patient with Hodgkin's lymphoma.",
+          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "HLA-matched platelets for a patient with refractoriness.",
+          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Red cells for an infant who had an intrauterine transfusion (IUT) a year ago.",
+          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Red cells for a patient receiving bone marrow transplant in the last 3 months.",
+          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Platelets for a non-emergency bleeding cancer patient on purine analogues.",
+          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
+          selected: ko.observable("Please select")
+        }]
+      };
+       // Randomly allocate questions into two groups
       questions.theme1.shuffle();
       questions.theme2.shuffle();
       questions.theme3.shuffle();
       questions.theme4.shuffle();
-      
+      var treatment = queryString
       var ViewModel = function() {
         var self = this;
-        self.questionHeading =  ko.observableArray([
-          "1. Are the statements true or false?",
-          "2. What aspects of blood components or recipients are risk factors for TA-GvHD?",
-          "3. What problems involving special components have been reported by haemovigilance schemes?",
-          "4. How would you specify the blood component when transfusing..."
-          ]),
-        self.questionBank1 = ko.observableArray(
-          questions.theme1.splice(0,4).concat(questions.theme2.splice(0,4)).concat(questions.theme3.splice(0,4)).concat(questions.theme4.splice(0,4))
-          ).extend({
+        self.treatment = ko.observable(getUrlParameter('treatment')),
+        self.role = ko.observable(getUrlParameter('role')),
+        self.hospital = ko.observable(getUrlParameter('hospital')),
+        self.specialty = ko.observable(getUrlParameter('specialty')),
+        self.questionHeading = ko.observableArray(["1. Are the statements true or false?", "2. What aspects of blood components or recipients are risk factors for TA-GvHD?", "3. What problems involving special components have been reported by haemovigilance schemes?", "4. How would you specify the blood component when transfusing..."]),
+        self.questionBank1 = ko.observableArray(questions.theme1.splice(0, 4).concat(questions.theme2.splice(0, 4)).concat(questions.theme3.splice(0, 4)).concat(questions.theme4.splice(0, 4))).extend({
           paging: 4
         }),
-        self.questionBank2 = ko.observableArray(
-          questions.theme1.splice(0,4).concat(questions.theme2.splice(0,4)).concat(questions.theme3.splice(0,4)).concat(questions.theme4.splice(0,4))
-          ).extend({
-          paging: 4
+        self.questionBank2 = ko.observableArray(questions.theme1.splice(0, 4).concat(questions.theme2.splice(0, 4)).concat(questions.theme3.splice(0, 4)).concat(questions.theme4.splice(0, 4))).extend({
+          paging: 1
         }),
-        self.progress = ko.computed(function(){
-
+        self.progress = ko.computed(function() {
           var count = 0;
-          for (i=0; i < self.questionBank1.pageCount() * self.questionBank1.pageSize(); i++){
+          for (i = 0; i < self.questionBank1.pageCount() * self.questionBank1.pageSize(); i++) {
             if (self.questionBank1()[i].selected() !== 'Please select') count++;
           }
-          return Math.round ( 100/(self.questionBank1.pageCount() * self.questionBank1.pageSize()) * count);
+          return Math.round(100 / (self.questionBank1.pageCount() * self.questionBank1.pageSize()) * count);
         }),
-        self.questionBank1.pageCompleted = ko.computed(function(){
-
+        self.questionBank1.pageCompleted = ko.computed(function() {
           var passed = true;
-          for (i=(self.questionBank1.currentPage()-1) * self.questionBank1.pageSize(); i < self.questionBank1.currentPage() * self.questionBank1.pageSize(); i++){
+          for (i = (self.questionBank1.currentPage() - 1) * self.questionBank1.pageSize(); i < self.questionBank1.currentPage() * self.questionBank1.pageSize(); i++) {
             if (self.questionBank1()[i].selected() == 'Please select') passed = false;
           }
           return passed;
         }),
-        self.questionBank2.pageCompleted = ko.computed(function(){
-
+        self.questionBank2.pageCompleted = ko.computed(function() {
           var passed = true;
-          for (i=(self.questionBank2.currentPage()-1) * self.questionBank2.pageSize(); i < self.questionBank2.currentPage() * self.questionBank2.pageSize(); i++){
+          for (i = (self.questionBank2.currentPage() - 1) * self.questionBank2.pageSize(); i < self.questionBank2.currentPage() * self.questionBank2.pageSize(); i++) {
             if (self.questionBank2()[i].selected() == 'Please select') passed = false;
           }
           return passed;
