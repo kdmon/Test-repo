@@ -500,35 +500,35 @@
         }],
         theme4: [{
           statement: "Red cells known to be from a second degree relative of the patient.",
-          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
+          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "Neither irradiated or CMV-negative", "Don't know"],
           selected: ko.observable("Please select")
         }, {
           statement: "Red cells for patients on Fludarabine or Alemtuzmab (Campath).",
-          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
+          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "Neither irradiated or CMV-negative", "Don't know"],
           selected: ko.observable("Please select")
         }, {
           statement: "Elective red cell transfusion for a pregnant woman in second trimester.",
-          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
+          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "Neither irradiated or CMV-negative", "Don't know"],
           selected: ko.observable("Please select")
         }, {
           statement: "Fresh frozen plasma for a patient with Hodgkin's lymphoma.",
-          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
+          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "Neither irradiated or CMV-negative", "Don't know"],
           selected: ko.observable("Please select")
         }, {
           statement: "HLA-matched platelets for a patient with refractoriness.",
-          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
+          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "Neither irradiated or CMV-negative", "Don't know"],
           selected: ko.observable("Please select")
         }, {
           statement: "Red cells for an infant who had an intrauterine transfusion (IUT) a year ago.",
-          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
+          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "Neither irradiated or CMV-negative", "Don't know"],
           selected: ko.observable("Please select")
         }, {
           statement: "Red cells for a patient receiving bone marrow transplant in the last 3 months.",
-          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
+          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "Neither irradiated or CMV-negative", "Don't know"],
           selected: ko.observable("Please select")
         }, {
           statement: "Platelets for a non-emergency bleeding cancer patient on purine analogues.",
-          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
+          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "Neither irradiated or CMV-negative", "Don't know"],
           selected: ko.observable("Please select")
         }]
       };
@@ -592,11 +592,11 @@
         self.role = ko.observable(getUrlParameter('role'));
         self.hospital = ko.observable(getUrlParameter('hospital'));
         self.specialty = ko.observable(getUrlParameter('specialty'));
-        self.questionHeading = ko.observableArray(["1. Are the statements true or false?", "2. What aspects of blood components or recipients are risk factors for TA-GvHD?", "3. What problems involving special components have been reported by haemovigilance schemes?", "4. How would you specify the blood component when transfusing..."]);
-        self.questionBank1 = ko.observableArray(questions.theme1.splice(0, 4).concat(questions.theme2.splice(0, 4)).concat(questions.theme3.splice(0, 4)).concat(questions.theme4.splice(0, 4))).extend({
-          paging: 4
+        self.questionHeading = ko.observableArray(["1. What statements are true or false?", "2. What are risk factors for TA-GvHD?", "3. What are common errors involving special components?", "4. What is the correct blood component treatment?"]);
+        self.questionBank1 = ko.observableArray(questions.theme1.splice(0, 3).concat(questions.theme2.splice(0, 3)).concat(questions.theme3.splice(0, 3)).concat(questions.theme4.splice(0, 3))).extend({
+          paging: 3
         });
-        self.questionBank2 = ko.observableArray(questions.theme1.splice(0, 4).concat(questions.theme2.splice(0, 4)).concat(questions.theme3.splice(0, 4)).concat(questions.theme4.splice(0, 4))).extend({
+        self.questionBank2 = ko.observableArray(questions.theme1.splice(0, 3).concat(questions.theme2.splice(0, 3)).concat(questions.theme3.splice(0, 3)).concat(questions.theme4.splice(0, 3))).extend({
           paging: 1
         });
         self.progress = ko.computed(function() {
