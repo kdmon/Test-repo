@@ -39,6 +39,7 @@
       }
       .editor {
         float:left;
+        text-shadow: none;
       }
       .preview {
         overflow: hidden;
@@ -107,12 +108,17 @@
       .ace_search {
         margin-left: 20px !important;
         margin-right: 20px !important;
+        white-space: nowrap;
       }
       #remoteVideos video,
       #localVideo {
-        width: 200px;
+        background: #000;
+        border: 5px outset #aaa;
+        border-radius: 5px;
+        width: 230px;
+        min-height: 150px;
         float: left;
-        margin: 5px;
+        margin-bottom: 2px;
       }
       #viewcontainer {
         clear: both;
@@ -498,17 +504,6 @@
         editors[fileCount] = ace.edit("editor" + fileCount);
         editors[fileCount].setBehavioursEnabled(true);
         
-        if (localStorage.editorTheme) {editors[fileCount].setTheme("ace/theme/" + localStorage.editorTheme);}
-        else {
-            
-          if (localStorage.uitheme == "dark") {
-            editors[fileCount].setTheme("ace/theme/vibrant_ink");
-          } else {
-            editors[fileCount].setTheme("ace/theme/chrome");
-          }
-        }
-        
-        
         if (localStorage.fontSize) {$(".editor").css("font-size", localStorage.fontSize + "px");}
         
         
@@ -539,6 +534,17 @@
             }, liveCodingDelay);
           }
         });
+        
+        
+        if (localStorage.editorTheme) {editors[fileCount].setTheme(localStorage.editorTheme);}
+        else {
+            
+          if (localStorage.uitheme == "dark") {
+            editors[fileCount].setTheme("ace/theme/vibrant_ink");
+          } else {
+            editors[fileCount].setTheme("ace/theme/chrome");
+          }
+        }
         
         runCode(true);
         setTitle();
@@ -839,8 +845,9 @@
       }
       
       function setEditorTheme () {
-        localStorage.editorTheme = $("#editortheme").val();
-        setTheme("ace/theme/" + localStorage.editorTheme);
+        var theme = $("#editortheme").val();
+        localStorage.editorTheme = "ace/theme/" + theme;
+        setTheme(localStorage.editorTheme);
       }
 
       function setLiveCodingDelay() {
@@ -1798,75 +1805,7 @@
           </select>
           <br/>
           
-          <p>Editor theme:</p>
-          <div style="display: none; height: 200px; overflow-x: hidden; overflow-y: scroll;">
-            <ul data-role="listview" data-icon="search" data-mini="true" name="themelist">
-              <li><a href="javascript: setTheme('ace/theme/ambiance');">Ambiance</a>
-              </li>
-              <li><a href="javascript: setTheme('ace/theme/chaos');">Chaos</a>
-              </li>
-              <li><a href="javascript: setTheme('ace/theme/chrome');">Chrome (light default)</a>
-              </li>
-              <li><a href="javascript: setTheme('ace/theme/clouds');">Clouds</a>
-              </li>
-              <li><a href="javascript: setTheme('ace/theme/clouds_midnight');">Clouds Midnight</a>
-              </li>
-              <li><a href="javascript: setTheme('ace/theme/cobalt');">Cobalt</a>
-              </li>
-              <li><a href="javascript: setTheme('ace/theme/crimson_editor');">Crimson Editor</a>
-              </li>
-              <li><a href="javascript: setTheme('ace/theme/dawn');">Dawn</a>
-              </li>
-              <li><a href="javascript: setTheme('ace/theme/dreamweaver');">Dreamweaver</a>
-              </li>
-              <li><a href="javascript: setTheme('ace/theme/eclipse');">Eclipse</a>
-              </li>
-              <li><a href="javascript: setTheme('ace/theme/github');">Github</a>
-              </li>
-              <li><a href="javascript: setTheme('ace/theme/idle_fingers');">Idle Fingers</a>
-              </li>
-              <li><a href="javascript: setTheme('ace/theme/kr_theme');">KR theme</a>
-              </li>
-              <li><a href="javascript: setTheme('ace/theme/merbivore');">Merbivore</a>
-              </li>
-              <li><a href="javascript: setTheme('ace/theme/merbivore_soft');">Merbivore Soft</a>
-              </li>
-              <li><a href="javascript: setTheme('ace/theme/mono_industrial');">Mono Industrial</a>
-              </li>
-              <li><a href="javascript: setTheme('ace/theme/monokai');">Monokai</a>
-              </li>
-              <li><a href="javascript: setTheme('ace/theme/pastel_on_dark');">Pastel on dark</a>
-              </li>
-              <li><a href="javascript: setTheme('ace/theme/solarized_dark');">Solarized Dark</a>
-              </li>
-              <li><a href="javascript: setTheme('ace/theme/solarized_light');">Solarized_Light</a>
-              </li>
-              <li><a href="javascript: setTheme('ace/theme/terminal');">Terminal</a>
-              </li>
-              <li><a href="javascript: setTheme('ace/theme/textmate');">Textmate</a>
-              </li>
-              <li><a href="javascript: setTheme('ace/theme/tomorrow');">Tomorrow</a>
-              </li>
-              <li><a href="javascript: setTheme('ace/theme/tomorrow_night');">Tomorrow Night</a>
-              </li>
-              <li><a href="javascript: setTheme('ace/theme/tomorrow_night_blue');">Tomorrow Night Blue</a>
-              </li>
-              <li><a href="javascript: setTheme('ace/theme/tomorrow_night_bright');">Tomorrow Night Bright</a>
-              </li>
-              <li><a href="javascript: setTheme('ace/theme/tomorrow_night_eighties');">Tomorrow Night 80s</a>
-              </li>
-              <li><a href="javascript: setTheme('ace/theme/twilight');">Twilight</a>
-              </li>
-              <li><a href="javascript: setTheme('ace/theme/vibrant_ink');">Vibrant Ink (dark default)</a>
-              </li>
-              <li><a href="javascript: setTheme('ace/theme/xcode');">Xcode</a>
-              </li>
-            </ul>
-          </div>
-          
-          
-          
-          <label for="uitheme">UI Theme:</label>
+          <label for="uitheme">GUI theme:</label>
           <select data-mini="true" name="uitheme" id="uitheme" onchange="setUiTheme()">
             <option value="light">Light (default)</option>
             <option value="dark">Dark</option>
