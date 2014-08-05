@@ -329,7 +329,6 @@
       var fileWhitelist = ['.htm','.html','.txt','.json','.js','.css','.md'];
       var firefox = 'firefox'; //$.browser.mozilla; Should use feature detection with jqm 1.4.
       var fontSize = localStorage.fontSize || 12;
-      var liveCoding = localStorage.liveCoding || true; // enable by default
       var liveCodingDelay = localStorage.liveCodingDelay || 3000; // 3s by default
       var liveCodingTimer = setTimeout(function() {}, 100); // used for live editing
       var loading = true;
@@ -499,7 +498,7 @@
         editors[fileCount] = ace.edit("editor" + fileCount);
         editors[fileCount].setBehavioursEnabled(true);
         
-        if (localStorage.editorTheme) {editors[fileCount].setTheme(localStorage.editorTheme);}
+        if (localStorage.editorTheme) {editors[fileCount].setTheme("ace/theme/" + localStorage.editorTheme);}
         else {
             
           if (localStorage.uitheme == "dark") {
@@ -512,6 +511,9 @@
         
         if (localStorage.fontSize) {$(".editor").css("font-size", localStorage.fontSize + "px");}
         
+        
+        
+        
         editors[fileCount].setOptions({
           enableBasicAutocompletion: true
         });
@@ -519,8 +521,10 @@
         var mode = modelist.getModeForPath(openFiles[currentFile].path + openFiles[currentFile].filename).mode;
         editors[fileCount].getSession().setMode(mode);
         editors[fileCount].setOption("enableEmmet", true);
-        editors[fileCount].getSession().setUseWrapMode(false);
         editors[fileCount].getSession().setTabSize(2);
+        
+        if (localStorage.lineWrap > 0) editors[fileCount].getSession().setUseWrapMode(true);
+        else editors[fileCount].getSession().setUseWrapMode(false);
         
         //editors[fileCount].session.setValue(value);
         editors[fileCount].setValue(value, -1);
@@ -528,7 +532,7 @@
         
         editors[fileCount].getSession().on('change', function(e) {
           // alert ("livecoding: " + liveCoding + "\nDelay:" + liveCodingDelay + "\nrunning?" + editors[currentFile].running);
-          if (liveCoding && editors[currentFile].running) {
+          if (liveCodingDelay > 0 && editors[currentFile].running) {
             clearTimeout(liveCodingTimer);
             liveCodingTimer = setTimeout(function() {
               runCode(false);
@@ -833,18 +837,23 @@
         localStorage.fontSize = fontSize;
         $(".editor").css("font-size", fontSize + "px");
       }
-
-      function setLiveCoding() {
-        if ($("#livecoding").val() == "on") {
-          liveCoding = true;
-        } else {
-          liveCoding = false;
-        }
-      }
       
+      function setEditorTheme () {
+        localStorage.editorTheme = $("#editortheme").val();
+        setTheme("ace/theme/" + localStorage.editorTheme);
+      }
+
       function setLiveCodingDelay() {
         liveCodingDelay = $("#livecodingdelay").val();
         localStorage.liveCodingDelay = liveCodingDelay;
+      }
+      
+      function setLineWrap() {
+        localStorage.lineWrap = $("#linewrap").val();
+        $.each(editors, function(key, value) {
+          if (localStorage.lineWrap > 0) editors[key].getSession().setUseWrapMode(true);
+          else editors[key].getSession().setUseWrapMode(false);
+        });
       }
 
       function setPath(path, append, saveProperties) {
@@ -1270,8 +1279,6 @@
         $('#uitheme').val(localStorage.uitheme || "light").selectmenu('refresh');
         
         $('#editor').val(localStorage.uitheme || "light").selectmenu('refresh');
-        
-        $('#livecode').val(localStorage.liveCoding || "On").selectmenu('refresh');
         
         $('#appsize').val(localStorage.appSize || "320").selectmenu('refresh');
         
@@ -1729,15 +1736,10 @@
         </div>
         <div role="main" class="ui-content">
           <h3>Options</h3>
-          <label for="live">Live coding:</label>
-          <select data-mini="true" name="live" id="livecoding" onchange="setLiveCoding()">
-            <option value="on">On (default)</option>
-            <option value="off">Off</option>
-          </select>
-          <br/>
           
-          <label for="livedelay">Delay:</label>
+          <label for="livedelay">Live coding delay:</label>
           <select data-mini="true" name="livedelay" id="livecodingdelay" onchange="setLiveCodingDelay()">
+            <option value="0">Disable live coding</option>
             <option value="500">0.5s</option>
             <option value="1000">1s</option>
             <option value="2000">2s</option>
@@ -1745,20 +1747,59 @@
             <option value="4000">4s</option>
             <option value="5000">5s</option>
             <option value="10000">10s</option>
+            <option value="30000">30s</option>
           </select>
           <br/>
           
-          <label for="uitheme">UI Theme:</label>
-          <select data-mini="true" name="uitheme" id="uitheme" onchange="setUiTheme()">
-            <option value="light">Light (default)</option>
-            <option value="dark">Dark</option>
-          </select>
-          <br/>
           <label for="fontsize">Font size:</label>
           <input type="range" name="fontsize" id="fontsize" value="12" min="12" max="25" onchange="setFontSize();" />
           <br/>
+          
+          <label for="linewrap">Word wrapping:</label>
+          <select data-mini="true" name="linewrap" id="linewrap" onchange="setLineWrap()">
+            <option value="80">Enable</option>
+            <option value="0">Disable</option>
+          </select>
+          <br/>
+          
+          
+          <label for="editortheme">Highlighting:</label>
+          <select data-mini="true" name="editortheme" id="editortheme" onchange="setEditorTheme()">
+            <option value="ambiance">Ambiance</option>
+            <option value="chaos">Chaos</option>
+            <option value="chrome">Chrome (light default)</option>
+            <option value="clouds">Clouds</option>
+            <option value="clouds_midnight">Clouds Midnight</option>
+            <option value="cobalt">Cobalt</option>
+            <option value="crimson_editor">Crimson Editor</option>
+            <option value="dawn">Dawn</option>
+            <option value="dreamweaver">Dreamweaver</option>
+            <option value="eclipse">Eclipse</option>
+            <option value="github">Github</option>
+            <option value="idle_fingers">Idle Fingers</option>
+            <option value="kr_theme">KR theme</option>
+            <option value="merbivore">Merbivore</option>
+            <option value="merbivore_soft">Merbivore Soft</option>
+            <option value="mono_industrial">Mono Industrial</option>
+            <option value="monokai">Monokai</option>
+            <option value="pastel_on_dark">Pastel on dark</option>
+            <option value="solarized_dark">Solarized Dark</option>
+            <option value="solarized_light">Solarized_Light</option>
+            <option value="terminal">Terminal</option>
+            <option value="textmate">Textmate</option>
+            <option value="tomorrow">Tomorrow</option>
+            <option value="tomorrow_night">Tomorrow Night</option>
+            <option value="tomorrow_night_blue">Tomorrow Night Blue</option>
+            <option value="tomorrow_night_bright">Tomorrow Night Bright</option>
+            <option value="tomorrow_night_eighties">Tomorrow Night 80s</option>
+            <option value="twilight">Twilight</option>
+            <option value="vibrant_ink">Vibrant Ink (dark default)</option>
+            <option value="xcode">Xcode</option>
+          </select>
+          <br/>
+          
           <p>Editor theme:</p>
-          <div style="height: 200px; overflow-x: hidden; overflow-y: scroll;">
+          <div style="display: none; height: 200px; overflow-x: hidden; overflow-y: scroll;">
             <ul data-role="listview" data-icon="search" data-mini="true" name="themelist">
               <li><a href="javascript: setTheme('ace/theme/ambiance');">Ambiance</a>
               </li>
@@ -1822,6 +1863,17 @@
               </li>
             </ul>
           </div>
+          
+          
+          
+          <label for="uitheme">UI Theme:</label>
+          <select data-mini="true" name="uitheme" id="uitheme" onchange="setUiTheme()">
+            <option value="light">Light (default)</option>
+            <option value="dark">Dark</option>
+          </select>
+          <br/>
+          
+          
         </div>
       </div>
       <div data-role="panel" data-dismissible="false" data-animate="false" data-swipe-close="false" id="revert">
