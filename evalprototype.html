@@ -390,37 +390,48 @@
       var questions = {
         theme1: [{
           statement: "Removal of leucocytes from platelets and red cells reduces risk of CMV transmission.",
+          rationale: "Guage understanding of the main cause of transfusion associated CMV transmission.",
+          explanation: "Platelets and red cell components contain leucocytes (white blood cells). Transfusion associated cytomegalovirus (CMV) infection is transmitted through transfusion of CMV-infected donor monocytes (SaBTO 2012). Monocytes are large, phagocytic mononuclear leukocytes (MESH 2014). Universal leucodepletion, typically achieved through filtration, is effective in removing monocytes and significantly reduces the risk of CMV transmission during red cell and platelet transfusion.",
+          key: "True",
           options: ["Please select", "True", "False", "Don't know"],
           selected: ko.observable("Please select")
         }, {
-          statement: "In the UK only red cells and platelets for patients with special requirements is leucodepleted.",
+          statement: "Only red cells and platelets for patients with special requirements is leucodepleted in the UK.",
+          rationale: "Check awareness of universal leucodepletion, a pre-storage processing step enhancing component safety.",
+          explanation: "Universal leucodepletion, the removal of leucocytes (white blood cells) through filtration from all platelets and red cells components manufactured in the UK irrespective of recipient, was introduced in 1998 and remains in place.",
+          key: "False",
           options: ["Please select", "True", "False", "Don't know"],
           selected: ko.observable("Please select")
         }, {
           statement: "Leucodepletion is as effective as irradiation in the prevention of TA-GvHD.",
+          rationale: "Test beliefs about leucodepletion and adherence to BCSH guidelines on irradiated blood.",
+          explanation: "Even though leucodepletion is likely to reduce the risk of Transfusion Associated Graft versus Host Disease (TA-GvHD), the evidence is incomplete and it is not an accepted alternative. Current national guidelines (BCSH 2010) recommend irradation to prevent TA-GvHD.",
+          key: "False",
           options: ["Please select", "True", "False", "Don't know"],
           selected: ko.observable("Please select")
         }, {
-          statement: "Some patients require CMV-negative components, even when leucodepleted.",
+          statement: "Red cells, platelets and granulocytes are cellular blood components.",
+          rationale: "Guage understanding of the distinction between non-/cellular components as it is frequently used in guidelines",
+          explanation: "Cellular blood components refer to platelet, red cell and granulocyte (white cell) components. Cellular blood components contain leucocytes that can cause TA-GvHD or transmit CMV infection.",
+          options: ["Please select", "True", "False", "Don't know"],
+          key: "True",
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Transfusion of cellular blood components can cause TA-GvHD and CMV infection.",
+          rationale: "Test knowledge that cellular blood components, and specifically the white blood cells they contain, can cause these conditions.",
+          explanation: "A requirement for TA-GvHD is the transfusion of viable donor T-lymphocytes (a type of white blood cell). CMV infection is transmitted by transfusion of infected donor monocytes (anothor type of white blood cell). Cellular blood components contain leucocytes (white blood cells, including T-lymphocytes and monocytes), and can therefore cause both TA-GvHD and CMV infection.",
+          key: "True",
           options: ["Please select", "True", "False", "Don't know"],
           selected: ko.observable("Please select")
         }, {
-          statement: "All red cell concentrate in the UK is irradiated.",
-          options: ["Please select", "True", "False", "Don't know"],
-          selected: ko.observable("Please select")
-        }, {
-          statement: "Platelets, white cells and red cells are examples of cellular blood components.",
-          options: ["Please select", "True", "False", "Don't know"],
-          selected: ko.observable("Please select")
-        }, {
-          statement: "Fresh Frozen Plasma is an example of a non-cellular blood component.",
-          options: ["Please select", "True", "False", "Don't know"],
-          selected: ko.observable("Please select")
-        }, {
-          statement: "Non-cellular components are unlikely to be associated with GvHD or CMV infection.",
+          statement: "Transfusion of Fresh Frozen Plasma can cause TA-GvHD and CMV infection.",
+          rationale: "Test knowledge of non-cellular blood components.",
+          explanation: "TA-GvHD is caused by transfusion of viable donor T-lymphocytes (a type of white blood cell). CMV infection is transmitted by transfusion of infected donor monocytes (anothor type of white blood cell). Fresh frozen plasma (FFP) does not cause TA-GvHD and CMV infection since it does not contain viable leucocytes (white cells).",
+          key: "True",
           options: ["Please select", "True", "False", "Don't know"],
           selected: ko.observable("Please select")
         }],
+        
         theme2: [{
           statement: "Viable donor lymphocytes in component.",
           options: ["Please select", "Yes", "No", "Don't know"],
