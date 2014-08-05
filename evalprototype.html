@@ -95,7 +95,10 @@
               </li>
             </ul>
             <p data-bind="visible: !$root.questionBank1.pageCompleted();">You must answer all mandatory questions (<i class="fa fa-certificate" style="color: red;"></i>) before proceeding.</p>
-            <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted() && $root.questionBank1.currentPage() <  $root.questionBank1.pageCount(), click: $root.questionBank1.moveNext">Next page</a>
+            <div data-bind="visible: $root.questionBank1.pageCompleted() && $root.questionBank1.currentPage() <  $root.questionBank1.pageCount()">
+              <p><b>Review your answers and press the green button to continue.</b></p>
+              <a href="#" class="positive" data-theme="b" data-role="button" data-bind="click: $root.questionBank1.moveNext">Next page</a>
+            </div>
             <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted() && $root.questionBank1.currentPage() ==  $root.questionBank1.pageCount(), click: $root.nextSection">Next section</a>
           </div>
           <div data-bind="visible: section() == 2">
@@ -592,7 +595,7 @@
         self.role = ko.observable(getUrlParameter('role'));
         self.hospital = ko.observable(getUrlParameter('hospital'));
         self.specialty = ko.observable(getUrlParameter('specialty'));
-        self.questionHeading = ko.observableArray(["1. What statements are true or false?", "2. What are risk factors for TA-GvHD?", "3. What are common errors involving special components?", "4. What is the correct blood component treatment?"]);
+        self.questionHeading = ko.observableArray(["1. What statements are true or false?", "2. What are risk factors for TA-GvHD?", "3. What are common errors involving special components?", "4. What is the correct blood component specification?"]);
         self.questionBank1 = ko.observableArray(questions.theme1.splice(0, 3).concat(questions.theme2.splice(0, 3)).concat(questions.theme3.splice(0, 3)).concat(questions.theme4.splice(0, 3))).extend({
           paging: 3
         });
