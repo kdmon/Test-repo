@@ -135,6 +135,9 @@
         float: left;
         margin-bottom: 2px;
       }
+      #remoteVideos {
+        transform: rotateY(180deg);
+      }
       #viewcontainer {
         clear: both;
         margin: 4px;
@@ -825,9 +828,9 @@
           break;
           
           case "leave":
-            //webrtc.stopLocalVideo();
+            webrtc.stopLocalVideo();
             webrtc.leaveRoom();
-            webrtc.joinRoom("blah");
+            //webrtc.joinRoom("blah");
             //webrtc.connection.disconnect();
             mediaEnabled.audio == false;
             mediaEnabled.video == false;
@@ -863,6 +866,7 @@
                 audio: true
             }
           });
+
           mediaEnabled.audio = "unmuted";
           mediaEnabled.video = false;
         }
@@ -891,6 +895,7 @@
           $("#mediabuttonstop").show();
           $("#mediabuttonleave").hide();
         });
+
       }
 
       function toggleChat() {
