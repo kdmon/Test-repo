@@ -472,10 +472,10 @@
         var htmlSnippet;
         htmlSnippet = '<div id="contextmenu' + currentFile + '">';
         htmlSnippet += '<div data-role="controlgroup" data-type="horizontal" data-mini="true" style="margin: 0px;">';
-        htmlSnippet += '<a class="ui-not-disabled" title="Open" data-role="button" href="#filebrowser"><i class="fa fa-folder-open fa-2x"></i> <span class="menulabel">Open</span></a>';
         htmlSnippet += '<a class="ui-not-disabled" title="Save" data-role="button" href="#commit"><i class="fa fa-save fa-2x"></i> <span class="menulabel">Save</span></a>';
-        htmlSnippet += '<a class="ui-not-disabled" title="Collaborate" data-role="button" href="#collaborate"><i class="fa fa-comments fa-2x"></i> <span class="menulabel">Collaborate</span></a>';
-        htmlSnippet += '<a style="margin-right: 5px;" href="#options" title="Options" data-role="button"><i class="fa fa-wrench fa-2x"></i> <span class="menulabel">Options</span></a>';
+        htmlSnippet += '<a class="ui-not-disabled" title="Open" data-role="button" href="#filebrowser"><i class="fa fa-folder-open fa-2x"></i> <span class="menulabel">Open</span></a>';
+        htmlSnippet += '<a href="#options" title="Options" data-role="button"><i class="fa fa-wrench fa-2x"></i> <span class="menulabel">Options</span></a>';
+        htmlSnippet += '<a style="margin-right: 5px;" class="ui-not-disabled" title="Collaborate" data-role="button" href="#collaborate"><i class="fa fa-comments fa-2x"></i> <span class="menulabel">Collaborate</span></a>';
         
         htmlSnippet += '<a href="#history" title="History" data-role="button"><i class="fa fa-history fa-2x"></i> <span class="menulabel">Revert</span></a>';
         htmlSnippet += '<a onclick="editors[currentFile].getSession().getUndoManager().undo();" href="#undo" title="Undo" data-role="button"><i class="fa fa-reply fa-2x"></i> <span class="menulabel">Undo</span></a>';
@@ -489,8 +489,8 @@
         htmlSnippet += '<a onclick="editors[fileCount].execCommand(' + "'paste'" + ');"style="margin-right: 5px;" href="#" title="Paste" data-role="button" onclick="paste"><i class="fa fa-paste fa-2x"></i> <span class="menulabel">Paste</span></a>';
 */
         htmlSnippet += '<a id="runbutton' + fileCount + '" title="Run code" href="#" onclick="togglePreview();" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-play fa-2x"></i> <span class="menulabel">Run code</span></a>';
-        htmlSnippet += '<a title="Code preview settings" class="previewsettingsbutton" id="previewsettingsbutton" href="#" onclick="togglePreviewSettings()" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-arrows-h fa-2x"></i> <span class="menulabel">Code preview settings</span></a>';
-        htmlSnippet += '<a href="#shareurl" data-role="button" class="nowrap" title="Full screen preview"><i class="fa fa-expand fa-2x"></i> <span class="menulabel">Full screen preview</span></a>';
+        htmlSnippet += '<a title="Code preview settings" class="previewsettingsbutton" id="previewsettingsbutton" href="#" onclick="togglePreviewSettings()" data-inline="true" data-role="button" class="nowrap"><i class="fa fa-gear fa-2x"></i><span class="menulabel">Code preview settings</span></a>';
+        htmlSnippet += '<a href="#shareurl" data-role="button" class="nowrap" title="Full screen preview"><i class="fa fa-mobile fa-2x"></i><i class="fa fa-desktop fa-2x" style="left:-20px;"></i><span class="menulabel">Full screen preview</span></a>';
         htmlSnippet += '</div></div>';
         
         var iframeCode = '<iframe class="preview" name="preview' + fileCount + '" id="preview' + fileCount + '" src="javascript: ' + "'" + "Live preview window'" + '"></iframe>';
@@ -735,7 +735,7 @@
           $("#previewsettings").show();
           $("#previewsettings").css({
             "top": "150px",
-            "left": "250px"
+            "left": "440px"
           });
           
           //$("#previewsettings").css("top", $(".previewsettingsbutton").position().top + $(".previewsettingsbutton").height() + 75 + "px");
@@ -1111,7 +1111,9 @@
           }, false);
           
           editors[currentFile].focus();
-          // prevent focus stealing for 3 seconds
+          
+          /*
+          // prevent focus stealing for 3 seconds -- bad idea!
           var handler = function() {
             editors[currentFile].focus();
           };
@@ -1122,6 +1124,7 @@
             editors[currentFile].focus();
             editors[currentFile].removeEventListener("blur", handler);
           }, 3000);
+          */
           
         }
         
@@ -1695,7 +1698,20 @@
         
         <div id="previewsettings">
           <center>
-            <h3>Preview width</h3>
+            <label for="livedelay">Auto-run delay:</label>
+            <select data-mini="true" name="livedelay" id="livecodingdelay" onchange="setLiveCodingDelay()">
+              <option value="0">Disable auto-run</option>
+              <option value="500">0.5s</option>
+              <option value="1000">1s</option>
+              <option value="2000">2s</option>
+              <option value="3000">3s (default)</option>
+              <option value="4000">4s</option>
+              <option value="5000">5s</option>
+              <option value="10000">10s</option>
+              <option value="30000">30s</option>
+            </select>
+            
+            <label for="appsize">Preview width:</label>
             <select name="appsize" id="appsize" data-native-menu="true" onchange="setAppSize();" data-mini="true">
               <option value="320">320 (iPhone)</option>
               <option value="360">360 (Galaxy S3)</option>
@@ -1706,6 +1722,7 @@
               <option value="800">800 (Nexus 10, Kindle HD)</option>
               <option value="1024">1024 (iPad landscape)</option>
             </select>
+            <br/>
             <a href="#" data-mini="true" data-role="button" onclick="togglePreviewSettings();">Close</a>
           </center>
         </div>
@@ -1742,21 +1759,7 @@
           <h1>Options</h1>
         </div>
         <div role="main" class="ui-content">
-          <h3>Options</h3>
-          
-          <label for="livedelay">Live coding delay:</label>
-          <select data-mini="true" name="livedelay" id="livecodingdelay" onchange="setLiveCodingDelay()">
-            <option value="0">Disable live coding</option>
-            <option value="500">0.5s</option>
-            <option value="1000">1s</option>
-            <option value="2000">2s</option>
-            <option value="3000">3s (default)</option>
-            <option value="4000">4s</option>
-            <option value="5000">5s</option>
-            <option value="10000">10s</option>
-            <option value="30000">30s</option>
-          </select>
-          <br/>
+          <h3>Editor options</h3>
           
           <label for="fontsize">Font size:</label>
           <input type="range" name="fontsize" id="fontsize" value="12" min="12" max="25" onchange="setFontSize();" />
@@ -1768,7 +1771,6 @@
             <option value="0">Disable</option>
           </select>
           <br/>
-          
           
           <label for="editortheme">Highlighting:</label>
           <select data-mini="true" name="editortheme" id="editortheme" onchange="setEditorTheme()">
