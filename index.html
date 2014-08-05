@@ -361,6 +361,7 @@
       mediaEnabled.webrtc = false // webrtc running?
       mediaEnabled.audio = false;
       mediaEnabled.video = false;
+      mediaEnabled.leftRoom = false;
       var openFiles = {}; // important in tracking file details, like path and repo.
       var webrtc;
        // End globals
@@ -783,6 +784,25 @@
       function toggleMedia(action, disableMedia) {
         var room = $("#chatroom").val();
         
+        if (mediaEnabled.leftRoom) {
+          webrtc.joinRoom(room); 
+          webrtc.unmute();
+          $("#mediabuttonaudio i").removeClass('fa-microphone-slash').addClass('fa-microphone');
+          $("#mediabuttonvideo i:last").removeClass('fa-eye-slash').addClass('fa-eye');
+
+          if (action == "audio") {
+            webrtc.pauseVideo();
+            $("#mediabuttonvideo i:last").removeClass('fa-eye').addClass('fa-eye-slash');
+            mediaEnabled.video = "paused";
+          }
+
+          mediaEnabled.leftRoom = false;
+          $("#mediacontainer").show();
+          $("#mediabuttonstop").show();
+          $("#mediabuttonleave").hide();
+          return;
+        }
+        
         switch (action) {
           
           case "audio":
@@ -828,8 +848,9 @@
           break;
           
           case "leave":
-            webrtc.stopLocalVideo();
+            //webrtc.stopLocalVideo();
             webrtc.leaveRoom();
+            mediaEnabled.leftRoom = true;
             //webrtc.joinRoom("blah");
             //webrtc.connection.disconnect();
             mediaEnabled.audio == false;
@@ -881,7 +902,17 @@
             socketio: {'force new connections':true},
             //signalingOptions: { "force new connection" : true },
             // immediately ask for camera access
-            autoRequestMedia: true
+            autoRequestMedia: true,
+            media: {
+              video: {
+                mandatory: {
+                  maxFrameRate: 15,
+                  maxWidth: 320,
+                  maxHeight: 240
+                }
+              },
+              audio: true
+            }
           });
           
           mediaEnabled.audio = "unmuted";
@@ -1999,17 +2030,9 @@
           <h3 id="chatroomheader" style="margin: 0px">Room</h3>
           <a id="mediabuttonvideo" data-role="button" data-inline="true" href="#" onclick="toggleMedia('video');" data-mini="true"><i class="fa fa-video-camera fa-2x"></i> <i class="fa fa-eye-slash fa-2x"></i></a>
           <a id="mediabuttonaudio" data-role="button" data-inline="true" href="#" onclick="toggleMedia('audio');" data-mini="true"><i class="fa fa-microphone-slash fa-2x"></i></a>
-          <a id="mediabuttonstop" style="display:none" data-role="button" data-inline="true" href="#" onclick="toggleMedia('leave');" data-mini="true"><i class="fa fa-power-off fa-2x"></i><span style="position: relative; top: -5px;">Stop</span></a>
+          <a id="mediabuttonstop" style="display:none" data-role="button" data-inline="true" href="#" onclick="toggleMedia('leave');" data-mini="true"><i class="fa fa-power-off"></i> <span>Stop</span></a>
           <a id="mediabuttonleave" data-role="button" data-inline="true" href="#" onclick="toggleChat();" data-mini="true"><i class="fa fa-sign-out fa-2x"></i><span style="position: relative; top: -5px;">Exit</span></a>
             <div id="mediacontainer" style="display: none; max-height: 500px; overflow: auto;">
-              <div id="mediacontrols" style="display:none;">
-                <button data-inline="true" onclick="startChat();">Start video chat</button>
-                <button data-inline="true" onclick="webrtc.mute()">Stop video chat</button>
-                <button data-inline="true" onclick="webrtc.pauseVideo()">Pause video stream</button>
-                <button data-inline="true" onclick="webrtc.resumeVideo()">Resume video stream</button>
-                <button data-inline="true" onclick="webrtc.mute()">Mute</button>
-                <button data-inline="true" onclick="webrtc.unmute()">Unmute</button>
-              </div>
               <video id="localVideo"></video>
               <div id="remoteVideos"></div>
             </div>
