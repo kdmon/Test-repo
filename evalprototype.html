@@ -132,6 +132,110 @@
                   <p>Please contact Karl if you have any questions at the following email address: k.d.monsen@sms.ed.ac.uk. Alternatively, write to: Karl Monsen, Centre for Design Informatics, Room 3.10, Evolution House, 78 West Port, EH1 2L.</p>
                 </div>
                 <h3>Participate</h3>
+                
+          <p>Please complete the below fields.</p>
+
+          <h3>Hospital</h3>
+          <select data-bind="hospital">
+            <option value="rie">Royal Infirmary of Edinburgh</option>
+            <option value="sjh">St John's Hospital</option>
+            <option value="wgh">Western General Hospital</option>
+            <option value="other">Other hospital</option>
+          </select>
+
+          <div data-bind="visible: hospital() == 'other'">
+            <h3>Not eligible</h3>
+            <p>We can only accept submissions from staff working at the hospitals listed above. If you recently moved hospital, please select your previous hospital.</p>
+          </div>
+
+          <div data-bind="visible: hospital() != 'other'">
+            <h3>Position</h3>
+            <select data-bind="position">
+              <option value="dr">Doctor</option>
+              <option value="rn">Registered nurse</option>
+              <option value="ns">Nurse specialist</option>
+              <option value="mw">Midwife</option>
+              <option value="bb">Blood bank staff</option>
+              <option value="ot">Other</option>
+            </select>
+          </div>
+
+          <div data-bind="visible: position() == 'other'">
+            <h3>Other position</h3>
+            <input data-bind="otherposition">
+          </div>
+
+          <div data-bind="visible: position() == 'dr'">
+            <h3>Grade</h3>
+            <select data-bind="grade">
+              <option value="fy1">Foundation year 1</option>
+              <option value="fy2">Foundation year 2</option>
+              <option value="registrar">Registrar</option>
+              <option value="consultant">Consultant</option>
+            </select>
+          </div>
+
+          <div data-bind="visible: (grade() == 'consultant' || grade() == 'registrar') || position() == 'ns'">
+            <h3>Specialty</h3>
+            <select data-bind="specialty">
+              <option value="gm">General medicine</option>
+              <option value="ho">Haematology or oncology</option>
+              <option value="on">Obstetrics or neonatology</option>
+              <option value="ot">Other</option>
+            </select>
+          </div>
+
+          <div data-bind="visible: (grade() == 'consultant' || grade() == 'registrar') || position() == 'ns'">
+            <h3>Years of experience since graduation</h3>
+            <select data-bind="experience">
+              <option value="0">Less than one year</option>
+              <option value="1">1 year</option>
+              <option value="2">2 years</option>
+              <option value="3">3 years</option>
+              <option value="4">4 years</option>
+              <option value="5">5 years</option>
+              <option value="6">6 years</option>
+              <option value="6">7 years</option>
+              <option value="6">8 years</option>
+              <option value="6">9 years</option>
+              <option value="10">10 years</option>
+              <option value="11">11 years</option>
+              <option value="12">12 years</option>
+              <option value="13">13 years</option>
+              <option value="14">14 years</option>
+              <option value="15">15 years</option>
+              <option value="16">16 years</option>
+              <option value="17">17 years</option>
+              <option value="18">18 years</option>
+              <option value="19">19 years</option>
+              <option value="20">20 years</option>
+              <option value="21">21 years</option>
+              <option value="22">22 years</option>
+              <option value="23">23 years</option>
+              <option value="24">24 years</option>
+              <option value="25">25 years</option>
+              <option value="26">26 years</option>
+              <option value="27">27 years</option>
+              <option value="28">28 years</option>
+              <option value="29">29 years</option>
+              <option value="30">30 years</option>
+              <option value="31">31 years</option>
+              <option value="32">32 years</option>
+              <option value="33">33 years</option>
+              <option value="34">34 years</option>
+              <option value="35">35 years</option>
+              <option value="36">36 years</option>
+              <option value="37">37 years</option>
+              <option value="38">38 years</option>
+              <option value="39">39 years</option>
+              <option value="40">40 years</option>
+              <option value="41">More than 40 years</option>
+            </select>
+          </div>
+                
+                
+                
+                
                 <p>Please select your...</p> <a href="#" data-role="button" data-bind="click: $root.nextSection">Next</a>
               </div>
             </div>
