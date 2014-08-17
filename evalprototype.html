@@ -122,7 +122,7 @@
                 </div>
                 <div data-role="collapsible" data-collapsed="true">
                   <h3>5. Why should I participate?</h3>
-                  <p>We know that special blood components is a topic that many staff involved in transfusion find challenging. Taking part is an excellent opportunity to learn about and test your knowledge in a safe environment. By taking part, you will help shape the design of a new learning resource for staff. If results are positive, wider dissemination of the app could improve practice. There is also a chance to win a £50 national book token voucher. Participation is completely voluntary and there are no risks to participating.</p>
+                  <p>We know that special blood components is a topic that many staff involved in transfusion find challenging. Taking part is an excellent opportunity to learn about and test your knowledge in a safe environment. By taking part, you will help shape the design of a new learning resource for staff. If results are positive, wider dissemination of the app could improve practice. There is also a chance to win aÿý50 national book token voucher. Participation is completely voluntary and there are no risks to participating.</p>
                 </div>
                 <div data-role="collapsible" data-collapsed="true">
                   <h3>6. How will we maintain your confidentiality?</h3>
@@ -135,35 +135,35 @@
                 </div>
                 <h1>Ready to begin?</h1>
                 <p>Please answer the questions to confirm your eligibility.</p>
-                <h3>What hospital do you work at?</h3>
+                <h3>At what hospital are you based?</h3>
                 <select data-bind="value: hospital">
                   <option value="" selected>Please select</option>
                   <option value="rie">Royal Infirmary of Edinburgh</option>
                   <option value="sjh">St John's Hospital</option>
                   <option value="wgh">Western General Hospital</option>
-                  <option value="other">Other hospital</option>
+                  <option value="other">None of the above</option>
                 </select>
                 <div data-bind="visible: hospital() == 'other'">
                   <h2 style="color: red">You are not eligible</h2>
                   <p>We're sorry, but we can only accept submissions from staff working at the hospitals listed above. If you recently moved hospital, please select your previous hospital.</p>
                 </div>
                 <div data-bind="visible: hospital() !== 'other' && hospital() !== ''">
-                  <h3>What is your position?</h3>
+                  <h3>What is your role?</h3>
                   <select data-bind="value: position">
                     <option value="">Please select</option>
+                    <option value="bb">Blood Bank/Hospital Laboratory</option>
                     <option value="dr">Doctor</option>
-                    <option value="rn">Registered nurse</option>
-                    <option value="ns">Nurse specialist</option>
                     <option value="mw">Midwife</option>
-                    <option value="bb">Blood bank staff</option>
+                    <option value="odp">Operating Department Practitioner</option>
+                    <option value="rn">Registered Nurse</option>
                     <option value="ot">Other</option>
                   </select>
                 </div>
-                <div data-bind="visible: position() == 'other'">
-                  <h3>Please enter other position</h3>
+                <div data-bind="visible: (position() == 'ot' || position() == 'bb')" style="margin-left: 5%;">
+                  <h3>Please enter your job title:</h3>
                   <input data-bind="value: otherposition">
                 </div>
-                <div data-bind="visible: position() == 'dr'">
+                <div data-bind="visible: position() == 'dr'" style="margin-left: 5%;">
                   <h3>What is your grade?</h3>
                   <select data-bind="value: grade">
                     <option>Please select</option>
@@ -173,7 +173,7 @@
                     <option value="consultant">Consultant</option>
                   </select>
                 </div>
-                <div data-bind="visible: (grade() == 'consultant' || grade() == 'registrar') || position() == 'ns'">
+                <div data-bind="visible: (grade() == 'consultant' || grade() == 'registrar') || position() == 'ns'" style="margin-left: 5%;">
                   <h3>What is your specialty?</h3>
                   <select data-bind="value: specialty">
                     <option>Please select</option>
@@ -183,7 +183,13 @@
                     <option value="ot">Other</option>
                   </select>
                 </div>
-                <div data-bind="visible: position() !== ''">
+                
+                <div data-bind="visible: specialty() == 'ot'" style="margin-left: 5%;">
+                  <h3>Please enter your specialty:</h3>
+                  <input data-bind="value: otherspecialty">
+                </div>
+                
+                <div data-bind="visible: position() !== ''" style="margin-left: 5%;">
                   <h3>How many years of experience do you have?</h3>
                   <select data-bind="value: experience">
                     <option value="-1">Please select</option>
@@ -231,8 +237,23 @@
                     <option value="41">More than 40 years</option>
                   </select>
                 </div>
+                
+                <div data-bind="visible: position() !== ''" style="margin-left: 5%;">
+                  <h3>How often do you care for patients requiring CMV-negative or irradiated blood components?</h3>
+                  <select data-bind="value: specialexperience">
+                    <option value="-1">Please select</option>
+                    <option value="7">Every day</option>
+                    <option value="6">Once a week</option>
+                    <option value="5">Once a month</option>
+                    <option value="4">Once every three months</option>
+                    <option value="3">Once every six months</option>
+                    <option value="2">Once a year</option>
+                    <option value="1">Never</option>
+                    <option value="0">Don't know</option>
+                  </select>
+                </div>
                 <div data-bind="visible: (position() && experience() > -1)">
-                  <p>You are ready to begin. By proceeding you indicate that you give your informed consent to take part in the research.</p>
+                  <p><b>Press the green button to start the knowledge tests</b>. By proceeding you indicate that you give your informed consent to take part in the research.</p>
                   <a href="#" class="positive" data-role="button" data-bind="click: $root.nextSection">Begin</a>
                 </div>
               </div>
@@ -740,9 +761,11 @@
         self.otherposition = ko.observable("");
         self.grade = ko.observable("");
         self.specialty = ko.observable("");
+        self.otherspecialty = ko.observable("");
         self.experience = ko.observable("");
+        self.specialexperience = ko.observable("");
         self.treatment = ko.observable(getUrlParameter('treatment') || "ggc");
-        self.questionHeading = ko.observableArray(["1. What statements are true or false?", "2. What are risk factors for TA-GvHD?", "3. What are common errors involving special components?", "4. What is the correct blood component specification?"]);
+        self.questionHeading = ko.observableArray(["1. Is the statement true or false?", "2. What are risk factors for TA-GvHD?", "3. What are common errors involving special components?", "4. What is the correct blood component specification?"]);
         self.questionBank1 = ko.observableArray(questions.theme1.splice(0, 3).concat(questions.theme2.splice(0, 3)).concat(questions.theme3.splice(0, 3)).concat(questions.theme4.splice(0, 3))).extend({
           paging: 3
         });
