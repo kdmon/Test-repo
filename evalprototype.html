@@ -38,6 +38,10 @@
       #ggcindications th {
         border: 1px solid #000;
       }
+      .special {
+        text-decoration: underline;
+        font-weight: bold;
+      }
       .completed {
         border: none !important;
         border-bottom: 1px solid #ddd !important;
@@ -85,6 +89,53 @@
           <div style="border: 1px solid #aaa; background: #EFE;">
             <p id="progressbar" data-bind="style: {width: progress() + 1 + '%'}, text: progress() + 1 + '% completed' "></p>
           </div>
+          <div data-bind="visible: section() == 0">
+            <div style="width: 100%; max-width: 780px; margin: auto;">
+              <img src="UoE_logo.gif" style="margin: 3%; margin-bottom: 0; width: 93%; max-width: 531px;">
+              <p style="font-size: 1.2em; padding: 0.5em; padding-top: 0;"><b>SPECIAL</b>:
+                <span class="special">S</span>topping and
+                <span class="special">P</span>reventing
+                <span class="special">E</span>rrors in
+                <span class="special">C</span>MV-negative and
+                <span class="special">I</span>rradiated blood transfusions through
+                <span class="special">A</span>pp-based
+                <span class="special">L</span>earning.</p>
+              <p>We would like to invite you to participate in the SPECIAL study. Before you decide whether to take part, we want you to know why we need your help and whats involved in taking part. Expand the sections to show more details about the study.</p>
+              <div data-role="collapsibleset" data-inset="false">
+                <div data-role="collapsible" data-collapsed="true">
+                  <h3>1. Background: special blood components</h3>
+                  <p>Although blood transfusion in the UK is safe, it is a complex process and about 100 mistakes related to the provision of special blood components are reported every year to Serious Hazards of Transfusion (SHOT) in the UK. These put patients at unnecessary risk of CMV infection and developing rare, but fatal Graft versus Host Disease.</p>
+                </div>
+                <div data-role="collapsible" data-collapsed="true">
+                  <h3>2. What is the aim of the research?</h3>
+                  <p>SHOT has identified a lack of knowledge in staff about special blood components. Researchers at the University of Edinburgh are collaborating with experts in transfusion to create an app with learning materials about special blood components for staff involved in the prescription, request, issue and administration of blood components. This pilot study will evaluate whether the app increases staff knowledge of the correct use of special blood components.</p>
+                </div>
+                <div data-role="collapsible" data-collapsed="true">
+                  <h3>3. Who are we asking to participate?</h3>
+                  <p>We are inviting all grades of doctors, registered nurses, midwives and transfusion laboratory staff who recently completed Module 1 of the Learn Blood Transfusion e-learning programme AND who work at one of the following hospitals in NHS Lothian: The Royal Infirmary of Edinburgh, Western General Hospital and St John's Hospital. Staff who do not meet these criteria are excluded from participating.</p>
+                </div>
+                <div data-role="collapsible" data-collapsed="true">
+                  <h3>4. What will I be asked to do?</h3>
+                  <p>We are asking all participants to answer a series of short multiple-choice tests about special blood components. Answering the questions should take you about 15 minutes in total, and you can choose to participate at a time and from a location that is convenient to you. You will need access to a computer with an Internet connection.</p>
+                </div>
+                <div data-role="collapsible" data-collapsed="true">
+                  <h3>5. Why should I participate?</h3>
+                  <p>We know that special blood components is a topic that many staff involved in transfusions find challenging. Taking part is an excellent opportunity to learn about and test your knowledge in a safe environment. By taking part, you will help shape the design of a new learning resource for staff. If results are positive, wider dissemination of the app could improve practice. There is also a chance to win a £50 national book token voucher. Participation is completely voluntary and there are no risks to participating.</p>
+                </div>
+                <div data-role="collapsible" data-collapsed="true">
+                  <h3>6. How will we maintain your confidentiality?</h3>
+                  <p>Any data that you provide will be treated confidentially and your answers will be reported anonymously in publications. The information will be held securely for the duration of the research project (3 years) and then destroyed.</p>
+                </div>
+                <div data-role="collapsible" data-collapsed="true">
+                  <h3>7. Who is conducting the research?</h3>
+                  <p>The research is conducted by Mr Karl Monsen, a PhD candidate at The University of Edinburgh, in collaboration with Ms Susan Cottrell, Better Blood Transfusion Nurse Specialist in Education at The Scottish National Blood Transfusion Service.</p>
+                  <p>Please contact Karl if you have any questions at the following email address: k.d.monsen@sms.ed.ac.uk. Alternatively, write to: Karl Monsen, Centre for Design Informatics, Room 3.10, Evolution House, 78 West Port, EH1 2L.</p>
+                </div>
+                <h3>Participate</h3>
+                <p>Please select your...</p> <a href="#" data-role="button" data-bind="click: $root.nextSection">Next</a>
+              </div>
+            </div>
+          </div>
           <div data-bind="visible: section() == 1">
             <h3 data-bind="text: questionHeading()[$root.questionBank1.currentPage()-1]"></h3> <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank1.currentPage() > 1, click: $root.questionBank1.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
             <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank1.currentPageData">
@@ -96,10 +147,9 @@
             </ul>
             <p data-bind="visible: !$root.questionBank1.pageCompleted();">You must answer all mandatory questions (<i class="fa fa-certificate" style="color: red;"></i>) before proceeding.</p>
             <div data-bind="visible: $root.questionBank1.pageCompleted() && $root.questionBank1.currentPage() <  $root.questionBank1.pageCount()">
-              <p><b>Review your answers and press the green button to continue.</b></p>
-              <a href="#" class="positive" data-theme="b" data-role="button" data-bind="click: $root.questionBank1.moveNext">Next page</a>
-            </div>
-            <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted() && $root.questionBank1.currentPage() ==  $root.questionBank1.pageCount(), click: $root.nextSection">Next section</a>
+              <p><b>Review your answers and press the green button to continue.</b>
+              </p> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="click: $root.questionBank1.moveNext">Next page</a>
+            </div> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted() && $root.questionBank1.currentPage() ==  $root.questionBank1.pageCount(), click: $root.nextSection">Next section</a>
           </div>
           <div data-bind="visible: section() == 2">
             <p data-bind="text: questionHeading()[$root.questionBank2.currentPage()-1]"></p> <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank1.currentPage() > 1, click: $root.questionBank1.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
@@ -107,20 +157,16 @@
               <li class="statement" data-bind="css: {completed: selected() !== 'Please select'}">
                 <span data-bind="text: statement"></span> <i class="fa fa-certificate" style="color: red;" data-bind="visible: selected() == 'Please select'"></i>
                 <br/>
-                <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select>
-                <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank2.pageCompleted() && $root.questionBank2.currentPage() <  $root.questionBank2.pageCount(), click: $root.questionBank2.moveNext" data-inline="true">Next</a>
-                 <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank2.pageCompleted() && $root.questionBank2.currentPage() == $root.questionBank2.pageCount(), click: $root.nextSection" data-inline="true">Next section</a>
+                <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank2.pageCompleted() && $root.questionBank2.currentPage() <  $root.questionBank2.pageCount(), click: $root.questionBank2.moveNext" data-inline="true">Next</a>
+                <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank2.pageCompleted() && $root.questionBank2.currentPage() == $root.questionBank2.pageCount(), click: $root.nextSection" data-inline="true">Next section</a>
               </li>
             </ul>
           </div>
         </div>
         <iframe data-bind="visible: section() == 2 && treatment() == 'app'" id="help" src="http://optimalblooduse.eu/app/#front" width="100%" style="border: 0px; border-top: 5px solid black;"></iframe>
-        <div data-bind="visible: section() == 2 && treatment() == 'ggc'" id="ggc" style=" padding: 10px;border: 0px; border-top: 5px solid black;">
-          <i>Extract from NHS Greater Glasgow and Clyde Blood Transfusion Special Requirements Guideline (March 2013, issue 1), pages 1-8:</i>
-          <div>
-            <a href="#" style="position: absolute; margin-top:0px; right: 0px;" data-role="button" data-inline="true" data-bind="click: findall"><i class="fa fa-search"></i></a> 
-            <a href="#" style="position: absolute; margin-top:0px; left: 10px;"data-role="button" data-inline="true" data-bind="visible: searchterm(), click: clearsearch">x</a>
-            <input class="searchbar" style="margin-left: 2em; font-size: 1.2em;" placeholder="Search guidelines" type="text" data-inline="true" data-bind="value: searchterm, valueUpdate: 'keyup'"> 
+        <div data-bind="visible: section() == 2 && treatment() == 'ggc'" id="ggc" style=" padding: 10px;border: 0px; border-top: 5px solid black;"> <i>Extract from NHS Greater Glasgow and Clyde Blood Transfusion Special Requirements Guideline (March 2013, issue 1), pages 1-8:</i>
+          <div> <a href="#" style="position: absolute; margin-top:0px; right: 0px;" data-role="button" data-inline="true" data-bind="click: findall"><i class="fa fa-search"></i></a>  <a href="#" style="position: absolute; margin-top:0px; left: 10px;" data-role="button" data-inline="true" data-bind="visible: searchterm(), click: clearsearch">x</a>
+            <input class="searchbar" style="margin-left: 2em; font-size: 1.2em;" placeholder="Search guidelines" type="text" data-inline="true" data-bind="value: searchterm, valueUpdate: 'keyup'">
           </div>
           <hr/>
           <h3><u>INTRODUCTION</u>
@@ -434,7 +480,6 @@
           options: ["Please select", "True", "False", "Don't know"],
           selected: ko.observable("Please select")
         }],
-        
         theme2: [{
           statement: "Viable donor lymphocytes in component.",
           options: ["Please select", "Yes", "No", "Don't know"],
@@ -555,11 +600,11 @@
       };
       var ViewModel = function() {
         var self = this;
-        self.nextSection = function () {
+        self.nextSection = function() {
           self.section(self.section() + 1);
           $(window).scrollTop(0);
         }
-        self.clearsearch = function () {
+        self.clearsearch = function() {
           $(".highlight").replaceWith(function() {
             return $(this).contents();
           });
@@ -574,23 +619,20 @@
           });
           // New search
           if (term.length > 1) {
-            
             $("#ggc *").highlight(term, "highlight");
-            
             var occurrances = $(".highlight") ? $(".highlight").length : 0;
-            
-            if (occurrances < 1) {alert ("Search term not found"); return;}
-            else {
-              $(window).scrollTop($(".highlight:first").offset().top);}
-              alert ("Found " + occurrances + " occurrances of search term.");
+            if (occurrances < 1) {
+              alert("Search term not found");
+              return;
+            } else {
+              $(window).scrollTop($(".highlight:first").offset().top);
             }
-          else {
-            alert ("Search term must be two characters or more");
-            
+            alert("Found " + occurrances + " occurrances of search term.");
+          } else {
+            alert("Search term must be two characters or more");
           }
-            
         };
-        self.section = ko.observable(1);
+        self.section = ko.observable(0);
         self.treatment = ko.observable(getUrlParameter('treatment') || "ggc");
         self.role = ko.observable(getUrlParameter('role'));
         self.hospital = ko.observable(getUrlParameter('hospital'));
@@ -607,7 +649,6 @@
           for (i = 0; i < self.questionBank1.pageCount() * self.questionBank1.pageSize(); i++) {
             if (self.questionBank1()[i].selected() !== 'Please select') count++;
           }
-          
           for (i = 0; i < self.questionBank2.pageCount() * self.questionBank2.pageSize(); i++) {
             if (self.questionBank2()[i].selected() !== 'Please select') count++;
           }
@@ -630,11 +671,10 @@
       };
       var model = new ViewModel();
       ko.applyBindings(model);
-      
       $(".searchbar").on('keypress', function(e) {
-	      if(e.keyCode==13){
-	        model.findall();
-	      }
+        if (e.keyCode == 13) {
+          model.findall();
+        }
       });
     </script>
   </body>
