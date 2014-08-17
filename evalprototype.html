@@ -134,7 +134,7 @@
                   <p>Please contact Karl if you have any questions at the following email address: k.d.monsen@sms.ed.ac.uk. Alternatively, write to: Karl Monsen, Centre for Design Informatics, Room 3.10, Evolution House, 78 West Port, EH1 2L.</p>
                 </div>
                 <h1>Ready to begin?</h1>
-                <p>Please answer the questions to confirm your eligibility.</p>
+                <p> By proceeding you indicate that you give your informed consent to take part in the research. Please answer the questions to confirm your eligibility.</p>
                 <h3>At what hospital are you based?</h3>
                 <select data-bind="value: hospital">
                   <option value="" selected>Please select</option>
@@ -173,7 +173,7 @@
                     <option value="consultant">Consultant</option>
                   </select>
                 </div>
-                <div data-bind="visible: (grade() == 'consultant' || grade() == 'registrar') || position() == 'ns'" style="margin-left: 5%;">
+                <div data-bind="visible:  position()" style="margin-left: 5%;">
                   <h3>What is your specialty?</h3>
                   <select data-bind="value: specialty">
                     <option>Please select</option>
@@ -252,8 +252,8 @@
                     <option value="0">Don't know</option>
                   </select>
                 </div>
-                <div data-bind="visible: (position() && experience() > -1)">
-                  <p><b>Press the green button to start the knowledge tests</b>. By proceeding you indicate that you give your informed consent to take part in the research.</p>
+                <div data-bind="visible: (position() && experience() > -1) && specialexperience() > -1">
+                  <p><b>Press the green button to start the knowledge tests</b>.</p>
                   <a href="#" class="positive" data-role="button" data-bind="click: $root.nextSection">Begin</a>
                 </div>
               </div>
