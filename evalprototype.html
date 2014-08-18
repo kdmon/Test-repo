@@ -91,10 +91,11 @@
           <div data-bind="visible: section() !== 0" style="border: 1px solid #aaa; background: #EFE;">
             <p id="progressbar" data-bind="style: {width: progress() + 1 + '%'}, text: progress() + 1 + '% completed' "></p>
           </div>
-          <div data-bind="visible: section() == 0">
+          <div data-bind="visible: section() == -1">
             <div style="width: 100%; max-width: 780px; margin: auto;">
               <img src="UoE_logo.gif" style="margin: 3%; margin-bottom: 0; width: 93%; max-width: 531px;">
-              <p style="font-size: 1.2em; padding-top: 0;"><b>SPECIAL</b>:
+              <h3>Welcome to SPECIAL</h3>
+              <p style="font-size: 1.2em; padding-top: 0;">
                 <span class="special">S</span>topping and
                 <span class="special">P</span>reventing
                 <span class="special">E</span>rrors in
@@ -102,11 +103,12 @@
                 <span class="special">I</span>rradiated blood transfusions through
                 <span class="special">A</span>pp-based
                 <span class="special">L</span>earning.</p>
-              <p>We would like to invite you to participate in the SPECIAL study. Before you decide whether to take part, we want you to know why we need your help and what is involved in taking part. Expand the sections to show more details about the study.</p>
+              <p>We would like to invite you to participate in the SPECIAL study. Before you decide whether to take part, we want you to know why we need your help and what is involved in taking part.</p>
+              <p>Expand the sections to show details.</p>
               <div data-role="collapsibleset" data-inset="false">
                 <div data-role="collapsible" data-collapsed="true">
                   <h3>1. Background: special blood components</h3>
-                  <p>Although blood transfusion in the UK is safe, it is a complex process and about 100 mistakes related to the provision of special blood components are reported every year to Serious Hazards of Transfusion (SHOT) in the UK. These put patients at unnecessary risk of CMV infection and developing rare, but fatal Graft versus Host Disease.</p>
+                  <p>Although blood transfusion in the UK is safe, it is a complex process and about 100 mistakes related to the provision of special blood components are reported every year to Serious Hazards of Transfusion(SHOT) in the UK. These put patients at unnecessary risk of CMV infection and developing rare, but fatal Graft versus Host Disease.</p>
                 </div>
                 <div data-role="collapsible" data-collapsed="true">
                   <h3>2. What is the aim of the research?</h3>
@@ -122,7 +124,8 @@
                 </div>
                 <div data-role="collapsible" data-collapsed="true">
                   <h3>5. Why should I participate?</h3>
-                  <p>We know that special blood components is a topic that many staff involved in transfusion find challenging. Taking part is an excellent opportunity to learn about and test your knowledge in a safe environment. By taking part, you will help shape the design of a new learning resource for staff. If results are positive, wider dissemination of the app could improve practice. There is also a chance to win a &pound;50 national book token voucher. Participation is completely voluntary and there are no risks to participating.</p>
+                  <p>Special blood components can be a challenging topic. Taking part is an excellent opportunity to learn about and test your knowledge in a safe environment.</p>
+                  <p>By taking part, you will also help shape the design of a new learning resource for staff. If results are positive, wider dissemination of the app could improve practice. There is also a chance to win a &pound;50 national book token voucher. Participation is completely voluntary and there are no risks to participating.</p>
                 </div>
                 <div data-role="collapsible" data-collapsed="true">
                   <h3>6. How will we maintain your confidentiality?</h3>
@@ -131,137 +134,150 @@
                 <div data-role="collapsible" data-collapsed="true">
                   <h3>7. Who is conducting the research?</h3>
                   <p>The research is conducted by Mr Karl Monsen, a PhD candidate at The University of Edinburgh, in collaboration with Ms Susan Cottrell, Better Blood Transfusion Nurse Specialist in Education at The Scottish National Blood Transfusion Service.</p>
-                  <p>Please contact Karl if you have any questions at the following email address: k.d.monsen@sms.ed.ac.uk. Alternatively, write to: Karl Monsen, Centre for Design Informatics, Room 3.10, Evolution House, 78 West Port, EH1 2L.</p>
+                  <p>Please contact Karl if you have any questions at the following email address: <a href="mailto: k.d.monsen@sms.ed.ac.uk">k.d.monsen@sms.ed.ac.uk</a>.</p>
+                  <p>Alternatively, you can write to Karl Monsen, Centre for Design Informatics, Room 3.10, Evolution House, 78 West Port, EH1 2L.</p>
+                  <p>Thank you</p>
                 </div>
-                <h1>Ready to begin?</h1>
-                <p>By proceeding you indicate that you give your informed consent to take part in the research. Please answer the questions to confirm your eligibility.</p>
-                <h3>At what hospital are you based?</h3>
-                <select data-bind="value: hospital">
-                  <option value="" selected>Please select</option>
-                  <option value="rie">Royal Infirmary of Edinburgh</option>
-                  <option value="sjh">St John's Hospital</option>
-                  <option value="wgh">Western General Hospital</option>
-                  <option value="other">None of the above</option>
+                <h2>Are you ready to begin?</h2>
+                <p>By proceeding you indicate that you give your informed consent to take part in the research.</p> <a href="#" class="positive" data-role="button" data-bind="click: $root.nextSection">I agree to participate</a>
+              </div>
+            </div>
+          </div>
+            <div data-bind="visible: section() == 0">
+              <h3>At what hospital are you based?</h3>
+              <select data-bind="value: hospital">
+                <option value="" selected>Please select</option>
+                <option value="rie">Royal Infirmary of Edinburgh</option>
+                <option value="sjh">St John's Hospital</option>
+                <option value="wgh">Western General Hospital</option>
+                <option value="other">None of the above</option>
+              </select>
+              <div data-bind="visible: hospital() == 'other'">
+                <h2 style="color: red">You are not eligible</h2>
+                <p>We're sorry, but we can only accept submissions from staff working at the hospitals listed above. If you recently moved hospital, please select your previous hospital.</p>
+              </div>
+              <div data-bind="visible: hospital() !== 'other' && hospital() !== ''">
+                <h3>What is your role?</h3>
+                <select data-bind="value: position">
+                  <option value="">Please select</option>
+                  <option value="bb">Blood Bank/Hospital Laboratory staff</option>
+                  <option value="dr">Doctor</option>
+                  <option value="mw">Midwife</option>
+                  <option value="odp">Operating Department Practitioner</option>
+                  <option value="rn">Registered Nurse</option>
+                  <option value="ot">Other</option>
                 </select>
-                <div data-bind="visible: hospital() == 'other'">
-                  <h2 style="color: red">You are not eligible</h2>
-                  <p>We're sorry, but we can only accept submissions from staff working at the hospitals listed above. If you recently moved hospital, please select your previous hospital.</p>
-                </div>
-                <div data-bind="visible: hospital() !== 'other' && hospital() !== ''">
-                  <h3>What is your role?</h3>
-                  <select data-bind="value: position">
-                    <option value="">Please select</option>
-                    <option value="bb">Blood Bank/Hospital Laboratory staff</option>
-                    <option value="dr">Doctor</option>
-                    <option value="mw">Midwife</option>
-                    <option value="odp">Operating Department Practitioner</option>
-                    <option value="rn">Registered Nurse</option>
-                    <option value="ot">Other</option>
-                  </select>
-                </div>
-                <div data-bind="visible: (position() == 'ot' || position() == 'bb')" style="margin-left: 5%;">
-                  <h3>Please enter your job title:</h3>
-                  <input data-bind="value: otherposition">
-                </div>
-                <div data-bind="visible: position() == 'dr'" style="margin-left: 5%;">
-                  <h3>What is your grade?</h3>
-                  <select data-bind="value: grade">
-                    <option>Please select</option>
-                    <option value="fy1">Foundation year 1</option>
-                    <option value="fy2">Foundation year 2</option>
-                    <option value="registrar">Registrar</option>
-                    <option value="consultant">Consultant</option>
-                  </select>
-                </div>
-                <div data-bind="visible:  position()" style="margin-left: 5%;">
-                  <h3>What is your specialty?</h3>
-                  <select data-bind="value: specialty">
-                    <option>Please select</option>
-                    <option value="ae">Accident and emergency (A&amp;E)</option>
-                    <option value="bb">Blood bank</option>
-                    <option value="cc">Critical care</option>
-                    <option value="gm">General medicine</option>
-                    <option value="ge">Geriatrics</option>
-                    <option value="he">Haematology</option>
-                    <option value="ne">Neonatology</option>
-                    <option value="ob">Obstetrics or gynaecology</option>
-                    <option value="on">Oncology</option>
-                    <option value="or">Orthopaedics</option>
-                    <option value="pd">Paediatrics</option>
-                    <option value="su">Surgical</option>
-                    <option value="th">Theatre</option>
-                    <option value="ot">Other</option>
-                  </select>
-                </div>
-                <div data-bind="visible: specialty() == 'ot'" style="margin-left: 5%;">
-                  <h3>Please enter your specialty:</h3>
-                  <input data-bind="value: otherspecialty">
-                </div>
-                <div data-bind="visible: position() !== ''" style="margin-left: 5%;">
-                  <h3>How many years of experience do you have?</h3>
-                  <select data-bind="value: experience">
-                    <option value="-1">Please select</option>
-                    <option value="0">Less than one year</option>
-                    <option value="1">1 year</option>
-                    <option value="2">2 years</option>
-                    <option value="3">3 years</option>
-                    <option value="4">4 years</option>
-                    <option value="5">5 years</option>
-                    <option value="6">6 years</option>
-                    <option value="6">7 years</option>
-                    <option value="6">8 years</option>
-                    <option value="6">9 years</option>
-                    <option value="10">10 years</option>
-                    <option value="11">11 years</option>
-                    <option value="12">12 years</option>
-                    <option value="13">13 years</option>
-                    <option value="14">14 years</option>
-                    <option value="15">15 years</option>
-                    <option value="16">16 years</option>
-                    <option value="17">17 years</option>
-                    <option value="18">18 years</option>
-                    <option value="19">19 years</option>
-                    <option value="20">20 years</option>
-                    <option value="21">21 years</option>
-                    <option value="22">22 years</option>
-                    <option value="23">23 years</option>
-                    <option value="24">24 years</option>
-                    <option value="25">25 years</option>
-                    <option value="26">26 years</option>
-                    <option value="27">27 years</option>
-                    <option value="28">28 years</option>
-                    <option value="29">29 years</option>
-                    <option value="30">30 years</option>
-                    <option value="31">31 years</option>
-                    <option value="32">32 years</option>
-                    <option value="33">33 years</option>
-                    <option value="34">34 years</option>
-                    <option value="35">35 years</option>
-                    <option value="36">36 years</option>
-                    <option value="37">37 years</option>
-                    <option value="38">38 years</option>
-                    <option value="39">39 years</option>
-                    <option value="40">40 years</option>
-                    <option value="41">More than 40 years</option>
-                  </select>
-                </div>
-                <div data-bind="visible: position() !== ''" style="margin-left: 5%;">
-                  <h3>How often do you care for patients requiring CMV-negative or irradiated blood components?</h3>
-                  <select data-bind="value: specialexperience">
-                    <option value="-1">Please select</option>
-                    <option value="7">Every day</option>
-                    <option value="6">Once a week</option>
-                    <option value="5">Once a month</option>
-                    <option value="4">Once every three months</option>
-                    <option value="3">Once every six months</option>
-                    <option value="2">Once a year</option>
-                    <option value="1">Never</option>
-                    <option value="0">Don't know</option>
-                  </select>
-                </div>
-                <div data-bind="visible: (position() && experience() > -1) && specialexperience() > -1">
-                  <p><b>Press the green button to start the knowledge tests</b>.</p> <a href="#" class="positive" data-role="button" data-bind="click: $root.nextSection">Begin</a>
-                </div>
+              </div>
+              <div data-bind="visible: (position() == 'ot' || position() == 'bb')" style="margin-left: 5%;">
+                <h3>Please enter your job title:</h3>
+                <input data-bind="value: otherposition">
+              </div>
+              <div data-bind="visible: position() == 'dr'" style="margin-left: 5%;">
+                <h3>What is your grade?</h3>
+                <select data-bind="value: grade">
+                  <option>Please select</option>
+                  <option value="fy1">Foundation year 1</option>
+                  <option value="fy2">Foundation year 2</option>
+                  <option value="registrar">Registrar</option>
+                  <option value="consultant">Consultant</option>
+                </select>
+              </div>
+              <div data-bind="visible:  position()" style="margin-left: 5%;">
+                <h3>What is your specialty?</h3>
+                <select data-bind="value: specialty">
+                  <option>Please select</option>
+                  <option value="ae">Accident and emergency (A&amp;E)</option>
+                  <option value="bb">Blood bank</option>
+                  <option value="cc">Critical care</option>
+                  <option value="gm">General medicine</option>
+                  <option value="ge">Geriatrics</option>
+                  <option value="he">Haematology</option>
+                  <option value="ne">Neonatology</option>
+                  <option value="ob">Obstetrics or gynaecology</option>
+                  <option value="on">Oncology</option>
+                  <option value="or">Orthopaedics</option>
+                  <option value="pd">Paediatrics</option>
+                  <option value="su">Surgical</option>
+                  <option value="th">Theatre</option>
+                  <option value="ot">Other</option>
+                </select>
+              </div>
+              <div data-bind="visible: specialty() == 'ot'" style="margin-left: 5%;">
+                <h3>Please enter your specialty:</h3>
+                <input data-bind="value: otherspecialty">
+              </div>
+              <div data-bind="visible: position() !== ''" style="margin-left: 5%;">
+                <h3>How many years of experience do you have?</h3>
+                <select data-bind="value: experience">
+                  <option value="-1">Please select</option>
+                  <option value="0">Less than one year</option>
+                  <option value="1">1 year</option>
+                  <option value="2">2 years</option>
+                  <option value="3">3 years</option>
+                  <option value="4">4 years</option>
+                  <option value="5">5 years</option>
+                  <option value="6">6 years</option>
+                  <option value="6">7 years</option>
+                  <option value="6">8 years</option>
+                  <option value="6">9 years</option>
+                  <option value="10">10 years</option>
+                  <option value="11">11 years</option>
+                  <option value="12">12 years</option>
+                  <option value="13">13 years</option>
+                  <option value="14">14 years</option>
+                  <option value="15">15 years</option>
+                  <option value="16">16 years</option>
+                  <option value="17">17 years</option>
+                  <option value="18">18 years</option>
+                  <option value="19">19 years</option>
+                  <option value="20">20 years</option>
+                  <option value="21">21 years</option>
+                  <option value="22">22 years</option>
+                  <option value="23">23 years</option>
+                  <option value="24">24 years</option>
+                  <option value="25">25 years</option>
+                  <option value="26">26 years</option>
+                  <option value="27">27 years</option>
+                  <option value="28">28 years</option>
+                  <option value="29">29 years</option>
+                  <option value="30">30 years</option>
+                  <option value="31">31 years</option>
+                  <option value="32">32 years</option>
+                  <option value="33">33 years</option>
+                  <option value="34">34 years</option>
+                  <option value="35">35 years</option>
+                  <option value="36">36 years</option>
+                  <option value="37">37 years</option>
+                  <option value="38">38 years</option>
+                  <option value="39">39 years</option>
+                  <option value="40">40 years</option>
+                  <option value="41">More than 40 years</option>
+                </select>
+              </div>
+              <div data-bind="visible: position() !== ''" style="margin-left: 5%;">
+                <h3>Have you ever worked in a department caring for patients requiring CMV-negative or irradiated blood components?</h3>
+                <select data-bind="value: specialexperience">
+                  <option value="-1">Please select</option>
+                  <option value="0">No</option>
+                  <option value="1">Yes</option>
+                </select>
+              </div>
+              <div data-bind="visible: position() !== ''" style="margin-left: 5%;">
+                <h3>How often do you care for patients requiring CMV-negative or irradiated blood components?</h3>
+                <select data-bind="value: specialexperience">
+                  <option value="-1">Please select</option>
+                  <option value="7">Every day</option>
+                  <option value="6">Once a week</option>
+                  <option value="5">Once a month</option>
+                  <option value="4">Once every three months</option>
+                  <option value="3">Once every six months</option>
+                  <option value="2">Once a year</option>
+                  <option value="1">Never</option>
+                  <option value="0">Don't know</option>
+                </select>
+              </div>
+              <div data-bind="visible: (position() && experience() > -1) && specialexperience() > -1">
+                <p><b>Press the green button to start the knowledge tests</b>.</p> <a href="#" class="positive" data-role="button" data-bind="click: $root.nextSection">Begin</a>
               </div>
             </div>
           </div>
@@ -475,7 +491,6 @@
             <li>All blood transfusions for infants up to 28 days post expected delivery date.</li>
           </ul>
         </div>
-     
         <div data-bind="visible: section() == 3" style="margin: 5%;">
           <h1>Usability evaluation</h1>
           <p>Thinking about the app, please answer the following questions as best you can.</p>
@@ -488,7 +503,6 @@
             <option value="4">Agree</option>
             <option value="5">Strongly agree</option>
           </select>
-          
           <h3>I would imagine that most people would learn to use this system very quickly.</h3>
           <select data-bind="value: sus2">
             <option value="" selected>Please select</option>
@@ -498,8 +512,6 @@
             <option value="4">Agree</option>
             <option value="5">Strongly agree</option>
           </select>
-          
-          
           <h3>I found the system very cumbersome to use.</h3>
           <select data-bind="value: sus3">
             <option value="" selected>Please select</option>
@@ -509,8 +521,6 @@
             <option value="4">Agree</option>
             <option value="5">Strongly agree</option>
           </select>
-          
-          
           <h3>I felt very confident using the system.</h3>
           <select data-bind="value: sus4">
             <option value="" selected>Please select</option>
@@ -520,7 +530,6 @@
             <option value="4">Agree</option>
             <option value="5">Strongly agree</option>
           </select>
-          
           <h3>I needed to learn a lot of things before I could get going with this system.</h3>
           <select data-bind="value: sus5">
             <option value="" selected>Please select</option>
@@ -530,7 +539,6 @@
             <option value="4">Agree</option>
             <option value="5">Strongly agree</option>
           </select>
-          
           <h3>I think that I would like to use this system frequently.</h3>
           <select data-bind="value: sus6">
             <option value="" selected>Please select</option>
@@ -540,7 +548,6 @@
             <option value="4">Agree</option>
             <option value="5">Strongly agree</option>
           </select>
-          
           <h3>I found the system unnecessarily complex.</h3>
           <select data-bind="value: sus7">
             <option value="" selected>Please select</option>
@@ -550,7 +557,6 @@
             <option value="4">Agree</option>
             <option value="5">Strongly agree</option>
           </select>
-          
           <h3>I thought the system was easy to use.</h3>
           <select data-bind="value: sus8">
             <option value="" selected>Please select</option>
@@ -560,7 +566,6 @@
             <option value="4">Agree</option>
             <option value="5">Strongly agree</option>
           </select>
-          
           <h3>I think that I would need the support of a technical person to be able to use this system.</h3>
           <select data-bind="value: sus9">
             <option value="" selected>Please select</option>
@@ -570,7 +575,6 @@
             <option value="4">Agree</option>
             <option value="5">Strongly agree</option>
           </select>
-          
           <h3>I found the various functions in this system were well integrated.</h3>
           <select data-bind="value: sus10">
             <option value="" selected>Please select</option>
@@ -580,16 +584,12 @@
             <option value="4">Agree</option>
             <option value="5">Strongly agree</option>
           </select>
-          
-          
           <div data-bind="visible: (sus1() && sus2() && sus3() && sus4() && sus5() && sus6() && sus7() && sus8() && sus9() && sus10())">
             <p><b>Press the green button to submit</b>.</p> <a href="#" class="positive" data-role="button" data-bind="click: $root.nextSection">Submit</a>
           </div>
-          
         </div>
       </div>
     </div>
-    
     <script type='text/javascript'>
       // http://jsfiddle.net/zeelux/B4vN2/
       (function() {
@@ -874,7 +874,7 @@
             alert("Search term must be two characters or more");
           }
         };
-        self.section = ko.observable(0);
+        self.section = ko.observable(-1);
         self.hospital = ko.observable("");
         self.position = ko.observable("");
         self.otherposition = ko.observable("");
