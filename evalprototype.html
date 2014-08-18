@@ -134,7 +134,7 @@
                   <p>Please contact Karl if you have any questions at the following email address: k.d.monsen@sms.ed.ac.uk. Alternatively, write to: Karl Monsen, Centre for Design Informatics, Room 3.10, Evolution House, 78 West Port, EH1 2L.</p>
                 </div>
                 <h1>Ready to begin?</h1>
-                <p> By proceeding you indicate that you give your informed consent to take part in the research. Please answer the questions to confirm your eligibility.</p>
+                <p>By proceeding you indicate that you give your informed consent to take part in the research. Please answer the questions to confirm your eligibility.</p>
                 <h3>At what hospital are you based?</h3>
                 <select data-bind="value: hospital">
                   <option value="" selected>Please select</option>
@@ -183,12 +183,10 @@
                     <option value="ot">Other</option>
                   </select>
                 </div>
-                
                 <div data-bind="visible: specialty() == 'ot'" style="margin-left: 5%;">
                   <h3>Please enter your specialty:</h3>
                   <input data-bind="value: otherspecialty">
                 </div>
-                
                 <div data-bind="visible: position() !== ''" style="margin-left: 5%;">
                   <h3>How many years of experience do you have?</h3>
                   <select data-bind="value: experience">
@@ -237,7 +235,6 @@
                     <option value="41">More than 40 years</option>
                   </select>
                 </div>
-                
                 <div data-bind="visible: position() !== ''" style="margin-left: 5%;">
                   <h3>How often do you care for patients requiring CMV-negative or irradiated blood components?</h3>
                   <select data-bind="value: specialexperience">
@@ -253,8 +250,7 @@
                   </select>
                 </div>
                 <div data-bind="visible: (position() && experience() > -1) && specialexperience() > -1">
-                  <p><b>Press the green button to start the knowledge tests</b>.</p>
-                  <a href="#" class="positive" data-role="button" data-bind="click: $root.nextSection">Begin</a>
+                  <p><b>Press the green button to start the knowledge tests</b>.</p> <a href="#" class="positive" data-role="button" data-bind="click: $root.nextSection">Begin</a>
                 </div>
               </div>
             </div>
@@ -402,45 +398,45 @@
               <p>*** Products for neonatal ET must be irradiated when there has been a previous IUT or if the donation is from a first or second-degree relative.
                 <br/>For other neonatal ET, irradiation is recommended if irradiation will not delay transfusion</p>
               <p>Whilst a diagnosis of severe T lymphocyte immunodeficiency is considered all components transfused should be irradiated and CMV seronegative whilst further tests are being undertaken</p>
-              <p?Q more detailed requirements for transplant recipients are as follows:</p>
-                <div style="margin-left:25px"> <b><i>allografts</i></b> - irradiated components should be given indefinitely
-                  <br/> <b><i>autografts</i></b> - irradiated components should be given until 6 months post transplant</div>
-                <p><b><i>[NB: Plasma reduced components section not reproduced in this extract.]</i></b>
-                </p>
-                <p><b>If there is any doubt as to whether or not a patient has a requirement for 
+              <p>?Q more detailed requirements for transplant recipients are as follows:</p>
+              <div style="margin-left:25px"> <b><i>allografts</i></b> - irradiated components should be given indefinitely
+                <br/> <b><i>autografts</i></b> - irradiated components should be given until 6 months post transplant</div>
+              <p><b><i>[NB: Plasma reduced components section not reproduced in this extract.]</i></b>
+              </p>
+              <p><b>If there is any doubt as to whether or not a patient has a requirement for 
         special blood components please discuss with the on call Haematologist at your local site.</b>
-                </p>
-                <h3><u>NOTIFICATION TO THE LABORATORY OF PATIENTS WITH SPECIAL REQUIREMENTS</u>
-                </h3>
-                <p>Once a patient has been identified as having a requirement for special blood components, a standard form, used throughout GG&amp;C (see appendix 1 <b><i>[NB: request form not reproduced in this extract]</i></b>), should be fully completed and sent to the local Blood Bank. The information held on this form will be shared with all Blood Banks throughout GG&amp;C.</p>
-                <p>The form should be signed by the Consultant in charge of the patient's care. It should be photocopied and a copy filed in the case records with the second copy forwarded to Blood Bank. If the patient has been identified as having special blood component requirements out with core working hours and a Consultant is not available, the requirement can be requested on a regular transfusion form and the special requirements form forwarded at the earliest possible opportunity. The information will not be disseminated throughout the Health Board Blood Banks until a Consultant signed copy of the special requirements form is received by the hospital Blood Bank.</p>
-                <p>If the need for the special blood components changes, an updated form should be forwarded to the hospital Blood Bank so their records can be amended.</p>
-                <h3>Laboratory Dissemination of Information</h3>
-                <p>As patients regularly transfer between hospital sites it is important that their transfusion requirement information is available throughout the Health Board Blood Banks. Once a Consultant signed form is received at a local Blood Bank, the form will be scanned and emailed to the Blood Bank managers in the South, North, Clyde and the Golden Jubilee Hospital so that their computer systems can be updated accordingly (as per the Blood Bank special requirements SOP).</p>
-                <p>The form will be returned to the requesting Consultant to ensure they are aware the laboratory tasks have been completed.</p>
-                <h3><u>PATIENT COUNSELLING AND CONSENT</u>
-                </h3>
-                <p>It is not a legal requirement in the United Kingdom that written consent is obtained before a transfusion of blood components; however, it is considered a required standard of good transfusion practice to ensure that the patient/parent/carer receives adequate information regarding the transfusion. This standard is laid down in the NHS QIS Clinical Standards (2006) now known as Healthcare Improvement Scotland and compliance is monitored. 4 This discussion should include information about the risks and benefits of transfusion as well as information relating to available alternatives, for example, iron supplementation and must be documented in the case records. Nursing and medical staff therefore, have a professional duty to ensure that they have adequate knowledge of transfusion related issues or that they can access the information and support required by patients undergoing a transfusion.</p>
-                <p>Booklets are available specifically for patients who require irradiated components and all patients receiving irradiated components should be given these before their first transfusion. They should also be counselled and told to inform nursing and medical staff of this requirement before any future transfusions. Patients should be given a card to carry documenting their special transfusion requirement. An adhesive sticker, taken from the information leaflet, should be placed on the front of case records detailing the requirement. It is the responsibility of the prescribing practitioner to ensure these steps are undertaken.</p>
-                <h3>INCIDENT REPORTING</h3>
-                <p>There have been 13 reported cases of TaGVHD since 1996 but no cases in the last 8 years. 2 cases have been reported in leucodepleted components (1998-99 and 2000-01) indicating that while leucodepletion significantly reduces, it does not eradicate the risk of this condition. It is important therefore that appropriate products are provided for patients at risk.</p>
-                <p>Errors do occur and the Serous Hazards of Transfusion (SHOT) report 2010 documents 74 cases where special requirements were not met. The majority of these (59 cases) were patients who required irradiated products but did not receive them. 5 It is important that any errors are documented appropriately to ensure that steps can be taken to avoid them in the future. If it becomes apparent that a patient has failed to receive appropriate components the hospital Blood Bank must be informed immediately. The incident will be fully investigated and reported on DATIX and to SHOT.</p>
-                <h3><u>REFERENCES</u>
-                </h3>
-                <ol>
-                  <li>Transfusion Transmitted Infection. Chapter 13. Practical Transfusion Medicine. Third Edition. P122-145. Murphy MF, Pamphilon DH.</li>
-                  <li>
-                    <a id="ref2"></a>Clinical Blood Transfusion. Chapter 16 Postgraduate Haematology Sixth Edition. P268-300. Hoffbrand AV, Catovsky D, Tuddenham EDD, Green AR.</li>
-                  <li>
-                    <a id="ref3"></a>Guidelines on the use of irradiated blood components prepared by the British Committee for Standards in Haematology blood transfusion task force British Journal of Haematology 2011, 152, 35  51</li>
-                  <li>NHS QIS Clinical Standards - Blood Transfusion <a href="http://www.healthcareimprovementscotland.org/previous_resources/standards/clinical_standards_-_blood_tra.aspx" target="_blank">http://www.healthcareimprovementscotland.org/previous_resources/standards/clinical_standards_-_blood_tra.aspx</a>
-                  </li>
-                  <li>Serious Hazards of Transfusion <a href="http://www.shotuk.org" target="_blank">http://www.shotuk.org/</a>
-                  </li>
-                  <li>Transfusion guidelines for neonates and older children British Journal of Haematology 2004, 124, 433 - 453</li>
-                  <li>Advisory Committee on the Safety of Blood, Tissues and Organs (SaBTO) <a href="http://www.dh.gov.uk/prod_consum_dh/groups/dh_digitalassets/@dh/@en/documents/digitalasset/dh_133086.pdf" target="_blank">http://www.dh.gov.uk/prod_consum_dh/groups/dh_digitalassets/@dh/@en/documents/digitalasset/dh_133086.pdf</a>
-                  </li>
-                </ol>
+              </p>
+              <h3><u>NOTIFICATION TO THE LABORATORY OF PATIENTS WITH SPECIAL REQUIREMENTS</u>
+              </h3>
+              <p>Once a patient has been identified as having a requirement for special blood components, a standard form, used throughout GG&amp;C (see appendix 1 <b><i>[NB: request form not reproduced in this extract]</i></b>), should be fully completed and sent to the local Blood Bank. The information held on this form will be shared with all Blood Banks throughout GG&amp;C.</p>
+              <p>The form should be signed by the Consultant in charge of the patient's care. It should be photocopied and a copy filed in the case records with the second copy forwarded to Blood Bank. If the patient has been identified as having special blood component requirements out with core working hours and a Consultant is not available, the requirement can be requested on a regular transfusion form and the special requirements form forwarded at the earliest possible opportunity. The information will not be disseminated throughout the Health Board Blood Banks until a Consultant signed copy of the special requirements form is received by the hospital Blood Bank.</p>
+              <p>If the need for the special blood components changes, an updated form should be forwarded to the hospital Blood Bank so their records can be amended.</p>
+              <h3>Laboratory Dissemination of Information</h3>
+              <p>As patients regularly transfer between hospital sites it is important that their transfusion requirement information is available throughout the Health Board Blood Banks. Once a Consultant signed form is received at a local Blood Bank, the form will be scanned and emailed to the Blood Bank managers in the South, North, Clyde and the Golden Jubilee Hospital so that their computer systems can be updated accordingly (as per the Blood Bank special requirements SOP).</p>
+              <p>The form will be returned to the requesting Consultant to ensure they are aware the laboratory tasks have been completed.</p>
+              <h3><u>PATIENT COUNSELLING AND CONSENT</u>
+              </h3>
+              <p>It is not a legal requirement in the United Kingdom that written consent is obtained before a transfusion of blood components; however, it is considered a required standard of good transfusion practice to ensure that the patient/parent/carer receives adequate information regarding the transfusion. This standard is laid down in the NHS QIS Clinical Standards (2006) now known as Healthcare Improvement Scotland and compliance is monitored. 4 This discussion should include information about the risks and benefits of transfusion as well as information relating to available alternatives, for example, iron supplementation and must be documented in the case records. Nursing and medical staff therefore, have a professional duty to ensure that they have adequate knowledge of transfusion related issues or that they can access the information and support required by patients undergoing a transfusion.</p>
+              <p>Booklets are available specifically for patients who require irradiated components and all patients receiving irradiated components should be given these before their first transfusion. They should also be counselled and told to inform nursing and medical staff of this requirement before any future transfusions. Patients should be given a card to carry documenting their special transfusion requirement. An adhesive sticker, taken from the information leaflet, should be placed on the front of case records detailing the requirement. It is the responsibility of the prescribing practitioner to ensure these steps are undertaken.</p>
+              <h3>INCIDENT REPORTING</h3>
+              <p>There have been 13 reported cases of TaGVHD since 1996 but no cases in the last 8 years. 2 cases have been reported in leucodepleted components (1998-99 and 2000-01) indicating that while leucodepletion significantly reduces, it does not eradicate the risk of this condition. It is important therefore that appropriate products are provided for patients at risk.</p>
+              <p>Errors do occur and the Serous Hazards of Transfusion (SHOT) report 2010 documents 74 cases where special requirements were not met. The majority of these (59 cases) were patients who required irradiated products but did not receive them. 5 It is important that any errors are documented appropriately to ensure that steps can be taken to avoid them in the future. If it becomes apparent that a patient has failed to receive appropriate components the hospital Blood Bank must be informed immediately. The incident will be fully investigated and reported on DATIX and to SHOT.</p>
+              <h3><u>REFERENCES</u>
+              </h3>
+              <ol>
+                <li>Transfusion Transmitted Infection. Chapter 13. Practical Transfusion Medicine. Third Edition. P122-145. Murphy MF, Pamphilon DH.</li>
+                <li>
+                  <a id="ref2"></a>Clinical Blood Transfusion. Chapter 16 Postgraduate Haematology Sixth Edition. P268-300. Hoffbrand AV, Catovsky D, Tuddenham EDD, Green AR.</li>
+                <li>
+                  <a id="ref3"></a>Guidelines on the use of irradiated blood components prepared by the British Committee for Standards in Haematology blood transfusion task force British Journal of Haematology 2011, 152, 35-51</li>
+                <li>NHS QIS Clinical Standards - Blood Transfusion <a href="http://www.healthcareimprovementscotland.org/previous_resources/standards/clinical_standards_-_blood_tra.aspx" target="_blank">http://www.healthcareimprovementscotland.org/previous_resources/standards/clinical_standards_-_blood_tra.aspx</a>
+                </li>
+                <li>Serious Hazards of Transfusion <a href="http://www.shotuk.org" target="_blank">http://www.shotuk.org/</a>
+                </li>
+                <li>Transfusion guidelines for neonates and older children British Journal of Haematology 2004, 124, 433 - 453</li>
+                <li>Advisory Committee on the Safety of Blood, Tissues and Organs (SaBTO) <a href="http://www.dh.gov.uk/prod_consum_dh/groups/dh_digitalassets/@dh/@en/documents/digitalasset/dh_133086.pdf" target="_blank">http://www.dh.gov.uk/prod_consum_dh/groups/dh_digitalassets/@dh/@en/documents/digitalasset/dh_133086.pdf</a>
+                </li>
+              </ol>
         </div>
         <div data-bind="visible: section() == 2 && treatment() == 'lothian'" style=" padding: 10px;border: 0px; border-top: 5px solid black;" id="lothian"> <i>Extract from NHS Lothian, Blood Transfusion Clinical Policy and Procedures 2013 (v.4), Appendic C: Special Requirements, pages 45-46:</i>
           <h3>Irradiated Components</h3>
@@ -469,8 +465,115 @@
             <li>All blood transfusions for infants up to 28 days post expected delivery date.</li>
           </ul>
         </div>
+     
+        <div data-bind="visible: section() == 3" style="margin: 5%;">
+          <p>The following questions are part of a standard usability inventory. Please answer them as best you can.</p>
+          <h3>I thought there was too much inconsistency in this system.</h3>
+          <select data-bind="value: sus1">
+            <option value="" selected>Please select</option>
+            <option value="1">Strongly disagree</option>
+            <option value="2">Disagree</option>
+            <option value="3">Neither agree nor disagree</option>
+            <option value="4">Agree</option>
+            <option value="5">Strongly agree</option>
+          </select>
+          
+          <h3>I would imagine that most people would learn to use this system very quickly.</h3>
+          <select data-bind="value: sus1">
+            <option value="" selected>Please select</option>
+            <option value="1">Strongly disagree</option>
+            <option value="2">Disagree</option>
+            <option value="3">Neither agree nor disagree</option>
+            <option value="4">Agree</option>
+            <option value="5">Strongly agree</option>
+          </select>
+          
+          
+          <h3>I found the system very cumbersome to use.</h3>
+          <select data-bind="value: sus1">
+            <option value="" selected>Please select</option>
+            <option value="1">Strongly disagree</option>
+            <option value="2">Disagree</option>
+            <option value="3">Neither agree nor disagree</option>
+            <option value="4">Agree</option>
+            <option value="5">Strongly agree</option>
+          </select>
+          
+          
+          <h3>I felt very confident using the system.</h3>
+          <select data-bind="value: sus1">
+            <option value="" selected>Please select</option>
+            <option value="1">Strongly disagree</option>
+            <option value="2">Disagree</option>
+            <option value="3">Neither agree nor disagree</option>
+            <option value="4">Agree</option>
+            <option value="5">Strongly agree</option>
+          </select>
+          
+          <h3>I needed to learn a lot of things before I could get going with this system.</h3>
+          <select data-bind="value: sus1">
+            <option value="" selected>Please select</option>
+            <option value="1">Strongly disagree</option>
+            <option value="2">Disagree</option>
+            <option value="3">Neither agree nor disagree</option>
+            <option value="4">Agree</option>
+            <option value="5">Strongly agree</option>
+          </select>
+          
+          <h3>I think that I would like to use this system frequently.</h3>
+          <select data-bind="value: sus1">
+            <option value="" selected>Please select</option>
+            <option value="1">Strongly disagree</option>
+            <option value="2">Disagree</option>
+            <option value="3">Neither agree nor disagree</option>
+            <option value="4">Agree</option>
+            <option value="5">Strongly agree</option>
+          </select>
+          
+          <h3>I found the system unnecessarily complex.</h3>
+          <select data-bind="value: sus1">
+            <option value="" selected>Please select</option>
+            <option value="1">Strongly disagree</option>
+            <option value="2">Disagree</option>
+            <option value="3">Neither agree nor disagree</option>
+            <option value="4">Agree</option>
+            <option value="5">Strongly agree</option>
+          </select>
+          
+          <h3>I thought the system was easy to use.</h3>
+          <select data-bind="value: sus1">
+            <option value="" selected>Please select</option>
+            <option value="1">Strongly disagree</option>
+            <option value="2">Disagree</option>
+            <option value="3">Neither agree nor disagree</option>
+            <option value="4">Agree</option>
+            <option value="5">Strongly agree</option>
+          </select>
+          
+          <h3>I think that I would need the support of a technical person to be able to use this system.</h3>
+          <select data-bind="value: sus1">
+            <option value="" selected>Please select</option>
+            <option value="1">Strongly disagree</option>
+            <option value="2">Disagree</option>
+            <option value="3">Neither agree nor disagree</option>
+            <option value="4">Agree</option>
+            <option value="5">Strongly agree</option>
+          </select>
+          
+          <h3>I found the various functions in this system were well integrated.</h3>
+          <select data-bind="value: sus1">
+            <option value="" selected>Please select</option>
+            <option value="1">Strongly disagree</option>
+            <option value="2">Disagree</option>
+            <option value="3">Neither agree nor disagree</option>
+            <option value="4">Agree</option>
+            <option value="5">Strongly agree</option>
+          </select>
+          
+        </div>
       </div>
     </div>
+    
     <script type='text/javascript'>
       // http://jsfiddle.net/zeelux/B4vN2/
       (function() {
@@ -755,7 +858,7 @@
             alert("Search term must be two characters or more");
           }
         };
-        self.section = ko.observable(0);
+        self.section = ko.observable(2);
         self.hospital = ko.observable("");
         self.position = ko.observable("");
         self.otherposition = ko.observable("");
@@ -764,6 +867,16 @@
         self.otherspecialty = ko.observable("");
         self.experience = ko.observable("");
         self.specialexperience = ko.observable("");
+        self.sus1 = ko.observable("");
+        self.sus2 = ko.observable("");
+        self.sus3 = ko.observable("");
+        self.sus4 = ko.observable("");
+        self.sus5 = ko.observable("");
+        self.sus6 = ko.observable("");
+        self.sus7 = ko.observable("");
+        self.sus8 = ko.observable("");
+        self.sus9 = ko.observable("");
+        self.sus10 = ko.observable("");
         self.treatment = ko.observable(getUrlParameter('treatment') || "ggc");
         self.questionHeading = ko.observableArray(["1. Is the statement true or false?", "2. What are risk factors for TA-GvHD?", "3. What are common errors involving special components?", "4. What is the correct blood component specification?"]);
         self.questionBank1 = ko.observableArray(questions.theme1.splice(0, 3).concat(questions.theme2.splice(0, 3)).concat(questions.theme3.splice(0, 3)).concat(questions.theme4.splice(0, 3))).extend({
