@@ -177,9 +177,19 @@
                   <h3>What is your specialty?</h3>
                   <select data-bind="value: specialty">
                     <option>Please select</option>
+                    <option value="ae">Accident and emergency (A&amp;E)</option>
+                    <option value="bb">Blood bank</option>
+                    <option value="cc">Critical care</option>
                     <option value="gm">General medicine</option>
-                    <option value="ho">Haematology or oncology</option>
-                    <option value="on">Obstetrics or neonatology</option>
+                    <option value="ge">Geriatrics</option>
+                    <option value="he">Haematology</option>
+                    <option value="ne">Neonatology</option>
+                    <option value="ob">Obstetrics or gynaecology</option>
+                    <option value="on">Oncology</option>
+                    <option value="or">Orthopaedics</option>
+                    <option value="pd">Paediatrics</option>
+                    <option value="su">Surgical</option>
+                    <option value="th">Theatre</option>
                     <option value="ot">Other</option>
                   </select>
                 </div>
@@ -864,7 +874,7 @@
             alert("Search term must be two characters or more");
           }
         };
-        self.section = ko.observable(3);
+        self.section = ko.observable(0);
         self.hospital = ko.observable("");
         self.position = ko.observable("");
         self.otherposition = ko.observable("");
