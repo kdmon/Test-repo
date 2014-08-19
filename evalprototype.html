@@ -173,11 +173,11 @@
                   <option value="ot">Other</option>
                 </select>
               </div>
-              <div data-bind="visible: (position() == 'ot' || position() == 'bb')" style="margin-left: 5%;">
+              <div data-bind="visible: (position() == 'ot' || position() == 'bb')" style="margin-left: 2em;">
                 <h3>Please enter your job title:</h3>
                 <input data-bind="value: otherposition">
               </div>
-              <div data-bind="visible: position() == 'dr'" style="margin-left: 5%;">
+              <div data-bind="visible: position() == 'dr'" style="margin-left: 0em;">
                 <h3>What is your grade?</h3>
                 <select data-bind="value: grade">
                   <option>Please select</option>
@@ -187,7 +187,7 @@
                   <option value="consultant">Consultant</option>
                 </select>
               </div>
-              <div data-bind="visible:  position()" style="margin-left: 5%;">
+              <div data-bind="visible:  position()" style="margin-left: 0em;">
                 <h3>What is your specialty?</h3>
                 <select data-bind="value: specialty">
                   <option>Please select</option>
@@ -210,11 +210,11 @@
                   <option value="ot">Other</option>
                 </select>
               </div>
-              <div data-bind="visible: specialty() == 'ot'" style="margin-left: 5%;">
+              <div data-bind="visible: specialty() == 'ot'" style="margin-left: 2em;">
                 <h3>Please enter your specialty:</h3>
                 <input data-bind="value: otherspecialty">
               </div>
-              <div data-bind="visible: position() !== ''" style="margin-left: 5%;">
+              <div data-bind="visible: position() !== ''" style="margin-left: 0em;">
                 <h3>How many years of experience do you have?</h3>
                 <select data-bind="value: experience">
                   <option value="-1">Please select</option>
@@ -262,7 +262,7 @@
                   <option value="41">More than 40 years</option>
                 </select>
               </div>
-              <div data-bind="visible: position() !== ''" style="margin-left: 5%;">
+              <div data-bind="visible: experience() > -1" style="margin-left: 0em;">
                 <h3>How often do you care for patients requiring CMV-negative or irradiated blood components?</h3>
                 <select data-bind="value: specialexperience">
                   <option value="-1">Please select</option>
@@ -276,17 +276,18 @@
                   <option value="0">Don't know</option>
                 </select>
               </div>
-              <div data-bind="visible: position() !== ''" style="margin-left: 5%;">
+              <div data-bind="visible: experience() > -1" style="margin-left: 0em;">
                 <h3>Have you worked in a unit with patients requiring CMV-negative or irradiated blood components, and if so for how long?</h3>
                 <select data-bind="value: specialexperience">
                   <option value="-1">Please select</option>
-                  <option value="0">No</option>
-                  <option value="1">Yes, for less than 1 month</option>
-                  <option value="2">Yes, for 1-5 months</option>
-                  <option value="3">Yes, for 6-12 months</option>
-                  <option value="4">Yes, for 1-2 years</option>
-                  <option value="5">Yes, for 2-3 years</option>
-                  <option value="6">Yes, for more than three years</option>
+                  <option value="7">Yes, for more than 3 years</option>
+                  <option value="6">Yes, for 2-3 years</option>
+                  <option value="5">Yes, for 1-2 years</option>
+                  <option value="4">Yes, for 6-11 months</option>
+                  <option value="3">Yes, for 1-5 months</option>
+                  <option value="2">Yes, for less than 1 month</option>
+                  <option value="1">No</option>
+                  <option value="0">Don't know</option>
                 </select>
               </div>
               <div data-bind="visible: (position() && experience() > -1) && specialexperience() > -1">
