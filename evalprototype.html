@@ -37,14 +37,24 @@
           text-align: left;
         }
       }
+      
       @media (min-width: 780px) {
         body {
-          font-size: 1.5em;
+          font-size: 1.8em;
         }
         
         a, input, select, .ui-btn {
-          font-size: 1em !important;
+          font-size: 1.2em !important;
         }
+      }
+    
+    
+      body {
+        font-size: 1.2em;
+      }
+      
+      a, input, select, .ui-btn {
+        font-size: 0.9em !important;
       }
       
       .ui-btn {
@@ -138,15 +148,12 @@
             <p>Press the headings below to learn more.</p>
             <div data-role="collapsibleset" data-inset="true">
               <div data-role="collapsible" data-collapsed="true">
-                <h3>1. Background: special blood components</h3>
-                <p>Although blood transfusion in the UK is safe, it is a complex process and about 100 mistakes related to the provision of irradiated and Cytomegalovirus (CMV) negative blood ("special blood components") are reported every year to Serious Hazards of Transfusion(SHOT) in the UK. These put patients at unnecessary risk of CMV infection and developing rare, but fatal Graft versus Host Disease.</p>
+                <h3>1. What is the aim of the research?</h3>
+                <p>Blood transfusion is a complex process and about a hundred mistakes related to the provision of irradiated and Cytomegalovirus (CMV) negative blood ("special blood components") are reported every year to Serious Hazards of Transfusion (SHOT) in the UK.</p>
+                <p>Researchers at the University of Edinburgh are collaborating with experts in transfusion to create an app with learning materials about special blood components for staff involved in key stages of the transfusion process. This pilot study will evaluate whether the app increases knowledge of the correct use of special blood components.</p>
               </div>
               <div data-role="collapsible" data-collapsed="true">
-                <h3>2. What is the aim of the research?</h3>
-                <p>SHOT has identified a lack of knowledge in staff about special blood components. Researchers at the University of Edinburgh are collaborating with experts in transfusion to create an app with learning materials about special blood components for staff involved in the prescription, request, issue and administration of blood components. This pilot study will evaluate whether the app increases staff knowledge of the correct use of special blood components.</p>
-              </div>
-              <div data-role="collapsible" data-collapsed="true">
-                <h3>3. Who are we asking to participate?</h3>
+                <h3>2. Who are we asking to participate?</h3>
                 <p>We are inviting all grades of doctors, registered nurses, midwives and transfusion laboratory staff who recently completed Module 1 of the Learn Blood Transfusion e-learning programme <i>and</i> who work at one of the following hospitals in NHS Lothian:
                   <br/>- The Royal Infirmary of Edinburgh
                   <br/>- Western General Hospital
@@ -154,19 +161,19 @@
                 <p>Staff who do not meet these criteria are excluded from participating.</p>
               </div>
               <div data-role="collapsible" data-collapsed="true">
-                <h3>4. What will I be asked to do?</h3>
-                <p>We are asking you to answer short multiple-choice tests about special blood components. Answering the questions should take you about 15 minutes in total, and you can choose to participate at a time and from a location that is convenient to you. You will need access to a computer with an Internet connection.</p>
+                <h3>3. What will I be asked to do?</h3>
+                <p>We are asking you to answer a short multiple choice test about special blood components. Answering the questions should take you about 15 minutes. You can choose to participate at a time and from a location that is convenient to you. You will need access to a computer with an Internet connection.</p>
               </div>
               <div data-role="collapsible" data-collapsed="true">
-                <h3>5. Why should I participate?</h3>
-                <p>Taking part in the study is an excellent opportunity to test your knowledge in a safe environment. By taking part, you will help shape the design of a new learning resource for staff. If results are positive, wider dissemination of the app could improve practice. There is also a chance to win a &pound;50 national book token voucher. Participation is completely voluntary and there are no risks to participating.</p>
+                <h3>4. Why should I participate?</h3>
+                <p>By taking part, you will help shape the design of a new learning resource for staff. If results are positive, wider dissemination of the app could improve practice. Taking part in the study is an excellent opportunity to test your knowledge in a safe environment. There is also a chance to win a &pound;50 national book token voucher. Participation is completely voluntary and there are no risks to participating.</p>
               </div>
               <div data-role="collapsible" data-collapsed="true">
-                <h3>6. How will we maintain your confidentiality?</h3>
+                <h3>5. How will we use your data?</h3>
                 <p>Any data that you provide will be treated confidentially and your answers will be reported anonymously in publications. The information will be held securely for the duration of the research project (3 years) and then destroyed.</p>
               </div>
               <div data-role="collapsible" data-collapsed="true">
-                <h3>7. Who is conducting the research?</h3>
+                <h3>6. Who is conducting the research?</h3>
                 <p>The research is conducted by Mr. Karl Monsen, a PhD candidate at The University of Edinburgh, in collaboration with Ms. Susan Cottrell, Better Blood Transfusion Nurse Specialist in Education at The Scottish National Blood Transfusion Service.</p>
                 <p>Dr. Brian McClelland is medical adviser to the project and the study is supported by Dr. Alastair Nimmo, Chair of the NHS Lothian Transfusion Committee.</p>
                 <p>If you have any questions, please contact Karl at the following email address: <a href="mailto: k.d.monsen@sms.ed.ac.uk">k.d.monsen@sms.ed.ac.uk</a>.</p>
@@ -178,6 +185,7 @@
             </div>
           </div>
           <div data-bind="visible: section() == 0" class="centered">
+            <h3>Confirm eligibility</h3>
             <p>Please answer the questions to confirm that you are eligible to participate in the study.</p>
             <h3>At what hospital are you based?</h3>
             <select data-bind="value: hospital">
@@ -205,47 +213,19 @@
             </div>
             <div data-bind="visible: (position() == 'ot' || position() == 'bb')" style="margin-left: 2em;">
               <h3>Please enter your job title:</h3>
-              <input data-bind="value: otherposition">
+              <input data-bind="value: otherposition, valueUpdate: 'keyup'">
             </div>
             <div data-bind="visible: position() == 'dr'" style="margin-left: 0em;">
               <h3>What is your grade?</h3>
               <select data-bind="value: grade">
-                <option>Please select</option>
+                <option value="">Please select</option>
                 <option value="fy1">Foundation year 1</option>
                 <option value="fy2">Foundation year 2</option>
                 <option value="registrar">Registrar</option>
                 <option value="consultant">Consultant</option>
               </select>
             </div>
-            <div data-bind="visible:  position()" style="margin-left: 0em;">
-              <h3>What is your specialty?</h3>
-              <select data-bind="value: specialty">
-                <option>Please select</option>
-                <option value="ae">Accident and emergency (A&amp;E)</option>
-                <option value="an">Anaesthetics</option>
-                <option value="bb">Blood bank</option>
-                <option value="ca">Cardiology</option>
-                <option value="cc">Critical care</option>
-                <option value="ga">Gastroenterology</option>
-                <option value="gp">General practitioner</option>
-                <option value="ge">Geriatrics</option>
-                <option value="he">Haematology</option>
-                <option value="ne">Neonatology</option>
-                <option value="ob">Obstetrics or gynaecology</option>
-                <option value="on">Oncology</option>
-                <option value="or">Orthopaedics</option>
-                <option value="pd">Paediatrics</option>
-                <option value="su">Surgical</option>
-                <option value="th">Theatre</option>
-                <option value="ot">Other</option>
-                <option value="dk">Don't know</option>
-              </select>
-            </div>
-            <div data-bind="visible: specialty() == 'ot'" style="margin-left: 2em;">
-              <h3>Please enter your specialty:</h3>
-              <input data-bind="value: otherspecialty">
-            </div>
-            <div data-bind="visible: position() !== ''" style="margin-left: 0em;">
+            <div data-bind="visible: position() !== '' && position() !== 'dr' && position() !== 'ot' || grade() !== '' || otherposition() !== ''" style="margin-left: 0em;">
               <h3>How many years of experience do you have?</h3>
               <select data-bind="value: experience">
                 <option value="-1">Please select</option>
@@ -294,22 +274,53 @@
                 <option value="42">Don't know</option>
               </select>
             </div>
+            
             <div data-bind="visible: experience() > -1" style="margin-left: 0em;">
-              <h3>How often do you work with patients who require CMV-negative or irradiated blood components?</h3>
+              <h3>What is your specialty?</h3>
+              <select data-bind="value: specialty">
+                <option value="">Please select</option>
+                <option value="ae">Accident and emergency (A&amp;E)</option>
+                <option value="an">Anaesthetics</option>
+                <option value="bb">Blood bank</option>
+                <option value="ca">Cardiology</option>
+                <option value="cc">Critical care</option>
+                <option value="ga">Gastroenterology</option>
+                <option value="gp">General practitioner</option>
+                <option value="ge">Geriatrics</option>
+                <option value="he">Haematology</option>
+                <option value="ne">Neonatology</option>
+                <option value="na">None / Not applicable</option>
+                <option value="ob">Obstetrics or gynaecology</option>
+                <option value="on">Oncology</option>
+                <option value="or">Orthopaedics</option>
+                <option value="pd">Paediatrics</option>
+                <option value="su">Surgical</option>
+                <option value="th">Theatre</option>
+                <option value="ot">Other</option>
+                <option value="dk">Don't know</option>
+              </select>
+            </div>
+            <div data-bind="visible: specialty() == 'ot'" style="margin-left: 2em;">
+              <h3>Please enter your specialty:</h3>
+              <input data-bind="value: otherspecialty">
+            </div>
+            <div data-bind="visible: specialty() !== ''" style="margin-left: 0em;">
+              <h3>Approximately how often do you work with patients who require CMV-negative or irradiated blood components?</h3>
               <select data-bind="value: currentexperience">
                 <option value="-1">Please select</option>
-                <option value="7">Every day</option>
-                <option value="6">Every week</option>
-                <option value="5">Every month</option>
-                <option value="4">Every three months</option>
-                <option value="3">Every six months</option>
-                <option value="2">Every year</option>
+                <option value="7">Daily</option>
+                <option value="6">Every other day</option>
+                <option value="5">Weekly</option>
+                <option value="4">Every other week</option>
+                <option value="3">Monthly</option>
+                <option value="2">Every other month</option>
+                <option value="1">Less frequently</option>
                 <option value="1">Never</option>
                 <option value="0">Don't know</option>
               </select>
             </div>
-            <div data-bind="visible: experience() > -1" style="margin-left: 0em;">
-              <h3>Have you previously worked in a unit with patients who require CMV-negative or irradiated blood components? If so, for how long did you work there?</h3>
+            <div data-bind="visible: currentexperience() > -1" style="margin-left: 0em;">
+              <h3>Do you or have you previously worked in a unit with patients who require CMV-negative or irradiated blood components? If so, for how long did you work there?</h3>
               <select data-bind="value: pastexperience">
                 <option value="-1">Please select</option>
                 <option value="1">No</option>
@@ -323,7 +334,8 @@
               </select>
             </div>
             <div data-bind="visible: (position() && experience() > -1) && pastexperience() > -1">
-              <p><b>Press the green button to start the knowledge tests</b>.</p> <a href="#" class="positive" data-role="button" data-bind="click: $root.nextSection">Begin</a>
+              <h3>You are eligible to participate.</h3>
+              <p>Press the green button to start the knowledge tests.</p> <a href="#" class="positive" data-role="button" data-bind="click: $root.nextSection">Begin</a>
             </div>
           </div>
         </div>
