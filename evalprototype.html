@@ -38,17 +38,7 @@
         }
       }
       
-      @media (min-width: 780px) {
-        body {
-          font-size: 1.8em;
-        }
-        
-        a, input, select, .ui-btn {
-          font-size: 1.2em !important;
-        }
-      }
-    
-    
+      
       body {
         font-size: 1.2em;
       }
@@ -57,6 +47,12 @@
         font-size: 0.9em !important;
       }
       
+      @media (min-width: 780px) {
+        body {
+          font-size: 1.6em;
+        }
+      }
+    
       .ui-btn {
         background: #ddf !important;
       }
@@ -69,7 +65,7 @@
         white-space: normal;
       }
       .centered {
-        width: 97%;
+        width: 96%;
         margin: auto;
         padding: 2%;
       }
@@ -130,8 +126,8 @@
   <body>
     <div data-role="page" id="front">
       <div data-role="main" class="ui-content" style="min-height:600px; padding: 0px;">
-        <div id="questionContainer" style="padding: 10px;">
-          <div data-bind="visible: section() > 0" class="centered" style="border: 1px solid #aaa; background: #EFE;">
+        <div id="questionContainer" class="centered">
+          <div data-bind="visible: section() > 0" style="border: 1px solid #aaa; background: #EFE;">
             <p id="progressbar" data-bind="style: {width: progress() + 1 + '%'}, text: progress() + 1 + '% completed' "></p>
           </div>
           <div data-bind="visible: section() == -1" class="centered">
@@ -144,7 +140,7 @@
               <span class="special">I</span>rradiated blood transfusions through
               <span class="special">A</span>pp-based
               <span class="special">L</span>earning.</p>
-            <p>We would like to invite you to participate in the SPECIAL study. Before you decide whether to take part, we want you to know why we need your help and what we will ask you to do.</p>
+            <p>We would like to invite you to participate in the SPECIAL study. Before you decide whether to take part, we want to explain why we need your help and what we will ask you to do.</p>
             <p>Press the headings below to learn more.</p>
             <div data-role="collapsibleset" data-inset="true">
               <div data-role="collapsible" data-collapsed="true">
@@ -185,7 +181,7 @@
             </div>
           </div>
           <div data-bind="visible: section() == 0" class="centered">
-            <h3>Confirm eligibility</h3>
+            <h2>Confirm eligibility</h2>
             <p>Please answer the questions to confirm that you are eligible to participate in the study.</p>
             <h3>At what hospital are you based?</h3>
             <select data-bind="value: hospital">
@@ -225,7 +221,7 @@
                 <option value="consultant">Consultant</option>
               </select>
             </div>
-            <div data-bind="visible: position() !== '' && position() !== 'dr' && position() !== 'ot' || grade() !== '' || otherposition() !== ''" style="margin-left: 0em;">
+            <div data-bind="visible: position() !== '' && position() !== 'dr' && position() !== 'ot' && position() !== 'bb' || grade() !== '' || otherposition() !== ''" style="margin-left: 0em;">
               <h3>How many years of experience do you have?</h3>
               <select data-bind="value: experience">
                 <option value="-1">Please select</option>
@@ -369,7 +365,7 @@
       <iframe data-bind="visible: section() == 2 && treatment() == 'app'" id="help" src="http://optimalblooduse.eu/app/#front" width="100%" style="border: 0px; border-top: 5px solid black;"></iframe>
       <div data-bind="visible: section() == 2 && treatment() == 'ggc'" id="ggc" style=" padding: 10px;border: 0px; border-top: 5px solid black;"> <i>Extract from NHS Greater Glasgow and Clyde Blood Transfusion Special Requirements Guideline (March 2013, issue 1), pages 1-8:</i>
         <div> <a href="#" style="position: absolute; margin-top:0px; right: 0px;" data-role="button" data-inline="true" data-bind="click: findall"><i class="fa fa-search"></i></a>  <a href="#" style="position: absolute; margin-top:0px; left: 10px;" data-role="button" data-inline="true" data-bind="visible: searchterm(), click: clearsearch">x</a>
-          <input class="searchbar" style="margin-left: 2em; font-size: 1.2em;" placeholder="Search guidelines" type="text" data-inline="true" data-bind="value: searchterm, valueUpdate: 'keyup'">
+          <input class="searchbar" style="margin-left: 2em; font-size: 1.2em;" placeholder="Search guidelines" type="text" data-inline="true" data-bind="value: searchterm, valueUpdate: 'keypress'">
         </div>
         <hr/>
         <h3><u>INTRODUCTION</u>
