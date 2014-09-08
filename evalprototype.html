@@ -130,7 +130,7 @@
           <div data-bind="visible: section() > 0" style="border: 1px solid #aaa; background: #EFE;">
             <p id="progressbar" data-bind="style: {width: progress() + 1 + '%'}, text: progress() + 1 + '% completed' "></p>
           </div>
-          <div data-bind="visible: section() == -1" class="centered">
+          <div data-bind="visible: section() == -1">
             <img src="UoE_logo.gif" style="margin: 3%; margin-bottom: 0; width: 93%; max-width: 531px;">
             <p style="font-size: 1.2em; padding-top: 0;"><b>SPECIAL:</b>
               <span class="special">S</span>topping and
@@ -180,7 +180,7 @@
               <p>By proceeding you indicate that you have read the above information and freely give your informed consent to take part in the research.</p> <a href="#" class="positive" data-role="button" data-bind="click: $root.nextSection">I agree to participate</a>
             </div>
           </div>
-          <div data-bind="visible: section() == 0" class="centered">
+          <div data-bind="visible: section() == 0">
             <h2>Confirm eligibility</h2>
             <p>Please answer the questions to confirm that you are eligible to participate in the study.</p>
             <h3>At what hospital are you based?</h3>
@@ -334,32 +334,32 @@
               <p>Press the green button to start the knowledge tests.</p> <a href="#" class="positive" data-role="button" data-bind="click: $root.nextSection">Begin</a>
             </div>
           </div>
+          <div data-bind="visible: section() == 1">
+            <h3 data-bind="text: questionHeading()[$root.questionBank1.currentPage()-1]"></h3> <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank1.currentPage() > 1, click: $root.questionBank1.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
+            <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank1.currentPageData">
+              <li class="statement" data-bind="css: {completed: selected() !== 'Please select'}">
+                <span data-bind="text: statement"></span> <i class="fa fa-certificate" style="color: red;" data-bind="visible: selected() == 'Please select'"></i>
+                <br/>
+                <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select>
+              </li>
+            </ul>
+            <p data-bind="visible: !$root.questionBank1.pageCompleted();">You must answer all mandatory questions (<i class="fa fa-certificate" style="color: red;"></i>) before proceeding.</p>
+            <div data-bind="visible: $root.questionBank1.pageCompleted() && $root.questionBank1.currentPage() <  $root.questionBank1.pageCount()">
+              <p><b>Review your answers and press the green button to continue.</b>
+              </p> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="click: $root.questionBank1.moveNext">Next page</a>
+            </div> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted() && $root.questionBank1.currentPage() ==  $root.questionBank1.pageCount(), click: $root.nextSection">Next section</a>
         </div>
-        <div data-bind="visible: section() == 1" class="centered">
-          <h3 data-bind="text: questionHeading()[$root.questionBank1.currentPage()-1]"></h3> <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank1.currentPage() > 1, click: $root.questionBank1.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
-          <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank1.currentPageData">
-            <li class="statement" data-bind="css: {completed: selected() !== 'Please select'}">
-              <span data-bind="text: statement"></span> <i class="fa fa-certificate" style="color: red;" data-bind="visible: selected() == 'Please select'"></i>
-              <br/>
-              <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select>
-            </li>
-          </ul>
-          <p data-bind="visible: !$root.questionBank1.pageCompleted();">You must answer all mandatory questions (<i class="fa fa-certificate" style="color: red;"></i>) before proceeding.</p>
-          <div data-bind="visible: $root.questionBank1.pageCompleted() && $root.questionBank1.currentPage() <  $root.questionBank1.pageCount()">
-            <p><b>Review your answers and press the green button to continue.</b>
-            </p> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="click: $root.questionBank1.moveNext">Next page</a>
-          </div> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted() && $root.questionBank1.currentPage() ==  $root.questionBank1.pageCount(), click: $root.nextSection">Next section</a>
+          <div data-bind="visible: section() == 2">
+            <p data-bind="text: questionHeading()[$root.questionBank2.currentPage()-1]"></p> <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank1.currentPage() > 1, click: $root.questionBank1.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
+            <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank2.currentPageData">
+              <li class="statement" data-bind="css: {completed: selected() !== 'Please select'}">
+                <span data-bind="text: statement"></span> <i class="fa fa-certificate" style="color: red;" data-bind="visible: selected() == 'Please select'"></i>
+                <br/>
+                <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank2.pageCompleted() && $root.questionBank2.currentPage() <  $root.questionBank2.pageCount(), click: $root.questionBank2.moveNext" data-inline="true">Next</a>
+                <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank2.pageCompleted() && $root.questionBank2.currentPage() == $root.questionBank2.pageCount(), click: $root.nextSection" data-inline="true">Next section</a>
+              </li>
+            </ul>
         </div>
-        <div data-bind="visible: section() == 2" class="centered">
-          <p data-bind="text: questionHeading()[$root.questionBank2.currentPage()-1]"></p> <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank1.currentPage() > 1, click: $root.questionBank1.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
-          <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank2.currentPageData">
-            <li class="statement" data-bind="css: {completed: selected() !== 'Please select'}">
-              <span data-bind="text: statement"></span> <i class="fa fa-certificate" style="color: red;" data-bind="visible: selected() == 'Please select'"></i>
-              <br/>
-              <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank2.pageCompleted() && $root.questionBank2.currentPage() <  $root.questionBank2.pageCount(), click: $root.questionBank2.moveNext" data-inline="true">Next</a>
-              <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank2.pageCompleted() && $root.questionBank2.currentPage() == $root.questionBank2.pageCount(), click: $root.nextSection" data-inline="true">Next section</a>
-            </li>
-          </ul>
         </div>
       </div>
       <iframe data-bind="visible: section() == 2 && treatment() == 'app'" id="help" src="http://optimalblooduse.eu/app/#front" width="100%" style="border: 0px; border-top: 5px solid black;"></iframe>
@@ -545,7 +545,7 @@
           <li>All blood transfusions for infants up to 28 days post expected delivery date.</li>
         </ul>
       </div>
-      <div data-bind="visible: section() == 3" class="centered">
+      <div data-bind="visible: section() == 3">
         <h1>Usability evaluation</h1>
         <p>Thinking about the app, please answer the following questions as best you can.</p>
         <h3>I thought there was too much inconsistency in this system.</h3>
@@ -643,7 +643,6 @@
         </div>
       </div>
     </div>
-    </div>
     <script type='text/javascript'>
       // http://jsfiddle.net/zeelux/B4vN2/
       (function() {
@@ -672,9 +671,9 @@
               } else {
                 _currentPage(newValue);
               }
-              $("#questionContainer").trigger("create");
               $("#selector").selectmenu();
               $(window).scrollTop(0);
+              $("#questionContainer").trigger("create");
             }
           });
           target.pageCount = ko.computed(function() {
@@ -928,7 +927,7 @@
             alert("Search term must be two characters or more");
           }
         };
-        self.section = ko.observable(-1);
+        self.section = ko.observable(getUrlParameter('section') || -1);
         self.hospital = ko.observable("");
         self.position = ko.observable("");
         self.otherposition = ko.observable("");
