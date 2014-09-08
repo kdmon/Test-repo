@@ -641,8 +641,8 @@
           </div>
         </div>
       </div>
+      <div id="appcontainer" data-bind="html: appCode"></div>
     </div>
-    <iframe data-bind="visible: section() == 2 && treatment() == 'app'" id="help" src="http://optimalblooduse.eu/app/#front" width="100%" height="1000px" style="border: 0px; border-top: 5px solid black;"></iframe>
     <script type='text/javascript'>
       // http://jsfiddle.net/zeelux/B4vN2/
       (function() {
@@ -978,6 +978,11 @@
             if (self.questionBank2()[i].selected() == 'Please select') passed = false;
           }
           return passed;
+        });
+        self.appCode = ko.computed(function () {
+          var code = '<iframe src="http://optimalblooduse.eu/app/#front"></iframe>';
+          if (self.section() == 2 && self.treatment() == 'app') return code;
+          else return;
         });
       };
       var model = new ViewModel();
