@@ -923,7 +923,7 @@
             alert("Search term must be two characters or more");
           }
         };
-        self.section = ko.observable(getUrlParameter('section') || -1);
+        self.section = ko.observable(getUrlParameter('section') || 2);
         self.hospital = ko.observable("");
         self.position = ko.observable("");
         self.otherposition = ko.observable("");
@@ -977,7 +977,8 @@
           return passed;
         });
         self.appCode = ko.computed(function() {
-          var code = '<iframe src="http://optimalblooduse.eu/app/#front"></iframe>';
+          var iframeheight = window.innerHeight- $("#questioncontainer").height();
+          var code = '<iframe src="http://optimalblooduse.eu/app/#front" width="100%" height="' + iframeheight + 'px"></iframe>';
           if (self.section() == 2 && self.treatment() == 'app') return code;
           else return;
         });
