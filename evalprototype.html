@@ -126,7 +126,7 @@
     <div data-role="page" id="front">
       <div data-role="main" class="ui-content">
         <div id="questionContainer" class="centered">
-          <div data-bind="visible: section() > 0" style="border: 1px solid #aaa; background: #EFE;">
+          <div data-bind="visible: section() > 0 && section() !== 2" style="border: 1px solid #aaa; background: #EFE;">
             <p id="progressbar" data-bind="style: {width: progress() + 1 + '%'}, text: progress() + 1 + '% completed' "></p>
           </div>
           <div data-bind="visible: section() == -1">
@@ -347,7 +347,11 @@
               </p> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="click: $root.questionBank1.moveNext">Next page</a>
             </div> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted() && $root.questionBank1.currentPage() ==  $root.questionBank1.pageCount(), click: $root.nextSection">Next section</a>
           </div>
-          <div data-bind="visible: section() == 2">
+          <div data-bind="visible: section() == 2" style="border-bottom: 1px solid black; z-index: 999999; width: 100%; padding: 5px; top: 0px; left: 0px; background: white; position: fixed; margin: 0px;">
+            <h3 style="margin: 0px">Take a moment to review the aid</h3>
+            <a href="#" class="positive" data-theme="b" data-role="button" data-bind="click: $root.nextSection" data-inline="true">Next section</a>
+          </div>
+          <div data-bind="visible: section() == 3">
             <p data-bind="text: questionHeading2()[$root.questionBank2.currentPage()-1]"></p>
             <ul style="margin: 0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank2.currentPageData">
               <li class="statement" data-bind="css: {completed: selected() !== 'Please select'}">
@@ -359,9 +363,11 @@
             </ul>
           </div>
         </div>
-        <div data-bind="visible: section() == 2 && treatment() == 'ggc'" id="ggc" style=" padding: 10px;border: 0px; border-top: 5px solid black;"> <i>Extract from NHS Greater Glasgow and Clyde Blood Transfusion Special Requirements Guideline (March 2013, issue 1), pages 1-8:</i>
-          <div> <a href="#" style="position: absolute; margin-top:0px; right: 0px;" data-role="button" data-inline="true" data-bind="click: findall"><i class="fa fa-search"></i></a>  <a href="#" style="position: absolute; margin-top:0px; left: 10px;" data-role="button" data-inline="true" data-bind="visible: searchterm(), click: clearsearch">x</a>
-            <input class="searchbar" style="margin-left: 2em; font-size: 1.2em;" placeholder="Search guidelines" type="text" data-inline="true" data-bind="value: searchterm, valueUpdate: 'keypress'">
+        <div data-bind="visible: (section() == 2 || section() == 3) && treatment() == 'ggc'" id="ggc" style="margin-top: 100px; padding: 10px;border: 0px; border-top: 5px solid black;"> <i>Extract from NHS Greater Glasgow and Clyde Blood Transfusion Special Requirements Guideline (March 2013, issue 1), pages 1-8:</i>
+          <div>
+            <a href="#" style="position: absolute; margin-top:0px; right: 0px;" data-role="button" data-inline="true" data-bind="click: findall"><i class="fa fa-search"></i></a>
+            <a href="#" style="position: absolute; margin-top:0px; left: 10px;" data-role="button" data-inline="true" data-bind="visible: searchterm(), click: clearsearch">x</a>
+            <input class="searchbar" style="margin-left: 2em;" placeholder="Search guidelines" type="text" data-bind="value: searchterm, valueUpdate: 'keypress'">
           </div>
           <hr/>
           <h3><u>INTRODUCTION</u>
@@ -492,11 +498,11 @@
               <p>The form will be returned to the requesting Consultant to ensure they are aware the laboratory tasks have been completed.</p>
               <h3><u>PATIENT COUNSELLING AND CONSENT</u>
               </h3>
-              <p>It is not a legal requirement in the United Kingdom that written consent is obtained before a transfusion of blood components; however, it is considered a required standard of good transfusion practice to ensure that the patient/parent/carer receives adequate information regarding the transfusion. This standard is laid down in the NHS QIS Clinical Standards (2006) now known as Healthcare Improvement Scotland and compliance is monitored. 4 This discussion should include information about the risks and benefits of transfusion as well as information relating to available alternatives, for example, iron supplementation and must be documented in the case records. Nursing and medical staff therefore, have a professional duty to ensure that they have adequate knowledge of transfusion related issues or that they can access the information and support required by patients undergoing a transfusion.</p>
+              <p>It is not a legal requirement in the United Kingdom that written consent is obtained before a transfusion of blood components; however, it is considered a required standard of good transfusion practice to ensure that the patient/parent/carer receives adequate information regarding the transfusion. This standard is laid down in the NHS QIS Clinical Standards (2006) now known as Healthcare Improvement Scotland and compliance is monitored. <sup><a href="#ref4">4</a></sup> This discussion should include information about the risks and benefits of transfusion as well as information relating to available alternatives, for example, iron supplementation and must be documented in the case records. Nursing and medical staff therefore, have a professional duty to ensure that they have adequate knowledge of transfusion related issues or that they can access the information and support required by patients undergoing a transfusion.</p>
               <p>Booklets are available specifically for patients who require irradiated components and all patients receiving irradiated components should be given these before their first transfusion. They should also be counselled and told to inform nursing and medical staff of this requirement before any future transfusions. Patients should be given a card to carry documenting their special transfusion requirement. An adhesive sticker, taken from the information leaflet, should be placed on the front of case records detailing the requirement. It is the responsibility of the prescribing practitioner to ensure these steps are undertaken.</p>
               <h3>INCIDENT REPORTING</h3>
               <p>There have been 13 reported cases of TaGVHD since 1996 but no cases in the last 8 years. 2 cases have been reported in leucodepleted components (1998-99 and 2000-01) indicating that while leucodepletion significantly reduces, it does not eradicate the risk of this condition. It is important therefore that appropriate products are provided for patients at risk.</p>
-              <p>Errors do occur and the Serous Hazards of Transfusion (SHOT) report 2010 documents 74 cases where special requirements were not met. The majority of these (59 cases) were patients who required irradiated products but did not receive them. 5 It is important that any errors are documented appropriately to ensure that steps can be taken to avoid them in the future. If it becomes apparent that a patient has failed to receive appropriate components the hospital Blood Bank must be informed immediately. The incident will be fully investigated and reported on DATIX and to SHOT.</p>
+              <p>Errors do occur and the Serous Hazards of Transfusion (SHOT) report 2010 documents 74 cases where special requirements were not met. The majority of these (59 cases) were patients who required irradiated products but did not receive them. <sup><a href="#ref5">5</a></sup> It is important that any errors are documented appropriately to ensure that steps can be taken to avoid them in the future. If it becomes apparent that a patient has failed to receive appropriate components the hospital Blood Bank must be informed immediately. The incident will be fully investigated and reported on DATIX and to SHOT.</p>
               <h3><u>REFERENCES</u>
               </h3>
               <ol>
@@ -514,7 +520,7 @@
                 </li>
               </ol>
         </div>
-        <div data-bind="visible: section() == 2 && treatment() == 'lothian'" style=" padding: 10px;border: 0px; border-top: 5px solid black;" id="lothian"> <i>Extract from NHS Lothian, Blood Transfusion Clinical Policy and Procedures 2013 (v.4), Appendic C: Special Requirements, pages 45-46:</i>
+        <div data-bind="visible: (section() == 2 || section() == 3) && treatment() == 'lothian'" style=" padding: 10px;border: 0px; border-top: 5px solid black;" id="lothian"> <i>Extract from NHS Lothian, Blood Transfusion Clinical Policy and Procedures 2013 (v.4), Appendic C: Special Requirements, pages 45-46:</i>
           <h3>Irradiated Components</h3>
           <p>For at-risk patients, all red cell, platelet and granulocyte concentrates should be irradiated. It is not necessary to irradiate FFP, cryoprecipitate or fractionated plasma products.</p>
           <ul>
@@ -541,7 +547,7 @@
             <li>All blood transfusions for infants up to 28 days post expected delivery date.</li>
           </ul>
         </div>
-        <div data-bind="visible: section() == 3">
+        <div data-bind="visible: section() == 4">
           <h1>Usability evaluation</h1>
           <p>Thinking about the app, please answer the following questions as best you can.</p>
           <h3>I thought there was too much inconsistency in this system.</h3>
@@ -918,7 +924,7 @@
               alert("Search term not found");
               return;
             } else {
-              $(window).scrollTop($(".highlight:first").offset().top);
+              $(window).scrollTop($(".highlight:first").offset().top - 150);
             }
             alert("Found " + occurrances + " occurrances of search term.");
           } else {
@@ -945,7 +951,7 @@
         self.sus8 = ko.observable("");
         self.sus9 = ko.observable("");
         self.sus10 = ko.observable("");
-        self.treatment = ko.observable(getUrlParameter('treatment') || "lothian");
+        self.treatment = ko.observable(getUrlParameter('treatment') || "ggc");
         self.questionHeading = ko.observableArray(["1. Is the statement true or false?", "2. What are risk factors for TA-GvHD?", "3. What are common errors involving special components?", "4. What is the correct blood component specification?"]);
         self.questionHeading2 = ko.observableArray(["1. Is the statement true or false? (1/3)", "1. Is the statement true or false? (2/3)", "1. Is the statement true or false? (3/3)", "2. What are risk factors for TA-GvHD? (1/3)", "2. What are risk factors for TA-GvHD? (2/3)", "2. What are risk factors for TA-GvHD? (3/3)", "3. What are common errors involving special components? (1/3)", "3. What are common errors involving special components? (2/3)", "3. What are common errors involving special components? (3/3)", "4. What is the correct blood component specification? (1/3)", "4. What is the correct blood component specification? (2/3)", "4. What is the correct blood component specification? (3/3)"]);
         self.questionBank1 = ko.observableArray(questions.theme1.splice(0, 3).concat(questions.theme2.splice(0, 3)).concat(questions.theme3.splice(0, 3)).concat(questions.theme4.splice(0, 3))).extend({
@@ -981,7 +987,7 @@
         self.appCode = ko.computed(function() {
           var iframeheight = window.innerHeight - $("#questioncontainer").outerHeight();
           var code = '<iframe src="http://optimalblooduse.eu/app/#front" width="100%" height="' + iframeheight + 'px"></iframe>';
-          if (self.section() == 2 && self.treatment() == 'app') return code;
+          if ((self.section() == 2 || self.section() == 3) && self.treatment() == 'app') return code;
           else return;
         });
       };
