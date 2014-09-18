@@ -62,11 +62,9 @@
         white-space: normal;
       }
       .centered {
-        /*
-        width: 96%;
+        max-width: 1024px;
         margin: auto;
-        padding: 2%;
-        */
+        
       }
       #ggcindications tr,
       #ggcindications th {
@@ -102,7 +100,7 @@
       }
       .ui-page {
         padding: 0px;
-        background: #FDFDFD;
+        background: #EEF;
         font-size: 0.9em;
       }
       .highlight {
@@ -130,49 +128,50 @@
             <p id="progressbar" data-bind="style: {width: progress() + 1 + '%'}, text: progress() + 1 + '% completed' "></p>
           </div>
           <div data-bind="visible: section() == -1">
-            <img src="UoE_logo.gif" style="margin: 3%; margin-bottom: 0; width: 93%; max-width: 531px;">
-            <p style="font-size: 1.2em; padding-top: 0;"><b>SPECIAL:</b>
+            <p style="font-size: 1.3em; padding-top: 0; text-shadow: 5px 5px 12px #ccc">
               <span class="special">S</span>topping and
               <span class="special">P</span>reventing
               <span class="special">E</span>rrors in
               <span class="special">C</span>MV-negative and
               <span class="special">I</span>rradiated blood transfusions through
               <span class="special">A</span>pp-based
-              <span class="special">L</span>earning.</p>
-            <p>We would like to invite you to participate in the SPECIAL study. Before you decide whether to take part, we want to explain why we need your help and what we will ask you to do.</p>
-            <p>Press the headings below to learn more.</p>
+              <span class="special">L</span>earning <b>(SPECIAL)</b>.</p>
+            <p>We would like to invite you to participate in the SPECIAL study. Before you decide whether to take part, click on the headings below to find out why we need your help and what we will ask you to do.</p>
             <div data-role="collapsibleset" data-inset="true">
               <div data-role="collapsible" data-collapsed="true">
                 <h3>1. What is the aim of the research?</h3>
                 <p>Blood transfusion is a complex process and about a hundred mistakes related to the provision of irradiated and Cytomegalovirus (CMV) negative blood ("special blood components") are reported every year to Serious Hazards of Transfusion (SHOT) in the UK.</p>
                 <p>Researchers at the University of Edinburgh are collaborating with experts in transfusion to create an app with learning materials about special blood components for staff involved in key stages of the transfusion process. This pilot study will evaluate whether the app increases knowledge of the correct use of special blood components.</p>
+                <center><img src="UoE_logo.gif" style="margin: 3%; margin-bottom: 0; width: 93%; max-width: 531px;"></center>
               </div>
               <div data-role="collapsible" data-collapsed="true">
-                <h3>2. Who are we asking to participate?</h3>
-                <p>We are inviting all grades of doctors, registered nurses, midwives and transfusion laboratory staff who recently completed Module 1 of the Learn Blood Transfusion e-learning programme <i>and</i> who work at one of the following hospitals in NHS Lothian:
-                  <br/>- The Royal Infirmary of Edinburgh
-                  <br/>- Western General Hospital
-                  <br/>- St John's Hospital.</p>
-                <p>Staff who do not meet these criteria are excluded from participating.</p>
-              </div>
-              <div data-role="collapsible" data-collapsed="true">
-                <h3>3. What will I be asked to do?</h3>
+                <h3>2. What will I be asked to do?</h3>
                 <p>We are asking you to answer a short multiple choice test about special blood components. Answering the questions should take you about 15 minutes. You can choose to participate at a time and from a location that is convenient to you. You will need access to a computer with an Internet connection.</p>
               </div>
               <div data-role="collapsible" data-collapsed="true">
-                <h3>4. Why should I participate?</h3>
-                <p>By taking part, you will help shape the design of a new learning resource for staff. If results are positive, wider dissemination of the app could improve practice. Taking part in the study is an excellent opportunity to test your knowledge in a safe environment. There is also a chance to win a &pound;50 national book token voucher. Participation is completely voluntary and there are no risks to participating.</p>
+                <h3>3. Why should I participate?</h3>
+                <p>By taking part, you will help shape the design of a new learning resource. If results are positive, wider dissemination of the app could reduce mistakes and enhance patient safety. Taking part in the study is also an excellent opportunity to test your knowledge in a safe environment. Additionally, there is a chance to win a &pound;50 national book token voucher. Participation is completely voluntary and there are no risks to participating.</p>
               </div>
               <div data-role="collapsible" data-collapsed="true">
-                <h3>5. How will we use your data?</h3>
+                <h3>4. How will we use your data?</h3>
                 <p>Any data that you provide will be treated confidentially and your answers will be reported anonymously in publications. The information will be held securely for the duration of the research project (3 years) and then destroyed.</p>
+              </div>
+              <div data-role="collapsible" data-collapsed="true">
+                <h3>5. Who are we asking to participate?</h3>
+                <p>We are inviting all grades of doctors, registered nurses, midwives and transfusion laboratory staff who recently completed Module 1 of the Learn Blood Transfusion e-learning programme from three NHS Lothian hospitals:</p>
+                  <ul>
+                  <li>The Royal Infirmary of Edinburgh</li>
+                  <li>Western General Hospital</li>
+                  <li>St John's Hospital.</li>
+                </ul>
+                <p style="display: none">Staff who do not meet these criteria are excluded from participating. If you have received a personal email invitation from the research team you are likely to be eligible.</p>
               </div>
               <div data-role="collapsible" data-collapsed="true">
                 <h3>6. Who is conducting the research?</h3>
                 <p>The research is conducted by Mr. Karl Monsen, a PhD candidate at The University of Edinburgh, in collaboration with Ms. Susan Cottrell, Better Blood Transfusion Nurse Specialist in Education at The Scottish National Blood Transfusion Service.</p>
                 <p>Dr. Brian McClelland is medical adviser to the project and the study is supported by Dr. Alastair Nimmo, Chair of the NHS Lothian Transfusion Committee.</p>
                 <p>If you have any questions, please contact Karl at the following email address: <a href="mailto: k.d.monsen@sms.ed.ac.uk">k.d.monsen@sms.ed.ac.uk</a>.</p>
-                <p>Alternatively, you can write to: Karl Monsen, Centre for Design Informatics, Room 3.10, Evolution House, 78 West Port, EH1 2L.</p>
+                <p>Alternatively, you can write to: Karl Monsen, Centre for Design Informatics, Room 3.10, Evolution House, 78 West Port, Edinburgh, EH1 2L.</p>
                 <p>Thank you for your time.</p>
               </div>
               <h2>Are you ready to begin?</h2>
@@ -931,7 +930,7 @@
             alert("Search term must be two characters or more");
           }
         };
-        self.section = ko.observable(getUrlParameter('section') || 2);
+        self.section = ko.observable(getUrlParameter('section') || -1);
         self.hospital = ko.observable("");
         self.position = ko.observable("");
         self.otherposition = ko.observable("");
@@ -951,7 +950,7 @@
         self.sus8 = ko.observable("");
         self.sus9 = ko.observable("");
         self.sus10 = ko.observable("");
-        self.treatment = ko.observable(getUrlParameter('treatment') || "ggc");
+        self.treatment = ko.observable(getUrlParameter('treatment') || "lothian");
         self.questionHeading = ko.observableArray(["1. Is the statement true or false?", "2. What are risk factors for TA-GvHD?", "3. What are common errors involving special components?", "4. What is the correct blood component specification?"]);
         self.questionHeading2 = ko.observableArray(["1. Is the statement true or false? (1/3)", "1. Is the statement true or false? (2/3)", "1. Is the statement true or false? (3/3)", "2. What are risk factors for TA-GvHD? (1/3)", "2. What are risk factors for TA-GvHD? (2/3)", "2. What are risk factors for TA-GvHD? (3/3)", "3. What are common errors involving special components? (1/3)", "3. What are common errors involving special components? (2/3)", "3. What are common errors involving special components? (3/3)", "4. What is the correct blood component specification? (1/3)", "4. What is the correct blood component specification? (2/3)", "4. What is the correct blood component specification? (3/3)"]);
         self.questionBank1 = ko.observableArray(questions.theme1.splice(0, 3).concat(questions.theme2.splice(0, 3)).concat(questions.theme3.splice(0, 3)).concat(questions.theme4.splice(0, 3))).extend({
