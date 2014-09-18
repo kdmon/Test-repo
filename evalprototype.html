@@ -388,7 +388,7 @@
               </p> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="click: $root.questionBank1.moveNext">Next page</a>
             </div> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted() && $root.questionBank1.currentPage() ==  $root.questionBank1.pageCount(), click: $root.nextSection">Next section</a>
           </div>
-          <div data-bind="visible: section() == 2" style="border-bottom: 1px solid black; z-index: 999999; width: 100%; padding: 5px; top: 0px; left: 0px; background: white; position: fixed; margin: 0px;">
+          <div data-bind="visible: section() == 2" style="border-bottom: 1px solid black; width: 100%; padding: 5px; top: 0px; left: 0px; background: white; margin: 0px;">
             <h3 style="margin: 0px">Take a moment to review the aid</h3> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="click: $root.nextSection" data-inline="true">Next section</a>
           </div>
           <div data-bind="visible: section() == 3">
@@ -559,7 +559,7 @@
                 </li>
               </ol>
         </div>
-        <div data-bind="visible: (section() == 2 || section() == 3) && treatment() == 'lothian'" style=" padding: 10px; margin-top: 80px; border: 0px; border-top: 5px solid black;" id="lothian"> <i>Extract from NHS Lothian, Blood Transfusion Clinical Policy and Procedures 2013 (v.4), Appendic C: Special Requirements, pages 45-46:</i>
+        <div data-bind="visible: (section() == 2 || section() == 3) && treatment() == 'lothian'" style=" padding: 10px; border: 0px; border-top: 5px solid black;" id="lothian"> <i>Extract from NHS Lothian, Blood Transfusion Clinical Policy and Procedures 2013 (v.4), Appendic C: Special Requirements, pages 45-46:</i>
           <h3>Irradiated Components</h3>
           <p>For at-risk patients, all red cell, platelet and granulocyte concentrates should be irradiated. It is not necessary to irradiate FFP, cryoprecipitate or fractionated plasma products.</p>
           <ul>
@@ -1028,7 +1028,7 @@
         });
         self.appCode = ko.computed(function() {
           var iframeheight = $( window ).height() - $("#questioncontainer").outerHeight() - 250;
-          var code = '<iframe src="http://optimalblooduse.eu/app/#front" width="100%" style="margin-top: 70px;" height="' + iframeheight + 'px"></iframe>';
+          var code = '<iframe src="http://optimalblooduse.eu/app/#front" width="100%" height="' + iframeheight + 'px"></iframe>';
           if ((self.section() == 2 || self.section() == 3) && self.treatment() == 'app') return code;
           else return;
         });
