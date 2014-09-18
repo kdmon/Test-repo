@@ -88,13 +88,15 @@
         font-weight: bold;
         padding: 2px;
         margin: 0px;
-        background: #8c8;
+        background: #7c7;
         white-space: nowrap;
         text-align: center;
         line-height: 1em;
         font-size: 0.8em;
       }
       .ui-content {
+        padding-top: 0em !important;
+        padding-bottom: 1em !important;
         padding-left: 1em !important;
         padding-right: 1em !important;
       }
@@ -105,6 +107,10 @@
       }
       .highlight {
         background-color: yellow;
+      }
+      .smallquestion {
+        margin: 0px;
+        font-weight: bold;
       }
       .positive {
         background: #afa !important;
@@ -124,9 +130,7 @@
     <div data-role="page" id="front">
       <div data-role="main" class="ui-content">
         <div id="questionContainer" class="centered">
-          <div data-bind="visible: section() > 0 && section() !== 2" style="border: 1px solid #aaa; background: #EFE;">
-            <p id="progressbar" data-bind="style: {width: progress() + 1 + '%'}, text: progress() + 1 + '% completed' "></p>
-          </div>
+          
           <div data-bind="visible: section() == -1">
             <p style="font-size: 1.3em; padding-top: 0; text-shadow: 3px 3px 3px #ccc">
               <span class="special">S</span>topping and
@@ -145,7 +149,6 @@
                 </center>
                 <p>Blood transfusion is a complex process and about one hundred mistakes related to the provision of irradiated and Cytomegalovirus (CMV) negative blood ("special blood components") are reported every year to Serious Hazards of Transfusion (SHOT) in the UK.</p>
                 <p>Researchers at the University of Edinburgh are collaborating with experts in transfusion to create an app with learning materials about special blood components for staff involved in key stages of the transfusion process. This pilot study will evaluate whether the app increases knowledge of the correct use of special blood components.</p>
-               
               </div>
               <div data-role="collapsible" data-collapsed="true">
                 <h3>2. What will I be asked to do?</h3>
@@ -396,7 +399,7 @@
             <a href="#" style="margin:0px" class="positive" data-theme="b" data-role="button" data-bind="click: $root.nextSection" data-inline="true">Next</a> </p>
           </div>
           <div data-bind="visible: section() == 3">
-            <p data-bind="text: questionHeading2()[$root.questionBank2.currentPage()-1]"></p>
+            <p class="smallquestion" data-bind="text: questionHeading2()[$root.questionBank2.currentPage()-1]"></p>
             <ul style="margin: 0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank2.currentPageData">
               <li class="statement" data-bind="css: {completed: selected() !== 'Please select'}">
                 <span data-bind="text: statement"></span> <i class="fa fa-certificate" style="color: red;" data-bind="visible: selected() == 'Please select'"></i>
@@ -406,6 +409,9 @@
               </li>
             </ul>
           </div>
+        </div>
+        <div data-bind="visible: section() > 0 && section() !== '2'" style="border: 0px solid #aaa; background: #EFE;">
+          <p id="progressbar" data-bind="style: {width: progress() + 1 + '%'}, text: progress() + 1 + '% completed' "></p>
         </div>
         <div data-bind="visible: (section() == 2 || section() == 3) && treatment() == 'ggc'" id="ggc" style="margin-top: 100px; padding: 10px;border: 0px; border-top: 5px solid black;"> <i>Extract from NHS Greater Glasgow and Clyde Blood Transfusion Special Requirements Guideline (March 2013, issue 1), pages 1-8:</i>
           <div> <a href="#" style="position: absolute; margin-top:0px; right: 0px;" data-role="button" data-inline="true" data-bind="click: findall"><i class="fa fa-search"></i></a>
@@ -689,6 +695,16 @@
         </div>
       </div>
       <div id="appcontainer" data-bind="html: appCode"></div>
+      <select data-role='none' data-bind="value: section" style="position: fixed; top:0px; right: 0px">
+        <option value="-1">-1</option>
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option selected value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+      </select>
     </div>
     <script type='text/javascript'>
       // http://jsfiddle.net/zeelux/B4vN2/
@@ -974,7 +990,7 @@
             alert("Search term must be two characters or more");
           }
         };
-        self.section = ko.observable(getUrlParameter('section') || 2);
+        self.section = ko.observable(getUrlParameter('section') || -1);
         self.hospital = ko.observable("");
         self.position = ko.observable("");
         self.otherposition = ko.observable("");
