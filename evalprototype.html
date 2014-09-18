@@ -46,14 +46,18 @@
       .ui-btn {
         font-size: 0.9em !important;
       }
+      .ui-btn {
+        background: #ddf !important;
+      }
+      .even .ui-btn {
+        background: #e5e5ff !important;
+      }
       @media (min-width: 780px) {
         body {
           font-size: 1.6em;
         }
       }
-      .ui-btn {
-        background: #ddf !important;
-      }
+      
       .ui-collapsible-heading-toggle {
         overflow: visible;
         white-space: normal;
@@ -108,7 +112,7 @@
       .highlight {
         background-color: yellow;
       }
-      .smallquestion {
+      .smallc {
         margin: 0px;
         font-weight: bold;
       }
@@ -128,7 +132,7 @@
 
   <body>
     <div data-role="page" id="front">
-      <div data-role="main" class="ui-content centered">
+      <div data-role="main" id="maincontainer" class="ui-content centered">
         <div id="questionContainer">
           <div data-bind="visible: section() == -1">
             <p style="font-size: 1.3em; padding-top: 0; text-shadow: 3px 3px 3px #ccc">
@@ -149,7 +153,7 @@
                 <p>Blood transfusion is a complex process and about one hundred mistakes related to the provision of irradiated and Cytomegalovirus (CMV) negative blood ("special blood components") are reported every year to Serious Hazards of Transfusion (SHOT) in the UK.</p>
                 <p>Researchers at the University of Edinburgh are collaborating with experts in transfusion to create an app with learning materials about special blood components for staff involved in key stages of the transfusion process. This pilot study will evaluate whether the app increases knowledge of the correct use of special blood components.</p>
               </div>
-              <div data-role="collapsible" data-collapsed="true">
+              <div data-role="collapsible" data-collapsed="true" class="even">
                 <h3>2. What will I be asked to do?</h3>
                 <p>We are asking you to answer a short multiple choice test about special blood components. Answering the questions should take you about 15 minutes. You can choose to participate at a time and from a location that is convenient to you. You will need access to a computer with an Internet connection.</p>
               </div>
@@ -157,12 +161,12 @@
                 <h3>3. Why should I participate?</h3>
                 <p>By taking part, you will help shape the design of a new learning resource. If results are positive, wider dissemination of the app could reduce mistakes and enhance patient safety. Taking part in the study is also an excellent opportunity to test your knowledge in a safe environment. Additionally, there is a chance to win a &pound;50 national book token voucher. Participation is completely voluntary and there are no risks to participating.</p>
               </div>
-              <div data-role="collapsible" data-collapsed="true">
-                <h3>4. How will we use your data?</h3>
+              <div data-role="collapsible" data-collapsed="true" class="even">
+                <h3>4. How will you use my data?</h3>
                 <p>Any data that you provide will be treated confidentially and your answers will be reported anonymously in publications. The information will be held securely for the duration of the research project (3 years) and then destroyed.</p>
               </div>
               <div data-role="collapsible" data-collapsed="true">
-                <h3>5. Who are we asking to participate?</h3>
+                <h3>5. Who are you asking to participate?</h3>
                 <p>We are inviting all grades of doctors, registered nurses, midwives and transfusion laboratory staff who recently completed Module 1 of the Learn Blood Transfusion e-learning programme from three NHS Lothian hospitals:</p>
                 <ul>
                   <li>The Royal Infirmary of Edinburgh</li>
@@ -171,7 +175,7 @@
                 </ul>
                 <p style="display: none">Staff who do not meet these criteria are excluded from participating. If you have received a personal email invitation from the research team you are likely to be eligible.</p>
               </div>
-              <div data-role="collapsible" data-collapsed="true">
+              <div data-role="collapsible" data-collapsed="true" class="even">
                 <h3>6. Who is conducting the research?</h3>
                 <p>The research is conducted by Mr. Karl Monsen, a PhD candidate at The University of Edinburgh, in collaboration with Ms. Susan Cottrell, Better Blood Transfusion Nurse Specialist in Education at The Scottish National Blood Transfusion Service.</p>
                 <p>Dr. Brian McClelland is medical adviser to the project and the study is supported by Dr. Alastair Nimmo, Chair of the NHS Lothian Transfusion Committee.</p>
@@ -181,7 +185,7 @@
               </div>
               <h2>Ready to begin?</h2>
               <p>By proceeding you indicate that you have read the above information and freely give your informed consent to take part in the research.</p>
-              <a href="#" class="positive" data-role="button" data-bind="click: $root.nextSection">I agree to participate</a>
+              <a href="#" class="positive" data-role="button" data-icon="check" data-bind="click: $root.nextSection">I agree to participate</a>
             </div>
           </div>
           <div data-bind="visible: section() == 0">
@@ -306,7 +310,7 @@
                   </div>
                 </div>
                 <div data-bind="visible: specialty() !== '' && position() !== ''">
-                  <h3>3. Do you currently work in a unit with patients who require CMV-negative or irradiated blood components?</h3>
+                  <h3>3. Do your current place of work have patients who require CMV-negative or irradiated blood components?</h3>
                   <select data-bind="value: currentwork">
                     <option value="-1">Please select</option>
                     <option value="0">No</option>
@@ -315,7 +319,7 @@
                   </select>
                   <div data-bind="visible: currentwork() !== '-1'" style="margin-left: 2em;">
                     <div data-bind="visible: currentwork() == '1'">
-                      <h3>How long have you worked there?</h3>
+                      <h3>How long have you been with your current workplace?</h3>
                       <select data-bind="value: currentexperience">
                         <option value="-1">Please select</option>
                         <option value="1">Less than 1 month</option>
@@ -329,7 +333,7 @@
                       </select>
                     </div>
                     <div data-bind="visible: currentexperience() == '0' || currentwork() == '0' || currentwork() == '2'">
-                      <h3>Have you previously worked in a unit with patients who require CMV-negative or irradiated blood components?</h3>
+                      <h3>Have you <i>previously</i> been part of a workplace with patients who require CMV-negative or irradiated blood components?</h3>
                       <select data-bind="value: pastwork">
                         <option value="-1">Please select</option>
                         <option value="0">No</option>
@@ -355,22 +359,24 @@
                     </div>
                   </div>
                   <div data-bind="visible: (currentwork() !== '-1' && (pastexperience() > -1 || currentexperience() > -1)) || pastwork() == '0' || pastwork() == '2'">
-                    <h3>4. How often do you work with patients who require CMV-negative or irradiated blood components?</h3>
+                    <h3>4. In your current role, how often do you work with patients who require CMV-negative or irradiated blood components?</h3>
                     <select data-bind="value: frequency">
                       <option value="-1">Please select</option>
-                      <option value="7">Every day</option>
-                      <option value="6">Every other day</option>
-                      <option value="5">Every week</option>
-                      <option value="4">Every other week</option>
-                      <option value="3">Every month</option>
-                      <option value="2">Every other month</option>
-                      <option value="1">Less frequently</option>
+                      <option value="10">Every day</option>
+                      <option value="9">Every other day</option>
+                      <option value="8">Every week</option>
+                      <option value="7">Every other week</option>
+                      <option value="6">Every month</option>
+                      <option value="5">Every other month</option>
+                      <option value="4">Every quarter</option>
+                      <option value="3">Every six months</option>
+                      <option value="2">Less frequently</option>
                       <option value="1">Never</option>
                       <option value="0">Don't know</option>
                     </select>
                     <div data-bind="visible: frequency() > -1">
-                      <h3>You are eligible to participate.</h3>
-                      <p>Press the green button to start the knowledge tests.</p> <a href="#" class="positive" data-role="button" data-bind="click: $root.nextSection">Begin</a>
+                      <h3>Thank you. You are eligible to participate in the study.</h3>
+                      <p>Press the green button to start the knowledge test.</p> <a href="#" data-icon="carat-r" data-iconpos="right" class="positive" data-role="button" data-bind="click: $root.nextSection">Begin test</a>
                     </div>
                   </div>
                 </div>
@@ -378,7 +384,9 @@
             </div>
           </div>
           <div data-bind="visible: section() == 1">
-            <h3 data-bind="text: questionHeading()[$root.questionBank1.currentPage()-1]"></h3> <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank1.currentPage() > 1, click: $root.questionBank1.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
+            <h3 data-bind="text: questionHeading()[$root.questionBank1.currentPage()-1]"></h3>
+            <p>Please answer without referring to outside help.</p>
+            <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank1.currentPage() > 1, click: $root.questionBank1.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
             <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank1.currentPageData">
               <li class="statement" data-bind="css: {completed: selected() !== 'Please select'}">
                 <span data-bind="text: statement"></span> <i class="fa fa-certificate" style="color: red;" data-bind="visible: selected() == 'Please select'"></i>
@@ -389,13 +397,12 @@
             <p data-bind="visible: !$root.questionBank1.pageCompleted();">You must answer all mandatory questions (<i class="fa fa-certificate" style="color: red;"></i>) before proceeding.</p>
             <div data-bind="visible: $root.questionBank1.pageCompleted() && $root.questionBank1.currentPage() <  $root.questionBank1.pageCount()">
               <p><b>Review your answers and press the green button to continue.</b>
-              </p> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="click: $root.questionBank1.moveNext">Next page</a>
+              </p> <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="click: $root.questionBank1.moveNext">Next page</a>
             </div> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted() && $root.questionBank1.currentPage() ==  $root.questionBank1.pageCount(), click: $root.nextSection">Next section</a>
           </div>
           <div data-bind="visible: section() == 2" style="height: 150px;  background: white; box-shadow: 0px 0px 10px 10px #fff;">
-            <h3 style="margin: 0px">Instructions</h3>
-            <p style="margin: 0px">Please take a couple of minutes to explore the <span data-bind="visible: treatment() == 'app'">Special Blood Request app (below)</span><span data-bind="visible: treatment() == 'lothian'">current NHS Lothian hospital guidelines</span>.
-            <a href="#" style="margin:0px" class="positive" data-theme="b" data-role="button" data-bind="click: $root.nextSection" data-inline="true">Next</a> </p>
+            <p style="margin: 0px">Please take some time to explore the <span data-bind="visible: treatment() == 'app'">Special Blood Request app (below)</span><span data-bind="visible: treatment() == 'lothian'">current NHS Lothian hospital guidelines</span>. Press Done when you're ready.
+            <a href="#" style="margin:0px" class="positive" data-theme="b" data-role="button" data-bind="click: $root.nextSection" data-inline="true">Done</a> </p>
           </div>
           <div data-bind="visible: section() == 3">
             <p class="smallquestion" data-bind="text: questionHeading2()[$root.questionBank2.currentPage()-1]"></p>
@@ -694,11 +701,11 @@
         </div>
       </div>
       <div id="appcontainer" data-bind="html: appCode"></div>
-      <select data-role='none' data-bind="value: section" style="position: fixed; top:0px; right: 0px">
+      <select data-role='none' data-bind="value: $root.section" style="position: fixed; top:0px; right: 0px">
         <option value="-1">-1</option>
         <option value="0">0</option>
         <option value="1">1</option>
-        <option selected value="2">2</option>
+        <option value="2">2</option>
         <option value="3">3</option>
         <option value="4">4</option>
         <option value="5">5</option>
@@ -905,35 +912,35 @@
         }],
         theme4: [{
           statement: "Red cells known to be from a second degree relative of the patient.",
-          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "Neither irradiated or CMV-negative", "Don't know"],
+          options: ["Please select", "Irradiated & CMV-neg.", "Irradiated", "CMV-negative", "No special component", "Don't know"],
           selected: ko.observable("Please select")
         }, {
           statement: "Red cells for patients on Fludarabine or Alemtuzmab (Campath).",
-          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "Neither irradiated or CMV-negative", "Don't know"],
+          options: ["Please select", "Irradiated & CMV-neg.", "Irradiated", "CMV-negative", "No special component", "Don't know"],
           selected: ko.observable("Please select")
         }, {
           statement: "Elective red cell transfusion for a pregnant woman in second trimester.",
-          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "Neither irradiated or CMV-negative", "Don't know"],
+          options: ["Please select", "Irradiated & CMV-neg.", "Irradiated", "CMV-negative", "No special component", "Don't know"],
           selected: ko.observable("Please select")
         }, {
           statement: "Fresh frozen plasma for a patient with Hodgkin's lymphoma.",
-          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "Neither irradiated or CMV-negative", "Don't know"],
+          options: ["Please select", "Irradiated & CMV-neg.", "Irradiated", "CMV-negative", "No special component", "Don't know"],
           selected: ko.observable("Please select")
         }, {
           statement: "HLA-matched platelets for a patient with refractoriness.",
-          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "Neither irradiated or CMV-negative", "Don't know"],
+          options: ["Please select", "Irradiated & CMV-neg.", "Irradiated", "CMV-negative", "No special component", "Don't know"],
           selected: ko.observable("Please select")
         }, {
           statement: "Red cells for an infant who had an intrauterine transfusion (IUT) a year ago.",
-          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "Neither irradiated or CMV-negative", "Don't know"],
+          options: ["Please select", "Irradiated & CMV-neg.", "Irradiated", "CMV-negative", "No special component", "Don't know"],
           selected: ko.observable("Please select")
         }, {
           statement: "Red cells for a patient receiving bone marrow transplant in the last 3 months.",
-          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "Neither irradiated or CMV-negative", "Don't know"],
+          options: ["Please select", "Irradiated & CMV neg.", "Irradiated", "CMV-negative", "No special component", "Don't know"],
           selected: ko.observable("Please select")
         }, {
           statement: "Platelets for a non-emergency bleeding cancer patient on purine analogues.",
-          options: ["Please select", "Irradiated & CMV-negative", "Irradiated", "CMV-negative", "Neither irradiated or CMV-negative", "Don't know"],
+          options: ["Please select", "Irradiated & CMV neg.", "Irradiated", "CMV-negative", "No special component", "Don't know"],
           selected: ko.observable("Please select")
         }]
       };
@@ -1014,11 +1021,11 @@
           return passed;
         });
         self.appCode = ko.computed(function() {
-          var iframeheight = $( window ).height() - $("#questioncontainer").outerHeight() - 150;
-          var code = '<iframe src="http://optimalblooduse.eu/app/#front" width="100%" height="' + iframeheight + 'px"></iframe>';
-          if ((self.section() == 2 || self.section() == 3) && self.treatment() == 'app') return code;
-          else return;
-        });
+            var iframeheight = $( window ).height() - $("#maincontainer").outerHeight() - 10;
+            var code = '<iframe src="http://optimalblooduse.eu/app/" width="100%" height="' + iframeheight + 'px"></iframe>';
+            if ((self.section() == 2 || self.section() == 3) && self.treatment() == 'app') return code;
+            else return;
+        }, this, { deferEvaluation: true });
         
         self.nextSection = function() {
           self.section(self.section() + 1);
