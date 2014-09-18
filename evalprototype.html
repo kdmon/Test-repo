@@ -300,7 +300,7 @@
                     <input data-bind="value: otherspecialty">
                   </div>
                 </div>
-                <div data-bind="visible: specialty() !== ''">
+                <div data-bind="visible: specialty() !== '' && position() !== ''">
                   <h3>3. Do you currently work in a unit with patients who require CMV-negative or irradiated blood components?</h3>
                   <select data-bind="value: currentwork">
                     <option value="-1">Please select</option>
@@ -349,7 +349,7 @@
                       </div>
                     </div>
                   </div>
-                  <div data-bind="visible: pastexperience() > -1 || currentexperience() > -1">
+                  <div data-bind="visible: (currentwork() !== '-1' && (pastexperience() > -1 || currentexperience() > -1)) || (currentwork() == '2' && pastwork() == '2')">
                     <h3>4. How often do you work with patients who require CMV-negative or irradiated blood components?</h3>
                     <select data-bind="value: frequency">
                       <option value="-1">Please select</option>
@@ -363,11 +363,10 @@
                       <option value="1">Never</option>
                       <option value="0">Don't know</option>
                     </select>
-                  </div>
-                  <div data-bind="visible: frequency() > 0">
-                    <h3>You are eligible to participate.</h3>
-                    <p>Press the green button to start the knowledge tests.</p>
-                    <a href="#" class="positive" data-role="button" data-bind="click: $root.nextSection">Begin</a>
+                    <div data-bind="visible: frequency() > -1">
+                      <h3>You are eligible to participate.</h3>
+                      <p>Press the green button to start the knowledge tests.</p> <a href="#" class="positive" data-role="button" data-bind="click: $root.nextSection">Begin</a>
+                    </div>
                   </div>
                 </div>
               </div>
