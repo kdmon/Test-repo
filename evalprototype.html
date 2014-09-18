@@ -1027,7 +1027,7 @@
           return passed;
         });
         self.appCode = ko.computed(function() {
-          var iframeheight = window.innerHeight - $("#questioncontainer").outerHeight() - 80;
+          var iframeheight = $( window ).height() - $("#questioncontainer").outerHeight() - 80;
           var code = '<iframe src="http://optimalblooduse.eu/app/#front" width="100%" style="margin-top: 80px;" height="' + iframeheight + 'px"></iframe>';
           if ((self.section() == 2 || self.section() == 3) && self.treatment() == 'app') return code;
           else return;
