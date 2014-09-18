@@ -181,7 +181,7 @@
           <div data-bind="visible: section() == 0">
             <h2>Confirm eligibility</h2>
             <p>Please answer the questions to confirm that you are eligible to participate in the study.</p>
-            <h3>At what hospital are you based?</h3>
+            <h3>1. At what hospital are you based?</h3>
             <select data-bind="value: hospital">
               <option value="" selected>Please select</option>
               <option value="rie">Royal Infirmary of Edinburgh</option>
@@ -190,11 +190,11 @@
               <option value="other">None of the above</option>
             </select>
             <div data-bind="visible: hospital() == 'other'">
-              <h2 style="color: red">You are not eligible</h2>
+              <h2 style="color: #A00">Ineligible</h2>
               <p>We're sorry, but we can only accept submissions from staff working at the hospitals listed above. If you recently moved hospital, please select your previous hospital.</p>
             </div>
             <div data-bind="visible: hospital() !== 'other' && hospital() !== ''">
-              <h3>What is your role?</h3>
+              <h3>2. What is your role?</h3>
               <select data-bind="value: position">
                 <option value="">Please select</option>
                 <option value="bb">Blood Bank/Hospital Laboratory staff</option>
@@ -205,107 +205,109 @@
                 <option value="ot">Other</option>
               </select>
             </div>
-            <div data-bind="visible: (position() == 'ot' || position() == 'bb')" style="margin-left: 2em;">
-              <h3>Please enter your job title:</h3>
-              <input data-bind="value: otherposition, valueUpdate: 'keyup'">
-            </div>
-            <div data-bind="visible: position() == 'dr'" style="margin-left: 0em;">
-              <h3>What is your grade?</h3>
-              <select data-bind="value: grade">
-                <option value="">Please select</option>
-                <option value="fy1">Foundation year 1</option>
-                <option value="fy2">Foundation year 2</option>
-                <option value="registrar">Registrar</option>
-                <option value="consultant">Consultant</option>
-              </select>
-            </div>
-            <div data-bind="visible: position() !== '' && position() !== 'dr' && position() !== 'ot' && position() !== 'bb' || grade() !== '' || otherposition() !== ''" style="margin-left: 0em;">
-              <h3>How many years of experience do you have?</h3>
-              <select data-bind="value: experience">
-                <option value="-1">Please select</option>
-                <option value="0">Less than one year</option>
-                <option value="1">1 year</option>
-                <option value="2">2 years</option>
-                <option value="3">3 years</option>
-                <option value="4">4 years</option>
-                <option value="5">5 years</option>
-                <option value="6">6 years</option>
-                <option value="6">7 years</option>
-                <option value="6">8 years</option>
-                <option value="6">9 years</option>
-                <option value="10">10 years</option>
-                <option value="11">11 years</option>
-                <option value="12">12 years</option>
-                <option value="13">13 years</option>
-                <option value="14">14 years</option>
-                <option value="15">15 years</option>
-                <option value="16">16 years</option>
-                <option value="17">17 years</option>
-                <option value="18">18 years</option>
-                <option value="19">19 years</option>
-                <option value="20">20 years</option>
-                <option value="21">21 years</option>
-                <option value="22">22 years</option>
-                <option value="23">23 years</option>
-                <option value="24">24 years</option>
-                <option value="25">25 years</option>
-                <option value="26">26 years</option>
-                <option value="27">27 years</option>
-                <option value="28">28 years</option>
-                <option value="29">29 years</option>
-                <option value="30">30 years</option>
-                <option value="31">31 years</option>
-                <option value="32">32 years</option>
-                <option value="33">33 years</option>
-                <option value="34">34 years</option>
-                <option value="35">35 years</option>
-                <option value="36">36 years</option>
-                <option value="37">37 years</option>
-                <option value="38">38 years</option>
-                <option value="39">39 years</option>
-                <option value="40">40 years</option>
-                <option value="41">More than 40 years</option>
-                <option value="42">Don't know</option>
-              </select>
-            </div>
-            <div data-bind="visible: experience() > -1" style="margin-left: 0em;">
-              <h3>What is your specialty?</h3>
-              <select data-bind="value: specialty">
-                <option value="">Please select</option>
-                <option value="ae">Accident and emergency (A&amp;E)</option>
-                <option value="an">Anaesthetics</option>
-                <option value="bb">Blood bank</option>
-                <option value="ca">Cardiology</option>
-                <option value="cc">Critical care</option>
-                <option value="ga">Gastroenterology</option>
-                <option value="gp">General practitioner</option>
-                <option value="ge">Geriatrics</option>
-                <option value="he">Haematology</option>
-                <option value="ne">Neonatology</option>
-                <option value="na">None / Not applicable</option>
-                <option value="ob">Obstetrics or gynaecology</option>
-                <option value="on">Oncology</option>
-                <option value="or">Orthopaedics</option>
-                <option value="pd">Paediatrics</option>
-                <option value="su">Surgical</option>
-                <option value="th">Theatre</option>
-                <option value="ot">Other</option>
-                <option value="dk">Don't know</option>
-              </select>
-            </div>
-            <div data-bind="visible: specialty() == 'ot'" style="margin-left: 2em;">
-              <h3>Please enter your specialty:</h3>
-              <input data-bind="value: otherspecialty">
+            <div style="margin-left: 2em;">
+              <div data-bind="visible: (position() == 'ot' || position() == 'bb')">
+                <h3>Please enter your job title:</h3>
+                <input data-bind="value: otherposition, valueUpdate: 'keyup'">
+              </div>
+              <div data-bind="visible: position() == 'dr'" style="margin-left: 0em;">
+                <h3>What is your grade?</h3>
+                <select data-bind="value: grade">
+                  <option value="">Please select</option>
+                  <option value="fy1">Foundation year 1</option>
+                  <option value="fy2">Foundation year 2</option>
+                  <option value="registrar">Registrar</option>
+                  <option value="consultant">Consultant</option>
+                </select>
+              </div>
+              <div data-bind="visible: (position() !== '' && position() !== 'dr' && position() !== 'ot' && position() !== 'bb') || (position() !== '' && (grade() !== '' || otherposition() !== ''))" style="margin-left: 0em;">
+                <h3>How many years of experience do you have?</h3>
+                <select data-bind="value: experience">
+                  <option value="-1">Please select</option>
+                  <option value="0">Less than one year</option>
+                  <option value="1">1 year</option>
+                  <option value="2">2 years</option>
+                  <option value="3">3 years</option>
+                  <option value="4">4 years</option>
+                  <option value="5">5 years</option>
+                  <option value="6">6 years</option>
+                  <option value="6">7 years</option>
+                  <option value="6">8 years</option>
+                  <option value="6">9 years</option>
+                  <option value="10">10 years</option>
+                  <option value="11">11 years</option>
+                  <option value="12">12 years</option>
+                  <option value="13">13 years</option>
+                  <option value="14">14 years</option>
+                  <option value="15">15 years</option>
+                  <option value="16">16 years</option>
+                  <option value="17">17 years</option>
+                  <option value="18">18 years</option>
+                  <option value="19">19 years</option>
+                  <option value="20">20 years</option>
+                  <option value="21">21 years</option>
+                  <option value="22">22 years</option>
+                  <option value="23">23 years</option>
+                  <option value="24">24 years</option>
+                  <option value="25">25 years</option>
+                  <option value="26">26 years</option>
+                  <option value="27">27 years</option>
+                  <option value="28">28 years</option>
+                  <option value="29">29 years</option>
+                  <option value="30">30 years</option>
+                  <option value="31">31 years</option>
+                  <option value="32">32 years</option>
+                  <option value="33">33 years</option>
+                  <option value="34">34 years</option>
+                  <option value="35">35 years</option>
+                  <option value="36">36 years</option>
+                  <option value="37">37 years</option>
+                  <option value="38">38 years</option>
+                  <option value="39">39 years</option>
+                  <option value="40">40 years</option>
+                  <option value="41">More than 40 years</option>
+                  <option value="42">Don't know</option>
+                </select>
+              </div>
+              <div data-bind="visible: experience() > -1" style="margin-left: 0em;">
+                <h3>What is your specialty?</h3>
+                <select data-bind="value: specialty">
+                  <option value="">Please select</option>
+                  <option value="ae">Accident and emergency (A&amp;E)</option>
+                  <option value="an">Anaesthetics</option>
+                  <option value="bb">Blood bank</option>
+                  <option value="ca">Cardiology</option>
+                  <option value="cc">Critical care</option>
+                  <option value="ga">Gastroenterology</option>
+                  <option value="gp">General practitioner</option>
+                  <option value="ge">Geriatrics</option>
+                  <option value="he">Haematology</option>
+                  <option value="ne">Neonatology</option>
+                  <option value="na">None / Not applicable</option>
+                  <option value="ob">Obstetrics or gynaecology</option>
+                  <option value="on">Oncology</option>
+                  <option value="or">Orthopaedics</option>
+                  <option value="pd">Paediatrics</option>
+                  <option value="su">Surgical</option>
+                  <option value="th">Theatre</option>
+                  <option value="ot">Other</option>
+                  <option value="dk">Don't know</option>
+                </select>
+              </div>
+              <div data-bind="visible: specialty() == 'ot'" style="margin-left: 2em;">
+                <h3>Please enter your specialty:</h3>
+                <input data-bind="value: otherspecialty">
+              </div>
             </div>
             <div data-bind="visible: specialty() !== ''" style="margin-left: 0em;">
-              <h3>Approximately how often do you work with patients who require CMV-negative or irradiated blood components?</h3>
+              <h3>3. How often do you work with patients who require CMV-negative or irradiated blood components?</h3>
               <select data-bind="value: currentexperience">
                 <option value="-1">Please select</option>
-                <option value="7">Daily</option>
+                <option value="7">Every day</option>
                 <option value="6">Every other day</option>
-                <option value="5">Weekly</option>
+                <option value="5">Every week</option>
                 <option value="4">Every other week</option>
-                <option value="3">Monthly</option>
+                <option value="3">Every month</option>
                 <option value="2">Every other month</option>
                 <option value="1">Less frequently</option>
                 <option value="1">Never</option>
@@ -313,7 +315,7 @@
               </select>
             </div>
             <div data-bind="visible: currentexperience() > -1" style="margin-left: 0em;">
-              <h3>Do you or have you previously worked in a unit with patients who require CMV-negative or irradiated blood components? If so, for how long did you work there?</h3>
+              <h3>4. Have you worked in a unit with patients who require CMV-negative or irradiated blood components? If so, for how long did you work there?</h3>
               <select data-bind="value: pastexperience">
                 <option value="-1">Please select</option>
                 <option value="1">No</option>
