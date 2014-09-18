@@ -1027,8 +1027,8 @@
           return passed;
         });
         self.appCode = ko.computed(function() {
-          var iframeheight = $( window ).height() - $("#questioncontainer").outerHeight() - 150;
-          var code = '<iframe src="http://optimalblooduse.eu/app/#front" width="100%" style="margin-top: 80px;" height="' + iframeheight + 'px"></iframe>';
+          var iframeheight = $( window ).height() - $("#questioncontainer").outerHeight() - 250;
+          var code = '<iframe src="http://optimalblooduse.eu/app/#front" width="100%" style="margin-top: 70px;" height="' + iframeheight + 'px"></iframe>';
           if ((self.section() == 2 || self.section() == 3) && self.treatment() == 'app') return code;
           else return;
         });
