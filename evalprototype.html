@@ -135,7 +135,7 @@
       <div data-role="main" id="maincontainer" class="ui-content centered">
         <div id="questionContainer">
           <div data-bind="visible: section() == -1">
-            <p style="font-size: 1.3em; padding-top: 0; text-shadow: 3px 3px 3px #ccc">
+            <p style="font-size: 1.3em; padding-top: 0; text-shadow: 3px 3px 3px #fff">
               <span class="special">S</span>topping and
               <span class="special">P</span>reventing
               <span class="special">E</span>rrors in
@@ -184,7 +184,7 @@
                 <p>Thank you for your time.</p>
               </div>
               <h2>Ready to begin?</h2>
-              <p>By proceeding you indicate that you have read the above information and freely give your informed consent to take part in the research.</p>
+              <p>By proceeding you indicate that you have read the above information and freely consent to take part in the study.</p>
               <a href="#" class="positive" data-role="button" data-icon="check" data-bind="click: $root.nextSection">I agree to participate</a>
             </div>
           </div>
@@ -878,7 +878,7 @@
           selected: ko.observable("Please select")
         }],
         theme3: [{
-          statement: "Lack of knowledge about the indications for special components.",
+          statement: "Lack of knowledge of the indications for special components.",
           options: ["Please select", "Yes", "No", "Don't know"],
           selected: ko.observable("Please select")
         }, {
