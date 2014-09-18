@@ -88,14 +88,18 @@
         font-weight: bold;
         padding: 2px;
         margin: 0px;
-        background: #5e5;
+        background: #8c8;
         white-space: nowrap;
         text-align: center;
         line-height: 1em;
         font-size: 0.8em;
       }
+      .ui-content {
+        padding-left: 1em !important;
+        padding-right: 1em !important;
+      }
       .ui-page {
-        padding: 0px;
+        padding: 0px !important;
         background: #EEF;
         font-size: 0.9em;
       }
@@ -139,7 +143,7 @@
                  <center>
                   <img src="UoE_logo.gif" style="margin: 3%; margin-bottom: 0; width: 93%; max-width: 531px;">
                 </center>
-                <p>Blood transfusion is a complex process and about a hundred mistakes related to the provision of irradiated and Cytomegalovirus (CMV) negative blood ("special blood components") are reported every year to Serious Hazards of Transfusion (SHOT) in the UK.</p>
+                <p>Blood transfusion is a complex process and about one hundred mistakes related to the provision of irradiated and Cytomegalovirus (CMV) negative blood ("special blood components") are reported every year to Serious Hazards of Transfusion (SHOT) in the UK.</p>
                 <p>Researchers at the University of Edinburgh are collaborating with experts in transfusion to create an app with learning materials about special blood components for staff involved in key stages of the transfusion process. This pilot study will evaluate whether the app increases knowledge of the correct use of special blood components.</p>
                
               </div>
@@ -348,7 +352,7 @@
                       </div>
                     </div>
                   </div>
-                  <div data-bind="visible: (currentwork() !== '-1' && (pastexperience() > -1 || currentexperience() > -1)) || pastwork() == '2'">
+                  <div data-bind="visible: (currentwork() !== '-1' && (pastexperience() > -1 || currentexperience() > -1)) || pastwork() == '0' || pastwork() == '2'">
                     <h3>4. How often do you work with patients who require CMV-negative or irradiated blood components?</h3>
                     <select data-bind="value: frequency">
                       <option value="-1">Please select</option>
@@ -386,8 +390,10 @@
               </p> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="click: $root.questionBank1.moveNext">Next page</a>
             </div> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted() && $root.questionBank1.currentPage() ==  $root.questionBank1.pageCount(), click: $root.nextSection">Next section</a>
           </div>
-          <div data-bind="visible: section() == 2" style="border-bottom: 1px solid black; width: 100%; padding: 5px; top: 0px; left: 0px; background: white; margin: 0px;">
-            <h3 style="margin: 0px">Take a moment to review the aid</h3> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="click: $root.nextSection" data-inline="true">Next section</a>
+          <div data-bind="visible: section() == 2" style="height: 150px;  background: white; box-shadow: 0px 0px 10px 10px #fff;">
+            <h3 style="margin: 0px">Instructions</h3>
+            <p style="margin: 0px">Please take a couple of minutes to explore the <span data-bind="visible: treatment() == 'app'">Special Blood Request app (below)</span><span data-bind="visible: treatment() == 'lothian'">current NHS Lothian hospital guidelines</span>.
+            <a href="#" style="margin:0px" class="positive" data-theme="b" data-role="button" data-bind="click: $root.nextSection" data-inline="true">Next</a> </p>
           </div>
           <div data-bind="visible: section() == 3">
             <p data-bind="text: questionHeading2()[$root.questionBank2.currentPage()-1]"></p>
@@ -968,7 +974,7 @@
             alert("Search term must be two characters or more");
           }
         };
-        self.section = ko.observable(getUrlParameter('section') || -1);
+        self.section = ko.observable(getUrlParameter('section') || 2);
         self.hospital = ko.observable("");
         self.position = ko.observable("");
         self.otherposition = ko.observable("");
@@ -991,9 +997,9 @@
         self.sus8 = ko.observable("");
         self.sus9 = ko.observable("");
         self.sus10 = ko.observable("");
-        self.treatment = ko.observable(getUrlParameter('treatment') || "lothian");
+        self.treatment = ko.observable(getUrlParameter('treatment') || "app");
         self.questionHeading = ko.observableArray(["1. Is the statement true or false?", "2. What are risk factors for TA-GvHD?", "3. What are common errors involving special components?", "4. What is the correct blood component specification?"]);
-        self.questionHeading2 = ko.observableArray(["1. Is the statement true or false? (1/3)", "1. Is the statement true or false? (2/3)", "1. Is the statement true or false? (3/3)", "2. What are risk factors for TA-GvHD? (1/3)", "2. What are risk factors for TA-GvHD? (2/3)", "2. What are risk factors for TA-GvHD? (3/3)", "3. What are common errors involving special components? (1/3)", "3. What are common errors involving special components? (2/3)", "3. What are common errors involving special components? (3/3)", "4. What is the correct blood component specification? (1/3)", "4. What is the correct blood component specification? (2/3)", "4. What is the correct blood component specification? (3/3)"]);
+        self.questionHeading2 = ko.observableArray(["5a. Is the statement true or false?", "5b. Is the statement true or false?", "5c. Is the statement true or false?", "6a. What are risk factors for TA-GvHD?", "6b. What are risk factors for TA-GvHD?", "6c. What are risk factors for TA-GvHD?", "7a. What are common errors involving special components?", "7b. What are common errors involving special components?", "7c. What are common errors involving special components?", "8a. What is the correct blood component specification?", "8b. What is the correct blood component specification?", "8c. What is the correct blood component specification?"]);
         self.questionBank1 = ko.observableArray(questions.theme1.splice(0, 3).concat(questions.theme2.splice(0, 3)).concat(questions.theme3.splice(0, 3)).concat(questions.theme4.splice(0, 3))).extend({
           paging: 3
         });
@@ -1025,7 +1031,7 @@
           return passed;
         });
         self.appCode = ko.computed(function() {
-          var iframeheight = $( window ).height() - $("#questioncontainer").outerHeight() - 250;
+          var iframeheight = $( window ).height() - $("#questioncontainer").outerHeight() - 150;
           var code = '<iframe src="http://optimalblooduse.eu/app/#front" width="100%" height="' + iframeheight + 'px"></iframe>';
           if ((self.section() == 2 || self.section() == 3) && self.treatment() == 'app') return code;
           else return;
