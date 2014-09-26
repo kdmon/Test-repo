@@ -405,7 +405,7 @@
             <a href="#" style="margin:0px" class="positive" data-theme="b" data-role="button" data-bind="click: $root.nextSection" data-inline="true">Done</a> </p>
           </div>
           <div data-bind="visible: section() == 3">
-            <p class="smallquestion" data-bind="text: questionHeading2()[$root.questionBank2.currentPage()-1]"></p>
+            <p class="smallquestion"><b data-bind="text: questionHeading2()[$root.questionBank2.currentPage()-1]"></b> You may refer to the <span data-bind="visible: treatment() != 'app'">guidelines</span> <span data-bind="visible: treatment() == 'app'">app</span> below when answering.</p>
             <ul style="margin: 0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank2.currentPageData">
               <li class="statement" data-bind="css: {completed: selected() !== 'Please select'}">
                 <span data-bind="text: statement"></span> <i class="fa fa-certificate" style="color: red;" data-bind="visible: selected() == 'Please select'"></i>
@@ -425,7 +425,6 @@
             <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="visible: searchterm(), click: clearsearch">x</a>
             <input class="searchbar" style="width: 60%" placeholder="Search guidelines" type="text" data-bind="value: searchterm, valueUpdate: 'keypress'">
           </div>
-          <hr/>
           <h3><u>INTRODUCTION</u>
           </h3>
           <p>This guideline is for all staff involved in prescribing, supplying and administering blood and blood components throughout Greater Glasgow and Clyde Health Board (GG&amp;C). It should be used in conjunction with the GG&amp;C Clinical Transfusion Policy. The aim of the Clinical Transfusion policy is to ensure that the <b>right</b> blood is given to the <b>right</b> patient at the <b>right</b> time, <b>every</b> time. This policy focuses on those patients who have a special requirement for transfusion and it aims:</p>
@@ -990,7 +989,7 @@
         self.sus8 = ko.observable("");
         self.sus9 = ko.observable("");
         self.sus10 = ko.observable("");
-        self.treatment = ko.observable(getUrlParameter('treatment') || "ggc");
+        self.treatment = ko.observable(getUrlParameter('treatment') || "app");
         self.questionHeading = ko.observableArray(["1. Is the statement true or false?", "2. What are risk factors for TA-GvHD?", "3. What are common errors involving special components?", "4. What is the correct blood component specification?"]);
         self.questionHeading2 = ko.observableArray(["5a. Is the statement true or false?", "5b. Is the statement true or false?", "5c. Is the statement true or false?", "6a. What are risk factors for TA-GvHD?", "6b. What are risk factors for TA-GvHD?", "6c. What are risk factors for TA-GvHD?", "7a. What are common errors involving special components?", "7b. What are common errors involving special components?", "7c. What are common errors involving special components?", "8a. What is the correct blood component specification?", "8b. What is the correct blood component specification?", "8c. What is the correct blood component specification?"]);
         self.questionBank1 = ko.observableArray(questions.theme1.splice(0, 3).concat(questions.theme2.splice(0, 3)).concat(questions.theme3.splice(0, 3)).concat(questions.theme4.splice(0, 3))).extend({
