@@ -419,7 +419,7 @@
         <div data-bind="visible: section() > 0 && section() !== '2'" style="border: 0px solid #aaa; background: #EFE;">
           <p id="progressbar" data-bind="style: {width: progress() + 1 + '%'}, text: progress() + 1 + '% completed' "></p>
         </div>
-        <div data-bind="visible: (section() == 2 || section() == 3) && treatment() == 'ggc'" id="ggc" style="margin-top: 100px; padding: 10px;border: 0px; border-top: 5px solid black;"> <i>Extract from NHS Greater Glasgow and Clyde Blood Transfusion Special Requirements Guideline (March 2013, issue 1), pages 1-8:</i>
+        <div data-bind="visible: (section() == 2 || section() == 3) && treatment() == 'ggc'" id="ggc"> <i>Extract from NHS Greater Glasgow and Clyde Blood Transfusion Special Requirements Guideline (March 2013, issue 1), pages 1-8:</i>
           <div> <a href="#" style="position: absolute; margin-top:0px; right: 0px;" data-role="button" data-inline="true" data-bind="click: findall"><i class="fa fa-search"></i></a>
             <a href="#" style="position: absolute; margin-top:0px; left: 10px;" data-role="button" data-inline="true" data-bind="visible: searchterm(), click: clearsearch">x</a>
             <input class="searchbar" style="margin-left: 2em;" placeholder="Search guidelines" type="text" data-bind="value: searchterm, valueUpdate: 'keypress'">
@@ -575,7 +575,7 @@
                 </li>
               </ol>
         </div>
-        <div data-bind="visible: (section() == 2 || section() == 3) && treatment() == 'lothian'" style=" padding: 10px; border: 0px; border-top: 5px solid black;" id="lothian"> <i>Extract from NHS Lothian, Blood Transfusion Clinical Policy and Procedures 2013 (v.4), Appendic C: Special Requirements, pages 45-46:</i>
+        <div data-bind="visible: (section() == 2 || section() == 3) && treatment() == 'lothian'" id="lothian"> <i>Extract from NHS Lothian, Blood Transfusion Clinical Policy and Procedures 2013 (v.4), Appendic C: Special Requirements, pages 45-46:</i>
           <h3>Irradiated Components</h3>
           <p>For at-risk patients, all red cell, platelet and granulocyte concentrates should be irradiated. It is not necessary to irradiate FFP, cryoprecipitate or fractionated plasma products.</p>
           <ul>
