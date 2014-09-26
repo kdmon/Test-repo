@@ -420,9 +420,10 @@
           <p id="progressbar" data-bind="style: {width: progress() + 1 + '%'}, text: progress() + 1 + '% completed' "></p>
         </div>
         <div data-bind="visible: (section() == 2 || section() == 3) && treatment() == 'ggc'" id="ggc"> <i>Extract from NHS Greater Glasgow and Clyde Blood Transfusion Special Requirements Guideline (March 2013, issue 1), pages 1-8:</i>
-          <div> <a href="#" style="position: absolute; margin-top:0px; right: 0px;" data-role="button" data-inline="true" data-bind="click: findall"><i class="fa fa-search"></i></a>
-            <a href="#" style="position: absolute; margin-top:0px; left: 10px;" data-role="button" data-inline="true" data-bind="visible: searchterm(), click: clearsearch">x</a>
-            <input class="searchbar" style="margin-left: 2em;" placeholder="Search guidelines" type="text" data-bind="value: searchterm, valueUpdate: 'keypress'">
+          <div>
+            <a href="#" style="float: right;" data-role="button" data-inline="true" data-bind="click: findall"><i class="fa fa-search"></i></a>
+            <a href="#" style="float: right;" data-role="button" data-inline="true" data-bind="visible: searchterm(), click: clearsearch">x</a>
+            <input class="searchbar" placeholder="Search guidelines" type="text" data-bind="value: searchterm, valueUpdate: 'keypress'">
           </div>
           <hr/>
           <h3><u>INTRODUCTION</u>
