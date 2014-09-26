@@ -400,7 +400,7 @@
               </p> <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="click: $root.questionBank1.moveNext">Next page</a>
             </div> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted() && $root.questionBank1.currentPage() ==  $root.questionBank1.pageCount(), click: $root.nextSection">Next section</a>
           </div>
-          <div data-bind="visible: section() == 2" style="height: 150px;  background: white; box-shadow: 0px 0px 10px 10px #fff;">
+          <div data-bind="visible: section() == 2" style="padding-bottom: 0.5em; margin-bottom: 2em; background: white; box-shadow: 0px 0px 10px 10px #fff;">
             <p style="margin: 0px">Please take some time to explore the <span data-bind="visible: treatment() == 'app'">Special Blood Request app (below)</span><span data-bind="visible: treatment() == 'lothian'">current NHS Lothian hospital guidelines</span><span data-bind="visible: treatment() == 'ggc'">proposed harmonised NHS Scotland hospital guidelines</span>. Press Done when you're ready.
             <a href="#" style="margin:0px" class="positive" data-theme="b" data-role="button" data-bind="click: $root.nextSection" data-inline="true">Done</a> </p>
           </div>
@@ -419,11 +419,11 @@
         <div data-bind="visible: section() > 0 && section() !== '2'" style="border: 0px solid #aaa; background: #EFE;">
           <p id="progressbar" data-bind="style: {width: progress() + 1 + '%'}, text: progress() + 1 + '% completed' "></p>
         </div>
-        <div data-bind="visible: (section() == 2 || section() == 3) && treatment() == 'ggc'" id="ggc"> <i>Extract from NHS Greater Glasgow and Clyde Blood Transfusion Special Requirements Guideline (March 2013, issue 1), pages 1-8:</i>
+        <div style="background: white; box-shadow: 0px 0px 10px 10px #fff;" data-bind="visible: (section() == 2 || section() == 3) && treatment() == 'ggc'" id="ggc">
           <div>
-            <a href="#" style="float: right;" data-role="button" data-inline="true" data-bind="click: findall"><i class="fa fa-search"></i></a>
-            <a href="#" style="float: right;" data-role="button" data-inline="true" data-bind="visible: searchterm(), click: clearsearch">x</a>
-            <input class="searchbar" placeholder="Search guidelines" type="text" data-bind="value: searchterm, valueUpdate: 'keypress'">
+            <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="click: findall"><i class="fa fa-search"></i></a>
+            <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="visible: searchterm(), click: clearsearch">x</a>
+            <input class="searchbar" style="width: 60%" placeholder="Search guidelines" type="text" data-bind="value: searchterm, valueUpdate: 'keypress'">
           </div>
           <hr/>
           <h3><u>INTRODUCTION</u>
@@ -575,8 +575,10 @@
                 <li>Advisory Committee on the Safety of Blood, Tissues and Organs (SaBTO) <a href="http://www.dh.gov.uk/prod_consum_dh/groups/dh_digitalassets/@dh/@en/documents/digitalasset/dh_133086.pdf" target="_blank">http://www.dh.gov.uk/prod_consum_dh/groups/dh_digitalassets/@dh/@en/documents/digitalasset/dh_133086.pdf</a>
                 </li>
               </ol>
+              <i>Extract from NHS Greater Glasgow and Clyde Blood Transfusion Special Requirements Guideline (March 2013, issue 1), pages 1-8.</i>
         </div>
-        <div data-bind="visible: (section() == 2 || section() == 3) && treatment() == 'lothian'" id="lothian"> <i>Extract from NHS Lothian, Blood Transfusion Clinical Policy and Procedures 2013 (v.4), Appendic C: Special Requirements, pages 45-46:</i>
+        <div style="background: white; box-shadow: 0px 0px 10px 10px #fff;" data-bind="visible: (section() == 2 || section() == 3) && treatment() == 'lothian'" id="lothian">
+          <i>Extract from NHS Lothian, Blood Transfusion Clinical Policy and Procedures 2013 (v.4), Appendic C: Special Requirements, pages 45-46:</i>
           <h3>Irradiated Components</h3>
           <p>For at-risk patients, all red cell, platelet and granulocyte concentrates should be irradiated. It is not necessary to irradiate FFP, cryoprecipitate or fractionated plasma products.</p>
           <ul>
@@ -988,7 +990,7 @@
         self.sus8 = ko.observable("");
         self.sus9 = ko.observable("");
         self.sus10 = ko.observable("");
-        self.treatment = ko.observable(getUrlParameter('treatment') || "app");
+        self.treatment = ko.observable(getUrlParameter('treatment') || "ggc");
         self.questionHeading = ko.observableArray(["1. Is the statement true or false?", "2. What are risk factors for TA-GvHD?", "3. What are common errors involving special components?", "4. What is the correct blood component specification?"]);
         self.questionHeading2 = ko.observableArray(["5a. Is the statement true or false?", "5b. Is the statement true or false?", "5c. Is the statement true or false?", "6a. What are risk factors for TA-GvHD?", "6b. What are risk factors for TA-GvHD?", "6c. What are risk factors for TA-GvHD?", "7a. What are common errors involving special components?", "7b. What are common errors involving special components?", "7c. What are common errors involving special components?", "8a. What is the correct blood component specification?", "8b. What is the correct blood component specification?", "8c. What is the correct blood component specification?"]);
         self.questionBank1 = ko.observableArray(questions.theme1.splice(0, 3).concat(questions.theme2.splice(0, 3)).concat(questions.theme3.splice(0, 3)).concat(questions.theme4.splice(0, 3))).extend({
