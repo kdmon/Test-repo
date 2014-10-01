@@ -95,6 +95,13 @@
         margin: 1%;
         display: inline-block;
       }
+      #appcontainer {
+        border-top: 8px dashed #aaa;
+      }
+      .guidelinecontainer {
+        background: white; 
+        box-shadow: 0px 0px 10px 10px #fff;"
+      }
       #progressbar {
         font-weight: bold;
         padding: 2px;
@@ -425,9 +432,8 @@
             <br/>
           </div>
           <div data-bind="visible: section() == 2">
-            <p style="margin: 0px">Please take some time to explore the <span data-bind="visible: treatment() == 'app'">Special Blood Request app (below)</span><span data-bind="visible: treatment() == 'lothian'">current NHS Lothian hospital guidelines</span><span data-bind="visible: treatment() == 'ggc'">proposed harmonised NHS Scotland hospital guidelines</span>. <b>Press 'Done' when you're ready.</b>
-            <a href="#" style="margin:0px" class="positive" data-theme="b" data-role="button" data-bind="click: $root.nextSection" data-inline="true">Done</a> </p>
-            <br/>
+            <p style="margin-bottom: 0px">Please take some time to explore the <span data-bind="visible: treatment() == 'app'">Special Blood Request app (below)</span><span data-bind="visible: treatment() == 'lothian'">current NHS Lothian hospital guidelines</span><span data-bind="visible: treatment() == 'ggc'">proposed harmonised NHS Scotland hospital guidelines</span>. <b>Press 'Done' when you're ready.</b></p>
+            <a href="#" style="margin:0px;" class="positive" data-theme="b" data-role="button" data-bind="click: $root.nextSection" data-inline="true">Done</a>
           </div>
           
           <div data-bind="visible: section() == 3">
@@ -453,7 +459,7 @@
         <div data-bind="visible: section() < -10 && section() !== 2" style="border: 0px solid #aaa; background: #EFE;">
           <p id="progressbar" data-bind="style: {width: progress() + 1 + '%'}, text: progress() + 1 + '% completed' "></p>
         </div>
-        <div style="background: white; box-shadow: 0px 0px 10px 10px #fff;" data-bind="visible: (section() == 2 || section() == 3) && treatment() == 'ggc'" id="ggc">
+        <div class="guidelinecontainer" data-bind="visible: (section() == 2 || section() == 3) && treatment() == 'ggc'" id="ggc">
           <div>
             <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="click: findall"><i class="fa fa-search"></i></a>
             <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="visible: searchterm(), click: clearsearch">x</a>
@@ -610,7 +616,7 @@
               </ol>
               <i>Extract from NHS Greater Glasgow and Clyde Blood Transfusion Special Requirements Guideline (March 2013, issue 1), pages 1-8.</i>
         </div>
-        <div style="background: white; box-shadow: 0px 0px 10px 10px #fff;" data-bind="visible: (section() == 2 || section() == 3) && treatment() == 'lothian'" id="lothian">
+        <div class="guidelinecontainer" data-bind="visible: (section() == 2 || section() == 3) && treatment() == 'lothian'" id="lothian">
 
           <div>
             <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="click: findall"><i class="fa fa-search"></i></a>
@@ -743,7 +749,7 @@
           </div>
         </div>
       </div>
-      <div id="appcontainer" data-bind="html: appCode"></div>
+      <div id="appcontainer" data-bind="html: appCode, visible: treatment() == 'app'"></div>
       
     </div>
     <script type='text/javascript'>
@@ -1023,7 +1029,7 @@
         self.sus8 = ko.observable("");
         self.sus9 = ko.observable("");
         self.sus10 = ko.observable("");
-        self.treatment = ko.observable(getUrlParameter('treatment') || "app");
+        self.treatment = ko.observable(getUrlParameter('treatment') || "ggc");
         self.questionHeading = ko.observableArray(["1. Are the statements true or false?", "2. What are risk factors for TA-GvHD?", "3. What are common errors involving special components?", "4. What is the correct blood component specification?"]);
         self.questionHeading2 = ko.observableArray(["5. Are the statements true or false?", "6. What are risk factors for TA-GvHD?", "7. What are common errors involving special blood components?", "8. What is the correct blood component specification?"]);
         self.questionBank1 = ko.observableArray(questions.theme1.splice(0, 3).concat(questions.theme2.splice(0, 3)).concat(questions.theme3.splice(0, 3)).concat(questions.theme4.splice(0, 3))).extend({
@@ -1057,7 +1063,7 @@
           return passed;
         });
         self.appCode = ko.computed(function() {
-            var iframeheight = $( window ).height() - $("#maincontainer").outerHeight() - 10;
+            var iframeheight =  $( window ).height() - 20; // $( window ).height() - $("#maincontainer").outerHeight() - 10;
             var code = '<iframe src="http://optimalblooduse.eu/app/" width="100%" height="' + iframeheight + 'px"></iframe>';
             if ((self.section() == 2 || self.section() == 3) && self.treatment() == 'app') return code;
             else return;
