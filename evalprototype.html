@@ -819,6 +819,7 @@
           target.moveNext = function() {
             model.pagenow(model.pagenow() + 1);
             target.currentPage(target.currentPage() + 1);
+            $('html, body').stop();
             $(window).scrollTop(0);
           };
           target.moveLast = function() {
@@ -1108,6 +1109,7 @@
         self.nextSection = function() {
           self.pagenow(self.pagenow() + 1);
           self.section(self.section() + 1);
+          $('html, body').stop();
           $(window).scrollTop(0);
         }
         self.clearsearch = function() {
