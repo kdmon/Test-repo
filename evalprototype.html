@@ -423,6 +423,7 @@
           <div data-bind="visible: section() == 2">
             <p style="margin: 0px">Please take some time to explore the <span data-bind="visible: treatment() == 'app'">Special Blood Request app (below)</span><span data-bind="visible: treatment() == 'lothian'">current NHS Lothian hospital guidelines</span><span data-bind="visible: treatment() == 'ggc'">proposed harmonised NHS Scotland hospital guidelines</span>. <b>Press 'Done' when you're ready.</b>
             <a href="#" style="margin:0px" class="positive" data-theme="b" data-role="button" data-bind="click: $root.nextSection" data-inline="true">Done</a> </p>
+            <br/>
           </div>
           
           <div data-bind="visible: section() == 3">
@@ -452,7 +453,7 @@
           <div>
             <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="click: findall"><i class="fa fa-search"></i></a>
             <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="visible: searchterm(), click: clearsearch">x</a>
-            <input class="searchbar" style="width: calc(100% - 120px);" placeholder="Search guidelines" type="text" data-bind="value: searchterm, valueUpdate: 'keypress'">
+            <input class="searchbar" placeholder="Search guidelines" type="text" data-bind="value: searchterm, valueUpdate: 'keypress', style: {width: searchterm() ? 'calc(100% - 120px)' : 'calc(100% - 65px)'}">
           </div>
           <h3><u>INTRODUCTION</u>
           </h3>
@@ -610,7 +611,7 @@
           <div>
             <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="click: findall"><i class="fa fa-search"></i></a>
             <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="visible: searchterm(), click: clearsearch">x</a>
-            <input class="searchbar" style="width: calc(100% - 120px);" placeholder="Search guidelines" type="text" data-bind="value: searchterm, valueUpdate: 'keypress'">
+            <input class="searchbar" placeholder="Search guidelines" type="text" data-bind="value: searchterm, valueUpdate: 'keypress', style: {width: searchterm() ? 'calc(100% - 120px)' : 'calc(100% - 65px)'}">
           </div>
 
           <h3>Irradiated Components</h3>
@@ -993,7 +994,7 @@
       };
       var ViewModel = function() {
         var self = this;
-        self.section = ko.observable(getUrlParameter('section') || -1);
+        self.section = ko.observable(getUrlParameter('section') || 3);
         self.hospital = ko.observable("");
         self.position = ko.observable("");
         self.otherposition = ko.observable("");
