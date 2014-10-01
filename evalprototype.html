@@ -1009,7 +1009,7 @@
       var ViewModel = function() {
         var self = this;
         self.pagenow = ko.observable(1);
-        self.section = ko.observable(getUrlParameter('section') || 2);
+        self.section = ko.observable(getUrlParameter('section') || -1);
         self.hospital = ko.observable("");
         self.position = ko.observable("");
         self.otherposition = ko.observable("");
