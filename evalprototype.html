@@ -375,7 +375,7 @@
                       <option value="0">Don't know</option>
                     </select>
                     <div data-bind="visible: frequency() > -1">
-                      <h3>Thank you. You are eligible to participate in the study.</h3>
+                      <h3>You are eligible to participate in the study.</h3>
                       <p>Press the green button to start the knowledge test.</p> <a href="#" data-icon="carat-r" data-iconpos="right" class="positive" data-role="button" data-bind="click: $root.nextSection">Begin test</a>
                     </div>
                   </div>
@@ -404,17 +404,25 @@
             <p style="margin: 0px">Please take some time to explore the <span data-bind="visible: treatment() == 'app'">Special Blood Request app (below)</span><span data-bind="visible: treatment() == 'lothian'">current NHS Lothian hospital guidelines</span><span data-bind="visible: treatment() == 'ggc'">proposed harmonised NHS Scotland hospital guidelines</span>. <b>Press Done when you're ready.</b>
             <a href="#" style="margin:0px" class="positive" data-theme="b" data-role="button" data-bind="click: $root.nextSection" data-inline="true">Done</a> </p>
           </div>
+          
           <div data-bind="visible: section() == 3">
-            <p class="smallquestion"><b data-bind="text: questionHeading2()[$root.questionBank2.currentPage()-1]"></b> You may refer to the <span data-bind="visible: treatment() != 'app'">guidelines</span> <span data-bind="visible: treatment() == 'app'">app</span> below when answering.</p>
-            <ul style="margin: 0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank2.currentPageData">
+            <h3 data-bind="text: questionHeading2()[$root.questionBank2.currentPage()-1]"></h3>
+            <p>You may refer to the <span data-bind="visible: treatment() != 'app'">guidelines</span> <span data-bind="visible: treatment() == 'app'">app</span> (shown below) when answering.</p>
+            <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank2.currentPage() > 1, click: $root.questionBank2.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
+            <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank2.currentPageData">
               <li class="statement" data-bind="css: {completed: selected() !== 'Please select'}">
                 <span data-bind="text: statement"></span> <i class="fa fa-certificate" style="color: red;" data-bind="visible: selected() == 'Please select'"></i>
                 <br/>
-                <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank2.pageCompleted() && $root.questionBank2.currentPage() <  $root.questionBank2.pageCount(), click: $root.questionBank2.moveNext" data-inline="true">Next</a>
-                <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank2.pageCompleted() && $root.questionBank2.currentPage() == $root.questionBank2.pageCount(), click: $root.nextSection" data-inline="true">Next section</a>
+                <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select>
               </li>
             </ul>
+            <p data-bind="visible: !$root.questionBank2.pageCompleted();">You must answer all mandatory questions (<i class="fa fa-certificate" style="color: red;"></i>) before proceeding.</p>
+            <div data-bind="visible: $root.questionBank2.pageCompleted() && $root.questionBank2.currentPage() <  $root.questionBank2.pageCount()">
+              <p><b>Review your answers and press the green button to continue.</b>
+              </p> <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="click: $root.questionBank2.moveNext">Next page</a>
+            </div> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank2.pageCompleted() && $root.questionBank2.currentPage() ==  $root.questionBank2.pageCount(), click: $root.nextSection">Next section</a>
           </div>
+          
         </div>
         <div data-bind="visible: section() > 0 && section() !== '2'" style="border: 0px solid #aaa; background: #EFE;">
           <p id="progressbar" data-bind="style: {width: progress() + 1 + '%'}, text: progress() + 1 + '% completed' "></p>
@@ -423,7 +431,7 @@
           <div>
             <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="click: findall"><i class="fa fa-search"></i></a>
             <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="visible: searchterm(), click: clearsearch">x</a>
-            <input class="searchbar" style="width: 60%" placeholder="Search guidelines" type="text" data-bind="value: searchterm, valueUpdate: 'keypress'">
+            <input class="searchbar" style="width: calc(100% - 120px);" placeholder="Search guidelines" type="text" data-bind="value: searchterm, valueUpdate: 'keypress'">
           </div>
           <h3><u>INTRODUCTION</u>
           </h3>
@@ -581,7 +589,7 @@
           <div>
             <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="click: findall"><i class="fa fa-search"></i></a>
             <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="visible: searchterm(), click: clearsearch">x</a>
-            <input class="searchbar" style="width: 60%" placeholder="Search guidelines" type="text" data-bind="value: searchterm, valueUpdate: 'keypress'">
+            <input class="searchbar" style="width: calc(100% - 120px);" placeholder="Search guidelines" type="text" data-bind="value: searchterm, valueUpdate: 'keypress'">
           </div>
 
           <h3>Irradiated Components</h3>
@@ -964,7 +972,7 @@
       };
       var ViewModel = function() {
         var self = this;
-        self.section = ko.observable(getUrlParameter('section') || -1);
+        self.section = ko.observable(getUrlParameter('section') || 2);
         self.hospital = ko.observable("");
         self.position = ko.observable("");
         self.otherposition = ko.observable("");
@@ -988,13 +996,13 @@
         self.sus9 = ko.observable("");
         self.sus10 = ko.observable("");
         self.treatment = ko.observable(getUrlParameter('treatment') || "lothian");
-        self.questionHeading = ko.observableArray(["1. Is the statement true or false?", "2. What are risk factors for TA-GvHD?", "3. What are common errors involving special components?", "4. What is the correct blood component specification?"]);
-        self.questionHeading2 = ko.observableArray(["5a. Is the statement true or false?", "5b. Is the statement true or false?", "5c. Is the statement true or false?", "6a. What are risk factors for TA-GvHD?", "6b. What are risk factors for TA-GvHD?", "6c. What are risk factors for TA-GvHD?", "7a. What are common errors involving special components?", "7b. What are common errors involving special components?", "7c. What are common errors involving special components?", "8a. What is the correct blood component specification?", "8b. What is the correct blood component specification?", "8c. What is the correct blood component specification?"]);
+        self.questionHeading = ko.observableArray(["1. Are the statements true or false?", "2. What are risk factors for TA-GvHD?", "3. What are common errors involving special components?", "4. What is the correct blood component specification?"]);
+        self.questionHeading2 = ko.observableArray(["5. Are the statements true or false?", "6. What are risk factors for TA-GvHD?", "7. What are common errors involving special blood components?", "8. What is the correct blood component specification?"]);
         self.questionBank1 = ko.observableArray(questions.theme1.splice(0, 3).concat(questions.theme2.splice(0, 3)).concat(questions.theme3.splice(0, 3)).concat(questions.theme4.splice(0, 3))).extend({
           paging: 3
         });
         self.questionBank2 = ko.observableArray(questions.theme1.splice(0, 3).concat(questions.theme2.splice(0, 3)).concat(questions.theme3.splice(0, 3)).concat(questions.theme4.splice(0, 3))).extend({
-          paging: 1
+          paging: 3
         });
         self.progress = ko.computed(function() {
           var count = 0;
