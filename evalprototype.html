@@ -427,8 +427,14 @@
             <p data-bind="visible: !$root.questionBank1.pageCompleted();">You must answer all mandatory questions (marked <i class="fa fa-certificate" style="color: red;"></i>) before proceeding.</p>
             <div data-bind="reveal: $root.questionBank1.pageCompleted() && $root.questionBank1.currentPage() <  $root.questionBank1.pageCount()">
               <p><b>Review your answers and press the green button to continue.</b>
-              </p> <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="click: $root.questionBank1.moveNext">Next page</a>
-            </div> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted() && $root.questionBank1.currentPage() ==  $root.questionBank1.pageCount(), click: $root.nextSection">Next section</a>
+              </p>
+              <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="click: $root.questionBank1.moveNext">Next page</a>
+            </div>
+            <div data-bind="reveal: $root.questionBank1.pageCompleted() && $root.questionBank1.currentPage() ==  $root.questionBank1.pageCount()">
+              <p><b>Review your answers and press the green button to continue.</b>
+              </p>
+              <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="click: $root.nextSection">Next section</a>
+            </div>
             <br/>
           </div>
           <div data-bind="visible: section() == 2">
@@ -450,8 +456,14 @@
             <p data-bind="visible: !$root.questionBank2.pageCompleted();">You must answer all mandatory questions (<i class="fa fa-certificate" style="color: red;"></i>) before proceeding.</p>
             <div data-bind="reveal: $root.questionBank2.pageCompleted() && $root.questionBank2.currentPage() <  $root.questionBank2.pageCount()">
               <p><b>Review your answers and press the green button to continue.</b>
-              </p> <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="click: $root.questionBank2.moveNext">Next page</a>
-            </div> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank2.pageCompleted() && $root.questionBank2.currentPage() ==  $root.questionBank2.pageCount(), click: $root.nextSection">Next section</a>
+              </p>
+              <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="click: $root.questionBank2.moveNext">Next page</a>
+            </div>
+            <div data-bind="reveal: $root.questionBank2.pageCompleted() && $root.questionBank2.currentPage() ==  $root.questionBank2.pageCount()">
+              <p><b>Review your answers and press the green button to continue.</b>
+              </p>
+              <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="click: $root.nextSection">Next section</a>
+            </div>
             <br/>
           </div>
         </div>
@@ -807,6 +819,7 @@
           target.moveNext = function() {
             model.pagenow(model.pagenow() + 1);
             target.currentPage(target.currentPage() + 1);
+            $(window).scrollTop(0);
           };
           target.moveLast = function() {
             target.currentPage(target.pageCount());
@@ -830,13 +843,14 @@
           update: function(element, valueAccessor) {
               // Whenever the value subsequently changes, slowly fade the element in or out
               var value = valueAccessor();
-              ko.utils.unwrapObservable(value) ? $(element).fadeIn('fast') : $(element).fadeOut('fast');
-              $('html, body').stop().animate({
+              ko.utils.unwrapObservable(value) ? $(element).fadeIn('slow') : $(element).fadeOut('slow');
+              
+              if (ko.utils.unwrapObservable(value)) $('html, body').stop().animate({
         	        'scrollTop':  $(element).offset().top
         	    }, 1000, 'swing');
         	    
               // $('html, body').animate({scrollTop: $(element).offset().top}, 2000);
-              window.scrollTo(0, $(element).offset().top);
+              // window.scrollTo(0, $(element).offset().top);
           }
       };
 
