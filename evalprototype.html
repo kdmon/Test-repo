@@ -229,12 +229,12 @@
               <option value="wgh">Western General Hospital</option>
               <option value="other">None of the above</option>
             </select>
-            <div data-bind="visible: hospital() !== ''">
-              <div data-bind="visible: hospital() == 'other'">
+            <div data-bind="reveal: hospital() !== ''">
+              <div data-bind="reveal: hospital() == 'other'">
                 <h2 style="color: #A00">Ineligible</h2>
                 <p>Sorry, only staff working at the hospitals listed above are eligible to participate in this study. If you recently moved hospital, please select your previous hospital.</p>
               </div>
-              <div data-bind="visible: hospital() !== 'other'">
+              <div data-bind="reveal: hospital() !== 'other'">
                 <h3>2. What is your role?</h3>
                 <select data-bind="value: position">
                   <option value="">Please select</option>
@@ -245,12 +245,12 @@
                   <option value="rn">Registered Nurse</option>
                   <option value="ot">Other</option>
                 </select>
-                <div data-bind="visible: position() !== ''" style="margin-left: 2em;">
-                  <div data-bind="visible: (position() == 'ot' || position() == 'bb')">
+                <div data-bind="reveal: position() !== ''" style="margin-left: 2em;">
+                  <div data-bind="reveal: (position() == 'ot' || position() == 'bb')">
                     <h3>Please enter your job title:</h3>
                     <input data-bind="value: otherposition, valueUpdate: 'keyup'">
                   </div>
-                  <div data-bind="visible: position() == 'dr'">
+                  <div data-bind="reveal: position() == 'dr'">
                     <h3>What is your grade?</h3>
                     <select data-bind="value: grade">
                       <option value="">Please select</option>
@@ -260,7 +260,7 @@
                       <option value="consultant">Consultant</option>
                     </select>
                   </div>
-                  <div data-bind="visible: (position() !== '' && position() !== 'dr' && position() !== 'ot' && position() !== 'bb') || (position() !== '' && (grade() !== '' || otherposition() !== ''))">
+                  <div data-bind="reveal: (position() !== '' && position() !== 'dr' && position() !== 'ot' && position() !== 'bb') || (position() !== '' && (grade() !== '' || otherposition() !== ''))">
                     <h3>How many years of experience do you have?</h3>
                     <select data-bind="value: experience">
                       <option value="-1">Please select</option>
@@ -309,7 +309,7 @@
                       <option value="42">Don't know</option>
                     </select>
                   </div>
-                  <div data-bind="visible: experience() > -1">
+                  <div data-bind="reveal: experience() > -1">
                     <h3>What is your specialty?</h3>
                     <select data-bind="value: specialty">
                       <option value="">Please select</option>
@@ -334,12 +334,12 @@
                       <option value="dk">Don't know</option>
                     </select>
                   </div>
-                  <div data-bind="visible: specialty() == 'ot'">
+                  <div data-bind="reveal: specialty() == 'ot'">
                     <h3>Please enter your specialty:</h3>
                     <input data-bind="value: otherspecialty">
                   </div>
                 </div>
-                <div data-bind="visible: specialty() !== '' && position() !== ''">
+                <div data-bind="reveal: specialty() !== '' && position() !== ''">
                   <h3>3. Do your current place of work have patients who require CMV-negative or irradiated blood components?</h3>
                   <select data-bind="value: currentwork">
                     <option value="-1">Please select</option>
@@ -347,8 +347,8 @@
                     <option value="1">Yes</option>
                     <option value="2">Don't know</option>
                   </select>
-                  <div data-bind="visible: currentwork() !== '-1'" style="margin-left: 2em;">
-                    <div data-bind="visible: currentwork() == '1'">
+                  <div data-bind="reveal: currentwork() !== '-1'" style="margin-left: 2em;">
+                    <div data-bind="reveal: currentwork() == '1'">
                       <h3>How long have you been with your current workplace?</h3>
                       <select data-bind="value: currentexperience">
                         <option value="-1">Please select</option>
@@ -362,7 +362,7 @@
                         <option value="0">Don't know</option>
                       </select>
                     </div>
-                    <div data-bind="visible: currentexperience() == '0' || currentwork() == '0' || currentwork() == '2'">
+                    <div data-bind="reveal: currentexperience() == '0' || currentwork() == '0' || currentwork() == '2'">
                       <h3>Have you <i>previously</i> been part of a workplace with patients who require CMV-negative or irradiated blood components?</h3>
                       <select data-bind="value: pastwork">
                         <option value="-1">Please select</option>
@@ -370,8 +370,8 @@
                         <option value="1">Yes</option>
                         <option value="2">Don't know</option>
                       </select>
-                      <div data-bind="visible: pastwork() !== '-1'" style="margin-left: 2em;">
-                        <div data-bind="visible: pastwork() == '1'">
+                      <div data-bind="reveal: pastwork() !== '-1'" style="margin-left: 2em;">
+                        <div data-bind="reveal: pastwork() == '1'">
                           <h3>How long did you work there?</h3>
                           <select data-bind="value: pastexperience">
                             <option value="-1">Please select</option>
@@ -388,7 +388,7 @@
                       </div>
                     </div>
                   </div>
-                  <div data-bind="visible: (currentwork() !== '-1' && (pastexperience() > -1 || currentexperience() > -1)) || pastwork() == '0' || pastwork() == '2'">
+                  <div data-bind="reveal: (currentwork() !== '-1' && (pastexperience() > -1 || currentexperience() > -1)) || pastwork() == '0' || pastwork() == '2'">
                     <h3>4. In your current role, how often do you work with patients who require CMV-negative or irradiated blood components?</h3>
                     <select data-bind="value: frequency">
                       <option value="-1">Please select</option>
@@ -404,7 +404,7 @@
                       <option value="1">Never</option>
                       <option value="0">Don't know</option>
                     </select>
-                    <div data-bind="visible: frequency() > -1">
+                    <div data-bind="reveal: frequency() > -1">
                       <h2>You are eligible to participate in the study.</h2>
                       <p>Press the green button to start the knowledge test.</p> <a href="#" data-icon="carat-r" data-iconpos="right" class="positive" data-role="button" data-bind="click: $root.nextSection">Begin test</a>
                     </div>
@@ -425,7 +425,7 @@
               </li>
             </ul>
             <p data-bind="visible: !$root.questionBank1.pageCompleted();">You must answer all mandatory questions (marked <i class="fa fa-certificate" style="color: red;"></i>) before proceeding.</p>
-            <div data-bind="visible: $root.questionBank1.pageCompleted() && $root.questionBank1.currentPage() <  $root.questionBank1.pageCount()">
+            <div data-bind="reveal: $root.questionBank1.pageCompleted() && $root.questionBank1.currentPage() <  $root.questionBank1.pageCount()">
               <p><b>Review your answers and press the green button to continue.</b>
               </p> <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="click: $root.questionBank1.moveNext">Next page</a>
             </div> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank1.pageCompleted() && $root.questionBank1.currentPage() ==  $root.questionBank1.pageCount(), click: $root.nextSection">Next section</a>
@@ -448,7 +448,7 @@
               </li>
             </ul>
             <p data-bind="visible: !$root.questionBank2.pageCompleted();">You must answer all mandatory questions (<i class="fa fa-certificate" style="color: red;"></i>) before proceeding.</p>
-            <div data-bind="visible: $root.questionBank2.pageCompleted() && $root.questionBank2.currentPage() <  $root.questionBank2.pageCount()">
+            <div data-bind="reveal: $root.questionBank2.pageCompleted() && $root.questionBank2.currentPage() <  $root.questionBank2.pageCount()">
               <p><b>Review your answers and press the green button to continue.</b>
               </p> <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="click: $root.questionBank2.moveNext">Next page</a>
             </div> <a href="#" class="positive" data-theme="b" data-role="button" data-bind="visible: $root.questionBank2.pageCompleted() && $root.questionBank2.currentPage() ==  $root.questionBank2.pageCount(), click: $root.nextSection">Next section</a>
@@ -819,6 +819,25 @@
           // Get jQuery Mobile to enhance elements within this element
           $(element).trigger("create");
         }
+      };
+      
+      ko.bindingHandlers.reveal = {
+          init: function(element, valueAccessor) {
+              // Initially set the element to be instantly visible/hidden depending on the value
+              var value = valueAccessor();
+              $(element).toggle(ko.utils.unwrapObservable(value)); // Use "unwrapObservable" so we can handle values that may or may not be observable
+          },
+          update: function(element, valueAccessor) {
+              // Whenever the value subsequently changes, slowly fade the element in or out
+              var value = valueAccessor();
+              ko.utils.unwrapObservable(value) ? $(element).fadeIn('fast') : $(element).fadeOut('fast');
+              $('html, body').stop().animate({
+        	        'scrollTop':  $(element).offset().top
+        	    }, 1000, 'swing');
+        	    
+              // $('html, body').animate({scrollTop: $(element).offset().top}, 2000);
+              window.scrollTo(0, $(element).offset().top);
+          }
       };
 
       function getUrlParameter(sParam) {
