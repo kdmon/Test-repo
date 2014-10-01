@@ -92,7 +92,7 @@
         border: 1px solid  #aaa;
         height: 5px;
         width: 5%;
-        margin-right: 2%;
+        margin: 1%;
         display: inline-block;
       }
       #progressbar {
@@ -129,6 +129,8 @@
         border: 1px #555 solid !important;
         text-shadow: none !important;
         color: black !important;
+        padding-top: 1em;
+        padding-bottom: 1em;
       }
       p {
         font-size: 1.1em;
@@ -142,15 +144,17 @@
       <div data-role="main" id="maincontainer" class="ui-content centered">
         <div id="questionContainer">
           
-          <div style="width: 100%;" data-bind="visible: section() > -1;">
-            <div class="progressbox" data-bind="style: {background : section() > -1 ? 'black' : 'none'}"></div>
-            <div class="progressbox" data-bind="style: {background : section() > 0 ? 'black' : 'none'}"></div>
-            <div class="progressbox" data-bind="style: {background : section() > 1 ? 'black' : 'none'}"></div>
-            <div class="progressbox" data-bind="style: {background : section() > 2 ? 'black' : 'none'}"></div>
-            <div class="progressbox" data-bind="style: {background : section() > 3 ? 'black' : 'none'}"></div>
-            <div class="progressbox" data-bind="style: {background : section() > 4 ? 'black' : 'none'}"></div>
-            <div class="progressbox" data-bind="style: {background : section() > 5 ? 'black' : 'none'}"></div>
-            <div class="progressbox" data-bind="style: {background : section() > 6 ? 'black' : 'none'}"></div>
+          <div style="width: 100%; text-align: center; height: 0px;" data-bind="visible: pagenow() > 1;">
+            <div class="progressbox" data-bind="style: {background : pagenow() > 1 ? 'black' : 'none'}"></div>
+            <div class="progressbox" data-bind="style: {background : pagenow() > 2 ? 'black' : 'none'}"></div>
+            <div class="progressbox" data-bind="style: {background : pagenow() > 3 ? 'black' : 'none'}"></div>
+            <div class="progressbox" data-bind="style: {background : pagenow() > 4 ? 'black' : 'none'}"></div>
+            <div class="progressbox" data-bind="style: {background : pagenow() > 5 ? 'black' : 'none'}"></div>
+            <div class="progressbox" data-bind="style: {background : pagenow() > 6 ? 'black' : 'none'}"></div>
+            <div class="progressbox" data-bind="style: {background : pagenow() > 7 ? 'black' : 'none'}"></div>
+            <div class="progressbox" data-bind="style: {background : pagenow() > 8 ? 'black' : 'none'}"></div>
+            <div class="progressbox" data-bind="style: {background : pagenow() > 9 ? 'black' : 'none'}"></div>
+            <div class="progressbox" data-bind="style: {background : pagenow() > 10 ? 'black' : 'none'}"></div>
           </div>
           
           <div data-bind="visible: section() == -1">
@@ -394,7 +398,7 @@
                       <option value="0">Don't know</option>
                     </select>
                     <div data-bind="visible: frequency() > -1">
-                      <h3>You are eligible to participate in the study.</h3>
+                      <h2>You are eligible to participate in the study.</h2>
                       <p>Press the green button to start the knowledge test.</p> <a href="#" data-icon="carat-r" data-iconpos="right" class="positive" data-role="button" data-bind="click: $root.nextSection">Begin test</a>
                     </div>
                   </div>
@@ -413,7 +417,7 @@
                 <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select>
               </li>
             </ul>
-            <p data-bind="visible: !$root.questionBank1.pageCompleted();">You must answer all mandatory questions (<i class="fa fa-certificate" style="color: red;"></i>) before proceeding.</p>
+            <p data-bind="visible: !$root.questionBank1.pageCompleted();">You must answer all mandatory questions (marked <i class="fa fa-certificate" style="color: red;"></i>) before proceeding.</p>
             <div data-bind="visible: $root.questionBank1.pageCompleted() && $root.questionBank1.currentPage() <  $root.questionBank1.pageCount()">
               <p><b>Review your answers and press the green button to continue.</b>
               </p> <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="click: $root.questionBank1.moveNext">Next page</a>
@@ -792,6 +796,7 @@
             target.currentPage(target.currentPage() - 1);
           };
           target.moveNext = function() {
+            model.pagenow(model.pagenow() + 1);
             target.currentPage(target.currentPage() + 1);
           };
           target.moveLast = function() {
@@ -994,7 +999,8 @@
       };
       var ViewModel = function() {
         var self = this;
-        self.section = ko.observable(getUrlParameter('section') || 3);
+        self.pagenow = ko.observable(1);
+        self.section = ko.observable(getUrlParameter('section') || -1);
         self.hospital = ko.observable("");
         self.position = ko.observable("");
         self.otherposition = ko.observable("");
@@ -1017,7 +1023,7 @@
         self.sus8 = ko.observable("");
         self.sus9 = ko.observable("");
         self.sus10 = ko.observable("");
-        self.treatment = ko.observable(getUrlParameter('treatment') || "lothian");
+        self.treatment = ko.observable(getUrlParameter('treatment') || "app");
         self.questionHeading = ko.observableArray(["1. Are the statements true or false?", "2. What are risk factors for TA-GvHD?", "3. What are common errors involving special components?", "4. What is the correct blood component specification?"]);
         self.questionHeading2 = ko.observableArray(["5. Are the statements true or false?", "6. What are risk factors for TA-GvHD?", "7. What are common errors involving special blood components?", "8. What is the correct blood component specification?"]);
         self.questionBank1 = ko.observableArray(questions.theme1.splice(0, 3).concat(questions.theme2.splice(0, 3)).concat(questions.theme3.splice(0, 3)).concat(questions.theme4.splice(0, 3))).extend({
@@ -1058,6 +1064,7 @@
         }, this, { deferEvaluation: true });
         
         self.nextSection = function() {
+          self.pagenow(self.pagenow() + 1);
           self.section(self.section() + 1);
           $(window).scrollTop(0);
         }
