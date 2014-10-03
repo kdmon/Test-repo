@@ -1543,6 +1543,12 @@
        // Window events
       $(window).resize(formatLayout);
       $(window).on("orientationchange", formatLayout());
+      $(window).keydown(function (e) {
+        // Ctrl-Enter pressed
+        if (e.ctrlKey && (e.keyCode == 13 || keyCode == 10)) {
+          togglePreview();
+        }
+      });
       window.onload = function () {toggleLoading(false); restorePreferences(); };
       window.onbeforeunload = function() {
           return ("Did you remember to save? If not, 'stay on the page' and hit commit.");
