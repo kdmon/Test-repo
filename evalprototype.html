@@ -89,7 +89,7 @@
         text-align: center;
       }
       .progressbox {
-        border: 1px solid  #aaa;
+        border: 1px solid  #000;
         height: 5px;
         width: 5%;
         margin: 1%;
@@ -151,17 +151,14 @@
       <div data-role="main" id="maincontainer" class="ui-content centered">
         <div id="questionContainer">
           
-          <div style="width: 100%; text-align: center; height: 0px;" data-bind="visible: pagenow() > 1;">
-            <div class="progressbox" data-bind="style: {background : pagenow() > 1 ? 'black' : 'none'}"></div>
-            <div class="progressbox" data-bind="style: {background : pagenow() > 2 ? 'black' : 'none'}"></div>
-            <div class="progressbox" data-bind="style: {background : pagenow() > 3 ? 'black' : 'none'}"></div>
-            <div class="progressbox" data-bind="style: {background : pagenow() > 4 ? 'black' : 'none'}"></div>
-            <div class="progressbox" data-bind="style: {background : pagenow() > 5 ? 'black' : 'none'}"></div>
-            <div class="progressbox" data-bind="style: {background : pagenow() > 6 ? 'black' : 'none'}"></div>
-            <div class="progressbox" data-bind="style: {background : pagenow() > 7 ? 'black' : 'none'}"></div>
-            <div class="progressbox" data-bind="style: {background : pagenow() > 8 ? 'black' : 'none'}"></div>
-            <div class="progressbox" data-bind="style: {background : pagenow() > 9 ? 'black' : 'none'}"></div>
-            <div class="progressbox" data-bind="style: {background : pagenow() > 10 ? 'black' : 'none'}"></div>
+          <div style="width: 100%; text-align: center; height: 0px;" data-bind="visible: pagenow() > 2 && pagenow() != 6;">
+            <div class="progressbox" data-bind="style: {background : pagenow() > 3 ? '#afa' : '#aba'}"></div>
+            <div class="progressbox" data-bind="style: {background : pagenow() > 4 ? '#afa' : '#aba'}"></div>
+            <div class="progressbox" data-bind="style: {background : pagenow() > 5 ? '#afa' : '#aba'}"></div>
+
+            <div class="progressbox" data-bind="style: {background : pagenow() > 7 ? '#afa' : '#aba'}"></div>
+            <div class="progressbox" data-bind="style: {background : pagenow() > 8 ? '#afa' : '#aba'}"></div>
+            <div class="progressbox" data-bind="style: {background : pagenow() > 9 ? '#afa' : '#aba'}"></div>
           </div>
           
           <div data-bind="visible: section() == -1">
@@ -340,7 +337,7 @@
                   </div>
                 </div>
                 <div data-bind="reveal: specialty() !== '' && position() !== ''">
-                  <h3>3. Do your current place of work have patients who require CMV-negative or irradiated blood components?</h3>
+                  <h3>3. Does your current place of work have patients who require CMV-negative or irradiated blood components?</h3>
                   <select data-bind="value: currentwork">
                     <option value="-1">Please select</option>
                     <option value="0">No</option>
@@ -880,145 +877,102 @@
       }
       var questions = {
         theme1: [{
+          statement: "Mistaken patient identity have caused patients not to receive irradiated blood.",
+          options: ["Please select", "True", "False", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Failure to provide patients with special blood components are reported to SHOT every year.",
+          options: ["Please select", "True", "False", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
           statement: "Removal of leucocytes from platelets and red cells reduces risk of CMV transmission.",
-          rationale: "Guage understanding of the main cause of transfusion associated CMV transmission.",
-          explanation: "Platelets and red cell components contain leucocytes (white blood cells). Transfusion associated cytomegalovirus (CMV) infection is transmitted through transfusion of CMV-infected donor monocytes (SaBTO 2012). Monocytes are large, phagocytic mononuclear leukocytes (MESH 2014). Universal leucodepletion, typically achieved through filtration, is effective in removing monocytes and significantly reduces the risk of CMV transmission during red cell and platelet transfusion.",
-          key: "True",
           options: ["Please select", "True", "False", "Don't know"],
           selected: ko.observable("Please select")
         }, {
           statement: "Only red cells and platelets for patients with special requirements is leucodepleted in the UK.",
-          rationale: "Check awareness of universal leucodepletion, a pre-storage processing step enhancing component safety.",
-          explanation: "Universal leucodepletion, the removal of leucocytes (white blood cells) through filtration from all platelets and red cells components manufactured in the UK irrespective of recipient, was introduced in 1998 and remains in place.",
-          key: "False",
-          options: ["Please select", "True", "False", "Don't know"],
+           options: ["Please select", "True", "False", "Don't know"],
           selected: ko.observable("Please select")
         }, {
           statement: "Leucodepletion is as effective as irradiation in the prevention of TA-GvHD.",
-          rationale: "Test beliefs about leucodepletion and adherence to BCSH guidelines on irradiated blood.",
-          explanation: "Even though leucodepletion is likely to reduce the risk of Transfusion Associated Graft versus Host Disease (TA-GvHD), the evidence is incomplete and it is not an accepted alternative. Current national guidelines (BCSH 2010) recommend irradiation to prevent TA-GvHD.",
-          key: "False",
-          options: ["Please select", "True", "False", "Don't know"],
+         options: ["Please select", "True", "False", "Don't know"],
           selected: ko.observable("Please select")
         }, {
           statement: "Red cells, platelets and granulocytes are cellular blood components.",
-          rationale: "Guage understanding of the distinction between non-/cellular components as it is frequently used in guidelines",
-          explanation: "Cellular blood components refer to platelet, red cell and granulocyte (white cell) components. Cellular blood components contain leucocytes that can cause TA-GvHD or transmit CMV infection.",
           options: ["Please select", "True", "False", "Don't know"],
-          key: "True",
           selected: ko.observable("Please select")
         }, {
           statement: "Transfusion of cellular blood components can cause TA-GvHD and CMV infection.",
-          rationale: "Test knowledge that cellular blood components, and specifically the white blood cells they contain, can cause these conditions.",
-          explanation: "A requirement for TA-GvHD is the transfusion of viable donor T-lymphocytes (a type of white blood cell). CMV infection is transmitted by transfusion of infected donor monocytes (another type of white blood cell). Cellular blood components contain leucocytes (white blood cells, including T-lymphocytes and monocytes), and can therefore cause both TA-GvHD and CMV infection.",
-          key: "True",
           options: ["Please select", "True", "False", "Don't know"],
           selected: ko.observable("Please select")
         }, {
-          statement: "All cellular blood components are routinely irradiated in the UK.",
-          rationale: "Test knowledge of current UK blood irradiation practice.",
-          explanation: "Cellular blood components are not routinely irradiated in UK. This is why irradiation must to be specifically entered under special requirements on the blood request form.",
-          key: "True",
+          statement: "All red cell components are routinely irradiated in the UK.",
           options: ["Please select", "True", "False", "Don't know"],
           selected: ko.observable("Please select")
         }],
         theme2: [{
-          statement: "Viable donor lymphocytes in component.",
-          options: ["Please select", "Yes", "No", "Don't know"],
-          selected: ko.observable("Please select")
-        }, {
-          statement: "Recipient with low haemoglobin level.",
-          options: ["Please select", "Yes", "No", "Don't know"],
-          selected: ko.observable("Please select")
-        }, {
-          statement: "Shared HLA haplotype between donor and recipient",
-          options: ["Please select", "Yes", "No", "Don't know"],
-          selected: ko.observable("Please select")
-        }, {
           statement: "Age of blood component.",
-          options: ["Please select", "Yes", "No", "Don't know"],
+          options: ["Please select", "Risk factor", "Not a risk", "Don't know"],
           selected: ko.observable("Please select")
         }, {
-          statement: "Recipient with HIV/AIDS.",
-          options: ["Please select", "Yes", "No", "Don't know"],
+          statement: "Viable donor lymphocytes in blood component.",
+          options: ["Please select", "Risk factor", "Not a risk", "Don't know"],
           selected: ko.observable("Please select")
         }, {
-          statement: "Granulocyte component.",
-          options: ["Please select", "Yes", "No", "Don't know"],
-          selected: ko.observable("Please select")
-        }, {
-          statement: "Fresh Frozen Plasma (FFP).",
-          options: ["Please select", "Yes", "No", "Don't know"],
+          statement: "Shared HLA haplotype between donor and recipient.",
+          options: ["Please select", "Risk factor", "Not a risk", "Don't know"],
           selected: ko.observable("Please select")
         }, {
           statement: "Recipient with severe T-lymphocyte immunodeficiency.",
-          options: ["Please select", "Yes", "No", "Don't know"],
+          options: ["Please select", "Risk factor", "Not a risk", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Recipient with HIV/AIDS.",
+          options: ["Please select", "Risk factor", "Not a risk", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Non-irradiated leucodepleted red cells.",
+          options: ["Please select", "Risk factor", "Not a risk", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Irradiated granulocyte component.",
+          options: ["Please select", "Risk factor", "Not a risk", "Don't know"],
+          selected: ko.observable("Please select")
+        }, {
+          statement: "Non-irradiated leucodepleted fresh frozen plasma (FFP).",
+          options: ["Please select", "Risk factor", "Not a risk", "Don't know"],
           selected: ko.observable("Please select")
         }],
         theme3: [{
-          statement: "Lack of knowledge of the indications for special components.",
-          options: ["Please select", "Yes", "No", "Don't know"],
-          selected: ko.observable("Please select")
-        }, {
-          statement: "Failure to request blood according to local guidelines.",
-          options: ["Please select", "Yes", "No", "Don't know"],
-          selected: ko.observable("Please select")
-        }, {
-          statement: "Poor communication between clinicians during shared patient care.",
-          options: ["Please select", "Yes", "No", "Don't know"],
-          selected: ko.observable("Please select")
-        }, {
-          statement: "Radiation effects after transfusion of irradiated blood.",
-          options: ["Please select", "Yes", "No", "Don't know"],
-          selected: ko.observable("Please select")
-        }, {
-          statement: "Mistaken patient identity at blood component collection or transfusion.",
-          options: ["Please select", "Yes", "No", "Don't know"],
-          selected: ko.observable("Please select")
-        }, {
-          statement: "Transfusion of incorrectly stored blood components.",
-          options: ["Please select", "Yes", "No", "Don't know"],
-          selected: ko.observable("Please select")
-        }, {
-          statement: "Erroneous data in laboratory information systems.",
-          options: ["Please select", "Yes", "No", "Don't know"],
-          selected: ko.observable("Please select")
-        }, {
-          statement: "Unnecessary requests for special blood components.",
-          options: ["Please select", "Yes", "No", "Don't know"],
-          selected: ko.observable("Please select")
-        }],
-        theme4: [{
           statement: "Red cells known to be from a second degree relative of the patient.",
-          options: ["Please select", "Irradiated & CMV-neg.", "Irradiated", "CMV-negative", "No special component", "Don't know"],
+          options: ["Please select", "Irradiated & CMV neg.", "Irradiated", "CMV negative", "None", "Don't know"],
           selected: ko.observable("Please select")
         }, {
           statement: "Red cells for patients on Fludarabine or Alemtuzmab (Campath).",
-          options: ["Please select", "Irradiated & CMV-neg.", "Irradiated", "CMV-negative", "No special component", "Don't know"],
+          options: ["Please select", "Irradiated & CMV neg.", "Irradiated", "CMV negative", "None", "Don't know"],
           selected: ko.observable("Please select")
         }, {
           statement: "Elective red cell transfusion for a pregnant woman in second trimester.",
-          options: ["Please select", "Irradiated & CMV-neg.", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
+          options: ["Please select", "Irradiated & CMV neg.", "Irradiated", "CMV negative", "None", "Don't know"],
           selected: ko.observable("Please select")
         }, {
           statement: "Fresh frozen plasma for a patient with Hodgkin's lymphoma.",
-          options: ["Please select", "Irradiated & CMV-neg.", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
+          options: ["Please select", "Irradiated & CMV neg.", "Irradiated", "CMV negative", "None", "Don't know"],
           selected: ko.observable("Please select")
         }, {
           statement: "HLA-matched platelets for a patient with refractoriness.",
-          options: ["Please select", "Irradiated & CMV-neg.", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
+          options: ["Please select", "Irradiated & CMV neg.", "Irradiated", "CMV negative", "None", "Don't know"],
           selected: ko.observable("Please select")
         }, {
-          statement: "Red cells for an infant who had an intrauterine transfusion (IUT) a year ago.",
-          options: ["Please select", "Irradiated & CMV-neg.", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
+          statement: "Platelets transfused in utero to treat neonatal alloimmune thrombocytopenia.",
+          options: ["Please select", "Irradiated & CMV neg.", "Irradiated", "CMV negative", "None", "Don't know"],
           selected: ko.observable("Please select")
         }, {
           statement: "Red cells for a patient receiving bone marrow transplant in the last 3 months.",
-          options: ["Please select", "Irradiated & CMV neg.", "Irradiated", "CMV-negative", "No special requirements", "Don't know"],
+          options: ["Please select", "Irradiated & CMV neg.", "Irradiated", "CMV negative", "None", "Don't know"],
           selected: ko.observable("Please select")
         }, {
           statement: "Platelets for a non-emergency bleeding cancer patient on purine analogues.",
-          options: ["Please select", "Irradiated & CMV neg.", "Irradiated", "CMV-negative", "No special component", "Don't know"],
+          options: ["Please select", "Irradiated & CMV neg.", "Irradiated", "CMV negative", "None", "Don't know"],
           selected: ko.observable("Please select")
         }]
       };
@@ -1026,7 +980,6 @@
       questions.theme1.shuffle();
       questions.theme2.shuffle();
       questions.theme3.shuffle();
-      questions.theme4.shuffle();
        // highlight text
       jQuery.fn.highlight = function(str, className) {
         var regex = new RegExp(str, "gi");
@@ -1067,13 +1020,13 @@
         self.sus9 = ko.observable("");
         self.sus10 = ko.observable("");
         self.treatment = ko.observable(getUrlParameter('treatment') || "ggc");
-        self.questionHeading = ko.observableArray(["1. Are the statements true or false?", "2. What are risk factors for TA-GvHD?", "3. What are common errors involving special components?", "4. What is the correct blood component specification?"]);
-        self.questionHeading2 = ko.observableArray(["5. Are the statements true or false?", "6. What are risk factors for TA-GvHD?", "7. What are common errors involving special blood components?", "8. What is the correct blood component specification?"]);
-        self.questionBank1 = ko.observableArray(questions.theme1.splice(0, 3).concat(questions.theme2.splice(0, 3)).concat(questions.theme3.splice(0, 3)).concat(questions.theme4.splice(0, 3))).extend({
-          paging: 3
+        self.questionHeading = ko.observableArray(["5. Are the statements true or false?", "6. What are risk factors for TA-GvHD?", "7. What special blood components are indicated in the following cases?"]);
+        self.questionHeading2 = ko.observableArray(["8. Are the statements true or false?", "9. What are risk factors for TA-GvHD?", "10. What special blood components are indicated in the following cases?"]);
+        self.questionBank1 = ko.observableArray(questions.theme1.splice(0, 4).concat(questions.theme2.splice(0, 4)).concat(questions.theme3.splice(0, 4))).extend({
+          paging: 4
         });
-        self.questionBank2 = ko.observableArray(questions.theme1.splice(0, 3).concat(questions.theme2.splice(0, 3)).concat(questions.theme3.splice(0, 3)).concat(questions.theme4.splice(0, 3))).extend({
-          paging: 3
+        self.questionBank2 = ko.observableArray(questions.theme1.splice(0, 4).concat(questions.theme2.splice(0, 4)).concat(questions.theme3.splice(0, 4))).extend({
+          paging: 4
         });
         self.progress = ko.computed(function() {
           var count = 0;
