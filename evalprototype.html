@@ -90,14 +90,12 @@
       }
       .progressbox {
         border: 1px solid  #000;
-        height: 5px;
-        width: 5%;
+        height: 8px;
+        width: 9%;
         margin: 1%;
         display: inline-block;
       }
-      #appcontainer {
-        border-top: 8px dashed #aaa;
-      }
+      
       .guidelinecontainer {
         background: white; 
         box-shadow: 0px 0px 10px 10px #fff;"
@@ -182,7 +180,7 @@
               </div>
               <div data-role="collapsible" data-collapsed="true" class="even">
                 <h3>2. What will I be asked to do?</h3>
-                <p>We are asking you to answer a short multiple choice test about special blood components. Answering the questions should take you about 15 minutes. You can choose to participate at a time and from a location that is convenient to you. You will need access to a computer with an Internet connection.</p>
+                <p>We are asking you to answer 24 multiple choice questions about special blood components, split into two sets of 12 questions each. Answering the questions should take you about 15 minutes. You can choose to participate at a time and from a location that is convenient to you. You will need access to a computer or mobile device with an Internet connection.</p>
               </div>
               <div data-role="collapsible" data-collapsed="true">
                 <h3>3. Why should I participate?</h3>
@@ -217,7 +215,7 @@
           </div>
           <div data-bind="visible: section() == 0">
             <h2>Confirm eligibility</h2>
-            <p>Please answer the questions to confirm that you are eligible to participate in the study.</p>
+            <p>Before you begin, please answer the questions to confirm that you are eligible to participate in the study.</p>
             <h3>1. At what hospital are you based?</h3>
             <select data-bind="value: hospital">
               <option value="" selected>Please select</option>
@@ -403,7 +401,7 @@
                     </select>
                     <div data-bind="reveal: frequency() > -1">
                       <h2>You are eligible to participate in the study.</h2>
-                      <p>Press the green button to start the knowledge test.</p> <a href="#" data-icon="carat-r" data-iconpos="right" class="positive" data-role="button" data-bind="click: $root.nextSection">Begin test</a>
+                      <p>Press the green button to begin answering the first set of questions.</p> <a href="#" data-icon="carat-r" data-iconpos="right" class="positive" data-role="button" data-bind="click: $root.nextSection">Begin test</a>
                     </div>
                   </div>
                 </div>
@@ -435,9 +433,12 @@
             <br/>
           </div>
           <div data-bind="visible: section() == 2">
-            <h3>You have completed the first part of the test</h3>
-            <p style="margin-bottom: 0px">Now, please take some time to explore <span data-bind="visible: treatment() == 'app'">the Special Blood Request app</span><span data-bind="visible: treatment() == 'lothian'">the current NHS Lothian hospital guidelines</span><span data-bind="visible: treatment() == 'ggc'">an extract of the proposed Scotland-wide hospital guidelines</span> (shown below). <b>Press 'Done' when you're ready to complete the final part of the test.</b></p>
-            <a href="#" style="margin:0px;" class="positive" data-theme="b" data-role="button" data-bind="click: $root.nextSection" data-inline="true">Done</a>
+            <h1>You have completed the first set of questions.</h1>
+            <p style="margin-bottom: 0px">Now, please take some time to explore <span data-bind="visible: treatment() == 'app'">the Special Blood Request app</span><span data-bind="visible: treatment() == 'lothian'">the current NHS Lothian hospital guidelines</span><span data-bind="visible: treatment() == 'ggc'">an extract of the proposed Scotland-wide hospital guidelines</span> (shown below).</p>
+            <p><b>Press 'Done' when you're ready to complete the last set of questions.</b></p>
+            <p style="text-align: center">
+              <a href="#" class="positive" data-theme="b" data-role="button" data-bind="click: $root.nextSection" data-inline="true">Done</a>
+            </p>
           </div>
           
           <div data-bind="visible: section() == 3">
@@ -666,11 +667,11 @@
         </div>
         <div data-bind="visible: section() == 4">
           <h1>Thank you</h1>
-          <p>You have completed the knowledge test and your responses has been recorded.</p>
+          <p>You have completed all the questions and your responses has been recorded.</p>
+          <a href="index.html" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right">Return to the front page</a>
         </div>
       </div>
       <div id="appcontainer" data-bind="html: appCode, visible: treatment() == 'app'"></div>
-      
     </div>
     <script type='text/javascript'>
       // http://jsfiddle.net/zeelux/B4vN2/
