@@ -435,7 +435,8 @@
             <br/>
           </div>
           <div data-bind="visible: section() == 2">
-            <p style="margin-bottom: 0px">Please take some time to explore <span data-bind="visible: treatment() == 'app'">the Special Blood Request app (below)</span><span data-bind="visible: treatment() == 'lothian'">the current NHS Lothian hospital guidelines</span><span data-bind="visible: treatment() == 'ggc'">an extract of the proposed Scotland wide hospital guidelines</span> (shown below). <b>Press 'Done' when you're ready.</b></p>
+            <h3>You have completed the first part of the test</h3>
+            <p style="margin-bottom: 0px">Now, please take some time to explore <span data-bind="visible: treatment() == 'app'">the Special Blood Request app</span><span data-bind="visible: treatment() == 'lothian'">the current NHS Lothian hospital guidelines</span><span data-bind="visible: treatment() == 'ggc'">an extract of the proposed Scotland-wide hospital guidelines</span> (shown below). <b>Press 'Done' when you're ready to complete the final part of the test.</b></p>
             <a href="#" style="margin:0px;" class="positive" data-theme="b" data-role="button" data-bind="click: $root.nextSection" data-inline="true">Done</a>
           </div>
           
@@ -664,101 +665,8 @@
           <i>Extract from NHS Lothian, Blood Transfusion Clinical Policy and Procedures 2013 (v.4), Appendic C: Special Requirements, pages 45-46.</i>
         </div>
         <div data-bind="visible: section() == 4">
-          <h1>Usability evaluation</h1>
-          <p>Thinking about the app, please answer the following questions as best you can.</p>
-          <h3>I thought there was too much inconsistency in this system.</h3>
-          <select data-bind="value: sus1">
-            <option value="" selected>Please select</option>
-            <option value="1">Strongly disagree</option>
-            <option value="2">Disagree</option>
-            <option value="3">Neither agree nor disagree</option>
-            <option value="4">Agree</option>
-            <option value="5">Strongly agree</option>
-          </select>
-          <h3>I would imagine that most people would learn to use this system very quickly.</h3>
-          <select data-bind="value: sus2">
-            <option value="" selected>Please select</option>
-            <option value="1">Strongly disagree</option>
-            <option value="2">Disagree</option>
-            <option value="3">Neither agree nor disagree</option>
-            <option value="4">Agree</option>
-            <option value="5">Strongly agree</option>
-          </select>
-          <h3>I found the system very cumbersome to use.</h3>
-          <select data-bind="value: sus3">
-            <option value="" selected>Please select</option>
-            <option value="1">Strongly disagree</option>
-            <option value="2">Disagree</option>
-            <option value="3">Neither agree nor disagree</option>
-            <option value="4">Agree</option>
-            <option value="5">Strongly agree</option>
-          </select>
-          <h3>I felt very confident using the system.</h3>
-          <select data-bind="value: sus4">
-            <option value="" selected>Please select</option>
-            <option value="1">Strongly disagree</option>
-            <option value="2">Disagree</option>
-            <option value="3">Neither agree nor disagree</option>
-            <option value="4">Agree</option>
-            <option value="5">Strongly agree</option>
-          </select>
-          <h3>I needed to learn a lot of things before I could get going with this system.</h3>
-          <select data-bind="value: sus5">
-            <option value="" selected>Please select</option>
-            <option value="1">Strongly disagree</option>
-            <option value="2">Disagree</option>
-            <option value="3">Neither agree nor disagree</option>
-            <option value="4">Agree</option>
-            <option value="5">Strongly agree</option>
-          </select>
-          <h3>I think that I would like to use this system frequently.</h3>
-          <select data-bind="value: sus6">
-            <option value="" selected>Please select</option>
-            <option value="1">Strongly disagree</option>
-            <option value="2">Disagree</option>
-            <option value="3">Neither agree nor disagree</option>
-            <option value="4">Agree</option>
-            <option value="5">Strongly agree</option>
-          </select>
-          <h3>I found the system unnecessarily complex.</h3>
-          <select data-bind="value: sus7">
-            <option value="" selected>Please select</option>
-            <option value="1">Strongly disagree</option>
-            <option value="2">Disagree</option>
-            <option value="3">Neither agree nor disagree</option>
-            <option value="4">Agree</option>
-            <option value="5">Strongly agree</option>
-          </select>
-          <h3>I thought the system was easy to use.</h3>
-          <select data-bind="value: sus8">
-            <option value="" selected>Please select</option>
-            <option value="1">Strongly disagree</option>
-            <option value="2">Disagree</option>
-            <option value="3">Neither agree nor disagree</option>
-            <option value="4">Agree</option>
-            <option value="5">Strongly agree</option>
-          </select>
-          <h3>I think that I would need the support of a technical person to be able to use this system.</h3>
-          <select data-bind="value: sus9">
-            <option value="" selected>Please select</option>
-            <option value="1">Strongly disagree</option>
-            <option value="2">Disagree</option>
-            <option value="3">Neither agree nor disagree</option>
-            <option value="4">Agree</option>
-            <option value="5">Strongly agree</option>
-          </select>
-          <h3>I found the various functions in this system were well integrated.</h3>
-          <select data-bind="value: sus10">
-            <option value="" selected>Please select</option>
-            <option value="1">Strongly disagree</option>
-            <option value="2">Disagree</option>
-            <option value="3">Neither agree nor disagree</option>
-            <option value="4">Agree</option>
-            <option value="5">Strongly agree</option>
-          </select>
-          <div data-bind="visible: (sus1() && sus2() && sus3() && sus4() && sus5() && sus6() && sus7() && sus8() && sus9() && sus10())">
-            <p><b>Press the green button to submit</b>.</p> <a href="#" class="positive" data-role="button" data-bind="click: $root.nextSection">Submit</a>
-          </div>
+          <h1>Thank you</h1>
+          <p>You have completed the knowledge test and your responses has been recorded.</p>
         </div>
       </div>
       <div id="appcontainer" data-bind="html: appCode, visible: treatment() == 'app'"></div>
@@ -1009,16 +917,6 @@
         self.pastwork = ko.observable("");
         self.pastexperience = ko.observable("");
         self.frequency = ko.observable("");
-        self.sus1 = ko.observable("");
-        self.sus2 = ko.observable("");
-        self.sus3 = ko.observable("");
-        self.sus4 = ko.observable("");
-        self.sus5 = ko.observable("");
-        self.sus6 = ko.observable("");
-        self.sus7 = ko.observable("");
-        self.sus8 = ko.observable("");
-        self.sus9 = ko.observable("");
-        self.sus10 = ko.observable("");
         self.treatment = ko.observable(getUrlParameter('treatment') || "ggc");
         self.questionHeading = ko.observableArray(["5. Are the statements true or false?", "6. What are risk factors for TA-GvHD?", "7. What special blood components are indicated in the following cases?"]);
         self.questionHeading2 = ko.observableArray(["8. Are the statements true or false?", "9. What are risk factors for TA-GvHD?", "10. What special blood components are indicated in the following cases?"]);
