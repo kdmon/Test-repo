@@ -180,7 +180,8 @@
               </div>
               <div data-role="collapsible" data-collapsed="true" class="even">
                 <h3>2. What will I be asked to do?</h3>
-                <p>We are asking you to answer two sets of 12 multiple choice questions about special blood components. After the first set of questions, you will be presented with <span data-bind="visible: treatment() == 'app'"> the app </span> <span data-bind="visible: treatment() != 'app'"> medical guidelines </span> to help you answer the remaining questions. Answering the questions should take you about 15 minutes. You can choose to participate at a time and from a location that is convenient to you. You will need access to a computer or mobile device with an Internet connection.</p>
+                <p>We are asking you to answer two sets of 12 multiple choice questions about special blood components. After the first set of questions, you will be presented with <span data-bind="visible: treatment() == 'app'"> the app </span> <span data-bind="visible: treatment() != 'app'"> medical guidelines </span> to help you answer the remaining questions.</p>
+                <p>Taking part in the study should take you about 15 minutes. You can choose to participate at a time and from a location that is convenient to you. You will need access to a computer or mobile device with an Internet connection.</p>
               </div>
               <div data-role="collapsible" data-collapsed="true">
                 <h3>3. Why should I participate?</h3>
@@ -433,11 +434,9 @@
             <br/>
           </div>
           <div data-bind="visible: section() == 2">
-            <h2>You have completed the first set of questions.</h2>
-            <p style="margin-bottom: 0px">Now, please take some time to explore <span data-bind="visible: treatment() == 'app'">the Special Blood Request app</span><span data-bind="visible: treatment() == 'lothian'">the current NHS Lothian hospital guidelines</span><span data-bind="visible: treatment() == 'ggc'">an extract of the proposed Scotland-wide hospital guidelines</span> (shown below). Then press 'Done' to complete the last set of questions.</p>
-            <p style="text-align: center">
-              <a href="#" class="positive" data-theme="b" data-role="button" data-bind="click: $root.nextSection" data-inline="true">Done</a>
-            </p>
+            <h2>First set of questions completed.</h2>
+            <p style="margin-bottom: 0px">Please take some time to <span data-bind="visible: treatment() == 'app'">familiarise yourself with the Special Blood Request app</span><span data-bind="visible: treatment() == 'lothian'">explore the current NHS Lothian hospital guidelines</span><span data-bind="visible: treatment() == 'ggc'">explore an extract of the proposed Scotland-wide hospital guidelines</span> (shown below). When you are ready, press the green button to continue to the last set of questions.</p>
+            <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="click: $root.nextSection">Final question set</a>
             <h2><span data-bind="visible: treatment() == 'app'">Special Blood Request app:</span><span data-bind="visible: treatment() != 'app'">Special requirements guidelines:</span></h2>
           </div>
           
