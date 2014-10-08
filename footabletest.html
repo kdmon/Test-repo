@@ -18,7 +18,9 @@
   </head>
 
   <body style="background: white">
-  <p>Search: <input id="filter" type="text" /></p>
+    <p>Search:
+      <input id="filter" type="text" />
+    </p>
     <table data-filter="#filter" class="footable">
       <thead>
         <tr>
@@ -32,7 +34,7 @@
       <tbody>
         <tr>
           <td data-value="Special component required">
-            <img title="Special component required" src="http://optimalblooduse.eu/app/red.png" style="height: 50px;"/>
+            <img title="Special component required" src="http://optimalblooduse.eu/app/red.png" style="height: 50px;" />
           </td>
           <td>Blood from a relative of the patient.</td>
           <td>Required</td>
@@ -41,19 +43,30 @@
         </tr>
         <tr>
           <td data-value="Special component required">
-            <img title="Special component required" src="http://optimalblooduse.eu/app/red.png" style="height: 50px;"/>
+            <img title="Special component required" src="http://optimalblooduse.eu/app/red.png" style="height: 50px;" />
           </td>
           <td>Granulocytes.</td>
-          <td>Yes</td>
-          <td>Yes, if patient is CMV-negative.</td>
-          <td>
-    1. "All granulocyte transfusions should be irradiated for recipients of any age, and they should be transfused soon as possible after irradiation. (1C)." BCSH2010
-    2. "As granulocytes cannot be leucodepleted and is usually given to immunocompromised patients, it is essential that the product be irradiated prior to transfusion to avoid graft-versus-host disease." UKBTS2012
-      
-      
-    3. "Granulocyte components should continue to be provided as CMV seronegative for CMV seronegative patients." SABTO2012
-    4. "CMV PCR monitoring should be considered for all patients (even CMV negative/negative patients) to allow early detection of any possible CMV infection (whether transfusion-transmitted or otherwise acquired)." SABTO2012
-    </td>
+          <td>Required</td>
+          <td>Required if patient is CMV-negative.</td>
+          <td>1. "All granulocyte transfusions should be irradiated for recipients of any age, and they should be transfused soon as possible after irradiation. (1C)." BCSH2010 2. "As granulocytes cannot be leucodepleted and is usually given to immunocompromised patients, it is essential that the product be irradiated prior to transfusion to avoid graft-versus-host disease." UKBTS2012 3. "Granulocyte components should continue to be provided as CMV seronegative for CMV seronegative patients." SABTO2012 4. "CMV PCR monitoring should be considered for all patients (even CMV negative/negative patients) to allow early detection of any possible CMV infection (whether transfusion-transmitted or otherwise acquired)." SABTO2012</td>
+        </tr>
+        <tr>
+          <td data-value="Special component required">
+            <img title="Special component required" src="http://optimalblooduse.eu/app/red.png" style="height: 50px;" />
+          </td>
+          <td>Human Leucocyte Antigen (HLA)-selected components</td>
+          <td>Required</td>
+          <td>Not required</td>
+          <td>"All human leucocyte antigen (HLA)-selected components should be irradiated, even if the patient is immunocompetent (2C)." BCSH2010</td>
+        </tr>
+        <tr>
+          <td data-value="Special component not required">
+            <img title="Special component not required" src="http://optimalblooduse.eu/app/green.png" style="height: 50px;" />
+          </td>
+          <td>Fresh frozen plasma, cryoprecipitate or plasma derivative.</td>
+          <td>Not required</td>
+          <td>Not required</td>
+          <td>It is not necessary to irradiate fresh frozen plasma, cryoprecipitate or fractionated plasma. CMV infection is associated with cellular blood components, such as red cells, platelets and granulocytes. Non-cellular components, such as fresh frozen plasma, cryoprecipitate and other plasma-derived blood components, do not need to be provided as CMV negative.</td>
         </tr>
       </tbody>
     </table>
