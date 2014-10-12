@@ -797,7 +797,7 @@
           options: ["Please select", "True", "False", "Don't know"],
           selected: ko.observable("Please select")
         }, {
-          statement: "Removal of leucocytes from platelets and red cells reduces risk of CMV transmission.",
+          statement: "Removal of leucocytes from platelets and red cells reduces the risk of CMV transmission.",
           options: ["Please select", "True", "False", "Don't know"],
           selected: ko.observable("Please select")
         }, {
@@ -842,7 +842,7 @@
           options: ["Please select", "Risk factor", "Not a risk", "Don't know"],
           selected: ko.observable("Please select")
         }, {
-          statement: "Non-irradiated leucodepleted red cells.",
+          statement: "Non-irradiated maternal blood.",
           options: ["Please select", "Risk factor", "Not a risk", "Don't know"],
           selected: ko.observable("Please select")
         }, {
@@ -921,7 +921,7 @@
         self.pastwork = ko.observable("");
         self.pastexperience = ko.observable("");
         self.frequency = ko.observable("");
-        self.treatment = ko.observable(getUrlParameter('treatment') || "ggc");
+        self.treatment = ko.observable(getUrlParameter('treatment') || "lothian");
         self.questionHeading = ko.observableArray(["5. Are the statements true or false?", "6. What are risk factors for transfusion associated graft versus host disease?", "7. What special blood components are indicated in the following cases?"]);
         self.questionHeading2 = ko.observableArray(["8. Are the statements true or false?", "9. What are risk factors for transfusion associated graft versus host disease?", "10. What special blood components are indicated in the following cases?"]);
         self.questionBank1 = ko.observableArray(questions.theme1.splice(0, 4).concat(questions.theme2.splice(0, 4)).concat(questions.theme3.splice(0, 4))).extend({
