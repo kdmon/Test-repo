@@ -38,7 +38,7 @@
         }
       }
       body {
-        font-size: 1.2em;
+        font-size: 1.1em;
       }
       a,
       input,
@@ -149,14 +149,16 @@
       <div data-role="main" id="maincontainer" class="ui-content centered">
         <div id="questionContainer">
           
-          <div style="width: 100%; text-align: center; height: 0px;" data-bind="visible: pagenow() > 2 && pagenow() != 6;">
-            <div class="progressbox" data-bind="style: {background : pagenow() > 3 ? '#afa' : '#aba'}"></div>
-            <div class="progressbox" data-bind="style: {background : pagenow() > 4 ? '#afa' : '#aba'}"></div>
-            <div class="progressbox" data-bind="style: {background : pagenow() > 5 ? '#afa' : '#aba'}"></div>
+          <div style="width: 100%; text-align: center; height: 0px;" data-bind="visible: pagenow() > 1">
+            <div class="progressbox" data-bind="style: {background : pagenow() > 2 ? '#afa' : 'none'}"></div>
+            
+            <div class="progressbox" data-bind="style: {background : pagenow() > 3 ? '#afa' : 'none'}"></div>
+            <div class="progressbox" data-bind="style: {background : pagenow() > 4 ? '#afa' : 'none'}"></div>
+            <div class="progressbox" data-bind="style: {background : pagenow() > 5 ? '#afa' : 'none'}"></div>
 
-            <div class="progressbox" data-bind="style: {background : pagenow() > 7 ? '#afa' : '#aba'}"></div>
-            <div class="progressbox" data-bind="style: {background : pagenow() > 8 ? '#afa' : '#aba'}"></div>
-            <div class="progressbox" data-bind="style: {background : pagenow() > 9 ? '#afa' : '#aba'}"></div>
+            <div class="progressbox" data-bind="style: {background : pagenow() > 7 ? '#afa' : 'none'}"></div>
+            <div class="progressbox" data-bind="style: {background : pagenow() > 8 ? '#afa' : 'none'}"></div>
+            <div class="progressbox" data-bind="style: {background : pagenow() > 9 ? '#afa' : 'none'}"></div>
           </div>
           
           <div data-bind="visible: section() == -1">
@@ -193,7 +195,7 @@
               </div>
               <div data-role="collapsible" data-collapsed="true">
                 <h3>5. Who are you asking to participate?</h3>
-                <p>We are inviting all grades of doctors, registered nurses, midwives and transfusion laboratory staff who recently completed Module 1 of the Learn Blood Transfusion e-learning programme from three NHS Lothian hospitals:</p>
+                <p>We are inviting all grades of doctors, registered nurses, midwives and transfusion laboratory staff who recently completed e-learning modules using the Learn Better Blood Transfusion programme from three NHS Lothian hospitals:</p>
                 <ul>
                   <li>The Royal Infirmary of Edinburgh</li>
                   <li>Western General Hospital</li>
@@ -210,13 +212,13 @@
                 <p>Thank you for your time.</p>
               </div>
               <h2>Ready to begin?</h2>
-              <p>By proceeding you indicate that you have read the above information and freely consent to take part in the study.</p>
+              <p><b>Press the green button to indicate that you have read the above information and freely consent to take part in the study.</b></p>
               <a href="#" class="positive" data-role="button" data-icon="check" data-bind="click: $root.nextSection">I agree to participate</a>
             </div>
           </div>
           <div data-bind="visible: section() == 0">
             <h2>Confirm eligibility</h2>
-            <p>Before you begin the test, please confirm that you are eligible to participate in the study by answering the following questions.</p>
+            <p>Before you begin, please confirm that you are eligible to participate in the study by answering the following questions.</p>
             <h3>1. At what hospital are you based?</h3>
             <select data-bind="value: hospital">
               <option value="" selected>Please select</option>
@@ -237,6 +239,7 @@
                   <option value="bb">Blood Bank/Hospital Laboratory staff</option>
                   <option value="dr">Doctor</option>
                   <option value="mw">Midwife</option>
+                  <option value="na">Nurse authoriser</option>
                   <option value="odp">Operating Department Practitioner</option>
                   <option value="rn">Registered Nurse</option>
                   <option value="ot">Other</option>
@@ -401,8 +404,8 @@
                       <option value="0">Don't know</option>
                     </select>
                     <div data-bind="reveal: frequency() > -1">
-                      <h2>You are eligible to participate in the study.</h2>
-                      <p>Press the green button to begin answering the first set of questions.</p> <a href="#" data-icon="carat-r" data-iconpos="right" class="positive" data-role="button" data-bind="click: $root.nextSection">Begin test</a>
+                      <p>Thank you. You are eligible to participate.</p>
+                      <p><b>Press the green button to begin answering the first set of questions.</b></p> <a href="#" data-icon="carat-r" data-iconpos="right" class="positive" data-role="button" data-bind="click: $root.nextSection">Next section</a>
                     </div>
                   </div>
                 </div>
@@ -434,9 +437,9 @@
             <br/>
           </div>
           <div data-bind="visible: section() == 2">
-            <h2>First set of questions completed.</h2>
-            <p style="margin-bottom: 0px">Please take some time to <span data-bind="visible: treatment() == 'app'">familiarise yourself with the Special Blood Request app</span><span data-bind="visible: treatment() == 'lothian'">explore the current NHS Lothian hospital guidelines</span><span data-bind="visible: treatment() == 'ggc'">explore an extract of the proposed Scotland-wide hospital guidelines</span> (shown below). When you are ready, press the green button to continue to the last set of questions.</p>
-            <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="click: $root.nextSection">Open last questions</a>
+            <p style="margin-bottom: 0px">Please take some time to <span data-bind="visible: treatment() == 'app'">familiarise yourself with the Special Blood Request app</span><span data-bind="visible: treatment() == 'lothian'">explore the current NHS Lothian hospital guidelines</span><span data-bind="visible: treatment() == 'ggc'">explore an extract of the proposed Scotland-wide hospital guidelines</span> (shown below).</p>
+            <p><b>When you are ready, press the green button to continue.</b></p>
+            <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="click: $root.nextSection">Next section</a>
             <h2><span data-bind="visible: treatment() == 'app'">Special Blood Request app:</span><span data-bind="visible: treatment() != 'app'">Special requirements guidelines:</span></h2>
           </div>
           
@@ -668,7 +671,7 @@
         <div data-bind="visible: section() == 4">
           <h1>Thank you</h1>
           <p>You have completed all the questions. Your answers have been recorded.</p>
-          <a href="index.html" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right">Return to the front page</a>
+          <a href="http://optimalblooduse.eu/specialstudy/index.html" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right">Return to the front page</a>
         </div>
       </div>
       <div id="appcontainer" data-bind="html: appCode, visible: treatment() == 'app'"></div>
@@ -919,8 +922,8 @@
         self.pastexperience = ko.observable("");
         self.frequency = ko.observable("");
         self.treatment = ko.observable(getUrlParameter('treatment') || "ggc");
-        self.questionHeading = ko.observableArray(["5. Are the statements true or false?", "6. What are risk factors for TA-GvHD?", "7. What special blood components are indicated in the following cases?"]);
-        self.questionHeading2 = ko.observableArray(["8. Are the statements true or false?", "9. What are risk factors for TA-GvHD?", "10. What special blood components are indicated in the following cases?"]);
+        self.questionHeading = ko.observableArray(["5. Are the statements true or false?", "6. What are risk factors for transfusion associated graft versus host disease?", "7. What special blood components are indicated in the following cases?"]);
+        self.questionHeading2 = ko.observableArray(["8. Are the statements true or false?", "9. What are risk factors for transfusion associated graft versus host disease?", "10. What special blood components are indicated in the following cases?"]);
         self.questionBank1 = ko.observableArray(questions.theme1.splice(0, 4).concat(questions.theme2.splice(0, 4)).concat(questions.theme3.splice(0, 4))).extend({
           paging: 4
         });
