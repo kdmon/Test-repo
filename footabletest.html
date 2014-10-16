@@ -29,9 +29,16 @@
             }
 
             function resizeFixed() {
+              setTimeout(function (){
+              $t_fixed.remove();
+              $t_fixed = $this.clone();
+              $t_fixed.find("tbody").remove().end().addClass("fixed").insertBefore($this);
+              $t_fixed.find("thead tr th span").remove();
               $t_fixed.find("th").each(function(index) {
-                $(this).css("width", $this.find("th").eq(index).outerWidth() + "px");
+                $(this).css("width", $this.find("th").eq(index).width() + "px");
               });
+              scrollFixed();
+              }, 150);
             }
 
             function scrollFixed() {
@@ -72,6 +79,7 @@
         display: none;
         border: none;
         z-index: 999;
+        width: calc(100% - 2em);
       }
       .footable {
         font-size: 1em;
@@ -81,7 +89,7 @@
         font-size: 0.8em;
       }
       .footable-cell-detail {
-        background: #FFF;
+        background: #F5FAFF;
       }
       .required {
         background: #FEE;
@@ -103,40 +111,58 @@
           <thead>
             <tr>
               <th>Indication</th>   
-              <th data-hide="phone">Irradiated</th>
-              <th data-hide="phone">CMV-neg.</th>
+              <th data-hide="phone" data-type="numeric">Irradiated</th>
+              <th data-hide="phone" data-type="numeric">CMV-neg.</th>
               <th data-hide="all">Details</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><i class="fa fa-tint"></i> 1. Blood from a relative of the patient.</td>
-              <td><i class="fa fa-check-square-o fa-3x red"></i></td>
-              <td><i class="fa fa-square-o fa-3x green"></i></td>
+              <td>1. Blood from a relative of the patient. <i class="fa fa-tint"></i></td>
+              <td data-value="3"><i class="fa fa-check-square-o fa-3x red"></i></td>
+              <td data-value="1"><i class="fa fa-square-o fa-3x green"></i></td>
               <td>"All transfusions from first- or second-degree relatives should be irradiated, even if the patient is immunocompetent (1B)."</td>
             </tr>
             <tr>
-              <td><i class="fa fa-tint"></i> 2. Granulocytes.</td>
-              <td><i class="fa fa-check-square-o fa-3x red"></i></td>
-              <td><i class="fa fa-square-o fa-3x green"></i> </td>
+              <td>2. Granulocytes. <i class="fa fa-tint"></i></td>
+              <td data-value="3"><i class="fa fa-check-square-o fa-3x red"></i></td>
+              <td data-value="2"><i class="fa fa-question fa-3x amber"></i> </td>
               <td>1. "All granulocyte transfusions should be irradiated for recipients of any age, and they should be transfused soon as possible after irradiation. (1C)." BCSH2010 2. "As granulocytes cannot be leucodepleted and is usually given to immunocompromised patients, it is essential that the product be irradiated prior to transfusion to avoid graft-versus-host disease." UKBTS2012 3. "Granulocyte components should continue to be provided as CMV seronegative for CMV seronegative patients." SABTO2012 4. "CMV PCR monitoring should be considered for all patients (even CMV negative/negative patients) to allow early detection of any possible CMV infection (whether transfusion-transmitted or otherwise acquired)." SABTO2012</td>
             </tr>
             <tr>
-              <td><i class="fa fa-tint"></i> 3. Human Leucocyte Antigen (HLA)-selected components</td>
-              <td><i class="fa fa-check-square-o fa-3x red"></i></td>
-              <td><i class="fa fa-square-o fa-3x green"></i> </td>
+              <td>3. Human Leucocyte Antigen (HLA)-selected components. <i class="fa fa-tint"></i></td>
+              <td data-value="3"><i class="fa fa-check-square-o fa-3x red"></i></td>
+              <td data-value="1"><i class="fa fa-square-o fa-3x green"></i> </td>
               <td>"All human leucocyte antigen (HLA)-selected components should be irradiated, even if the patient is immunocompetent (2C)." BCSH2010</td>
             </tr>
             <tr>
-              <td><i class="fa fa-tint"></i> 4. Fresh frozen plasma, cryoprecipitate or plasma derivative.</td>
-              <td><i class="fa fa-square-o fa-3x green"></i> </td>
-              <td><i class="fa fa-square-o fa-3x green"></i> </td>
+              <td>4. Fresh frozen plasma, cryoprecipitate or plasma derivative. <i class="fa fa-tint"></i></td>
+              <td data-value="1"><i class="fa fa-square-o fa-3x green"></i> </td>
+              <td data-value="1"><i class="fa fa-square-o fa-3x green"></i> </td>
               <td>It is not necessary to irradiate fresh frozen plasma, cryoprecipitate or fractionated plasma. CMV infection is associated with cellular blood components, such as red cells, platelets and granulocytes. Non-cellular components, such as fresh frozen plasma, cryoprecipitate and other plasma-derived blood components, do not need to be provided as CMV negative.</td>
             </tr>
             <tr>
-              <td><i class="fa fa-tint"></i> 5. Red cells or platelets.</td>
-              <td><i class="fa fa-question fa-3x amber"></i></td>
-              <td><i class="fa fa-question fa-3x amber"></i></td>
+              <td>5. Red cells or platelets. <i class="fa fa-tint"></i></td>
+              <td data-value="2"><i class="fa fa-question fa-3x amber"></i></td>
+              <td data-value="2"><i class="fa fa-question fa-3x amber"></i></td>
+              <td>Red cells and platelets contain lymphocytes (white cells) that can cause transfusion-associated Graft versus Host Disease (TA-GvHD). Cryopreserved red cells after deglycerolization do not require irradiation because they are washed free of leucocytes. Irradiated platelets and red cells are only indicated when there is an elevated risk of TA-GvHD.</td>
+            </tr>
+            <tr>
+              <td><i class="fa fa-flask"></i> 6. Purine analogue drugs.</td>
+              <td data-value="3"><i class="fa fa-check-square-o fa-3x red"></i></td>
+              <td data-value="1"><i class="fa fa-square-o fa-3x green"></i></td>
+              <td>Red cells and platelets contain lymphocytes (white cells) that can cause transfusion-associated Graft versus Host Disease (TA-GvHD). Cryopreserved red cells after deglycerolization do not require irradiation because they are washed free of leucocytes. Irradiated platelets and red cells are only indicated for at-risk patients.</td>
+            </tr>
+            <tr>
+              <td><i class="fa fa-flask"></i> 7. Campath (Alemtuzumab).</td>
+              <td data-value="3"><i class="fa fa-check-square-o fa-3x red"></i></td>
+              <td data-value="1"><i class="fa fa-square-o fa-3x green"></i></td>
+              <td>Red cells and platelets contain lymphocytes (white cells) that can cause transfusion-associated Graft versus Host Disease (TA-GvHD). Cryopreserved red cells after deglycerolization do not require irradiation because they are washed free of leucocytes. Irradiated platelets and red cells are only indicated for at-risk patients.</td>
+            </tr>
+            <tr>
+              <td><i class="fa fa-flask"></i> 8. Anti-thymocyte globulin (ATG).</td>
+              <td data-value="3"><i class="fa fa-check-square-o fa-3x red"></i></td>
+              <td data-value="1"><i class="fa fa-square-o fa-3x green"></i></td>
               <td>Red cells and platelets contain lymphocytes (white cells) that can cause transfusion-associated Graft versus Host Disease (TA-GvHD). Cryopreserved red cells after deglycerolization do not require irradiation because they are washed free of leucocytes. Irradiated platelets and red cells are only indicated for at-risk patients.</td>
             </tr>
           </tbody>
@@ -145,7 +171,7 @@
         <h2>Legend</h2>
         <h3><i class="fa fa-tint"></i> Blood components</h3>
         <h3><i class="fa fa-flask"></i> Immunesuppressive drugs</h3>
-        <h3><i class="fa fa-list-alt"></i> History of medical condition</h3>
+        <h3><i class="fa fa-list-alt"></i> Medical history</h3>
         <h3><i class="fa fa-child"></i> Neonatology and obstetrics</h3>
         <h3><i class="fa fa-eyedropper"></i> Stem cell and bone marrow transplant</h3>
         <br/>
