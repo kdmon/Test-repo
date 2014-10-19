@@ -58,6 +58,9 @@
       });
     </script>
     <style>
+      label {
+        text-align: center;
+      }
       .amber {
         color: #FD5;
         text-shadow: 1px 1px 19px #000;
@@ -72,6 +75,7 @@
       }
       .centered {
         text-align: center !important;
+        margin: 0px;
       }
       table {
         border-collapse: collapse;
@@ -105,7 +109,7 @@
   <body style="background: white">
     <div data-role="page">
       <div data-role="header">
-        <h1>Page Title</h1>
+        <h1>Look up</h1>
       </div>
       <!-- /header -->
       <div role="main" class="ui-content">
@@ -117,9 +121,9 @@
         <table class="footable" id="indications" data-filter="#filter">
           <thead>
             <tr>
-              <th>Indication</th>   
-              <th data-hide="phone" data-type="numeric">Irradiated</th>
-              <th data-hide="phone" data-type="numeric">CMV-neg.</th>
+              <th data-class="expand">Indication</th>   
+              <th data-hide="phone" data-type="numeric"></th>
+              <th data-hide="phone" data-type="numeric"></th>
               <th data-hide="all"></th>
             </tr>
           </thead>
@@ -132,9 +136,15 @@
             </tr>
             <tr>
               <td>2. Granulocytes. </td>
-              <td class="centered" data-value="3"><i class="fa fa-warning fa-3x red"></i></td>
-              <td class="centered" data-value="2"><i class="fa fa-question-circle fa-3x amber"></i> </td>
-              <td>1. "All granulocyte transfusions should be irradiated for recipients of any age, and they should be transfused soon as possible after irradiation. (1C)." BCSH2010 2. "As granulocytes cannot be leucodepleted and is usually given to immunocompromised patients, it is essential that the product be irradiated prior to transfusion to avoid graft-versus-host disease." UKBTS2012 3. "Granulocyte components should continue to be provided as CMV seronegative for CMV seronegative patients." SABTO2012 4. "CMV PCR monitoring should be considered for all patients (even CMV negative/negative patients) to allow early detection of any possible CMV infection (whether transfusion-transmitted or otherwise acquired)." SABTO2012</td>
+              <td data-value="3"><p class="centered" ><i class="fa fa-warning fa-2x red"></i><br/>Irradiation required.</p></td>
+              <td data-value="2"><p class="centered"><i class="fa fa-warning fa-2x amber"></i><br/>CMV-negative required for CMV-negative patients.</p></td>
+              <td>
+                <hr/>
+                <p>1. "All granulocyte transfusions should be irradiated for recipients of any age, and they should be transfused soon as possible after irradiation. (1C)." BCSH2010</p>
+                <p>2. "As granulocytes cannot be leucodepleted and is usually given to immunocompromised patients, it is essential that the product be irradiated prior to transfusion to avoid graft-versus-host disease." UKBTS2012</p>
+                <p>3. "Granulocyte components should continue to be provided as CMV seronegative for CMV seronegative patients." SABTO2012</p>
+                <p>4. "CMV PCR monitoring should be considered for all patients (even CMV negative/negative patients) to allow early detection of any possible CMV infection (whether transfusion-transmitted or otherwise acquired)." SABTO2012</p>
+              </td>
             </tr>
             <tr>
               <td>3. Human Leucocyte Antigen (HLA)-selected components. </td>
@@ -186,31 +196,41 @@
         <br/>
         <br/>
         <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
       </div>
       <!-- /content -->
-      <div data-role="footer">
-        <h4>Page Footer</h4>
+      <div data-role="footer" class="ui-title" style="overflow: hidden;" data-position="fixed" data-tap-toggle="false">
+        <a href="#" id="searchbutton" onclick="$('#searchbar').toggle();$('#searchbutton').toggleClass('ui-icon-carat-d').toggleClass('ui-icon-search');" class="ui-btn ui-btn-icon-notext ui-icon-search" style="float:right;margin:0px !important; padding: 6px;">Search</a>
+        <h3><i class="fa fa-tint red"></i><i class="fa fa-tint amber"></i><i class="fa fa-tint green"></i> Special Blood Request</h3>
+        <div id="searchbar" style="margin: 0px; padding: 5px; display:none; background: #ddd;" class="ui-field-contain">
+          <label for="searchfield">Find a term</label>
+          <input type="search" name="searchfield" id="searchfield" value="">
+          <label for="glossarylist">Select a term</label>
+          <select id="glossarylist" name="glossarylist" data-inline="true">
+            <option value="">Press to show glossary terms</option>
+            <option value="atrisk">At-risk patients</option>
+            <option value="cellular">Blood components, cellular</option>
+            <option value="non-cellular">Blood components, non-cellular</option>
+            <option value="cmv">Cytomegalovirus</option>
+            <option value="relative">First-degree relative</option>
+            <option value="tagvhd">Graft vs. Host Disease</option>
+            <option value="irradiation">Irradiation</option>
+            <option value="ld">Leucodepletion</option>
+            <option value="causes">Mistakes, causes of</option>
+            <option value="mistakes">Mistakes, frequency of</option>
+            <option value="prevention">Mistakes, preventing</option>
+            <option value="relative">Second-degree relative</option>
+            <option value="special">Special blood component</option>
+            <option value="uld">Universal leucodepletion</option>
+          </select>
+          <a href="#" data-role="button" data-inline="true">Open</a>
+        </div>
+          <div data-role="navbar">
+            <ul>
+                <li><a href="#" data-icon="home">Home</a></li>
+                <li><a href="#" onclick="$('#searchbar').toggle();" data-icon="info">Learn</a></li>
+                <li><a href="#" data-icon="bullets" class="ui-btn-active ui-state-persist">Indications</a></li>
+            </ul>
+        </div><!-- /navbar -->
       </div>
       <!-- /footer -->
     </div>
