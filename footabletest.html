@@ -27,7 +27,7 @@
             }
 
             function resizeFixed() {
-              setTimeout(function (){
+              setTimeout(function() {
                 $t_fixed.remove();
                 $t_fixed = $this.clone();
                 $t_fixed.find("tbody").remove().end().addClass("fixed").insertBefore($this);
@@ -108,18 +108,44 @@
 
   <body style="background: white">
     <div data-role="page">
+      <div data-role="header" data-theme="b">
+        <a href="#" data-rel="back" data-icon="carat-l">Back</a>
+        <h3>Indications</h3>
+        <a href="#" onclick="$('#searchbar').toggle();$(this).toggleClass('ui-icon-minus').toggleClass('ui-icon-search');" data-icon="search">Search</a>
+        <div id="searchbar" style="margin: 0px; padding: 5px; display:none; background: #ddd;" class="ui-field-contain ui-body-a">
+          <label for="searchfield">Search the app by entering a term or use the index:</label>
+          <input data-theme="a" type="search" name="searchfield" id="searchfield" value="">
+          <select data-theme="a" id="glossarylist" name="glossarylist" data-inline="true">
+            <option value="">Press to show index terms</option>
+            <option value="atrisk">At-risk patients</option>
+            <option value="cellular">Blood components, cellular</option>
+            <option value="non-cellular">Blood components, non-cellular</option>
+            <option value="cmv">Cytomegalovirus</option>
+            <option value="relative">First-degree relative</option>
+            <option value="tagvhd">Graft vs. Host Disease</option>
+            <option value="irradiation">Irradiation</option>
+            <option value="ld">Leucodepletion</option>
+            <option value="causes">Mistakes, causes of</option>
+            <option value="mistakes">Mistakes, frequency of</option>
+            <option value="prevention">Mistakes, preventing</option>
+            <option value="relative">Second-degree relative</option>
+            <option value="special">Special blood component</option>
+            <option value="uld">Universal leucodepletion</option>
+          </select>
+          <a href="#" data-theme="a" data-role="button" data-inline="true">Open</a>
+        </div>
+      </div>
       <div role="main" class="ui-content">
         <h3>Indications for irradiated and CMV negative blood components</h3>
         <input id="filter" type="search" />
         <button data-inline="true" data-icon="plus" onclick="$('#indicationsearch').toggle();$(this).toggleClass('ui-icon-minus').toggleClass('ui-icon-plus');">Advanced search</button>
-        <div id="indicationsearch" style="display: none">
-          <a href="#" onclick="$('table').trigger('footable_filter', {filter: 'granulocyte'});" data-inline="true" data-role="button">Gran</a>
+        <div id="indicationsearch" style="display: none"> <a href="#" onclick="$('table').trigger('footable_filter', {filter: 'granulocyte'});" data-inline="true" data-role="button">Gran</a>
           <a href="#" onclick="$('table').trigger('footable_clear_filter');" data-inline="true" data-role="button">Clear filter</a>
         </div>
         <table class="footable" id="indications" data-filter="#filter">
           <thead>
             <tr>
-              <th data-class="expand">Indication</th>   
+              <th data-class="expand">Indication</th>
               <th data-hide="phone" data-type="numeric">Irradiation</th>
               <th data-hide="phone" data-type="numeric">CMV-negative</th>
               <th data-hide="all"></th>
@@ -128,14 +154,26 @@
           <tbody>
             <tr class="bloodcomponent">
               <td>1. Blood from a relative of the patient.</td>
-              <td data-value="3"><p class="centered" ><i class="fa fa-warning fa-2x red"></i><br/>Irradiation required.</p></td>
-              <td data-value="2"><p class="centered"><i class="fa fa-asterisk fa-2x green"></i><br/>CMV-negative not required unless neonate or pregnancy.</p></td>
+              <td data-value="3">
+                <p class="centered"><i class="fa fa-warning fa-2x red"></i>
+                  <br/>Irradiation required.</p>
+              </td>
+              <td data-value="2">
+                <p class="centered"><i class="fa fa-asterisk fa-2x green"></i>
+                  <br/>CMV-negative not required unless neonate or pregnancy.</p>
+              </td>
               <td>"All transfusions from first- or second-degree relatives should be irradiated, even if the patient is immunocompetent (1B)."</td>
             </tr>
             <tr>
-              <td>2. Granulocytes. </td>
-              <td data-value="3"><p class="centered" ><i class="fa fa-warning fa-2x red"></i><br/>Irradiation required.</p></td>
-              <td data-value="2"><p class="centered"><i class="fa fa-warning fa-2x amber"></i><br/>CMV-negative required for CMV-negative patients.</p></td>
+              <td>2. Granulocytes.</td>
+              <td data-value="3">
+                <p class="centered"><i class="fa fa-warning fa-2x red"></i>
+                  <br/>Irradiation required.</p>
+              </td>
+              <td data-value="2">
+                <p class="centered"><i class="fa fa-warning fa-2x amber"></i>
+                  <br/>CMV-negative required for CMV-negative patients.</p>
+              </td>
               <td>
                 <hr/>
                 <p>1. "All granulocyte transfusions should be irradiated for recipients of any age, and they should be transfused soon as possible after irradiation. (1C)." BCSH2010</p>
@@ -145,39 +183,51 @@
               </td>
             </tr>
             <tr>
-              <td>3. Human Leucocyte Antigen (HLA)-selected components. </td>
-              <td class="centered" data-value="3"><i class="fa fa-warning fa-3x red"></i></td>
-              <td class="centered" data-value="1"><i class="fa fa-square-o fa-3x green"></i> </td>
+              <td>3. Human Leucocyte Antigen (HLA)-selected components.</td>
+              <td class="centered" data-value="3"><i class="fa fa-warning fa-3x red"></i>
+              </td>
+              <td class="centered" data-value="1"><i class="fa fa-square-o fa-3x green"></i> 
+              </td>
               <td>"All human leucocyte antigen (HLA)-selected components should be irradiated, even if the patient is immunocompetent (2C)." BCSH2010</td>
             </tr>
             <tr>
-              <td>4. Fresh frozen plasma, cryoprecipitate or plasma derivative. </td>
-              <td class="centered" data-value="1"><i class="fa fa-square-o fa-3x green"></i> </td>
-              <td class="centered" data-value="1"><i class="fa fa-square-o fa-3x green"></i> </td>
+              <td>4. Fresh frozen plasma, cryoprecipitate or plasma derivative.</td>
+              <td class="centered" data-value="1"><i class="fa fa-square-o fa-3x green"></i> 
+              </td>
+              <td class="centered" data-value="1"><i class="fa fa-square-o fa-3x green"></i> 
+              </td>
               <td>It is not necessary to irradiate fresh frozen plasma, cryoprecipitate or fractionated plasma. CMV infection is associated with cellular blood components, such as red cells, platelets and granulocytes. Non-cellular components, such as fresh frozen plasma, cryoprecipitate and other plasma-derived blood components, do not need to be provided as CMV negative.</td>
             </tr>
             <tr>
-              <td>5. Red cells or platelets. </td>
-              <td class="centered" data-value="2"><i class="fa fa-question-circle fa-3x amber"></i></td>
-              <td class="centered" data-value="2"><i class="fa fa-question-circle fa-3x amber"></i></td>
+              <td>5. Red cells or platelets.</td>
+              <td class="centered" data-value="2"><i class="fa fa-question-circle fa-3x amber"></i>
+              </td>
+              <td class="centered" data-value="2"><i class="fa fa-question-circle fa-3x amber"></i>
+              </td>
               <td>Red cells and platelets contain lymphocytes (white cells) that can cause transfusion-associated Graft versus Host Disease (TA-GvHD). Cryopreserved red cells after deglycerolization do not require irradiation because they are washed free of leucocytes. Irradiated platelets and red cells are only indicated when there is an elevated risk of TA-GvHD.</td>
             </tr>
             <tr>
               <td>6. Purine analogue drugs.</td>
-              <td class="centered" data-value="3"><i class="fa fa-warning fa-3x red"></i></td>
-              <td class="centered" data-value="1"><i class="fa fa-square-o fa-3x green"></i></td>
+              <td class="centered" data-value="3"><i class="fa fa-warning fa-3x red"></i>
+              </td>
+              <td class="centered" data-value="1"><i class="fa fa-square-o fa-3x green"></i>
+              </td>
               <td>Red cells and platelets contain lymphocytes (white cells) that can cause transfusion-associated Graft versus Host Disease (TA-GvHD). Cryopreserved red cells after deglycerolization do not require irradiation because they are washed free of leucocytes. Irradiated platelets and red cells are only indicated for at-risk patients.</td>
             </tr>
             <tr>
               <td>7. Campath (Alemtuzumab).</td>
-              <td class="centered" data-value="3"><i class="fa fa-warning fa-3x red"></i></td>
-              <td class="centered" data-value="1"><i class="fa fa-square-o fa-3x green"></i></td>
+              <td class="centered" data-value="3"><i class="fa fa-warning fa-3x red"></i>
+              </td>
+              <td class="centered" data-value="1"><i class="fa fa-square-o fa-3x green"></i>
+              </td>
               <td>Red cells and platelets contain lymphocytes (white cells) that can cause transfusion-associated Graft versus Host Disease (TA-GvHD). Cryopreserved red cells after deglycerolization do not require irradiation because they are washed free of leucocytes. Irradiated platelets and red cells are only indicated for at-risk patients.</td>
             </tr>
             <tr>
               <td>8. Anti-thymocyte globulin (ATG).</td>
-              <td class="centered" data-value="3"><i class="fa fa-warning fa-3x red"></i></td>
-              <td class="centered" data-value="1"><i class="fa fa-square-o fa-3x green"></i></td>
+              <td class="centered" data-value="3"><i class="fa fa-warning fa-3x red"></i>
+              </td>
+              <td class="centered" data-value="1"><i class="fa fa-square-o fa-3x green"></i>
+              </td>
               <td>Red cells and platelets contain lymphocytes (white cells) that can cause transfusion-associated Graft versus Host Disease (TA-GvHD). Cryopreserved red cells after deglycerolization do not require irradiation because they are washed free of leucocytes. Irradiated platelets and red cells are only indicated for at-risk patients.</td>
             </tr>
           </tbody>
@@ -196,38 +246,19 @@
         <br/>
       </div>
       <!-- /content -->
-      <div data-role="footer" class="ui-title" style="overflow: hidden;" data-position="fixed" data-tap-toggle="false">
-        <a href="#" id="searchbutton" onclick="$('#searchbar').toggle();$('#searchbutton').toggleClass('ui-icon-carat-d').toggleClass('ui-icon-search');" class="ui-btn ui-btn-icon-notext ui-icon-search" style="background:#d55; float:left;border:none;margin:0px !important; padding: 7px;">Search</a>
-        <h3><i class="fa fa-tint red"></i> Special Blood Request</h3>
-        <div id="searchbar" style="margin: 0px; padding: 5px; display:none; background: #ddd;" class="ui-field-contain">
-          <label for="searchfield">Search the app by entering a term or use the index:</label>
-          <input type="search" name="searchfield" id="searchfield" value="">
-          <select id="glossarylist" name="glossarylist" data-inline="true">
-            <option value="">Press to show index terms</option>
-            <option value="atrisk">At-risk patients</option>
-            <option value="cellular">Blood components, cellular</option>
-            <option value="non-cellular">Blood components, non-cellular</option>
-            <option value="cmv">Cytomegalovirus</option>
-            <option value="relative">First-degree relative</option>
-            <option value="tagvhd">Graft vs. Host Disease</option>
-            <option value="irradiation">Irradiation</option>
-            <option value="ld">Leucodepletion</option>
-            <option value="causes">Mistakes, causes of</option>
-            <option value="mistakes">Mistakes, frequency of</option>
-            <option value="prevention">Mistakes, preventing</option>
-            <option value="relative">Second-degree relative</option>
-            <option value="special">Special blood component</option>
-            <option value="uld">Universal leucodepletion</option>
-          </select>
-          <a href="#" data-role="button" data-inline="true">Open</a>
+      <div data-role="footer" style="background: #000;" data-position="fixed" data-tap-toggle="false">
+        <h3 style="color: #fff; text-shadow: none;"><i class="fa fa-tint" style="color: #fff; text-shadow: 1px 1px 10px #fff;"></i> Special Blood Components</h3>
+        <div data-role="navbar">
+          <ul>
+            <li><a href="#" data-theme="b" data-icon="home">Home</a>
+            </li>
+            <li><a href="#" data-theme="b" onclick="$('#searchbar').toggle();" data-icon="info">Learn</a>
+            </li>
+            <li><a href="#" data-theme="b" data-icon="bullets" class="ui-btn-active ui-state-persist">Indications</a>
+            </li>
+          </ul>
         </div>
-          <div data-role="navbar">
-            <ul>
-                <li><a href="#" data-icon="home">Home</a></li>
-                <li><a href="#" onclick="$('#searchbar').toggle();" data-icon="info">Learn</a></li>
-                <li><a href="#" data-icon="bullets" class="ui-btn-active ui-state-persist">Indications</a></li>
-            </ul>
-        </div><!-- /navbar -->
+        <!-- /navbar -->
       </div>
       <!-- /footer -->
     </div>
