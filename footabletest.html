@@ -108,22 +108,20 @@
 
   <body style="background: white">
     <div data-role="page">
-      <div data-role="header">
-        <h1>Look up</h1>
-      </div>
-      <!-- /header -->
       <div role="main" class="ui-content">
-        <a href="#" onclick="$('table').trigger('footable_filter', {filter: 'granulocyte'});" data-inline="true" data-role="button">Gran</a>
-        <a href="#" onclick="$('table').trigger('footable_clear_filter');" data-inline="true" data-role="button">Clear filter</a>
-        <p>Search:
-          <input id="filter" type="text" />
-        </p>
+        <h3>Indications for irradiated and CMV negative blood components</h3>
+        <input id="filter" type="search" />
+        <button data-inline="true" data-icon="plus" onclick="$('#indicationsearch').toggle();$(this).toggleClass('ui-icon-minus').toggleClass('ui-icon-plus');">Advanced search</button>
+        <div id="indicationsearch" style="display: none">
+          <a href="#" onclick="$('table').trigger('footable_filter', {filter: 'granulocyte'});" data-inline="true" data-role="button">Gran</a>
+          <a href="#" onclick="$('table').trigger('footable_clear_filter');" data-inline="true" data-role="button">Clear filter</a>
+        </div>
         <table class="footable" id="indications" data-filter="#filter">
           <thead>
             <tr>
               <th data-class="expand">Indication</th>   
               <th data-hide="phone" data-type="numeric">Irradiation</th>
-              <th data-hide="phone" data-type="numeric">CMV-neg.</th>
+              <th data-hide="phone" data-type="numeric">CMV-negative</th>
               <th data-hide="all"></th>
             </tr>
           </thead>
@@ -131,7 +129,7 @@
             <tr class="bloodcomponent">
               <td>1. Blood from a relative of the patient.</td>
               <td data-value="3"><p class="centered" ><i class="fa fa-warning fa-2x red"></i><br/>Irradiation required.</p></td>
-              <td data-value="2"><p class="centered"><i class="fa fa-check fa-2x green"></i><br/>CMV-negative not required unless neonate or pregnancy.</p></td>
+              <td data-value="2"><p class="centered"><i class="fa fa-asterisk fa-2x green"></i><br/>CMV-negative not required unless neonate or pregnancy.</p></td>
               <td>"All transfusions from first- or second-degree relatives should be irradiated, even if the patient is immunocompetent (1B)."</td>
             </tr>
             <tr>
@@ -199,14 +197,14 @@
       </div>
       <!-- /content -->
       <div data-role="footer" class="ui-title" style="overflow: hidden;" data-position="fixed" data-tap-toggle="false">
-        <a href="#" id="searchbutton" onclick="$('#searchbar').toggle();$('#searchbutton').toggleClass('ui-icon-carat-d').toggleClass('ui-icon-search');" class="ui-btn ui-btn-icon-notext ui-icon-search" style="float:right;border:none;margin:0px !important; padding: 8px;">Search</a>
-        <h3><i class="fa fa-tint red"></i> Special Blood Components</h3>
+        <a href="#" id="searchbutton" onclick="$('#searchbar').toggle();$('#searchbutton').toggleClass('ui-icon-carat-d').toggleClass('ui-icon-search');" class="ui-btn ui-btn-icon-notext ui-icon-search" style="background:#5d5; float:right;border:none;margin:0px !important; padding: 8px;">Search</a>
+        <h3><i class="fa fa-tint red"></i> Special Blood Request</h3>
         <div id="searchbar" style="margin: 0px; padding: 5px; display:none; background: #ddd;" class="ui-field-contain">
-          <label for="searchfield">Find a term</label>
+          <label for="searchfield">Enter search term:</label>
           <input type="search" name="searchfield" id="searchfield" value="">
-          <label for="glossarylist">Select a term</label>
+          <label for="glossarylist">Select from index:</label>
           <select id="glossarylist" name="glossarylist" data-inline="true">
-            <option value="">Press to show glossary terms</option>
+            <option value="">Press to show index terms</option>
             <option value="atrisk">At-risk patients</option>
             <option value="cellular">Blood components, cellular</option>
             <option value="non-cellular">Blood components, non-cellular</option>
