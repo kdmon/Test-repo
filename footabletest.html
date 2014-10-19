@@ -28,15 +28,16 @@
 
             function resizeFixed() {
               setTimeout(function (){
-              $t_fixed.remove();
-              $t_fixed = $this.clone();
-              $t_fixed.find("tbody").remove().end().addClass("fixed").insertBefore($this);
-              $t_fixed.find("thead tr th span").remove();
-              $t_fixed.find("th").each(function(index) {
-                $(this).css("width", $this.find("th").eq(index).width() + "px");
-              });
-              scrollFixed();
-              }, 150);
+                $t_fixed.remove();
+                $t_fixed = $this.clone();
+                $t_fixed.find("tbody").remove().end().addClass("fixed").insertBefore($this);
+                $t_fixed.find("thead tr th span").remove();
+                $t_fixed.find("th").each(function(index) {
+                  $(this).css("width", $this.find("th").eq(index).width() + "px");
+                });
+                $('.fixed').css('width', '100%').css('width', '-=32px');
+                scrollFixed();
+              }, 200);
             }
 
             function scrollFixed() {
@@ -87,7 +88,6 @@
         display: none;
         border: none;
         z-index: 999;
-        width: calc(100% - 2em);
       }
       .footable {
         font-size: 1em;
@@ -122,16 +122,16 @@
           <thead>
             <tr>
               <th data-class="expand">Indication</th>   
-              <th data-hide="phone" data-type="numeric"></th>
-              <th data-hide="phone" data-type="numeric"></th>
+              <th data-hide="phone" data-type="numeric">Irradiation</th>
+              <th data-hide="phone" data-type="numeric">CMV-neg.</th>
               <th data-hide="all"></th>
             </tr>
           </thead>
           <tbody>
             <tr class="bloodcomponent">
               <td>1. Blood from a relative of the patient.</td>
-              <td class="centered" data-value="3"><i class="fa fa-warning fa-3x red"></i></td>
-              <td class="centered" data-value="1"><i class="fa fa-smile-o fa-3x green"></i></td>
+              <td data-value="3"><p class="centered" ><i class="fa fa-warning fa-2x red"></i><br/>Irradiation required.</p></td>
+              <td data-value="2"><p class="centered"><i class="fa fa-check fa-2x green"></i><br/>CMV-negative not required unless neonate or pregnancy.</p></td>
               <td>"All transfusions from first- or second-degree relatives should be irradiated, even if the patient is immunocompetent (1B)."</td>
             </tr>
             <tr>
@@ -199,8 +199,8 @@
       </div>
       <!-- /content -->
       <div data-role="footer" class="ui-title" style="overflow: hidden;" data-position="fixed" data-tap-toggle="false">
-        <a href="#" id="searchbutton" onclick="$('#searchbar').toggle();$('#searchbutton').toggleClass('ui-icon-carat-d').toggleClass('ui-icon-search');" class="ui-btn ui-btn-icon-notext ui-icon-search" style="float:right;margin:0px !important; padding: 6px;">Search</a>
-        <h3><i class="fa fa-tint red"></i><i class="fa fa-tint amber"></i><i class="fa fa-tint green"></i> Special Blood Request</h3>
+        <a href="#" id="searchbutton" onclick="$('#searchbar').toggle();$('#searchbutton').toggleClass('ui-icon-carat-d').toggleClass('ui-icon-search');" class="ui-btn ui-btn-icon-notext ui-icon-search" style="float:right;border:none;margin:0px !important; padding: 8px;">Search</a>
+        <h3><i class="fa fa-tint red"></i> Special Blood Components</h3>
         <div id="searchbar" style="margin: 0px; padding: 5px; display:none; background: #ddd;" class="ui-field-contain">
           <label for="searchfield">Find a term</label>
           <input type="search" name="searchfield" id="searchfield" value="">
