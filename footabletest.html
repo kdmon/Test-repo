@@ -59,6 +59,7 @@
       });
     </script>
     <style>
+      .ui-btn-active { background-color: #3aa !important;  }
       label {
         text-align: center;
       }
@@ -137,7 +138,7 @@
       </div>
       <div role="main" class="ui-content">
         <h3>Indications for irradiated and CMV negative blood components</h3>
-        <h2 style="background: #000; padding: 25px; border-radius: 10px; text-align: center; color: #fff; text-shadow: none;"><i class="fa fa-tint fa-5x" style="color: #fff; text-shadow: 1px 1px 40px #fff;"></i><br/>Special Blood Components</h2>
+        <h2 style="width: 40%; min-width: 200px; margin:auto; background: #3aa; padding: 25px; border-radius: 10px; text-align: center; color: #fff; text-shadow: none;"><i class="fa fa-tint fa-5x" style="color: #fff; text-shadow: 1px 1px 40px #fff;"></i><br/>Special Blood Components</h2>
         <input id="filter" type="search" />
         <button data-inline="true" data-icon="plus" onclick="$('#indicationsearch').toggle();$(this).toggleClass('ui-icon-minus').toggleClass('ui-icon-plus');">Advanced search</button>
         <div id="indicationsearch" style="display: none"> <a href="#" onclick="$('table').trigger('footable_filter', {filter: 'granulocyte'});" data-inline="true" data-role="button">Gran</a>
@@ -247,7 +248,7 @@
         <br/>
       </div>
       <!-- /content -->
-      <div data-role="footer" style="background: #000;" data-position="fixed" data-tap-toggle="false">
+      <div data-role="footer" style="background: #277;" data-position="fixed" data-tap-toggle="false">
         <h3 style="color: #fff; text-shadow: none;"><i class="fa fa-tint" style="color: #fff; text-shadow: 1px 1px 10px #fff;"></i> Special Blood Components</h3>
         <div data-role="navbar">
           <ul>
