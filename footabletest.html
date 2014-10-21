@@ -71,12 +71,34 @@
   		
     </script>
     <style>
+      .footable {
+        border-spacing: 0px 0px;
+      }
+      
+      .footable td {
+        color: #000;
+        background: #fff;
+        border: 1px solid #3aa;
+        padding: 5px;
+      }
+      
+      .footable th {
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+      
+      .footable th, tr {
+        background: #3aa;
+        text-shadow: none;
+        color: #fff;
+      }
+      
       .ui-btn-active {
         background-color: #3aa !important;
         border: none;
       }
       .submenu a {
-        background: #177 !important;
+        background: #3aa !important;
       }
       label {
         text-align: center;
@@ -96,10 +118,6 @@
       .centered {
         text-align: center !important;
         margin: 0px;
-      }
-      table {
-        border-collapse: collapse;
-        width: 100%;
       }
       .fixed {
         top: 42px;
@@ -138,7 +156,15 @@
       </div>
     </div>
     <div data-role="page" id="indications">
-      
+    
+      <div data-role="header" style="background: #eee; border: none;" data-theme="b" data-position="fixed" data-tap-toggle="false">
+      <div class="submenu">
+          <a href="#" data-role="button" data-theme="b" style="margin:5px; float: left;" data-rel="back" data-icon="carat-l">Back</a>
+          <a href="#searchpanel" data-role="button" data-theme="b" style="margin:5px; float: left;" data-iconpos="right" data-icon="search">Find</a>
+          <a href="#menupanel" data-role="button" data-theme="b" style="margin:5px; margin-bottom:0px; float: right;" data-icon="bars" data-iconpos="right">Menu</a>
+          <a href="#" data-role="button" data-theme="b" style="margin:5px; margin-bottom:0px; float: right;" onclick="$(window).scrollTop(0)" data-icon="carat-u">Top</a>
+        </div>
+      </div>
       <div role="main" class="ui-content">
         <h3>Indications for irradiated and CMV negative blood components</h3>
         <input id="filter" type="search" />
@@ -250,13 +276,8 @@
         <br/>
       </div>
       <div data-role="footer" style="background: #066; border: none;" data-position="fixed" data-tap-toggle="false" data-theme="b">
-        <div class="submenu">
-          <a href="#" data-role="button" data-theme="b" style="margin:5px; float: left;" data-rel="back" data-icon="carat-l">Back</a>
-          <a href="#searchpanel" data-role="button" data-theme="b" style="margin:5px; float: left;" data-iconpos="right" data-icon="search">Find</a>
-          <a href="#" data-role="button" data-theme="b" style="margin:5px; margin-bottom:0px; float: right;" onclick="$(window).scrollTop(0)" data-icon="carat-u">To top</a>
-        </div>
-        <h3 style="margin:0px;  box-shadow: 0px 0px 15px #000; background: #288; clear: both; padding: 5px; color: #fff; text-shadow: none;"><i class="fa fa-tint" style="color: #fff; text-shadow: 1px 1px 10px #fff;"></i> Special Blood Components</h3>
-        <div data-role="navbar" style="box-shadow: 0px 0px 5px #000;">
+        <h3 style="margin:0px;  box-shadow: 0px 0px 5px #000; background: #288; clear: both; padding: 5px; color: #fff; text-shadow: none;"><i class="fa fa-tint" style="color: #fff; text-shadow: 1px 1px 10px #fff;"></i> Special Blood Components</h3>
+        <div data-role="navbar">
           <ul>
             <li><a href="#home"  data-icon="home">Home</a>
             </li>
