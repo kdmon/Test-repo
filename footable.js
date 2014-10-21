@@ -15,6 +15,7 @@
   w.footable = {
     options: {
       delay: 100, // The number of millseconds to wait before triggering the react event
+      detailFields: false,
       breakpoints: { // The different screen resolution breakpoints
         phone: 480,
         tablet: 1024
@@ -80,7 +81,8 @@
           if (group !== '_none') element.append('<div class="' + classes.detailInnerGroup + '">' + groups[group].name + '</div>');
           for (var j = 0; j < groups[group].data.length; j++) {
             var separator = (groups[group].data[j].name) ? separatorChar : '';
-            element.append('<div class="' + classes.detailInnerRow + '"><div class="' + classes.detailInnerName + '">' + groups[group].data[j].name + separator + '</div><div class="' + classes.detailInnerValue + '">' + groups[group].data[j].display + '</div></div>');
+            if (w.footable.options.detailFields) element.append('<div class="' + classes.detailInnerRow + '"><div class="' + classes.detailInnerName + '">' + groups[group].data[j].name + separator + '</div><div class="' + classes.detailInnerValue + '">' + groups[group].data[j].display + '</div></div>');
+            else element.append('<div class="' + classes.detailInnerRow + '"><div class="' + classes.detailInnerValue + '">' + groups[group].data[j].display + '</div></div>');
           }
         }
       },
