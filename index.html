@@ -431,9 +431,10 @@
         }, function(data) {
           var history = "";
           for (i = 0; i < data.length; i++) {
-            history += '<li><p class="wrap">' + timeSince(data[i].commit.author.date) + " <em>" + data[i].commit.author.name + '</em>: ' + data[i].commit.message + ' (<a href="' + data[i].html_url + '" target="_blank">More</a>)</p></li>';
+            var filepath = "http://it4se.com:8080/" + openFiles[currentFile].username + "/" + openFiles[currentFile].repository + "/" + data[i].sha + "/" + openFiles[currentFile].filename;
+            history += '<li><p class="wrap">' + timeSince(data[i].commit.author.date) + " <em>" + data[i].commit.author.name + '</em>: ' + data[i].commit.message + ' <a data-role="button" data-inline="true" data-mini="true" href="' + filepath + '" target="_blank">Preview</a> <a data-role="button" data-inline="true" data-mini="true" href="' + data[i].html_url + '" target="_blank">Diff</a> <a data-role="button" data-mini="true" data-inline="true" onclick="if (confirm (' + "'" + "Set current document to this revision?" + "'" + ')) pullProxy(' + "'" + filepath + "'" + ', 1);" href="#">Load</a></p></li>';
           }
-          $("#changelog").html(history).listview("refresh");
+          $("#changelog").html(history).listview("refresh").trigger("refresh").trigger("create");
         });
       }
 
