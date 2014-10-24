@@ -16,7 +16,7 @@
     <script src="footable.js" type="text/javascript"></script>
     <script type="text/javascript">
       (function($) {
-        $.fn.fixMe = function() {
+        $.fn.stickyHeading = function() {
           return this.each(function() {
             var $this = $(this),
               $t_fixed;
@@ -59,31 +59,34 @@
       
       $(document).on("pageinit", "#indications", function() {
         setTimeout(function () {
-          $('#indicationstable').footable();
-          $(".footable").fixMe();
+          $('#indicationstable').footable({
+            toggleHTMLElement: '<span style="margin: 1em; float:left;"><i class="fa fa-plus-square-o fa-3x footable-toggle footable-expand"></i> <i class="fa fa-minus-square-o fa-3x footable-toggle footable-contract"></i></span>',
+            toggleSelector: " > tbody > tr > td > span.footable-toggle"
+            
+          });
+          $(".footable").stickyHeading();
         }, 300);
       });
       
-        
-  		$(function() {
+      $(function() {
   			$( "body>[data-role='panel']" ).panel().trigger('create');
   		});
   		
     </script>
     <style>
       .footable {
-        border-spacing: 0px 0px;
+        border-spacing: 1px 0px;
       }
       
-      .footable-detail-show .fa-plus {
+      .footable-detail-show .fa-plus-square-o {
         display: none;
       }
       
-      :not(.footable-detail-show) .fa-minus {
+      :not(.footable-detail-show) .fa-minus-square-o {
         display: none;
       }
       
-      .footable-detail-show .fa-minus {
+      .footable-detail-show .fa-minus-square-o {
         display: inline;
       }
       
@@ -98,6 +101,7 @@
       
       .footable-row-detail-cell {
         background: #ddd;
+        vertical-align: middle;
       }
       
       .footable td {
@@ -105,8 +109,8 @@
         color: #000;
         border: none;
         padding: 5px;
-        height: 5em;
         box-shadow: 0px 0px 2px #000;
+        vertical-align: middle;
       }
       
       .footable th {
@@ -247,14 +251,14 @@
           </thead>
           <tbody>
             <tr class="bloodcomponent">
-              <td><i class="fa fa-plus fa-2x"></i> <i class="fa fa-minus fa-2x "></i> 1. Blood from a relative of the patient.</td>
+              <td>1. Blood from a relative of the patient.</td>
               <td data-value="3"><p class="redcell">
                 <i class="fa fa-warning fa-2x red"></i>
                   <br/>Irradiation required.</p>
               </td>
               <td data-value="1"><p class="greencell">CMV-negative not required, unless neonate, pregnant woman or granulocyte transfusion.</p>
               </td>
-              <td>"All transfusions from <a href="#rels" data-rel="popup">first- or second-degree relatives <i class="fa fa-info-circle"></i></a> should be irradiated, even if the patient is immunocompetent (1B)."
+              <td>"All transfusions from <a href="#rels" data-rel="popup" style="color: inherit; text-decoration: underline; text-decoration-style: dotted; font-weight: inherit;" >first- or second-degree relatives <i class="fa fa-info-circle"></i></a> should be irradiated, even if the patient is immunocompetent (1B)."
                  <div data-role="popup" id="rels">
                   <p>This is a completely basic popup, no options set.</p>
                 </div>
@@ -262,7 +266,7 @@
               </td>
             </tr>
             <tr class="bloodcomponent">
-              <td><i class="fa fa-plus fa-2x"></i> <i class="fa fa-minus fa-2x "></i> 2. Granulocytes.</td>
+              <td>2. Granulocytes.</td>
               <td data-value="3">
                 <p class="redcell"><i class="fa fa-warning fa-2x"></i>
                   <br/>Irradiation required.</p>
@@ -279,7 +283,7 @@
               </td>
             </tr>
             <tr class="bloodcomponent">
-              <td><i class="fa fa-plus fa-2x"></i> <i class="fa fa-minus fa-2x "></i> 3. Human Leucocyte Antigen (HLA)-selected components.</td>
+              <td>3. Human Leucocyte Antigen (HLA)-selected components.</td>
               <td class="centered" data-value="3"><i class="fa fa-warning fa-3x red"></i>
               </td>
               <td class="centered" data-value="1"><i class="fa fa-square-o fa-3x green"></i> 
@@ -287,7 +291,7 @@
               <td>"All human leucocyte antigen (HLA)-selected components should be irradiated, even if the patient is immunocompetent (2C)." BCSH2010</td>
             </tr>
             <tr class="bloodcomponent">
-              <td><i class="fa fa-plus fa-2x"></i> <i class="fa fa-minus fa-2x "></i> 4. Fresh frozen plasma, cryoprecipitate or plasma derivative.</td>
+              <td>4. Fresh frozen plasma, cryoprecipitate or plasma derivative.</td>
               <td class="centered" data-value="1"><i class="fa fa-square-o fa-3x green"></i> 
               </td>
               <td class="centered" data-value="1"><i class="fa fa-square-o fa-3x green"></i> 
@@ -295,7 +299,7 @@
               <td>It is not necessary to irradiate fresh frozen plasma, cryoprecipitate or fractionated plasma. CMV infection is associated with cellular blood components, such as red cells, platelets and granulocytes. Non-cellular components, such as fresh frozen plasma, cryoprecipitate and other plasma-derived blood components, do not need to be provided as CMV negative.</td>
             </tr>
             <tr class="bloodcomponent">
-              <td><i class="fa fa-plus fa-2x"></i> <i class="fa fa-minus fa-2x "></i> 5. Red cells or platelets.</td>
+              <td>5. Red cells or platelets.</td>
               <td class="centered" data-value="2"><i class="fa fa-question-circle fa-3x amber"></i>
               </td>
               <td class="centered" data-value="2"><i class="fa fa-question-circle fa-3x amber"></i>
@@ -303,7 +307,7 @@
               <td>Red cells and platelets contain lymphocytes (white cells) that can cause transfusion-associated Graft versus Host Disease (TA-GvHD). Cryopreserved red cells after deglycerolization do not require irradiation because they are washed free of leucocytes. Irradiated platelets and red cells are only indicated when there is an elevated risk of TA-GvHD.</td>
             </tr>
             <tr class="drugs">
-              <td><i class="fa fa-plus fa-2x"></i> <i class="fa fa-minus fa-2x "></i> 6. Purine analogue drugs.</td>
+              <td>6. Purine analogue drugs.</td>
               <td class="centered" data-value="3"><i class="fa fa-warning fa-3x red"></i>
               </td>
               <td class="centered" data-value="1"><i class="fa fa-square-o fa-3x green"></i>
@@ -311,7 +315,7 @@
               <td>Red cells and platelets contain lymphocytes (white cells) that can cause transfusion-associated Graft versus Host Disease (TA-GvHD). Cryopreserved red cells after deglycerolization do not require irradiation because they are washed free of leucocytes. Irradiated platelets and red cells are only indicated for at-risk patients.</td>
             </tr>
             <tr class="drugs">
-              <td><i class="fa fa-plus fa-2x"></i> <i class="fa fa-minus fa-2x "></i> 7. Campath (Alemtuzumab).</td>
+              <td>7. Campath (Alemtuzumab).</td>
               <td class="centered" data-value="3"><i class="fa fa-warning fa-3x red"></i>
               </td>
               <td class="centered" data-value="1"><i class="fa fa-square-o fa-3x green"></i>
@@ -319,7 +323,7 @@
               <td>Red cells and platelets contain lymphocytes (white cells) that can cause transfusion-associated Graft versus Host Disease (TA-GvHD). Cryopreserved red cells after deglycerolization do not require irradiation because they are washed free of leucocytes. Irradiated platelets and red cells are only indicated for at-risk patients.</td>
             </tr>
             <tr class="drugs">
-              <td><i class="fa fa-plus fa-2x"></i> <i class="fa fa-minus fa-2x "></i> 8. Anti-thymocyte globulin (ATG).</td>
+              <td>8. Anti-thymocyte globulin (ATG).</td>
               <td class="centered" data-value="3"><i class="fa fa-warning fa-3x red"></i>
               </td>
               <td class="centered" data-value="1"><i class="fa fa-square-o fa-3x green"></i>
