@@ -19,8 +19,9 @@
       (function($) {
         $.fn.stickyHeading = function() {
           return this.each(function() {
-            var originalHeader = $(this).find("thead tr"),
-              fixedHeader;
+            var originalTable = $(this);
+            var originalHeader = $(this).find("thead tr");
+            var fixedHeader;
 
             function init() {
               fixedHeader = originalHeader.clone(1);
@@ -43,10 +44,10 @@
 
             function scrollFixed() {
               var offset = $(this).scrollTop(),
-                tableOffsetTop = 160,
-                tableOffsetBottom = tableOffsetTop + $(this).height() - $(this).find("thead").height();
-              if (offset < tableOffsetTop || offset > tableOffsetBottom) {fixedHeader.hide(); originalHeader.show();}
-              else if (offset >= tableOffsetTop && offset <= tableOffsetBottom && fixedHeader.is(":hidden")) {fixedHeader.show(); originalHeader.hide();}
+                tableOffsetTop = originalTable.offset().top;
+                tableOffsetBottom = tableOffsetTop + originalTable.height() - originalHeader.height();
+              if (offset < tableOffsetTop || offset > tableOffsetBottom) {fixedHeader.hide();}
+              else if (offset >= tableOffsetTop && offset <= tableOffsetBottom && fixedHeader.is(":hidden")) {fixedHeader.show();}
             }
             $(window).resize(resizeFixed);
             $(window).scroll(scrollFixed);
