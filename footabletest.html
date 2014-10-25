@@ -3,11 +3,12 @@
 
   <head>
     <title>Responsive HTML tables</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css" />
     <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script>
-      $( document ).on( "mobileinit", function() {
+      $(document).on("mobileinit", function() {
         $.mobile.defaultPageTransition = 'none';
       });
     </script>
@@ -34,7 +35,7 @@
                 $t_fixed.remove();
                 $t_fixed = $this.clone();
                 $t_fixed.find("tbody").remove().end().addClass("fixed").insertBefore($this);
-                $t_fixed.find("thead tr th span").remove();
+                $t_fixed.find("thead tr th i").remove();
                 $t_fixed.find("th").each(function(index) {
                   $(this).css("width", $this.find("th").eq(index).width() + "px");
                 });
@@ -56,40 +57,32 @@
           });
         };
       })(jQuery);
-      
       $(document).on("pageinit", "#indications", function() {
-        setTimeout(function () {
+        setTimeout(function() {
           $('#indicationstable').footable({
             toggleHTMLElement: '<span style="margin: 1em; float:left;"><i class="fa fa-plus-square-o fa-3x footable-toggle footable-expand"></i> <i class="fa fa-minus-square-o fa-3x footable-toggle footable-contract"></i></span>',
             toggleSelector: " > tbody > tr > td > span.footable-toggle"
-            
           });
           $(".footable").stickyHeading();
         }, 300);
       });
-      
       $(function() {
-  			$( "body>[data-role='panel']" ).panel().trigger('create');
-  		});
-  		
+        $("body>[data-role='panel']").panel().trigger('create');
+      });
     </script>
     <style>
       .footable {
         border-spacing: 1px 0px;
       }
-      
       .footable-detail-show .fa-plus-square-o {
         display: none;
       }
-      
       :not(.footable-detail-show) .fa-minus-square-o {
         display: none;
       }
-      
       .footable-detail-show .fa-minus-square-o {
         display: inline;
       }
-      
       .footable-row-detail-value {
         font-weight: normal;
         box-shadow: 0px 0px 5px #bbb;
@@ -98,12 +91,10 @@
         background: #fff;
         border-radius: 5px;
       }
-      
       .footable-row-detail-cell {
         background: #ddd;
         vertical-align: middle;
       }
-      
       .footable td {
         font-weight: bold;
         color: #000;
@@ -112,46 +103,52 @@
         box-shadow: 0px 0px 2px #000;
         vertical-align: middle;
       }
-      
       .footable th {
         padding-top: 10px;
         padding-bottom: 10px;
         box-shadow: 1px 1px 5px #000;
       }
-      
-      .footable th, .footable tr {
+      .footable th,
+      .footable tr {
         background: #3aa;
         text-shadow: none;
         color: #fff;
       }
-      
       .footable .bloodcomponent {
         background: #fdd;
       }
-      
       .footable .drugs {
         background: #fff;
       }
-      
       .footable .history {
         background: #ffd;
       }
-      
       .footable .neonatology {
         background: #ddf;
       }
-      
       .footable .transplant {
         background: #ddd;
       }
-      
       .footable tr {
         background: #fff;
       }
-      
       .ui-btn-active {
         background-color: #3aa !important;
         border: none;
+      }
+      .activetab {
+        background-color: #3aa !important;
+        border: none !important;
+        border-left: 1px solid #000 !important;
+        border-top: 1px solid #000 !important;
+        text-shadow: none !important;
+      }
+      .inactivetab {
+        background-color: #055 !important;
+        border: none !important;
+        border-left: 1px solid #000 !important;
+        border-top: 1px solid #000 !important;
+        text-shadow: none !important;
       }
       .submenu a {
         background: #3aa !important;
@@ -159,8 +156,9 @@
       label {
         text-align: center;
       }
-      
-      .greencell, .redcell, .ambercell{
+      .greencell,
+      .redcell,
+      .ambercell {
         font-weight: normal;
         text-shadow: 1px 1px 1px #555;
         color: white;
@@ -172,15 +170,15 @@
         border: 1px solid #aaa;
         min-height: 5em;
       }
-      .greencell{
+      .greencell {
         background: #2b2;
       }
-      .ambercell{
+      .ambercell {
         background: #ef0;
         text-shadow: 1px 1px 1px #fff;
         color: #000;
       }
-      .redcell{
+      .redcell {
         background: #b00;
       }
       .centered {
@@ -213,7 +211,7 @@
         <h3 style="padding: 2px; color: #fff; text-shadow: none;"><i class="fa fa-tint" style="color: #fff; text-shadow: 1px 1px 10px #fff;"></i> Special Blood Components</h3>
         <div data-role="navbar">
           <ul>
-            <li><a href="#home" data-theme="b" class="ui-btn-active ui-state-persist" data-icon="home">Home</a>
+            <li><a href="#home" data-theme="b" class="activetab" data-icon="home">Home</a>
             </li>
             <li><a href="#learn" data-theme="b" data-icon="info">Learn</a>
             </li>
@@ -224,10 +222,8 @@
       </div>
     </div>
     <div data-role="page" id="indications">
-    
       <div data-role="header" style="background: #eee; border: none;" data-theme="b" data-position="fixed" data-tap-toggle="false">
-      <div class="submenu">
-          <a href="#" data-role="button" data-theme="b" style="margin:5px; float: left;" data-rel="back" data-icon="carat-l">Back</a>
+        <div class="submenu"> <a href="#" data-role="button" data-theme="b" style="margin:5px; float: left;" data-rel="back" data-icon="carat-l">Back</a>
           <a href="#searchpanel" data-role="button" data-theme="b" style="margin:5px; float: left;" data-iconpos="right" data-icon="search">Find</a>
           <a href="#menupanel" data-role="button" data-theme="b" style="margin:5px; margin-bottom:0px; float: right;" data-icon="bars" data-iconpos="right">Menu</a>
           <a href="#" data-role="button" data-theme="b" style="margin:5px; margin-bottom:0px; float: right;" onclick="$(window).scrollTop(0)" data-icon="carat-u">Top</a>
@@ -243,26 +239,29 @@
         <table class="footable" id="indicationstable" data-filter="#filter">
           <thead>
             <tr>
-              <th data-class="expand">Indication <i class="fa fa-sort"></i></th>
-              <th data-hide="phone" data-type="numeric">Irradiation <i class="fa fa-sort"></i></th>
-              <th data-hide="phone" data-type="numeric">CMV-negative <i class="fa fa-sort"></i></th>
+              <th data-class="expand">Indication <i class="fa fa-sort"></i>
+              </th>
+              <th data-hide="phone" data-type="numeric">Irradiation <i class="fa fa-sort"></i>
+              </th>
+              <th data-hide="phone" data-type="numeric">CMV-negative <i class="fa fa-sort"></i>
+              </th>
               <th data-hide="all"></th>
             </tr>
           </thead>
           <tbody>
             <tr class="bloodcomponent">
               <td>1. Blood from a relative of the patient.</td>
-              <td data-value="3"><p class="redcell">
-                <i class="fa fa-warning fa-2x red"></i>
+              <td data-value="3">
+                <p class="redcell"> <i class="fa fa-warning fa-2x red"></i>
                   <br/>Irradiation required.</p>
               </td>
-              <td data-value="1"><p class="greencell">CMV-negative not required, unless neonate, pregnant woman or granulocyte transfusion.</p>
+              <td data-value="1">
+                <p class="greencell">CMV-negative not required, unless neonate, pregnant woman or granulocyte transfusion.</p>
               </td>
-              <td>"All transfusions from <a href="#rels" data-rel="popup" style="color: inherit; text-decoration: underline; text-decoration-style: dotted; font-weight: inherit;" >first- or second-degree relatives <i class="fa fa-info-circle"></i></a> should be irradiated, even if the patient is immunocompetent (1B)."
-                 <div data-role="popup" id="rels">
+              <td>"All transfusions from <a href="#rels" data-rel="popup" style="color: inherit; text-decoration: underline; text-decoration-style: dotted; font-weight: inherit;">first- or second-degree relatives <i class="fa fa-info-circle"></i></a> should be irradiated, even if the patient is immunocompetent (1B)."
+                <div data-role="popup" id="rels">
                   <p>This is a completely basic popup, no options set.</p>
                 </div>
-                
               </td>
             </tr>
             <tr class="bloodcomponent">
@@ -349,11 +348,11 @@
         <h3 style="margin:0px;  box-shadow: 0px 0px 5px #000; background: #288; clear: both; padding: 5px; color: #fff; text-shadow: none;"><i class="fa fa-tint" style="color: #fff; text-shadow: 1px 1px 10px #fff;"></i> Special Blood Components</h3>
         <div data-role="navbar">
           <ul>
-            <li><a href="#home"><i class="fa fa-home fa-2x"></i><br/>Home</a>
+            <li><a href="#home" class="inactivetab"><i class="fa fa-home fa-2x"></i><br/>Home</a>
             </li>
-            <li><a href="#learn"><i class="fa fa-graduation-cap fa-2x"></i><br/>Learn</a>
+            <li><a href="#learn" class="inactivetab"><i class="fa fa-graduation-cap fa-2x"></i><br/>Learn</a>
             </li>
-            <li><a href="#indications" class="ui-btn-active ui-state-persist"><i class="fa fa-book fa-2x"></i><br/>Indications</a>
+            <li><a href="#indications" class="activetab"><i class="fa fa-book fa-2x"></i><br/>Indications</a>
             </li>
           </ul>
         </div>
@@ -361,26 +360,25 @@
     </div>
     <div data-role="panel" id="searchpanel" data-position="right" data-display="overlay" data-theme="a">
       <h3 style="margin: 0px;" class="centered">Search the app</h3>
-        <label for="searchfield">Enter a search term or look up a word in the index:</label>
-        <input data-theme="a" type="search" name="searchfield" id="searchfield" value="">
-        <select data-theme="a" id="glossarylist" name="glossarylist" data-inline="true">
-          <option value="">Press to show index terms</option>
-          <option value="atrisk">At-risk patients</option>
-          <option value="cellular">Blood components, cellular</option>
-          <option value="non-cellular">Blood components, non-cellular</option>
-          <option value="cmv">Cytomegalovirus</option>
-          <option value="relative">First-degree relative</option>
-          <option value="tagvhd">Graft vs. Host Disease</option>
-          <option value="irradiation">Irradiation</option>
-          <option value="ld">Leucodepletion</option>
-          <option value="causes">Mistakes, causes of</option>
-          <option value="mistakes">Mistakes, frequency of</option>
-          <option value="prevention">Mistakes, preventing</option>
-          <option value="relative">Second-degree relative</option>
-          <option value="special">Special blood component</option>
-          <option value="uld">Universal leucodepletion</option>
-        </select>
-      <a href="#" data-rel="close" data-icon="delete" data-role="button">Close</a>
+      <label for="searchfield">Enter a search term or look up a word in the index:</label>
+      <input data-theme="a" type="search" name="searchfield" id="searchfield" value="">
+      <select data-theme="a" id="glossarylist" name="glossarylist" data-inline="true">
+        <option value="">Press to show index terms</option>
+        <option value="atrisk">At-risk patients</option>
+        <option value="cellular">Blood components, cellular</option>
+        <option value="non-cellular">Blood components, non-cellular</option>
+        <option value="cmv">Cytomegalovirus</option>
+        <option value="relative">First-degree relative</option>
+        <option value="tagvhd">Graft vs. Host Disease</option>
+        <option value="irradiation">Irradiation</option>
+        <option value="ld">Leucodepletion</option>
+        <option value="causes">Mistakes, causes of</option>
+        <option value="mistakes">Mistakes, frequency of</option>
+        <option value="prevention">Mistakes, preventing</option>
+        <option value="relative">Second-degree relative</option>
+        <option value="special">Special blood component</option>
+        <option value="uld">Universal leucodepletion</option>
+      </select> <a href="#" data-rel="close" data-icon="delete" data-role="button">Close</a>
     </div>
   </body>
 
