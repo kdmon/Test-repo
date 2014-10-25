@@ -21,43 +21,50 @@
           return this.each(function() {
             var originalTable = $(this);
             var originalHeader = $(this).find("thead tr");
-            var fixedHeader;
-
-            function init() {
-              fixedHeader = originalHeader.clone(1);
-              fixedHeader.addClass("fixed").insertBefore(originalHeader);
-              resizeFixed();
-            }
-
-            function resizeFixed() {
-              setTimeout(function() {
-                fixedHeader.remove();
-                fixedHeader = originalHeader.clone(1);
-                fixedHeader.addClass("fixed").insertBefore(originalHeader);
-                fixedHeader.find("th").each(function(index) {
-                  $(this).css("width", originalHeader.find("th").eq(index).width() + "px");
-                });
-                $('.fixed').css('width', '100%');
-                scrollFixed();
-              }, 200);
-            }
-
-            function scrollFixed() {
-              var offset = $(this).scrollTop(),
+            var fixedHeader = false;
+            var timer;
+            
+            function makeHeader() {
+              clearTimeout(timer);
+              timer = setTimeout(function() {
+                
+                var offset = $(window).scrollTop(),
                 tableOffsetTop = originalTable.offset().top;
                 tableOffsetBottom = tableOffsetTop + originalTable.height() - originalHeader.height();
-              if (offset < tableOffsetTop || offset > tableOffsetBottom) {fixedHeader.hide();}
-              else if (offset >= tableOffsetTop && offset <= tableOffsetBottom && fixedHeader.is(":hidden")) {fixedHeader.show();}
+                
+                // outside range, remove the fixed header
+                if (offset < tableOffsetTop || offset > tableOffsetBottom) {
+                  
+                  if (fixedHeader) {
+                    console.log("hiding header");
+                    fixedHeader.remove();
+                    fixedHeader = false;
+                  }
+                }
+                
+                // otherwise recreate header
+                else {
+                  console.log("recreating header")
+                  if (fixedHeader) fixedHeader.remove();
+                  fixedHeader = originalHeader.clone(1);
+                  fixedHeader.addClass("fixed").insertBefore(originalHeader);
+                  fixedHeader.find("th").each(function(index) {
+                    $(this).css("width", originalHeader.find("th").eq(index).width() + "px");
+                  });
+                  $('.fixed').css('width', '100%');
+                }
+                  
+              }, 200);
             }
-            $(window).resize(resizeFixed);
-            $(window).scroll(scrollFixed);
-            init();
+            $(window).resize(makeHeader);
+            $(window).scroll(makeHeader);
+            makeHeader();
           });
         };
       })(jQuery);
-      $(document).on("pageinit", "#indications", function() {
+      $(document).on("pageshow", "#indications", function() {
         setTimeout(function() {
-          $('#indicationstable').stickyHeading().footable({
+          $('.footable').stickyHeading().footable({
             toggleHTMLElement: '<span style="margin: 1em; float:left;"><i class="fa fa-plus-square-o fa-3x footable-toggle footable-expand"></i> <i class="fa fa-minus-square-o fa-3x footable-toggle footable-contract"></i></span>',
             toggleSelector: " > tbody > tr > td > span.footable-toggle"
           });
@@ -185,7 +192,6 @@
       .fixed {
         top: 42px;
         position: fixed;
-        display: none;
         border: none;
         z-index: 999;
       }
