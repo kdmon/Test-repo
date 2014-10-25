@@ -19,37 +19,34 @@
       (function($) {
         $.fn.stickyHeading = function() {
           return this.each(function() {
-            var $this = $(this),
-              $t_fixed;
+            var originalHeader = $(this).find("thead tr"),
+              fixedHeader;
 
             function init() {
-              $this.wrap('<div class="container" />');
-              $t_fixed = $this.clone();
-              $t_fixed.find("tbody").remove().end().addClass("fixed").insertBefore($this);
-              $t_fixed.find("thead tr th span").remove();
+              fixedHeader = originalHeader.clone(1);
+              fixedHeader.addClass("fixed").insertBefore(originalHeader);
               resizeFixed();
             }
 
             function resizeFixed() {
               setTimeout(function() {
-                $t_fixed.remove();
-                $t_fixed = $this.clone();
-                $t_fixed.find("tbody").remove().end().addClass("fixed").insertBefore($this);
-                $t_fixed.find("thead tr th i").remove();
-                $t_fixed.find("th").each(function(index) {
-                  $(this).css("width", $this.find("th").eq(index).width() + "px");
+                fixedHeader.remove();
+                fixedHeader = originalHeader.clone(1);
+                fixedHeader.addClass("fixed").insertBefore(originalHeader);
+                fixedHeader.find("th").each(function(index) {
+                  $(this).css("width", originalHeader.find("th").eq(index).width() + "px");
                 });
-                $('.fixed').css('width', '100%').css('width', '-=32px');
+                $('.fixed').css('width', '100%');
                 scrollFixed();
               }, 200);
             }
 
             function scrollFixed() {
               var offset = $(this).scrollTop(),
-                tableOffsetTop = $this.offset().top,
-                tableOffsetBottom = tableOffsetTop + $this.height() - $this.find("thead").height();
-              if (offset < tableOffsetTop || offset > tableOffsetBottom) $t_fixed.hide();
-              else if (offset >= tableOffsetTop && offset <= tableOffsetBottom && $t_fixed.is(":hidden")) $t_fixed.show();
+                tableOffsetTop = 160,
+                tableOffsetBottom = tableOffsetTop + $(this).height() - $(this).find("thead").height();
+              if (offset < tableOffsetTop || offset > tableOffsetBottom) {fixedHeader.hide(); originalHeader.show();}
+              else if (offset >= tableOffsetTop && offset <= tableOffsetBottom && fixedHeader.is(":hidden")) {fixedHeader.show(); originalHeader.hide();}
             }
             $(window).resize(resizeFixed);
             $(window).scroll(scrollFixed);
@@ -59,11 +56,10 @@
       })(jQuery);
       $(document).on("pageinit", "#indications", function() {
         setTimeout(function() {
-          $('#indicationstable').footable({
+          $('#indicationstable').stickyHeading().footable({
             toggleHTMLElement: '<span style="margin: 1em; float:left;"><i class="fa fa-plus-square-o fa-3x footable-toggle footable-expand"></i> <i class="fa fa-minus-square-o fa-3x footable-toggle footable-contract"></i></span>',
             toggleSelector: " > tbody > tr > td > span.footable-toggle"
           });
-          $(".footable").stickyHeading();
         }, 300);
       });
       $(function() {
@@ -195,6 +191,17 @@
       .required {
         background: #FEE;
       }
+      .footable-sortable {
+        cursor: pointer;
+      }
+      .footable-sorted {
+        
+      }
+      
+      .footable-sorted-desc {
+        
+      }
+      
     </style>
   </head>
 
