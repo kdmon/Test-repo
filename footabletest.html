@@ -11,6 +11,15 @@
       $(document).on("mobileinit", function() {
         $.mobile.defaultPageTransition = 'none';
       });
+      
+      // IE shim
+      if (typeof console === "undefined"){
+        console={};
+        console.log = function(){
+            return;
+        }
+      }
+      
     </script>
     <script src="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.js"></script>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
@@ -21,7 +30,7 @@
           return this.each(function() {
             var originalTable = $(this);
             var originalHeader = $(this).find("thead tr");
-            var fixedHeader = false;
+            var fixedHeader;
             var timer;
             
             function makeHeader() {
@@ -35,10 +44,9 @@
                 // outside range, remove the fixed header
                 if (offset < tableOffsetTop || offset > tableOffsetBottom) {
                   
-                  if (fixedHeader) {
+                  if ($(".fixed").length > 0) {
                     console.log("hiding header");
-                    fixedHeader.remove();
-                    fixedHeader = false;
+                    $(".fixed").remove();
                   }
                 }
                 
@@ -62,7 +70,7 @@
           });
         };
       })(jQuery);
-      $(document).on("pageshow", "#indications", function() {
+      $(document).on("pageinit", "#indications", function() {
         setTimeout(function() {
           $('.footable').stickyHeading().footable({
             toggleHTMLElement: '<span style="margin: 1em; float:left;"><i class="fa fa-plus-square-o fa-3x footable-toggle footable-expand"></i> <i class="fa fa-minus-square-o fa-3x footable-toggle footable-contract"></i></span>',
