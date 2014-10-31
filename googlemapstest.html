@@ -1,0 +1,71 @@
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Geolocative map</title>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css" />
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+    <script>
+      function initialise() {
+        $("#map-canvas").css('width', '100%');
+        $("#map-canvas").css('height', '500px');
+        map = new google.maps.Map(document.getElementById('map-canvas'));
+        var kmlLayer = new google.maps.KmlLayer('https://maps.google.co.uk/maps/ms?authuser=0&vps=2&hl=en&ie=UTF8&msa=0&output=kml&msid=202603040537053371079.0004e0731464230887fe2', {
+          suppressInfoWindows: false
+        });
+        kmlLayer.setMap(map);
+        // Create custom icon showing the location of the user
+        userMarker = new google.maps.Marker({
+          map: map,
+          title: "You are here!"
+        });
+        userMarker.setIcon("https://chart.googleapis.com/chart?chst=d_map_pin_icon&chld=glyphish_walk|FBA");
+        // Call function that attempts to find user's location
+        getLocation();
+      }
+       // Function that retrieves user's initial location and
+       // then continues to track their position on the map.
+       // Users must agree to share their position.
+      function getLocation() {
+        if (navigator.geolocation) {
+          // Attempt to track user's position.
+          watchGPS = navigator.geolocation.watchPosition(function(position) {
+            // Store the reading of the longitude and latitute
+            var userLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            // Update the user map marker
+            userMarker.setPosition(userLocation);
+          });
+        } else {
+          alert("Geolocation is not supported by this browser.");
+        }
+      }
+      $(document).on("pageshow", "#map", function(event, ui) {
+        initialise();
+      });
+    </script>
+  </head>
+
+  <body>
+    <div data-role="page" id="page1">
+      <div data-role="header">
+        <h1>Page 1</h1>
+      </div>
+      <div data-role="main" class="ui-content">
+        <p>This is page one.</p> <a href="#map" data-role="button">Show map</a>
+      </div>
+    </div>
+    <div data-role="page" id="map">
+      <div data-role="header">
+        <h1>Google map</h1>
+      </div>
+      <div data-role="main" class="ui-content">
+        <div id="map-canvas" style="width: 100%; height: 500px;"></div>
+        <p>This is the map page.</p> <a href="#page1" data-role="button">Return home</a>
+      </div>
+    </div>
+  </body>
+
+</html>
