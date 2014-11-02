@@ -4,30 +4,12 @@
 
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>SPECIAL study</title>
-    <script type='text/javascript' src='json2.js'></script>
-    <script type='text/javascript' src='http://code.jquery.com/jquery-1.9.1.js'></script>
-    <script>
-    
-      $(document).on("mobileinit", function() {
-        $.mobile.defaultPageTransition = 'none';
-        $.mobile.gradeA = function() {
-          
-          // return ( ( $.support.mediaquery && $.support.cssPseudoElement ) || $.mobile.browser.oldIE && $.mobile.browser.oldIE >= 8 ) && ( $.support.boundingRect || $.fn.jquery.match(/1\.[0-7+]\.[0-9+]?/) !== null );
-          
-          // hack to force ie7 support again
-          return true;
-        };
-            
-      });
-    </script>
-    <script type='text/javascript' src="http://knockoutjs.com/downloads/knockout-3.2.0.debug.js"></script>
-    <script type='text/javascript' src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
-    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <meta name="HandheldFriendly" content="True" />
     <meta name="MobileOptimized" content="320" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SPECIAL study</title>
+    <link rel="stylesheet" type="text/css" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <style>
       @media (min-width: 30em) {
         /* Show the table header rows and set all cells to display: table-cell */
@@ -59,17 +41,21 @@
       .ui-select span {
         white-space: normal !important;
       }
+      .positive {
+        background: #aaffaa !important;
+        background-color: #aaffaa !important;
+        box-shadow: 0px 2px 2px #ccc;
+        border: 1px #555 solid !important;
+        text-shadow: none !important;
+        color: black !important;
+        padding-top: 1em;
+        padding-bottom: 1em;
+      }
       a,
       input,
       select,
       .ui-btn {
         font-size: 0.9em !important;
-      }
-      .ui-btn {
-        background: #ddf !important;
-      }
-      .even .ui-btn {
-        background: #e5e5ff !important;
       }
       @media (min-width: 780px) {
         body {
@@ -129,7 +115,7 @@
       }
       .ui-page {
         padding: 0px !important;
-        background: #EEF;
+        background: #fff;
         font-size: 0.9em;
       }
       .highlight {
@@ -138,15 +124,6 @@
       .smallc {
         margin: 0px;
         font-weight: bold;
-      }
-      .positive {
-        background: #afa !important;
-        box-shadow: 0px 2px 2px #ccc;
-        border: 1px #555 solid !important;
-        text-shadow: none !important;
-        color: black !important;
-        padding-top: 1em;
-        padding-bottom: 1em;
       }
       p {
         font-size: 1.1em;
@@ -449,12 +426,12 @@
             <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank1.currentPage() > 1, click: $root.questionBank1.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
             <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank1.currentPageData">
               <li class="statement" data-bind="css: {completed: selected() !== 'Please select'}">
-                <span data-bind="text: statement"></span> <i class="fa fa-certificate" style="color: red;" data-bind="visible: selected() == 'Please select'"></i>
+                <span data-bind="text: statement"></span> <i class="fa fa-ln" style="color: red;" data-bind="visible: selected() == 'Please select'">&#xf0a3;</i>
                 <br/>
                 <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select>
               </li>
             </ul>
-            <p data-bind="visible: !$root.questionBank1.pageCompleted();">You must answer all mandatory questions (marked <i class="fa fa-certificate" style="color: red;"></i>) before proceeding.</p>
+            <p data-bind="visible: !$root.questionBank1.pageCompleted();">You must answer all mandatory questions (marked <i class="fa fa-ln" style="color: red;">&#xf0a3;</i>) before proceeding.</p>
             <div data-bind="reveal: $root.questionBank1.pageCompleted() && $root.questionBank1.currentPage() <  $root.questionBank1.pageCount()">
               <p><b>Review your answers and press the green button to continue.</b>
               </p>
@@ -479,12 +456,12 @@
             <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank2.currentPage() > 1, click: $root.questionBank2.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
             <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank2.currentPageData">
               <li class="statement" data-bind="css: {completed: selected() !== 'Please select'}">
-                <span data-bind="text: statement"></span> <i class="fa fa-certificate" style="color: red;" data-bind="visible: selected() == 'Please select'"></i>
+                <span data-bind="text: statement"></span> <i class="fa fa-ln" style="color: red;" data-bind="visible: selected() == 'Please select'">&#xf0a3;</i>
                 <br/>
                 <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select>
               </li>
             </ul>
-            <p data-bind="visible: !$root.questionBank2.pageCompleted();">You must answer all mandatory questions (<i class="fa fa-certificate" style="color: red;"></i>) before proceeding.</p>
+            <p data-bind="visible: !$root.questionBank2.pageCompleted();">You must answer all mandatory questions (<i class="fa fa-ln" style="color: red;">&#xf0a3;</i>) before proceeding.</p>
             <div data-bind="reveal: $root.questionBank2.pageCompleted() && $root.questionBank2.currentPage() <  $root.questionBank2.pageCount()">
               <p><b>Review your answers and press the green button to continue.</b>
               </p>
@@ -502,7 +479,7 @@
         
         <div class="guidelinecontainer" data-bind="visible: (section() == 2 || section() == 3) && treatment() == 'ggc'" id="ggc">
           <div>
-            <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="click: findall"><i class="fa fa-search"></i></a>
+            <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="click: findall"><i class="fa fa-ln">&#xf002;</i></a>
             <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="visible: searchterm(), click: clearsearch">x</a>
             <input class="searchbar" placeholder="Search document" type="text" data-bind="value: searchterm, valueUpdate: 'keypress'">
           </div>
@@ -663,7 +640,7 @@
         <div class="guidelinecontainer" data-bind="visible: (section() == 2 || section() == 3) && treatment() == 'lothian'" id="lothian">
 
           <div>
-            <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="click: findall"><i class="fa fa-search"></i></a>
+            <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="click: findall"><i class="fa fa-ln">&#xf002;</i></a>
             <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="visible: searchterm(), click: clearsearch">x</a>
             <input class="searchbar" placeholder="Search document" type="text" data-bind="value: searchterm, valueUpdate: 'keypress'">
           </div>
@@ -713,7 +690,27 @@
       </div>
       <div id="appcontainer" data-bind="html: appCode, visible: treatment() == 'app'"></div>
     </div>
-    <script type='text/javascript'>
+    
+        <script type="text/javascript" src="json2.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script>
+    
+      $(document).on("mobileinit", function() {
+        $.mobile.defaultPageTransition = 'none';
+        $.mobile.gradeA = function() {
+          
+          // return ( ( $.support.mediaquery && $.support.cssPseudoElement ) || $.mobile.browser.oldIE && $.mobile.browser.oldIE >= 8 ) && ( $.support.boundingRect || $.fn.jquery.match(/1\.[0-7+]\.[0-9+]?/) !== null );
+          
+          // hack to force ie7 support again
+          return true;
+        };
+            
+      });
+    </script>
+    <script type="text/javascript" src="http://knockoutjs.com/downloads/knockout-3.2.0.debug.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
+    
+    <script>
       // http://jsfiddle.net/zeelux/B4vN2/
       (function() {
         'use strict';
