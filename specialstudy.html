@@ -263,7 +263,7 @@
                     </select>
                   </div>
                   <div data-bind="reveal: (position() !== '' && position() !== 'dr' && position() !== 'ot' && position() !== 'bb') || (position() !== '' && (grade() !== '' || otherposition() !== ''))">
-                    <h3>How many years of medical experience do you have?</h3>
+                    <h3>How many years of experience do you have?</h3>
                     <select data-bind="value: experience">
                       <option value="-1">Please select</option>
                       <option value="0">Less than one year</option>
@@ -510,7 +510,7 @@
           </ul>
           <p>The most commonly requested special requirements in practice are irradiated components and CMV seronegative components.</p>
           <h3>CMV Seronegative Components</h3>
-          p>Cytomegalovirus (CMV) belongs to the herpes family and in the healthy population causes a self limiting illness. It is cell associated and therefore can be transmitted in cellular blood components (red cells, platelets and granulocytes). Typically it causes a subclinical illness similar to infectious mononucleolus (glandular fever). In immunocompromised patients it can result in potentially fatal pneumonitis or disseminated CMV. For this reason CMV seronegative products should be used for a selected group of patients, listed below.</p>
+          <p>Cytomegalovirus (CMV) belongs to the herpes family and in the healthy population causes a self limiting illness. It is cell associated and therefore can be transmitted in cellular blood components (red cells, platelets and granulocytes). Typically it causes a subclinical illness similar to infectious mononucleolus (glandular fever). In immunocompromised patients it can result in potentially fatal pneumonitis or disseminated CMV. For this reason CMV seronegative products should be used for a selected group of patients, listed below.</p>
           <p>The requirement for CMV seronegative blood components has been recently reviewed by the Advisory Committee on the Safety of Blood, Tissue and Organs (SaBTO). Universal leucodepletion, introduced by the UK blood services in 1999 primarily as a vCJD risk reduction measure, results in a three log depletion of white cells. This is generally accepted to render these components "CMV safe"</p>
           <p>Monitoring selected patient groups for CMV infection with pre-emptive therapy where required has been shown to be a successful strategy in certain groups (solid organ transplants, haematopoietic stem cell transplants).</p>
           <p>CMV seronegative components should continue to be used where leucodepletion is not possible (granulocyte transfusions) or where the potential severity of the consequences of CMV infection, and/or the difficulty in monitoring for infection are considered too great (IUT and transfusions in neonates up to 28 days post EDD, elective transfusions in pregnancy).
@@ -677,7 +677,7 @@
             <li>Pregnant women antenatally (pre-delivery only). If CMV negative components are not readily available and a delay will compromise the mother or baby, CMV random components (i.e. untested) are an acceptable alternative.</li>
             <li>All blood transfusions for infants up to 28 days post expected delivery date.</li>
           </ul>
-          <i>Extract from NHS Lothian, Blood Transfusion Clinical Policy and Procedures 2013 (v.4), Appendic C: Special Requirements, pages 45-46.</i>
+          <i>Extract from NHS Lothian, Blood Transfusion Clinical Policy and Procedures 2013 (v.4), Appendix C: Special Requirements, pages 45-46.</i>
         </div>
         
         <div data-bind="visible: section() == 2 && treatment() != 'app'">
@@ -823,10 +823,10 @@
           selected: ko.observable("Please select")
         }, {
           statement: "How can the risk of cytomegalovirus (CMV) infection be minimised?",
-           options: ["Please select", "Restrictive use of transfusion", "CMV screening of donors", "Leucocyte depletion", "All of the above", "None of the above", "Don't know"],
+           options: ["Please select", "Restrictive use of transfusion", "Use of CMV-negative blood", "Leucocyte depletion", "All of the above", "None of the above", "Don't know"],
           selected: ko.observable("Please select")
         }, {
-          statement: "What statements about leucodepletion (LD) in the UK are correct?.",
+          statement: "What statements about leucodepletion (LD) in the UK are correct?",
          options: ["Please select", "LD significantly reduce white cells", "All red cells and platelets are LD", "Granulocytes cannot be LD", "All of the above", "None of the above", "Don't know"],
           selected: ko.observable("Please select")
         }, {
@@ -838,12 +838,12 @@
           options: ["Please select", "Indefinitely", "Six months", "Three months", "Case by case decision", "Irradiation is not required", "Don't know"],
           selected: ko.observable("Please select")
         }, {
-          statement: "Why do patients fail to receive irradiated blood appropriately.",
+          statement: "Why do patients fail to receive irradiated blood appropriately?",
           options: ["Please select", "Poor handover in shared care", "Mistaken patient identity", "Errors in information systems", "All of the above", "None of the above", "Don't know"],
           selected: ko.observable("Please select")
         }],
         theme2: [{
-          statement: "Red cells donated by an uncle to his adolescent nephew.",
+          statement: "Red cells donated by a mother to her child.",
           options: ["Please select", "Irradiated & CMV negative", "Irradiated", "CMV negative", "No special component required", "Not enough information to answer", "Don't know"],
           selected: ko.observable("Please select")
         }, {
@@ -867,11 +867,11 @@
           options: ["Please select", "Irradiated & CMV negative", "Irradiated", "CMV negative", "No special component required", "Not enough information to answer", "Don't know"],
           selected: ko.observable("Please select")
         }, {
-          statement: "Red cells for an eight year old girl receiving bone marrow transplant in the last 3 months.",
+          statement: "Red cells for an eight year old girl who had a bone marrow transplant within the last 3 months.",
           options: ["Please select", "Irradiated & CMV negative", "Irradiated", "CMV negative", "No special component required", "Not enough information to answer", "Don't know"],
           selected: ko.observable("Please select")
         }, {
-          statement: "Platelets for a stable bleeding 60 year old male receiving purine analogue drugs.",
+          statement: "Platelets for a 60 year old male receiving purine analogue drugs.",
           options: ["Please select", "Irradiated & CMV negative", "Irradiated", "CMV negative", "No special component required", "Not enough information to answer", "Don't know"],
           selected: ko.observable("Please select")
         }]
@@ -949,10 +949,11 @@
         }, this, { deferEvaluation: true });
         
         self.saveAnswers = function() {
-          $.post( "save.php", ko.toJSON(viewModel), function() {
+          $.post( "save.php", ko.toJSON(ViewModel), function() {
             self.nextSection();
           });
         }
+        
         self.nextSection = function() {
           self.pagenow(self.pagenow() + 1);
           self.section(self.section() + 1);
