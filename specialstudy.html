@@ -950,7 +950,7 @@
         }, this, { deferEvaluation: true });
         
         self.saveAnswers = function() {
-          $.post( "save.php", ko.toJSON(ViewModel), function() {
+          $.post( "save.php", {'data': ko.toJSON(ViewModel, null, 2)}, function() {
             self.nextSection();
           });
         }
