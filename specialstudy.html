@@ -689,7 +689,7 @@
           <p>Add question in demographics and perception.</p>
           <h3>You have completed all the questions.</h3>
           <p>Press the green button to submit your answers.</p>
-          <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right"  data-bind="visible: !$root.saved, click: $root.saveAnswers">Submit answers</a>
+          <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right"  data-bind="visible: ($root.saved == false), click: $root.saveAnswers">Submit answers</a>
         </div>
         <div data-bind="visible: section() == 5">
           <h1>Thank you</h1>
