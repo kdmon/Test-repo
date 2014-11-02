@@ -685,9 +685,14 @@
             <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="click: $root.nextSection">Next page</a>
         </div>
         <div data-bind="visible: section() == 4">
+          <p>Add question in demographics and perception.</p>
+          <h3>You have completed all the questions.</h3>
+          <p>Press the green button to submit your answers.</p>
+          <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right"  data-bind="click: $root.saveAnswers">Return to the front page</a>
+        </div>
+        <div data-bind="visible: section() == 5">
           <h1>Thank you</h1>
-          <p>You have completed all the questions. Your answers have been recorded.</p>
-          <a href="http://optimalblooduse.eu/specialstudy/index.html" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right">Return to the front page</a>
+          <p>Your answers have been recorded. You may close this browser window.</p>
         </div>
       </div>
       <div id="appcontainer" data-bind="html: appCode, visible: treatment() == 'app'"></div>
@@ -943,6 +948,11 @@
             else return;
         }, this, { deferEvaluation: true });
         
+        self.saveAnswers = function() {
+          $.post( "save.php", ko.toJSON(viewModel), function() {
+            self.nextSection();
+          });
+        }
         self.nextSection = function() {
           self.pagenow(self.pagenow() + 1);
           self.section(self.section() + 1);
