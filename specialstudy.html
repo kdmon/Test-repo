@@ -146,12 +146,13 @@
       <div data-role="main" id="maincontainer" class="ui-content centered">
         <div id="questionContainer">
           
-          <div width="100%" style="width: 100%; text-align: center; height: 0px;" data-bind="visible: pagenow() > 1">
+          <div width="100%" style="width: 100%; text-align: center; height: 0px;" data-bind="visible: pagenow() > 1 && pagenow() < 9">
             <div class="progressbox" data-bind="style: {background : pagenow() > 2 ? '#afa' : 'none'}"></div>
             
             <div class="progressbox" data-bind="style: {background : pagenow() > 3 ? '#afa' : 'none'}"></div>
             <div class="progressbox" data-bind="style: {background : pagenow() > 4 ? '#afa' : 'none'}"></div>
             <div class="progressbox" data-bind="style: {background : pagenow() > 5 ? '#afa' : 'none'}"></div>
+            <div class="progressbox" data-bind="style: {background : pagenow() > 6 ? '#afa' : 'none'}"></div>
 
             <div class="progressbox" data-bind="style: {background : pagenow() > 7 ? '#afa' : 'none'}"></div>
          </div>
@@ -689,7 +690,7 @@
           <p>Add question in demographics and perception.</p>
           <h3>You have completed all the questions.</h3>
           <p>Press the green button to submit your answers.</p>
-          <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right"  data-bind="visible: ($root.saved == false), click: $root.saveAnswers">Submit answers</a>
+          <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right"  data-bind="visible: (saved() == false), click: $root.saveAnswers">Submit answers</a>
         </div>
         <div data-bind="visible: section() == 5">
           <h1>Thank you</h1>
