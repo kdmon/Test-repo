@@ -689,7 +689,7 @@
           <p>Add question in demographics and perception.</p>
           <h3>You have completed all the questions.</h3>
           <p>Press the green button to submit your answers.</p>
-          <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right"  data-bind="click: $root.saveAnswers">Return to the front page</a>
+          <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right"  data-bind="visible: !$root.saved, click: $root.saveAnswers">Submit answers</a>
         </div>
         <div data-bind="visible: section() == 5">
           <h1>Thank you</h1>
@@ -895,6 +895,7 @@
       };
       var ViewModel = function() {
         var self = this;
+        self.saved = ko.observable(false);
         self.pagenow = ko.observable(1);
         self.section = ko.observable(getUrlParameter('section') || -1);
         self.hospital = ko.observable("");
@@ -950,9 +951,17 @@
         }, this, { deferEvaluation: true });
         
         self.saveAnswers = function() {
-          $.post( "save.php", {'data': ko.toJSON(ViewModel, null, 2)}, function() {
+          self.saved(true);
+          $.ajax({
+            url: "save.php",
+            type: "POST",
+            data: {data: ko.toJSON(self, null, 2)}
+          }).done(function() {
             self.nextSection();
-          });
+          }).fail(function() {
+            alert( "Unable to save, please check your internet connection and try again." );
+            self.saved(false);
+          })
         }
         
         self.nextSection = function() {
