@@ -57,14 +57,25 @@
       .ui-btn {
         font-size: 0.9em !important;
       }
+    
+      .splitview {
+        display: inline-block !important;
+        width: 49%;
+        clear: both;
+        vertical-align: top;
+      }
+      
       @media (min-width: 780px) {
         body {
-          font-size: 1.4em;
+          font-size: 1.3em;
         }
         
+      }
+
+      @media (max-width: 700px) {
         .splitview {
-          display: inline-block !important;
-          width: 49%;
+          display: block !important;
+          width: 100%;
           clear: both;
           vertical-align: top;
         }
@@ -454,7 +465,7 @@
               <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="click: $root.nextSection">Answer remaining questions</a>
             </div>
             
-            <div data-bind="visible: section() == 3"><br/>
+            <div data-bind="visible: section() == 3">
               <h2 data-bind="text: questionHeading2()[$root.questionBank2.currentPage()-1]"></h2>
               <p>You may refer to the <span data-bind="visible: treatment() != 'app'">guidelines</span> <span data-bind="visible: treatment() == 'app'">app</span> (adjacent) when answering.</p>
               <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank2.currentPage() > 1, click: $root.questionBank2.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
@@ -683,7 +694,7 @@
         
           <div data-bind="visible: section() == 4">
           
-          <h3>Please rate the following statements in relation the <span data-bind="visible: treatment() == 'app'">Special Blood Components App</span> <span data-bind="visible: treatment() == 'lothian'">NHS Lothian special requirements hospital guidelines</span></h3>
+          <h3>Please rate the following statements in relation the <span data-bind="visible: treatment() == 'app'">Special Blood Components App</span> <span data-bind="visible: treatment() == 'lothian'">NHS Lothian Special Requirements Guidelines</span></h3>
             <h4>It was clear, succinct and easy to use.</h4>
             <select data-bind="value: rating1">
               <option value="-1">Please select</option>
@@ -728,8 +739,8 @@
               <option value="dn">Don't know</option>
             </select>
             
-            <h3>Please explain your ratings briefly.</h3>
-            <textarea data-bind="value: comments"></textarea>
+            <h4>Please explain your ratings</h4>
+            <textarea data-bind="value: ratingscomments"></textarea>
             
             <h4>Do you use a smartphone or tablet device?</h4>
             <select data-bind="value: deviceuse">
@@ -752,6 +763,10 @@
               <option value="60">60 and over</option>
               <option value="dn">Don't know</option>
             </select>
+            
+            <h4>Do you have any final comments?</h3>
+            <textarea data-bind="value: comments"></textarea>
+            
             
             <h3>You have completed all the questions.</h3>
             <p>Press the green button to submit your answers.</p>
