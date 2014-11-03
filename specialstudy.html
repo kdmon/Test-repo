@@ -415,8 +415,8 @@
                       <option value="0">Don't know</option>
                     </select>
                     <div data-bind="reveal: frequency() > -1">
-                      <p>Thank you. You are eligible to participate.</p>
-                      <p><b>Press the green button to begin answering the first set of questions.</b></p> <a href="#" data-icon="carat-r" data-iconpos="right" class="positive" data-role="button" data-bind="click: $root.nextSection">Next page</a>
+                      <p>You are eligible to participate.</p>
+                      <p><b>Press the green button to answer the first set of knowledge-based questions.</b></p> <a href="#" data-icon="carat-r" data-iconpos="right" class="positive" data-role="button" data-bind="click: $root.nextSection">Next page</a>
                     </div>
                   </div>
                 </div>
@@ -449,14 +449,15 @@
           </div>
           <div class="splitview">
             <div data-bind="visible: section() == 2">
-              <p style="margin-bottom: 0px">Please take some time to <span data-bind="visible: treatment() == 'app'">familiarise yourself with the Special Blood Request app</span><span data-bind="visible: treatment() == 'lothian'">explore the current NHS Lothian hospital guidelines</span><span data-bind="visible: treatment() == 'ggc'">explore an extract of the proposed Scotland-wide hospital guidelines</span> (shown below).</p>
-              <p data-bind="visible: treatment() == 'app'"><b>When you are ready, press the green button to continue.</b></p>
-              <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="visible: treatment() == 'app', click: $root.nextSection">Next page</a>
+              <h3>You have completed the first set of questions.</h3>
+              <p>Now, please take a moment to study <span data-bind="visible: treatment() == 'app'">the Special Blood Components App</span><span data-bind="visible: treatment() == 'lothian'">the NHS Lothian Special Requirements Guidelines</span><span data-bind="visible: treatment() == 'ggc'">explore an extract of the proposed Scotland-wide hospital guidelines</span> (adjacent) before you answer the remaining questions.</p>
+              <p><b>Only press the green button when you have done so and are ready to continue.</b></p>
+              <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="click: $root.nextSection">Answer remaining questions</a>
             </div>
             
             <div data-bind="visible: section() == 3"><br/>
               <h3 data-bind="text: questionHeading2()[$root.questionBank2.currentPage()-1]"></h3>
-              <p>You may refer to the <span data-bind="visible: treatment() != 'app'">guidelines</span> <span data-bind="visible: treatment() == 'app'">app</span> (shown below) when answering.</p>
+              <p>You may refer to the <span data-bind="visible: treatment() != 'app'">guidelines</span> <span data-bind="visible: treatment() == 'app'">app</span> (adjacent) when answering.</p>
               <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank2.currentPage() > 1, click: $root.questionBank2.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
               <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank2.currentPageData">
                 <li class="statement" data-bind="css: {completed: selected() !== 'Please select'}">
@@ -476,14 +477,11 @@
                 </p>
                 <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="click: $root.nextSection">Next page</a>
               </div>
-              <br/>
-              <h2><span data-bind="visible: treatment() == 'app'">Special Blood Request app:</span><span data-bind="visible: treatment() != 'app'">Special requirements guidelines:</span></h2>
             </div>
           </div>
         
         
           <div class="splitview">
-          
             <div class="guidelinecontainer" data-bind="visible: (section() == 2 || section() == 3) && treatment() == 'ggc'" id="ggc">
               <div>
                 <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="click: findall"><i class="fa fa-ln">&#xf002;</i></a>
@@ -651,7 +649,7 @@
                 <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="visible: searchterm(), click: clearsearch">x</a>
                 <input class="searchbar" placeholder="Search document" type="text" data-bind="value: searchterm, valueUpdate: 'keypress'">
               </div>
-    
+              <h2>NHS Lothian Special Requirements Guidelines</h2>
               <h3>Irradiated Components</h3>
               <p>For at-risk patients, all red cell, platelet and granulocyte concentrates should be irradiated. It is not necessary to irradiate FFP, cryoprecipitate or fractionated plasma products.</p>
               <ul>
@@ -678,11 +676,6 @@
                 <li>All blood transfusions for infants up to 28 days post expected delivery date.</li>
               </ul>
               <i>Extract from NHS Lothian, Blood Transfusion Clinical Policy and Procedures 2013 (v.4), Appendix C: Special Requirements, pages 45-46.</i>
-            </div>
-            
-            <div data-bind="visible: section() == 2 && treatment() != 'app'">
-              <p><b>When you are ready, press the green button to continue.</b></p>
-                <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="click: $root.nextSection">Next page</a>
             </div>
             
             <div data-bind="visible: section() == 4">
@@ -769,11 +762,12 @@
           <div id="appcontainer" data-bind="html: appCode, visible: treatment() == 'app'"></div>
         </div>
       </div>
+      </div>
     </div>
     
-        <script type="text/javascript" src="json2.js"></script>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
-    <script>
+      <script type="text/javascript" src="json2.js"></script>
+      <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
+      <script>
     
       $(document).on("mobileinit", function() {
         $.mobile.defaultPageTransition = 'none';
@@ -1019,8 +1013,8 @@
         self.frequency = ko.observable("");
         self.evalcode = ko.observable(getUrlParameter('i'));
         self.treatment = ko.observable(self.evalcode().substr(0,1) == 1 ? 'lothian' : 'app');
-        self.questionHeading = ko.observableArray(["", "What special blood components are indicated in the following cases?"]);
-        self.questionHeading2 = ko.observableArray(["", "What special blood components are indicated in the following cases?"]);
+        self.questionHeading = ko.observableArray(["Answer the questions by selecting an option from the list", "What special blood components are indicated in the following cases?"]);
+        self.questionHeading2 = ko.observableArray(["Answer the questions by selecting an option from the list", "What special blood components are indicated in the following cases?"]);
         self.questionBank1 = ko.observableArray(questions.theme1.splice(0, 4).concat(questions.theme2.splice(0, 4))).extend({
           paging: 4
         });
@@ -1053,7 +1047,7 @@
         });
         self.appCode = ko.computed(function() {
             var iframeheight =  $( window ).height() - 20; // $( window ).height() - $("#maincontainer").outerHeight() - 10;
-            var code = '<iframe src="http://it4se.com:8080/kdmon/special-app/master/index.html" width="100%" height="' + iframeheight + 'px"></iframe>';
+            var code = '<h3>Special Blood Components App</h3><iframe src="http://it4se.com:8080/kdmon/special-app/master/index.html" width="100%" height="' + iframeheight + 'px"></iframe>';
             if ((self.section() == 2 || self.section() == 3) && self.treatment() == 'app') return code;
             else return;
         }, this, { deferEvaluation: true });
