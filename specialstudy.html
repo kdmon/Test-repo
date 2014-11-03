@@ -57,7 +57,7 @@
         top: 0;
         bottom: 0;
         z-index: 9999999;
-        background: #aaa;
+        background: #fff;
         text-align: center;
       }
       
@@ -175,10 +175,11 @@
 
   <body>
     <div data-role="page" id="front">
-      
-      <div id="loading"><br/><br/><h1>Loading SPECIAL study, please wait...</h1></div>
 
       <div data-role="main" id="maincontainer" class="ui-content centered">
+      
+        <div id="loading"><br/><br/><h3>Loading SPECIAL study, please wait...</h3></div>
+        
         <div width="100%" style="width: 100%; text-align: center;" data-bind="visible: pagenow() > 1 && pagenow() < 10">
           <div class="progressbox" data-bind="style: {background : pagenow() > 2 ? '#afa' : 'none'}"></div>
           <div class="progressbox" data-bind="style: {background : pagenow() > 3 ? '#afa' : 'none'}"></div>
@@ -1312,14 +1313,13 @@
       });
 
       window.onload = function () {
-        alert("Loaded");
-        setTimeout(function() {$("#loading").hide()}, 500)
+        setTimeout(function() {$("#loading").hide()}, 250)
       };
       
       window.onbeforeunload = function() {
-        if (!ViewModel.saved && ViewModel.section > 0) return ("Please stay on the page and complete the remaining questions. Your answers will be lost otherwise.");
+        if (!model.saved() && model.section() > 0) return ("Please stay on the page and complete the remaining questions. Your answers will be lost otherwise.");
       }
-      
+
     </script>
   </body>
 
