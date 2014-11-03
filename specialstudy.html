@@ -60,6 +60,8 @@
     
       .splitview {
         display: inline-block !important;
+        *display: inline;
+        zoom: 1;
         width: 49%;
         clear: both;
         vertical-align: top;
@@ -656,9 +658,9 @@
     
               <h3>NHS Lothian Special Requirements Guidelines</h3>
               <div>
-                <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="click: findall"><i class="fa fa-ln">&#xf002;</i></a>
-                <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="visible: searchterm(), click: clearsearch">x</a>
                 <input class="searchbar" placeholder="Search document" type="text" data-bind="value: searchterm, valueUpdate: 'keypress'">
+                <a href="#" data-role="button" data-inline="true" data-bind="click: findall">Search <i class="fa fa-ln">&#xf002;</i></a>
+                <a href="#" data-role="button" data-inline="true" data-bind="visible: searchterm(), click: clearsearch"> Clear</a>
               </div>
               
               <h3>Irradiated Components</h3>
@@ -740,7 +742,7 @@
             </select>
             
             <h4>Please explain your ratings</h4>
-            <textarea data-bind="value: ratingscomments"></textarea>
+            <textarea data-bind="value: ratingcomments"></textarea>
             
             <h4>Do you use a smartphone or tablet device?</h4>
             <select data-bind="value: deviceuse">
@@ -764,7 +766,7 @@
               <option value="dn">Don't know</option>
             </select>
             
-            <h4>Do you have any final comments?</h3>
+            <h4>Do you have any final comments?</h4>
             <textarea data-bind="value: comments"></textarea>
             
             
@@ -1017,6 +1019,7 @@
         self.rating2 = ko.observable("");
         self.rating3 = ko.observable("");
         self.rating4 = ko.observable("");
+        self.ratingcomments = ko.observable("");
         self.comments = ko.observable("");
         self.timings = ko.observableArray();
         self.specialty = ko.observable("");
