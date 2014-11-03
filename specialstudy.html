@@ -8,8 +8,8 @@
     <meta name="MobileOptimized" content="320" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>SPECIAL study</title>
-    <link rel="stylesheet" type="text/css" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
-    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="jquery/jquery.mobile-1.4.5.min.css">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
     
     <!--[if lte IE 7]>
     
@@ -449,7 +449,22 @@
                       <option value="1">Never</option>
                       <option value="0">Don't know</option>
                     </select>
-                    <div data-bind="reveal: frequency() > -1">
+                  </div>
+                  
+                  <div data-bind="reveal: frequency">
+                    <h3>5. How confident do you feel about the indications for special blood components?</h3>
+                    <select data-bind="value: confidence">
+                      <option value="-1">Please select</option>
+                      <option value="vc">Very confident</option>
+                      <option value="sc">Somewhat confident</option>
+                      <option value="nc">Neither confident nor unconfident</option>
+                      <option value="un">Unconfident</option>
+                      <option value="vu">Very unconfident</option>
+                      <option value="dn">Don't know</option>
+                    </select>
+                  </div>
+                  
+                    <div data-bind="reveal: confidence() > -1">
                       <h1>You are eligible to participate.</h1>
                       <p><b>Press the green button to answer the first set of knowledge-based questions.</b></p> <a href="#" data-icon="carat-r" data-iconpos="right" class="positive" data-role="button" data-bind="click: $root.nextSection">Next page</a>
                     </div>
@@ -521,7 +536,7 @@
             
             <h3>Please rate the following statements about the <span data-bind="visible: treatment() == 'app'">Special Blood Components App</span> <span data-bind="visible: treatment() == 'lothian'">NHS Lothian Special Requirements Guideline</span></h3>
   
-              <h4>It was clear, succinct and easy to use.</h4>
+              <h4>It was clear and succinctly written.</h4>
               <select data-bind="value: rating1">
                 <option value="-1">Please select</option>
                 <option value="sa">Strongly agree</option>
@@ -532,7 +547,7 @@
                 <option value="dn">Don't know</option>
               </select>
               
-              <h4>It covered all the most important points.</h4>
+              <h4>It presented all the information I needed.</h4>
               <select data-bind="value: rating2">
                 <option value="-1">Please select</option>
                 <option value="sa">Strongly agree</option>
@@ -554,7 +569,7 @@
                 <option value="dn">Don't know</option>
               </select>
               
-              <h4>I would recommend it to others.</h4>
+              <h4>It helped me learn something new.</h4>
               <select data-bind="value: rating4">
                 <option value="-1">Please select</option>
                 <option value="sa">Strongly agree</option>
@@ -785,33 +800,66 @@
           </div>
           
           <div data-bind="visible: section() == 5">
-          
-            <h3>Attitude to app-based learning</h3>
-          
-            <h4>I feel confident about the indications for special components.</h4>
-            <select data-bind="value: rating4">
-              <option selected value="0">Please select</option>
-              <option value="sa">Strongly agree</option>
-              <option value="a">Agree</option>
-              <option value="no">No opinion</option>
-              <option value="d">Disagree</option>
-              <option value="sd">Strongly disagree</option>
-              <option value="dn">Don't know</option>
-            </select>
-          
-            <h4>Guidance for prescribing special components is easy to use.</h4>
-            <select data-bind="value: rating4">
-              <option selected value="0">Please select</option>
-              <option value="sa">Strongly agree</option>
-              <option value="a">Agree</option>
-              <option value="no">No opinion</option>
-              <option value="d">Disagree</option>
-              <option value="sd">Strongly disagree</option>
-              <option value="dn">Don't know</option>
-            </select>
-          
-            <h4>Having access to an app for special components would be useful.</h4>
-            <select data-bind="value: rating4">
+
+            <div data-bind="visible: treatment() == 'app'">
+
+              <h4>I would recommend the Special Blood Components App to colleagues.</h4>
+              
+              <select data-bind="value: recommendapp">
+                <option selected value="0">Please select</option>
+                <option value="sa">Strongly agree</option>
+                <option value="a">Agree</option>
+                <option value="no">No opinion</option>
+                <option value="d">Disagree</option>
+                <option value="sd">Strongly disagree</option>
+                <option value="dn">Don't know</option>
+              </select>
+              
+              <h4>The Special Blood Components App should be made widely available.</h4>
+              
+              <select data-bind="value: available">
+                <option selected value="0">Please select</option>
+                <option value="sa">Strongly agree</option>
+                <option value="a">Agree</option>
+                <option value="no">No opinion</option>
+                <option value="d">Disagree</option>
+                <option value="sd">Strongly disagree</option>
+                <option value="dn">Don't know</option>
+              </select>
+              
+            </div>
+            
+            <div data-bind="visible: treatment() == 'lothian'">
+              
+              <h4>I would recommend the NHS Lothian Special Requirements Guidelines to colleagues.</h4>
+              
+              <select data-bind="value: recommendguideline">
+                <option selected value="0">Please select</option>
+                <option value="sa">Strongly agree</option>
+                <option value="a">Agree</option>
+                <option value="no">No opinion</option>
+                <option value="d">Disagree</option>
+                <option value="sd">Strongly disagree</option>
+                <option value="dn">Don't know</option>
+              </select>
+              
+              <h4>Having access to an app about special requirements would be useful.</h4>
+              <select data-bind="value: appuseful">
+                <option selected value="0">Please select</option>
+                <option value="sa">Strongly agree</option>
+                <option value="a">Agree</option>
+                <option value="no">No opinion</option>
+                <option value="d">Disagree</option>
+                <option value="sd">Strongly disagree</option>
+                <option value="dn">Don't know</option>
+              </select>
+              
+            </div>
+
+            <h3>Attitude to App-based learning</h3>
+            
+            <h4>Should more apps about safe transfusion practice be developed?</h4>
+            <select data-bind="value: moreapps">
               <option selected value="0">Please select</option>
               <option value="sa">Strongly agree</option>
               <option value="a">Agree</option>
@@ -821,17 +869,26 @@
               <option value="dn">Don't know</option>
             </select>
             
-            <h4>The Special Blood Components App should be made widely available.</h4>
-            <select data-bind="value: useful">
+            <h4>Have you used apps in your education or pratice before?</h4>
+            <select data-bind="value: pastappuse">
               <option selected value="0">Please select</option>
-              <option value="sa">Strongly agree</option>
-              <option value="a">Agree</option>
-              <option value="no">No opinion</option>
-              <option value="d">Disagree</option>
-              <option value="sd">Strongly disagree</option>
-              <option value="dn">Don't know</option>
+              <option value="all">Yes, in both my education and practice</option>
+              <option value="education">Yes, in my education only</option>
+              <option value="practice">Yes, in my practice only</option>
+              <option value="no">No</option>
+              <option value="1">Prefer not to say</option>
             </select>
             
+            <h4>If you use a smartphone or tablet device, where do you use it?</h4>
+            <select data-bind="value: deviceuse">
+              <option selected value="0">Please select</option>
+              <option value="both">Both at home and at work</option>
+              <option value="work">At work</option>
+              <option value="home">At home</option>
+              <option value="no">I do not use a smartphone or tablet</option>
+              <option value="1">Prefer not to say</option>
+            </select>
+          
             <h4>Please indicate your age group</h4>
             <select data-bind="value: age">
               <option selected value="0">Please select</option>
@@ -844,31 +901,22 @@
               <option value="1">Prefer not to say</option>
             </select>
             
-            <h4>Do you use a smartphone or tablet device?</h4>
-            <select data-bind="value: deviceuse">
-              <option selected value="0">Please select</option>
-              <option value="both">Yes, both at home and at work</option>
-              <option value="work">Yes, at work</option>
-              <option value="home">Yes, at home</option>
-              <option value="no">No</option>
-              <option value="1">Prefer not to say</option>
-            </select>
-          
             <h4>Acknowledgements</h4>
             
             <p>
-              The app has an acknowledgements section page where we list people who have
+              The app has an acknowledgements page where we list people who have
               helped test and develop the app. If you would like to be listed there,
-              please state your title, name, position and affiliation. If you would
-              like to maintain your confidentiality, then do not enter your details.
+              please state your title, name, position and affiliation. <strong>
+              If maintaining your confidentiality is important, then please do not 
+              enter your details.</strong>
             </p>
             
             <input type="text" data-bind="value: contributor">
 
+            <h4>If you are happy to be contacted by the researchers for follow 
+            up study in the future, please leave your email address.</h4>
             
-            <h4>Are you happy to be contacted by the researchers for follow up study? If so, please leave your email address.</h4>
             <input type="text" data-bind="value: followupemail">
-
 
             <h4>Do you have any final comments?</h4>
             <textarea data-bind="value: comments"></textarea>
@@ -880,14 +928,14 @@
           
           <div data-bind="visible: section() == 6">
             <h1>Thank you</h1>
-            <p>Your answers have been recorded. You may close this browser window.</p>
+            <p>Your answers have been recorded. You can safely close this browser window.</p>
           </div>
         </div>
       </div>
     </div>
     
       <script type="text/javascript" src="json2.js"></script>
-      <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
+      <script type="text/javascript" src="jquery/jquery-1.11.1.min.js"></script>
       <script>
     
       $(document).on("mobileinit", function() {
@@ -903,7 +951,7 @@
       });
     </script>
     <script type="text/javascript" src="http://knockoutjs.com/downloads/knockout-3.2.0.debug.js"></script>
-    <script type="text/javascript" src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
+    <script type="text/javascript" src="jquery/jquery.mobile-1.4.5.min.js"></script>
     
     <script>
       // http://jsfiddle.net/zeelux/B4vN2/
@@ -1117,15 +1165,21 @@
         self.position = ko.observable("");
         self.otherposition = ko.observable("");
         self.grade = ko.observable("");
+        self.confidence = ko.observable("");
         self.age = ko.observable("");
-        self.deviceuse = ko.observable("");
         self.rating1 = ko.observable("");
         self.rating2 = ko.observable("");
         self.rating3 = ko.observable("");
         self.rating4 = ko.observable("");
         self.ratingcomments = ko.observable("");
+        self.recommendapp = ko.observable("");
+        self.available = ko.observable("");
+        self.recommendguideline = ko.observable("");
+        self.appuseful = ko.observable("");
+        self.moreapps = ko.observable("");
+        self.pastappuse = ko.observable("");
+        self.deviceuse = ko.observable("");
         self.comments = ko.observable("");
-        self.useful = ko.observable("");
         self.followupemail = ko.observable("");
         self.contributor = ko.observable("");
         self.timings = ko.observableArray();
