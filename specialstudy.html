@@ -1161,28 +1161,12 @@
         self.saved = ko.observable(false);
         self.pagenow = ko.observable(1);
         self.section = ko.observable(-1);
+        self.timings = ko.observableArray();
+
         self.hospital = ko.observable("");
         self.position = ko.observable("");
         self.otherposition = ko.observable("");
         self.grade = ko.observable("");
-        self.confidence = ko.observable("");
-        self.age = ko.observable("");
-        self.rating1 = ko.observable("");
-        self.rating2 = ko.observable("");
-        self.rating3 = ko.observable("");
-        self.rating4 = ko.observable("");
-        self.ratingcomments = ko.observable("");
-        self.recommendapp = ko.observable("");
-        self.available = ko.observable("");
-        self.recommendguideline = ko.observable("");
-        self.appuseful = ko.observable("");
-        self.moreapps = ko.observable("");
-        self.pastappuse = ko.observable("");
-        self.deviceuse = ko.observable("");
-        self.comments = ko.observable("");
-        self.followupemail = ko.observable("");
-        self.contributor = ko.observable("");
-        self.timings = ko.observableArray();
         self.specialty = ko.observable("");
         self.otherspecialty = ko.observable("");
         self.experience = ko.observable("");
@@ -1191,6 +1175,28 @@
         self.pastwork = ko.observable("");
         self.pastexperience = ko.observable("");
         self.frequency = ko.observable("");
+        self.confidence = ko.observable("");
+
+        self.rating1 = ko.observable("");
+        self.rating2 = ko.observable("");
+        self.rating3 = ko.observable("");
+        self.rating4 = ko.observable("");
+        self.ratingcomments = ko.observable("");
+
+        self.recommendapp = ko.observable("");
+        self.available = ko.observable("");
+        self.recommendguideline = ko.observable("");
+        self.appuseful = ko.observable("");
+
+        self.moreapps = ko.observable("");
+        self.pastappuse = ko.observable("");
+        self.deviceuse = ko.observable("");
+        self.age = ko.observable("");
+
+        self.followupemail = ko.observable("");
+        self.contributor = ko.observable("");
+        self.comments = ko.observable("");
+
         self.evalcode = ko.observable(getUrlParameter('i'));
         self.treatment = ko.observable(self.evalcode().substr(0,1) == 1 ? 'lothian' : 'app');
         self.questionHeading = ko.observableArray(["Answer the questions by selecting an option from the list.", "What special blood components are indicated in the following cases?"]);
@@ -1303,13 +1309,16 @@
           model.findall();
         }
       });
-      
-      
-      window.onload = function () {setTimeout(function() {$("#loading").hide()}, 500)};
+
+      window.onload = function () {
+        alert("Loaded");
+        setTimeout(function() {$("#loading").hide()}, 500)
+      };
       
       window.onbeforeunload = function() {
-        if (!$root.saved && $root.section > 0) return ("Your answers have not been saved. Please stay on the page and complete the questionnaire.");
+        if (!ViewModel.saved && ViewModel.section > 0) return ("Please stay on the page and complete the remaining questions. Your answers will be lost otherwise.");
       }
+      
     </script>
   </body>
 
