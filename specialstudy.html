@@ -451,16 +451,16 @@
                     </select>
                   </div>
                   
-                  <div data-bind="reveal: frequency">
+                  <div data-bind="reveal: frequency() > -1">
                     <h3>5. How confident do you feel about the indications for special blood components?</h3>
                     <select data-bind="value: confidence">
                       <option value="-1">Please select</option>
-                      <option value="vc">Very confident</option>
-                      <option value="sc">Somewhat confident</option>
-                      <option value="nc">Neither confident nor unconfident</option>
-                      <option value="un">Unconfident</option>
-                      <option value="vu">Very unconfident</option>
-                      <option value="dn">Don't know</option>
+                      <option value="5">Very confident</option>
+                      <option value="4">Somewhat confident</option>
+                      <option value="3">Neither confident nor unconfident</option>
+                      <option value="2">Unconfident</option>
+                      <option value="1">Very unconfident</option>
+                      <option value="0">Don't know</option>
                     </select>
                   </div>
                   
@@ -800,6 +800,9 @@
           </div>
           
           <div data-bind="visible: section() == 5">
+          
+
+            <p>Please tell us what you think about App-based learning by rating the following statements.</p>
 
             <div data-bind="visible: treatment() == 'app'">
 
@@ -855,10 +858,8 @@
               </select>
               
             </div>
-
-            <h3>Attitude to App-based learning</h3>
             
-            <h4>Should more apps about safe transfusion practice be developed?</h4>
+            <h4>More apps about safe transfusion practice should be developed.</h4>
             <select data-bind="value: moreapps">
               <option selected value="0">Please select</option>
               <option value="sa">Strongly agree</option>
@@ -868,6 +869,8 @@
               <option value="sd">Strongly disagree</option>
               <option value="dn">Don't know</option>
             </select>
+            
+            <h3>Tell us about your use of apps</h3>
             
             <h4>Have you used apps in your education or pratice before?</h4>
             <select data-bind="value: pastappuse">
@@ -932,10 +935,9 @@
           </div>
         </div>
       </div>
-    </div>
     
       <script type="text/javascript" src="json2.js"></script>
-      <script type="text/javascript" src="jquery/jquery-1.11.1.min.js"></script>
+      <script type="text/javascript" src="jquery/jquery-1.9.1.js"></script>
       <script>
     
       $(document).on("mobileinit", function() {
