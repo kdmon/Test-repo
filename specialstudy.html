@@ -673,11 +673,82 @@
             <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="click: $root.nextSection">Next page</a>
         </div>
         <div data-bind="visible: section() == 4">
-          <p>Add question in demographics and perception.</p>
+        
+        <h3>Please rate the following statements in relation the <span data-bind="visible: treatment() == 'app'">Special Blood Components App</span> <span data-bind="visible: treatment() == 'lothian'">NHS Lothian special requirements hospital guidelines</span></h3>
+          <h4>It was clear, succinct and easy to use.</h4>
+          <select data-bind="value: rating1">
+            <option value="-1">Please select</option>
+            <option value="sa">Strongly agree</option>
+            <option value="a">Agree</option>
+            <option value="no">No opinion</option>
+            <option value="d">Disagree</option>
+            <option value="sd">Strongly disagree</option>
+            <option value="dn">Don't know</option>
+          </select>
+          
+          <h4>It covered all the most important points.</h4>
+          <select data-bind="value: rating2">
+            <option value="-1">Please select</option>
+            <option value="sa">Strongly agree</option>
+            <option value="a">Agree</option>
+            <option value="no">No opinion</option>
+            <option value="d">Disagree</option>
+            <option value="sd">Strongly disagree</option>
+            <option value="dn">Don't know</option>
+          </select>
+          
+          <h4>Looking up the indications was quick and easy.</h4>
+          <select data-bind="value: rating3">
+            <option value="-1">Please select</option>
+            <option value="sa">Strongly agree</option>
+            <option value="a">Agree</option>
+            <option value="no">No opinion</option>
+            <option value="d">Disagree</option>
+            <option value="sd">Strongly disagree</option>
+            <option value="dn">Don't know</option>
+          </select>
+          
+          <h4>I would recommend it to others.</h4>
+          <select data-bind="value: rating4">
+            <option value="-1">Please select</option>
+            <option value="sa">Strongly agree</option>
+            <option value="a">Agree</option>
+            <option value="no">No opinion</option>
+            <option value="d">Disagree</option>
+            <option value="sd">Strongly disagree</option>
+            <option value="dn">Don't know</option>
+          </select>
+          
+          <h3>Please explain your ratings briefly.</h3>
+          <textarea data-bind="comments"></text area>
+          
+          <h4>Do you use a smartphone or tablet device?</h4>
+          <select data-bind="value: deviceuse">
+            <option value="-1">Please select</option>
+            <option value="both">Yes, both at home and at work</option>
+            <option value="work">Yes, at work</option>
+            <option value="home">Yes, at home</option>
+            <option value="no">No</option>
+            <option value="dn">Don't know</option>
+          </select>
+          
+          <h4>Please indicate your age group</h4>
+          <select data-bind="value: age">
+            <option value="-1">Please select</option>
+            <option value="19">19 and under</option>
+            <option value="20">20-29</option>
+            <option value="30">30-39</option>
+            <option value="40">40-49</option>
+            <option value="50">50-59</option>
+            <option value="60">60 and over</option>
+            <option value="dn">Don't know</option>
+          </select>
+          
           <h3>You have completed all the questions.</h3>
           <p>Press the green button to submit your answers.</p>
           <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right"  data-bind="visible: (saved() == false), click: $root.saveAnswers">Submit answers</a>
         </div>
+        
         <div data-bind="visible: section() == 5">
           <h1>Thank you</h1>
           <p>Your answers have been recorded. You may close this browser window.</p>
@@ -916,6 +987,14 @@
         self.position = ko.observable("");
         self.otherposition = ko.observable("");
         self.grade = ko.observable("");
+        self.age = ko.observable("");
+        self.deviceuse = ko.observable("");
+        self.rating1 = ko.observable("");
+        self.rating2 = ko.observable("");
+        self.rating3 = ko.observable("");
+        self.rating4 = ko.observable("");
+        self.comments = ko.observable("");
+        self.timings = ko.observableArray();
         self.specialty = ko.observable("");
         self.otherspecialty = ko.observable("");
         self.experience = ko.observable("");
@@ -974,12 +1053,13 @@
           }).done(function() {
             self.nextSection();
           }).fail(function() {
-            alert( "Unable to save, please check your internet connection and try again." );
+            alert( "Unable to save answers. Please check your internet connection and try again." );
             self.saved(false);
           })
         }
         
         self.nextSection = function() {
+          self.timings.push(new Date().getTime());
           self.pagenow(self.pagenow() + 1);
           self.section(self.section() + 1);
           $('html, body').stop();
