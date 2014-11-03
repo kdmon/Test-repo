@@ -205,7 +205,7 @@
           </div>
           <div data-bind="visible: section() == 0">
             <h2>Confirm eligibility</h2>
-            <p>Before you begin, please confirm that you are eligible to participate in the study by answering the following questions.</p>
+            <p>Please confirm that you are eligible to participate by answering the following questions:</p>
             <h3>1. At what hospital are you based?</h3>
             <select data-bind="value: hospital">
               <option value="" selected>Please select</option>
@@ -217,7 +217,7 @@
             <div data-bind="reveal: hospital() !== ''">
               <div data-bind="reveal: hospital() == 'other'">
                 <h2 style="color: #A00">Ineligible</h2>
-                <p>Sorry, only staff working at the hospitals listed above are eligible to participate in this study. If you recently moved hospital, please select your previous hospital.</p>
+                <p>We're sorry, only staff working at the hospitals listed above are eligible to participate in this study. If you recently moved hospital, please select your last hospital.</p>
               </div>
               <div data-bind="reveal: hospital() !== 'other'">
                 <h3>2. What is your role?</h3>
@@ -240,19 +240,13 @@
                     <h3>What is your grade?</h3>
                     <select data-bind="value: grade">
                       <option value="">Please select</option>
-                      <option value="fy1">Foundation year 1</option>
-                      <option value="fy2">Foundation year 2</option>
-                      <option value="st1">Specialist trainee years 1</option>
-                      <option value="st2">Specialist trainee years 2</option>
-                      <option value="st3">Specialist trainee years 3</option>
-                      <option value="st4">Specialist trainee years 4</option>
-                      <option value="st5">Specialist trainee years 5</option>
-                      <option value="st6">Specialist trainee years 6</option>
-                      <option value="st7">Specialist trainee years 7</option>
-                      <option value="st8">Specialist trainee years 8</option>
-                      <option value="sas">Specialty and Associate Specialist</option>
-                      <option value="registrar">Specialty Registrar</option>
                       <option value="consultant">Consultant</option>
+                      <option value="registrar">Specialty Registrar</option>
+                      <option value="str">Specialty Trainee Registrar (StR)</option>
+                      <option value="sas">Specialty and Associate Specialist</option>
+                      <option value="gp">GP Trainee</option>
+                      <option value="fy2">Foundation Year 2</option>
+                      <option value="fy1">Foundation Year 1</option>
                     </select>
                   </div>
                   <div data-bind="reveal: (position() !== '' && position() !== 'dr' && position() !== 'ot' && position() !== 'bb') || (position() !== '' && (grade() !== '' || otherposition() !== ''))">
