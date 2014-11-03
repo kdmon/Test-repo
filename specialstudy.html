@@ -59,11 +59,8 @@
       }
     
       .splitview {
-        display: inline-block !important;
-        *display: inline;
-        zoom: 1;
+        display: inline-block;
         width: 49%;
-        clear: both;
         vertical-align: top;
       }
       
@@ -76,7 +73,7 @@
 
       @media (max-width: 700px) {
         .splitview {
-          display: block !important;
+          display: block;
           width: 100%;
           clear: both;
           vertical-align: top;
@@ -150,6 +147,17 @@
         line-height: 1.5em;
       }
     </style>
+    
+    <!-[if lte IE 7]>
+    
+      <style type='text/css'>
+        .splitview {
+          display: inline !important;
+        }
+      </style>
+      
+    <![endif]->
+    
   </head>
 
   <body>
@@ -1066,7 +1074,7 @@
         });
         self.appCode = ko.computed(function() {
             var iframeheight =  $( window ).height() - 20; // $( window ).height() - $("#maincontainer").outerHeight() - 10;
-            var code = '<h3>Special Blood Components App</h3><iframe src="http://it4se.com:8080/kdmon/special-app/master/index.html" width="100%" height="' + iframeheight + 'px"></iframe>';
+            var code = '<iframe src="http://it4se.com:8080/kdmon/special-app/master/index.html" width="100%" height="' + iframeheight + 'px"></iframe>';
             if ((self.section() == 2 || self.section() == 3) && self.treatment() == 'app') return code;
             else return;
         }, this, { deferEvaluation: true });
