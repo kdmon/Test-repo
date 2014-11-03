@@ -49,6 +49,18 @@
       body {
         font-size: 1.1em;
       }
+      
+      #loading {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 9999999;
+        background: #aaa;
+        text-align: center;
+      }
+      
       .ui-select span {
         white-space: normal !important;
       }
@@ -163,17 +175,17 @@
 
   <body>
     <div data-role="page" id="front">
+      
+      <div id="loading"><br/><br/><h1>Loading SPECIAL study, please wait...</h1></div>
+
       <div data-role="main" id="maincontainer" class="ui-content centered">
-        
-        <div width="100%" style="width: 100%; text-align: center;" data-bind="visible: pagenow() > 1 && pagenow() < 9">
-          <div class="progressbox" data-bind="style: {background : pagenow() > 2 ? '#afa' : 'none'}"></div>
-          
+        <div width="100%" style="width: 100%; text-align: center;" data-bind="visible: pagenow() > 2 && pagenow() < 10">
           <div class="progressbox" data-bind="style: {background : pagenow() > 3 ? '#afa' : 'none'}"></div>
           <div class="progressbox" data-bind="style: {background : pagenow() > 4 ? '#afa' : 'none'}"></div>
           <div class="progressbox" data-bind="style: {background : pagenow() > 5 ? '#afa' : 'none'}"></div>
           <div class="progressbox" data-bind="style: {background : pagenow() > 6 ? '#afa' : 'none'}"></div>
-
           <div class="progressbox" data-bind="style: {background : pagenow() > 7 ? '#afa' : 'none'}"></div>
+          <div class="progressbox" data-bind="style: {background : pagenow() > 8 ? '#afa' : 'none'}"></div>
        </div>
        
         <div id="questionContainer">
@@ -437,7 +449,7 @@
                       <option value="0">Don't know</option>
                     </select>
                     <div data-bind="reveal: frequency() > -1">
-                      <p>You are eligible to participate.</p>
+                      <h1>You are eligible to participate.</h1>
                       <p><b>Press the green button to answer the first set of knowledge-based questions.</b></p> <a href="#" data-icon="carat-r" data-iconpos="right" class="positive" data-role="button" data-bind="click: $root.nextSection">Next page</a>
                     </div>
                   </div>
@@ -469,16 +481,20 @@
             </div>
             <br/>
           </div>
+          
           <div class="splitview">
             <div data-bind="visible: section() == 2">
               <h2>You have completed the first set of questions.</h2>
-              <p><b>Please take a moment to study <span data-bind="visible: treatment() == 'app'">the Special Blood Components App</span><span data-bind="visible: treatment() == 'lothian'">the NHS Lothian Special Requirements Guidelines</span><span data-bind="visible: treatment() == 'ggc'">explore an extract of the proposed Scotland-wide hospital guidelines</span> (adjacent) before pressing the green button to answer the remaining questions.</b></p>
-              <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="click: $root.nextSection">Answer remaining questions</a>
+              <p><b>Please take a moment to study <span data-bind="visible: treatment() == 'app'">the Special Blood Components App</span><span data-bind="visible: treatment() == 'lothian'">the NHS Lothian Special Requirements Guidelines</span><span data-bind="visible: treatment() == 'ggc'">explore an extract of the proposed Scotland-wide hospital guidelines</span> (adjacent) before proceeding to answer the remaining questions.</b></p>
+              <label>
+                <input type="checkbox" data-bind="checked: ready" />I am ready to proceed 
+              </label>
+              <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="visible: ready, click: $root.nextSection">Proceed to remaining questions</a>
             </div>
             
             <div data-bind="visible: section() == 3">
               <h2 data-bind="text: questionHeading2()[$root.questionBank2.currentPage()-1]"></h2>
-              <p>You may refer to the <span data-bind="visible: treatment() != 'app'">guidelines</span> <span data-bind="visible: treatment() == 'app'">app</span> (adjacent) when answering.</p>
+              <p><b>You may refer to the <span data-bind="visible: treatment() != 'app'">guidelines</span> <span data-bind="visible: treatment() == 'app'">app</span> (adjacent) when answering.</b></p>
               <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank2.currentPage() > 1, click: $root.questionBank2.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
               <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank2.currentPageData">
                 <li class="statement" data-bind="css: {completed: selected() !== 'Please select'}">
@@ -499,6 +515,69 @@
                 <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="click: $root.nextSection">Next page</a>
               </div>
             </div>
+            
+            <div data-bind="visible: section() == 4">
+            
+            <h3>Please rate the following statements about the <span data-bind="visible: treatment() == 'app'">Special Blood Components App</span> <span data-bind="visible: treatment() == 'lothian'">NHS Lothian Special Requirements Guideline</span></h3>
+  
+              <h4>It was clear, succinct and easy to use.</h4>
+              <select data-bind="value: rating1">
+                <option value="-1">Please select</option>
+                <option value="sa">Strongly agree</option>
+                <option value="a">Agree</option>
+                <option value="no">No opinion</option>
+                <option value="d">Disagree</option>
+                <option value="sd">Strongly disagree</option>
+                <option value="dn">Don't know</option>
+              </select>
+              
+              <h4>It covered all the most important points.</h4>
+              <select data-bind="value: rating2">
+                <option value="-1">Please select</option>
+                <option value="sa">Strongly agree</option>
+                <option value="a">Agree</option>
+                <option value="no">No opinion</option>
+                <option value="d">Disagree</option>
+                <option value="sd">Strongly disagree</option>
+                <option value="dn">Don't know</option>
+              </select>
+              
+              <h4>Looking up the indications was quick and easy.</h4>
+              <select data-bind="value: rating3">
+                <option value="-1">Please select</option>
+                <option value="sa">Strongly agree</option>
+                <option value="a">Agree</option>
+                <option value="no">No opinion</option>
+                <option value="d">Disagree</option>
+                <option value="sd">Strongly disagree</option>
+                <option value="dn">Don't know</option>
+              </select>
+              
+              <h4>I would recommend it to others.</h4>
+              <select data-bind="value: rating4">
+                <option value="-1">Please select</option>
+                <option value="sa">Strongly agree</option>
+                <option value="a">Agree</option>
+                <option value="no">No opinion</option>
+                <option value="d">Disagree</option>
+                <option value="sd">Strongly disagree</option>
+                <option value="dn">Don't know</option>
+              </select>
+              
+              <h4>Please explain your ratings</h4>
+              
+              <textarea data-bind="value: ratingcomments"></textarea>
+              
+              <p>
+                If you gave a high or a low rating, please explain why?
+                Comment on any strengths and weaknesses.
+              </p>
+              
+              
+              <a href="#" data-icon="carat-r" data-iconpos="right" class="positive" data-role="button" data-bind="click: $root.nextSection">Next page</a>
+              
+            </div>
+            
           </div>
         
         
@@ -663,7 +742,7 @@
                   </ol>
                   <i>Extract from NHS Greater Glasgow and Clyde Blood Transfusion Special Requirements Guideline (March 2013, issue 1), pages 1-8.</i>
             </div>
-            <div class="guidelinecontainer" data-bind="visible: (section() == 2 || section() == 3) && treatment() == 'lothian'" id="lothian">
+            <div class="guidelinecontainer" data-bind="visible: (section() == 2 || section() == 3 || section() == 4) && treatment() == 'lothian'" id="lothian">
     
               <h3>NHS Lothian Special Requirements Guidelines</h3>
               <div>
@@ -699,15 +778,17 @@
               </ul>
               <i>Extract from NHS Lothian, Blood Transfusion Clinical Policy and Procedures 2013 (v.4), Appendix C: Special Requirements, pages 45-46.</i>
             </div>
-            
+
             <div id="appcontainer" data-bind="html: appCode, visible: treatment() == 'app'"></div>
-          </div>
-        
-          <div data-bind="visible: section() == 4">
           
-          <h3>Please rate the following statements in relation the <span data-bind="visible: treatment() == 'app'">Special Blood Components App</span> <span data-bind="visible: treatment() == 'lothian'">NHS Lothian Special Requirements Guidelines</span></h3>
-            <h4>It was clear, succinct and easy to use.</h4>
-            <select data-bind="value: rating1">
+          </div>
+          
+          <div data-bind="visible: section() == 5">
+          
+            <h3>Attitude to app-based learning</h3>
+          
+            <h4>I feel confident about the indications for special components.</h4>
+            <select data-bind="value: rating4">
               <option value="-1">Please select</option>
               <option value="sa">Strongly agree</option>
               <option value="a">Agree</option>
@@ -716,9 +797,9 @@
               <option value="sd">Strongly disagree</option>
               <option value="dn">Don't know</option>
             </select>
-            
-            <h4>It covered all the most important points.</h4>
-            <select data-bind="value: rating2">
+          
+            <h4>Guidance for prescribing special components is easy to use.</h4>
+            <select data-bind="value: rating4">
               <option value="-1">Please select</option>
               <option value="sa">Strongly agree</option>
               <option value="a">Agree</option>
@@ -727,19 +808,8 @@
               <option value="sd">Strongly disagree</option>
               <option value="dn">Don't know</option>
             </select>
-            
-            <h4>Looking up the indications was quick and easy.</h4>
-            <select data-bind="value: rating3">
-              <option value="-1">Please select</option>
-              <option value="sa">Strongly agree</option>
-              <option value="a">Agree</option>
-              <option value="no">No opinion</option>
-              <option value="d">Disagree</option>
-              <option value="sd">Strongly disagree</option>
-              <option value="dn">Don't know</option>
-            </select>
-            
-            <h4>I would recommend it to others.</h4>
+          
+            <h4>Having access to an app for special components would be useful.</h4>
             <select data-bind="value: rating4">
               <option value="-1">Please select</option>
               <option value="sa">Strongly agree</option>
@@ -750,16 +820,14 @@
               <option value="dn">Don't know</option>
             </select>
             
-            <h4>Please explain your ratings</h4>
-            <textarea data-bind="value: ratingcomments"></textarea>
-            
-            <h4>Do you use a smartphone or tablet device?</h4>
-            <select data-bind="value: deviceuse">
+            <h4>The Special Blood Components App should be made widely available.</h4>
+            <select data-bind="value: useful">
               <option value="-1">Please select</option>
-              <option value="both">Yes, both at home and at work</option>
-              <option value="work">Yes, at work</option>
-              <option value="home">Yes, at home</option>
-              <option value="no">No</option>
+              <option value="sa">Strongly agree</option>
+              <option value="a">Agree</option>
+              <option value="no">No opinion</option>
+              <option value="d">Disagree</option>
+              <option value="sd">Strongly disagree</option>
               <option value="dn">Don't know</option>
             </select>
             
@@ -772,19 +840,44 @@
               <option value="40">40-49</option>
               <option value="50">50-59</option>
               <option value="60">60 and over</option>
-              <option value="dn">Don't know</option>
+              <option value="0">Prefer not to say</option>
             </select>
             
+            <h4>Do you use a smartphone or tablet device?</h4>
+            <select data-bind="value: deviceuse">
+              <option value="-1">Please select</option>
+              <option value="both">Yes, both at home and at work</option>
+              <option value="work">Yes, at work</option>
+              <option value="home">Yes, at home</option>
+              <option value="no">No</option>
+              <option value="0">Prefer not to say</option>
+            </select>
+          
+            <h4>Acknowledgements</h4>
+            
+            <p>
+              The app has an acknowledgements section page where we list people who have
+              helped test and develop the app. If you would like to be listed there,
+              please state your title, name, position and affiliation. If you would
+              like to maintain your confidentiality, then do not enter your details.
+            </p>
+            
+            <input type="text" data-bind="value: contributor">
+
+            
+            <h4>Are you happy to be contacted by the researchers for follow up study? If so, please leave your email address.</h4>
+            <input type="text" data-bind="value: followupemail">
+
+
             <h4>Do you have any final comments?</h4>
             <textarea data-bind="value: comments"></textarea>
-            
             
             <h3>You have completed all the questions.</h3>
             <p>Press the green button to submit your answers.</p>
             <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right"  data-bind="visible: (saved() == false), click: $root.saveAnswers">Submit answers</a>
           </div>
           
-          <div data-bind="visible: section() == 5">
+          <div data-bind="visible: section() == 6">
             <h1>Thank you</h1>
             <p>Your answers have been recorded. You may close this browser window.</p>
           </div>
@@ -1015,6 +1108,7 @@
       };
       var ViewModel = function() {
         var self = this;
+        self.ready = ko.observable(false);
         self.saved = ko.observable(false);
         self.pagenow = ko.observable(1);
         self.section = ko.observable(-1);
@@ -1030,6 +1124,9 @@
         self.rating4 = ko.observable("");
         self.ratingcomments = ko.observable("");
         self.comments = ko.observable("");
+        self.useful = ko.observable("");
+        self.followupemail = ko.observable("");
+        self.contributor = ko.observable("");
         self.timings = ko.observableArray();
         self.specialty = ko.observable("");
         self.otherspecialty = ko.observable("");
@@ -1041,8 +1138,8 @@
         self.frequency = ko.observable("");
         self.evalcode = ko.observable(getUrlParameter('i'));
         self.treatment = ko.observable(self.evalcode().substr(0,1) == 1 ? 'lothian' : 'app');
-        self.questionHeading = ko.observableArray(["Answer the questions by selecting an option from the list", "What special blood components are indicated in the following cases?"]);
-        self.questionHeading2 = ko.observableArray(["Answer the questions by selecting an option from the list", "What special blood components are indicated in the following cases?"]);
+        self.questionHeading = ko.observableArray(["Answer the questions by selecting an option from the list.", "What special blood components are indicated in the following cases?"]);
+        self.questionHeading2 = ko.observableArray(["Answer the questions by selecting an option from the list.", "What special blood components are indicated in the following cases?"]);
         self.questionBank1 = ko.observableArray(questions.theme1.splice(0, 4).concat(questions.theme2.splice(0, 4))).extend({
           paging: 4
         });
@@ -1074,9 +1171,9 @@
           return passed;
         });
         self.appCode = ko.computed(function() {
-            var iframeheight =  $( window ).height() - 20; // $( window ).height() - $("#maincontainer").outerHeight() - 10;
+            var iframeheight =  $( window ).height() - 50; // $( window ).height() - $("#maincontainer").outerHeight() - 10;
             var code = '<iframe src="http://it4se.com:8080/kdmon/special-app/master/index.html" width="100%" height="' + iframeheight + 'px"></iframe>';
-            if ((self.section() == 2 || self.section() == 3) && self.treatment() == 'app') return code;
+            if ((self.section() == 2 || self.section() == 3 || self.section() == 4) && self.treatment() == 'app') return code;
             else return;
         }, this, { deferEvaluation: true });
         
@@ -1151,6 +1248,13 @@
           model.findall();
         }
       });
+      
+      
+      window.onload = function () {setTimeout(function() {$("#loading").hide()}, 500)};
+      
+      window.onbeforeunload = function() {
+        if (!$root.saved && $root.section > 0) return ("Your answers have not been saved. Please stay on the page and complete the questionnaire.");
+      }
     </script>
   </body>
 
