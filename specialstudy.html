@@ -62,9 +62,9 @@
           font-size: 1.4em;
         }
         
-        .guidelinecontainer, #appcontainer, #maincontainer > div {
+        .splitview {
           display: inline-block !important;
-          width: 45%;
+          width: 49%;
           clear: both;
           vertical-align: top;
         }
@@ -142,18 +142,19 @@
   <body>
     <div data-role="page" id="front">
       <div data-role="main" id="maincontainer" class="ui-content centered">
-        <div id="questionContainer">
+        
+        <div width="100%" style="width: 100%; text-align: center;" data-bind="visible: pagenow() > 1 && pagenow() < 9">
+          <div class="progressbox" data-bind="style: {background : pagenow() > 2 ? '#afa' : 'none'}"></div>
           
-          <div width="100%" style="width: 100%; text-align: center; height: 0px;" data-bind="visible: pagenow() > 1 && pagenow() < 9">
-            <div class="progressbox" data-bind="style: {background : pagenow() > 2 ? '#afa' : 'none'}"></div>
-            
-            <div class="progressbox" data-bind="style: {background : pagenow() > 3 ? '#afa' : 'none'}"></div>
-            <div class="progressbox" data-bind="style: {background : pagenow() > 4 ? '#afa' : 'none'}"></div>
-            <div class="progressbox" data-bind="style: {background : pagenow() > 5 ? '#afa' : 'none'}"></div>
-            <div class="progressbox" data-bind="style: {background : pagenow() > 6 ? '#afa' : 'none'}"></div>
+          <div class="progressbox" data-bind="style: {background : pagenow() > 3 ? '#afa' : 'none'}"></div>
+          <div class="progressbox" data-bind="style: {background : pagenow() > 4 ? '#afa' : 'none'}"></div>
+          <div class="progressbox" data-bind="style: {background : pagenow() > 5 ? '#afa' : 'none'}"></div>
+          <div class="progressbox" data-bind="style: {background : pagenow() > 6 ? '#afa' : 'none'}"></div>
 
-            <div class="progressbox" data-bind="style: {background : pagenow() > 7 ? '#afa' : 'none'}"></div>
-         </div>
+          <div class="progressbox" data-bind="style: {background : pagenow() > 7 ? '#afa' : 'none'}"></div>
+       </div>
+       
+        <div id="questionContainer">
           
           <div data-bind="visible: section() == -1">
             <center>
@@ -446,322 +447,328 @@
             </div>
             <br/>
           </div>
-          <div data-bind="visible: section() == 2">
-            <p style="margin-bottom: 0px">Please take some time to <span data-bind="visible: treatment() == 'app'">familiarise yourself with the Special Blood Request app</span><span data-bind="visible: treatment() == 'lothian'">explore the current NHS Lothian hospital guidelines</span><span data-bind="visible: treatment() == 'ggc'">explore an extract of the proposed Scotland-wide hospital guidelines</span> (shown below).</p>
-            <p data-bind="visible: treatment() == 'app'"><b>When you are ready, press the green button to continue.</b></p>
-            <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="visible: treatment() == 'app', click: $root.nextSection">Next page</a>
-          </div>
-          
-          <div data-bind="visible: section() == 3"><br/>
-            <h3 data-bind="text: questionHeading2()[$root.questionBank2.currentPage()-1]"></h3>
-            <p>You may refer to the <span data-bind="visible: treatment() != 'app'">guidelines</span> <span data-bind="visible: treatment() == 'app'">app</span> (shown below) when answering.</p>
-            <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank2.currentPage() > 1, click: $root.questionBank2.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
-            <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank2.currentPageData">
-              <li class="statement" data-bind="css: {completed: selected() !== 'Please select'}">
-                <span data-bind="text: statement"></span> <i class="fa fa-ln" style="color: red;" data-bind="visible: selected() == 'Please select'">&#xf0a3;</i>
-                <br/>
-                <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select>
-              </li>
-            </ul>
-            <p data-bind="visible: !$root.questionBank2.pageCompleted();">You must answer all mandatory questions (<i class="fa fa-ln" style="color: red;">&#xf0a3;</i>) before proceeding.</p>
-            <div data-bind="reveal: $root.questionBank2.pageCompleted() && $root.questionBank2.currentPage() <  $root.questionBank2.pageCount()">
-              <p><b>Review your answers and press the green button to continue.</b>
-              </p>
-              <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="click: $root.questionBank2.moveNext">Next page</a>
+          <div class="splitview">
+            <div data-bind="visible: section() == 2">
+              <p style="margin-bottom: 0px">Please take some time to <span data-bind="visible: treatment() == 'app'">familiarise yourself with the Special Blood Request app</span><span data-bind="visible: treatment() == 'lothian'">explore the current NHS Lothian hospital guidelines</span><span data-bind="visible: treatment() == 'ggc'">explore an extract of the proposed Scotland-wide hospital guidelines</span> (shown below).</p>
+              <p data-bind="visible: treatment() == 'app'"><b>When you are ready, press the green button to continue.</b></p>
+              <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="visible: treatment() == 'app', click: $root.nextSection">Next page</a>
             </div>
-            <div data-bind="reveal: $root.questionBank2.pageCompleted() && $root.questionBank2.currentPage() ==  $root.questionBank2.pageCount()">
-              <p><b>Review your answers and press the green button to continue.</b>
-              </p>
-              <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="click: $root.nextSection">Next page</a>
-            </div>
-            <br/>
-            <h2><span data-bind="visible: treatment() == 'app'">Special Blood Request app:</span><span data-bind="visible: treatment() != 'app'">Special requirements guidelines:</span></h2>
-          </div>
-        </div>
-        
-        <div class="guidelinecontainer" data-bind="visible: (section() == 2 || section() == 3) && treatment() == 'ggc'" id="ggc">
-          <div>
-            <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="click: findall"><i class="fa fa-ln">&#xf002;</i></a>
-            <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="visible: searchterm(), click: clearsearch">x</a>
-            <input class="searchbar" placeholder="Search document" type="text" data-bind="value: searchterm, valueUpdate: 'keypress'">
-          </div>
-          <div style="display: none;">
-            <h3><u>INTRODUCTION</u>
-            </h3>
-            <p>This guideline is for all staff involved in prescribing, supplying and administering blood and blood components throughout Greater Glasgow and Clyde Health Board (GG&amp;C). It should be used in conjunction with the GG&amp;C Clinical Transfusion Policy. The aim of the Clinical Transfusion policy is to ensure that the <b>right</b> blood is given to the <b>right</b> patient at the <b>right</b> time, <b>every</b> time. This policy focuses on those patients who have a special requirement for transfusion and it aims:</p>
-            <ul>
-              <li>To provide healthcare professionals with clear guidelines on when Cytomegalovirus (CMV) seronegative components, irradiated components, or other special requirements for transfusion are indicated</li>
-              <li>To outline the process of notification to the hospital Blood Bank, of patients with special requirements</li>
-              <li>To outline how this information will be disseminated across Greater Glasgow and Clyde</li>
-              <li>To outline how errors should be reported if they arise.</li>
-            </ul>
-            <p>Advice on blood transfusion may be obtained from Biomedical Scientist (BMS) staff in Blood Bank, from Haematology Medical Staff and from hospital Transfusion Practitioners.</p>
-            <p>This policy has been prepared for the GG&amp;C Overarching Transfusion Committee and represents current standards. It will be reviewed every two years to accommodate future changes in the provision of health care in GG&amp;C and in the provision of blood and blood components.</p>
-          </div>
-          <h3><u>REASON FOR SPECIAL REQUIREMENTS AND IDENTIFICATION OF PATIENTS</u>
-          </h3>
-          <ul>
-            <li>Special requirements cover a range of additional specifications or processing of standard blood components</li>
-          </ul>
-          <p>The most commonly requested special requirements in practice are irradiated components and CMV seronegative components.</p>
-          <h3>CMV Seronegative Components</h3>
-          <p>Cytomegalovirus (CMV) belongs to the herpes family and in the healthy population causes a self limiting illness. It is cell associated and therefore can be transmitted in cellular blood components (red cells, platelets and granulocytes). Typically it causes a subclinical illness similar to infectious mononucleolus (glandular fever). In immunocompromised patients it can result in potentially fatal pneumonitis or disseminated CMV. For this reason CMV seronegative products should be used for a selected group of patients, listed below.</p>
-          <p>The requirement for CMV seronegative blood components has been recently reviewed by the Advisory Committee on the Safety of Blood, Tissue and Organs (SaBTO). Universal leucodepletion, introduced by the UK blood services in 1999 primarily as a vCJD risk reduction measure, results in a three log depletion of white cells. This is generally accepted to render these components "CMV safe"</p>
-          <p>Monitoring selected patient groups for CMV infection with pre-emptive therapy where required has been shown to be a successful strategy in certain groups (solid organ transplants, haematopoietic stem cell transplants).</p>
-          <p>CMV seronegative components should continue to be used where leucodepletion is not possible (granulocyte transfusions) or where the potential severity of the consequences of CMV infection, and/or the difficulty in monitoring for infection are considered too great (IUT and transfusions in neonates up to 28 days post EDD, elective transfusions in pregnancy).
-            <p>
-              <p>Pregnant women who are being regularly transfused throughout their pregnancy should receive CMV seronegative components. There is no requirement for this for emergency transfusions in pregnancy.</p>
-              <p>As CMV is a common virus and the prevalence of anti-CMV in the UK adult population is 50-60%, it not possible to provide CMV seronegative products for all recipients. Components that have been leucocyte depleted to less than 5 x 10^6/unit have a significant reduction in the risk of CMV transmission.</p>
-              <h3>Irradiated Components</h3>
-              <p>Irradiation is the only known method of preventing Transfusion Associated Graft versus Host Disease (TaGvHD). This is a rare but fatal complication of blood transfusion. It results from engraftment and clonal expansion of HLA compatible donor lymphocytes. Clinically TaGvHD presents with fever, rash, diarrhoea, hepatitis and pancytopenia 4-30 days after transfusion. This complication of transfusion is eliminated by inactivation of donor lymphocytes by irradiation. The risk associated with individual transfusions depends on the number and viability of contaminating lymphocytes, susceptibility of the host's immune system to their engraftment and the degree of immunological disparity between donor and recipient. <sup><a href="#ref2">2</a>,<a href="#ref3">3</a></sup>
-              </p>
-              <p>The table below identifies the patients who have requirements for irradiated and / or CMV seronegative components and the length of time these are required.</p>
-              <table id="ggcindications" data-role="table">
-                <thead>
-                  <tr>
-                    <th>Condition:</th>
-                    <th>Cytomegalovirus CMV Seronegative:</th>
-                    <th>Irradiated:</th>
-                  </tr>
-                </thead>
-                <tr>
-                  <td>Neonates up to 28 days post EDD</td>
-                  <td>&#10003;</td>
-                  <td>*</td>
-                </tr>
-                <tr>
-                  <td>Intrauterine Transfusion (IUT)</td>
-                  <td>&#10003;</td>
-                  <td>&#10003;**</td>
-                </tr>
-                <tr>
-                  <td>Neonatal Exchange Transfusion (ET)</td>
-                  <td>&#10003;</td>
-                  <td>***</td>
-                </tr>
-                <tr>
-                  <td>All donations from first or second degree relative</td>
-                  <td></td>
-                  <td>&#10003;</td>
-                </tr>
-                <tr>
-                  <td>Severe T lymphocyte immunodeficiency syndromes including Di George and Severe Combined Immunodeficiency</td>
-                  <td>&#10003;</td>
-                  <td>&#10003;</td>
-                </tr>
-                <tr>
-                  <td>Recipients of haemopoietic stem cell transplantation (HSCT)</td>
-                  <td></td>
-                  <td>&#10003; <b>&#124;&#124;</b></td>
-                </tr>
-                <tr>
-                  <td>Stem cell harvesting
-                    <br><i> from mobilisation or 2 weeks before the harvest (whichever is earliest) until harvest is completed</i>
-                  </td>
-                  <td></td>
-                  <td>&#10003;</td>
-                </tr>
-                <tr>
-                  <td>All recipients of alemtuzumab (Campath, anti CD-52)</td>
-                  <td></td>
-                  <td>&#10003;</td>
-                </tr>
-                <tr>
-                  <td>All patients with Hodgkins lymphoma</td>
-                  <td></td>
-                  <td>&#10003;</td>
-                </tr>
-                <tr>
-                  <td>All patients treated with purine analogues, e.g. fludarabine, cladrabine, deoxycoformicin, clofarabine</td>
-                  <td></td>
-                  <td>&#10003;</td>
-                </tr>
-                <tr>
-                  <td>All patients with aplastic anaemia treated with immunosuppressive therapy (until lymphocyte count >1.0 x10^9/L)</td>
-                  <td></td>
-                  <td>&#10003;</td>
-                </tr>
-                <tr>
-                  <td>Pregnant women on regular transfusion programme</td>
-                  <td>&#10003;</td>
-                  <td></td>
-                </tr>
-              </table>
-              <p><b>Leucodepleted CMV seropositive components (CMV safe) may be used for the above patient groups 
-            in the situation of life-threatening haemorrhage</b>
-              </p>
-              <p><b>CMV seronegative components should only be used for CMV negative patients or those in whom CMV status is unknown.</b>
-              </p>
-              <p>* Top up transfusions in infants aged &lt;6 months do not require irradiation unless there has been a previous IUT or if the donation is from a first or second-degree relative</p>
-              <p>** The requirement for irradiation after IUT remains until 6 months after 40 weeks gestation</p>
-              <p>*** Products for neonatal ET must be irradiated when there has been a previous IUT or if the donation is from a first or second-degree relative.
-                <br/>For other neonatal ET, irradiation is recommended if irradiation will not delay transfusion</p>
-              <p>Whilst a diagnosis of severe T lymphocyte immunodeficiency is considered all components transfused should be irradiated and CMV seronegative whilst further tests are being undertaken</p>
-              <p><b>&#124; &#124;</b> more detailed requirements for transplant recipients are as follows:</p>
-              <div style="margin-left:25px"> <b><i>allografts</i></b> - irradiated components should be given indefinitely
-                <br/> <b><i>autografts</i></b> - irradiated components should be given until 6 months post transplant</div>
-              
-              <p><b>If there is any doubt as to whether or not a patient has a requirement for 
-          special blood components please discuss with the on call Haematologist at your local site.</b>
-              </p>
-              <div style="display: none;">
-                <h3><u>NOTIFICATION TO THE LABORATORY OF PATIENTS WITH SPECIAL REQUIREMENTS</u>
-                </h3>
-                <p>Once a patient has been identified as having a requirement for special blood components, a standard form, used throughout GG&amp;C (see appendix 1 <b><i>[NB: request form not reproduced in this extract]</i></b>), should be fully completed and sent to the local Blood Bank. The information held on this form will be shared with all Blood Banks throughout GG&amp;C.</p>
-                <p>The form should be signed by the Consultant in charge of the patient's care. It should be photocopied and a copy filed in the case records with the second copy forwarded to Blood Bank. If the patient has been identified as having special blood component requirements out with core working hours and a Consultant is not available, the requirement can be requested on a regular transfusion form and the special requirements form forwarded at the earliest possible opportunity. The information will not be disseminated throughout the Health Board Blood Banks until a Consultant signed copy of the special requirements form is received by the hospital Blood Bank.</p>
-                <p>If the need for the special blood components changes, an updated form should be forwarded to the hospital Blood Bank so their records can be amended.</p>
-                <h3>Laboratory Dissemination of Information</h3>
-                <p>As patients regularly transfer between hospital sites it is important that their transfusion requirement information is available throughout the Health Board Blood Banks. Once a Consultant signed form is received at a local Blood Bank, the form will be scanned and emailed to the Blood Bank managers in the South, North, Clyde and the Golden Jubilee Hospital so that their computer systems can be updated accordingly (as per the Blood Bank special requirements SOP).</p>
-                <p>The form will be returned to the requesting Consultant to ensure they are aware the laboratory tasks have been completed.</p>
-                <h3><u>PATIENT COUNSELLING AND CONSENT</u>
-                </h3>
-                <p>It is not a legal requirement in the United Kingdom that written consent is obtained before a transfusion of blood components; however, it is considered a required standard of good transfusion practice to ensure that the patient/parent/carer receives adequate information regarding the transfusion. This standard is laid down in the NHS QIS Clinical Standards (2006) now known as Healthcare Improvement Scotland and compliance is monitored. <sup><a href="#ref4">4</a></sup> This discussion should include information about the risks and benefits of transfusion as well as information relating to available alternatives, for example, iron supplementation and must be documented in the case records. Nursing and medical staff therefore, have a professional duty to ensure that they have adequate knowledge of transfusion related issues or that they can access the information and support required by patients undergoing a transfusion.</p>
-                <p>Booklets are available specifically for patients who require irradiated components and all patients receiving irradiated components should be given these before their first transfusion. They should also be counselled and told to inform nursing and medical staff of this requirement before any future transfusions. Patients should be given a card to carry documenting their special transfusion requirement. An adhesive sticker, taken from the information leaflet, should be placed on the front of case records detailing the requirement. It is the responsibility of the prescribing practitioner to ensure these steps are undertaken.</p>
+            
+            <div data-bind="visible: section() == 3"><br/>
+              <h3 data-bind="text: questionHeading2()[$root.questionBank2.currentPage()-1]"></h3>
+              <p>You may refer to the <span data-bind="visible: treatment() != 'app'">guidelines</span> <span data-bind="visible: treatment() == 'app'">app</span> (shown below) when answering.</p>
+              <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank2.currentPage() > 1, click: $root.questionBank2.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
+              <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank2.currentPageData">
+                <li class="statement" data-bind="css: {completed: selected() !== 'Please select'}">
+                  <span data-bind="text: statement"></span> <i class="fa fa-ln" style="color: red;" data-bind="visible: selected() == 'Please select'">&#xf0a3;</i>
+                  <br/>
+                  <select id="selector" data-inline="true" data-native-menu="true" data-bind="options: options, value: selected"></select>
+                </li>
+              </ul>
+              <p data-bind="visible: !$root.questionBank2.pageCompleted();">You must answer all mandatory questions (<i class="fa fa-ln" style="color: red;">&#xf0a3;</i>) before proceeding.</p>
+              <div data-bind="reveal: $root.questionBank2.pageCompleted() && $root.questionBank2.currentPage() <  $root.questionBank2.pageCount()">
+                <p><b>Review your answers and press the green button to continue.</b>
+                </p>
+                <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="click: $root.questionBank2.moveNext">Next page</a>
               </div>
-              <h3>INCIDENT REPORTING</h3>
-              <p>There have been 13 reported cases of TaGVHD since 1996 but no cases in the last 8 years. 2 cases have been reported in leucodepleted components (1998-99 and 2000-01) indicating that while leucodepletion significantly reduces, it does not eradicate the risk of this condition. It is important therefore that appropriate products are provided for patients at risk.</p>
-              <p>Errors do occur and the Serous Hazards of Transfusion (SHOT) report 2010 documents 74 cases where special requirements were not met. The majority of these (59 cases) were patients who required irradiated products but did not receive them. <sup><a href="#ref5">5</a></sup> It is important that any errors are documented appropriately to ensure that steps can be taken to avoid them in the future. If it becomes apparent that a patient has failed to receive appropriate components the hospital Blood Bank must be informed immediately. The incident will be fully investigated and reported on DATIX and to SHOT.</p>
-              <h3><u>REFERENCES</u>
-              </h3>
-              <ol>
-                <li>Transfusion Transmitted Infection. Chapter 13. Practical Transfusion Medicine. Third Edition. P122-145. Murphy MF, Pamphilon DH.</li>
-                <li>
-                  <a id="ref2"></a>Clinical Blood Transfusion. Chapter 16 Postgraduate Haematology Sixth Edition. P268-300. Hoffbrand AV, Catovsky D, Tuddenham EDD, Green AR.</li>
-                <li>
-                  <a id="ref3"></a>Guidelines on the use of irradiated blood components prepared by the British Committee for Standards in Haematology blood transfusion task force British Journal of Haematology 2011, 152, 35-51</li>
-                <li>NHS QIS Clinical Standards - Blood Transfusion <a href="http://www.healthcareimprovementscotland.org/previous_resources/standards/clinical_standards_-_blood_tra.aspx" target="_blank">http://www.healthcareimprovementscotland.org/previous_resources/standards/clinical_standards_-_blood_tra.aspx</a>
-                </li>
-                <li>Serious Hazards of Transfusion <a href="http://www.shotuk.org" target="_blank">http://www.shotuk.org/</a>
-                </li>
-                <li>Transfusion guidelines for neonates and older children British Journal of Haematology 2004, 124, 433 - 453</li>
-                <li>Advisory Committee on the Safety of Blood, Tissues and Organs (SaBTO) <a href="http://www.dh.gov.uk/prod_consum_dh/groups/dh_digitalassets/@dh/@en/documents/digitalasset/dh_133086.pdf" target="_blank">http://www.dh.gov.uk/prod_consum_dh/groups/dh_digitalassets/@dh/@en/documents/digitalasset/dh_133086.pdf</a>
-                </li>
-              </ol>
-              <i>Extract from NHS Greater Glasgow and Clyde Blood Transfusion Special Requirements Guideline (March 2013, issue 1), pages 1-8.</i>
-        </div>
-        <div class="guidelinecontainer" data-bind="visible: (section() == 2 || section() == 3) && treatment() == 'lothian'" id="lothian">
-
-          <div>
-            <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="click: findall"><i class="fa fa-ln">&#xf002;</i></a>
-            <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="visible: searchterm(), click: clearsearch">x</a>
-            <input class="searchbar" placeholder="Search document" type="text" data-bind="value: searchterm, valueUpdate: 'keypress'">
+              <div data-bind="reveal: $root.questionBank2.pageCompleted() && $root.questionBank2.currentPage() ==  $root.questionBank2.pageCount()">
+                <p><b>Review your answers and press the green button to continue.</b>
+                </p>
+                <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="click: $root.nextSection">Next page</a>
+              </div>
+              <br/>
+              <h2><span data-bind="visible: treatment() == 'app'">Special Blood Request app:</span><span data-bind="visible: treatment() != 'app'">Special requirements guidelines:</span></h2>
+            </div>
           </div>
-
-          <h3>Irradiated Components</h3>
-          <p>For at-risk patients, all red cell, platelet and granulocyte concentrates should be irradiated. It is not necessary to irradiate FFP, cryoprecipitate or fractionated plasma products.</p>
-          <ul>
-            <li>All intrauterine transfusions.</li>
-            <li>All exchange or top-up transfusions in infants where there has been a previous intra-uterine transfusion, until 6 months after the expected delivery date.</li>
-            <li>Exchange transfusion, with no previous intra-uterine transfusion; irradiated blood is recommended provided this does not unduly delay transfusion.</li>
-            <li>Proven or suspected congenital immunodeficiency states (including Severe Combined Immunodeficiency (SCID), Di George's syndrome, Wiskott-Aldrich syndrome, purine nucleoside phosphorylase deficiency, reticular dysgenesis, cell- mediated immunodeficiency (not otherwise classified), primary T lymphocyte immunodeficiencies, adenosine deaminase deficiency, MHC Class I and II deficiency, leucocyte adhesion deficiency, immunodeficiency with eosinophilia, ataxia telangiectasia, chronic mucocutaneous candidiasis).</li>
-            <li>All autologous bone marrow or peripheral blood stem cell transplant recipients from start of conditioning until at least three months after transplant (or until at least six months after transplant if total body irradiation has been given).</li>
-            <li>All allogeneic bone marrow or peripheral blood stem cell transplant recipients from start of conditioning until a minimum of six months after transplant; possibly longer at the discretion of the haematologist e.g. chronic GvHD.</li>
-            <li>Blood transfused to allogeneic bone marrow or peripheral blood stem-cell donors for 7 days before the harvest and until after the last collection.</li>
-            <li>Blood transfused to patients undergoing autologous bone marrow harvest for the 7 days before the harvest and until after the harvest.</li>
-            <li>Blood transfused to patients undergoing autologous peripheral blood stem-cell mobilisation from commencement of the mobilising chemotherapy regimen and until the last collection.</li>
-            <li>Patients with Hodgkin's disease, indefinitely.</li>
-            <li>Patients treated with the purine analogue drugs Fludarabine, Deoxycoformycin, Cladribine, Clofarabine and Bendamustine, indefinitely.</li>
-            <li>All transfusions from first- or second-degree relatives, even if the patient is immunocompetent.</li>
-            <li>All HLA-matched platelet transfusions, even if the patient is immunocompetent.</li>
-            <li>All granulocyte transfusions, which must then be transfused with minimum delay.</li>
-            <li>Patients receiving ALG, ATG, CAMPATH or any other T-cell depleting agents (such as alemtuzumab for non-haematological indications including solid organ transplantation, multiple sclerosis and vasculitis) during treatment and then indefinitely.</li>
-          </ul>
-          <h3>CMV Negative Components</h3>
-          <ul>
-            <li>Intra-uterine transfusion irrespective of the CMV status of the mother.</li>
-            <li>Pregnant women antenatally (pre-delivery only). If CMV negative components are not readily available and a delay will compromise the mother or baby, CMV random components (i.e. untested) are an acceptable alternative.</li>
-            <li>All blood transfusions for infants up to 28 days post expected delivery date.</li>
-          </ul>
-          <i>Extract from NHS Lothian, Blood Transfusion Clinical Policy and Procedures 2013 (v.4), Appendix C: Special Requirements, pages 45-46.</i>
-        </div>
         
-        <div data-bind="visible: section() == 2 && treatment() != 'app'">
-          <p><b>When you are ready, press the green button to continue.</b></p>
-            <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="click: $root.nextSection">Next page</a>
-        </div>
-        <div data-bind="visible: section() == 4">
         
-        <h3>Please rate the following statements in relation the <span data-bind="visible: treatment() == 'app'">Special Blood Components App</span> <span data-bind="visible: treatment() == 'lothian'">NHS Lothian special requirements hospital guidelines</span></h3>
-          <h4>It was clear, succinct and easy to use.</h4>
-          <select data-bind="value: rating1">
-            <option value="-1">Please select</option>
-            <option value="sa">Strongly agree</option>
-            <option value="a">Agree</option>
-            <option value="no">No opinion</option>
-            <option value="d">Disagree</option>
-            <option value="sd">Strongly disagree</option>
-            <option value="dn">Don't know</option>
-          </select>
+          <div class="splitview">
           
-          <h4>It covered all the most important points.</h4>
-          <select data-bind="value: rating2">
-            <option value="-1">Please select</option>
-            <option value="sa">Strongly agree</option>
-            <option value="a">Agree</option>
-            <option value="no">No opinion</option>
-            <option value="d">Disagree</option>
-            <option value="sd">Strongly disagree</option>
-            <option value="dn">Don't know</option>
-          </select>
-          
-          <h4>Looking up the indications was quick and easy.</h4>
-          <select data-bind="value: rating3">
-            <option value="-1">Please select</option>
-            <option value="sa">Strongly agree</option>
-            <option value="a">Agree</option>
-            <option value="no">No opinion</option>
-            <option value="d">Disagree</option>
-            <option value="sd">Strongly disagree</option>
-            <option value="dn">Don't know</option>
-          </select>
-          
-          <h4>I would recommend it to others.</h4>
-          <select data-bind="value: rating4">
-            <option value="-1">Please select</option>
-            <option value="sa">Strongly agree</option>
-            <option value="a">Agree</option>
-            <option value="no">No opinion</option>
-            <option value="d">Disagree</option>
-            <option value="sd">Strongly disagree</option>
-            <option value="dn">Don't know</option>
-          </select>
-          
-          <h3>Please explain your ratings briefly.</h3>
-          <textarea data-bind="value: comments"></textarea>
-          
-          <h4>Do you use a smartphone or tablet device?</h4>
-          <select data-bind="value: deviceuse">
-            <option value="-1">Please select</option>
-            <option value="both">Yes, both at home and at work</option>
-            <option value="work">Yes, at work</option>
-            <option value="home">Yes, at home</option>
-            <option value="no">No</option>
-            <option value="dn">Don't know</option>
-          </select>
-          
-          <h4>Please indicate your age group</h4>
-          <select data-bind="value: age">
-            <option value="-1">Please select</option>
-            <option value="19">19 and under</option>
-            <option value="20">20-29</option>
-            <option value="30">30-39</option>
-            <option value="40">40-49</option>
-            <option value="50">50-59</option>
-            <option value="60">60 and over</option>
-            <option value="dn">Don't know</option>
-          </select>
-          
-          <h3>You have completed all the questions.</h3>
-          <p>Press the green button to submit your answers.</p>
-          <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right"  data-bind="visible: (saved() == false), click: $root.saveAnswers">Submit answers</a>
-        </div>
-        
-        <div data-bind="visible: section() == 5">
-          <h1>Thank you</h1>
-          <p>Your answers have been recorded. You may close this browser window.</p>
+            <div class="guidelinecontainer" data-bind="visible: (section() == 2 || section() == 3) && treatment() == 'ggc'" id="ggc">
+              <div>
+                <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="click: findall"><i class="fa fa-ln">&#xf002;</i></a>
+                <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="visible: searchterm(), click: clearsearch">x</a>
+                <input class="searchbar" placeholder="Search document" type="text" data-bind="value: searchterm, valueUpdate: 'keypress'">
+              </div>
+              <div style="display: none;">
+                <h3><u>INTRODUCTION</u>
+                </h3>
+                <p>This guideline is for all staff involved in prescribing, supplying and administering blood and blood components throughout Greater Glasgow and Clyde Health Board (GG&amp;C). It should be used in conjunction with the GG&amp;C Clinical Transfusion Policy. The aim of the Clinical Transfusion policy is to ensure that the <b>right</b> blood is given to the <b>right</b> patient at the <b>right</b> time, <b>every</b> time. This policy focuses on those patients who have a special requirement for transfusion and it aims:</p>
+                <ul>
+                  <li>To provide healthcare professionals with clear guidelines on when Cytomegalovirus (CMV) seronegative components, irradiated components, or other special requirements for transfusion are indicated</li>
+                  <li>To outline the process of notification to the hospital Blood Bank, of patients with special requirements</li>
+                  <li>To outline how this information will be disseminated across Greater Glasgow and Clyde</li>
+                  <li>To outline how errors should be reported if they arise.</li>
+                </ul>
+                <p>Advice on blood transfusion may be obtained from Biomedical Scientist (BMS) staff in Blood Bank, from Haematology Medical Staff and from hospital Transfusion Practitioners.</p>
+                <p>This policy has been prepared for the GG&amp;C Overarching Transfusion Committee and represents current standards. It will be reviewed every two years to accommodate future changes in the provision of health care in GG&amp;C and in the provision of blood and blood components.</p>
+              </div>
+              <h3><u>REASON FOR SPECIAL REQUIREMENTS AND IDENTIFICATION OF PATIENTS</u>
+              </h3>
+              <ul>
+                <li>Special requirements cover a range of additional specifications or processing of standard blood components</li>
+              </ul>
+              <p>The most commonly requested special requirements in practice are irradiated components and CMV seronegative components.</p>
+              <h3>CMV Seronegative Components</h3>
+              <p>Cytomegalovirus (CMV) belongs to the herpes family and in the healthy population causes a self limiting illness. It is cell associated and therefore can be transmitted in cellular blood components (red cells, platelets and granulocytes). Typically it causes a subclinical illness similar to infectious mononucleolus (glandular fever). In immunocompromised patients it can result in potentially fatal pneumonitis or disseminated CMV. For this reason CMV seronegative products should be used for a selected group of patients, listed below.</p>
+              <p>The requirement for CMV seronegative blood components has been recently reviewed by the Advisory Committee on the Safety of Blood, Tissue and Organs (SaBTO). Universal leucodepletion, introduced by the UK blood services in 1999 primarily as a vCJD risk reduction measure, results in a three log depletion of white cells. This is generally accepted to render these components "CMV safe"</p>
+              <p>Monitoring selected patient groups for CMV infection with pre-emptive therapy where required has been shown to be a successful strategy in certain groups (solid organ transplants, haematopoietic stem cell transplants).</p>
+              <p>CMV seronegative components should continue to be used where leucodepletion is not possible (granulocyte transfusions) or where the potential severity of the consequences of CMV infection, and/or the difficulty in monitoring for infection are considered too great (IUT and transfusions in neonates up to 28 days post EDD, elective transfusions in pregnancy).
+                <p>
+                  <p>Pregnant women who are being regularly transfused throughout their pregnancy should receive CMV seronegative components. There is no requirement for this for emergency transfusions in pregnancy.</p>
+                  <p>As CMV is a common virus and the prevalence of anti-CMV in the UK adult population is 50-60%, it not possible to provide CMV seronegative products for all recipients. Components that have been leucocyte depleted to less than 5 x 10^6/unit have a significant reduction in the risk of CMV transmission.</p>
+                  <h3>Irradiated Components</h3>
+                  <p>Irradiation is the only known method of preventing Transfusion Associated Graft versus Host Disease (TaGvHD). This is a rare but fatal complication of blood transfusion. It results from engraftment and clonal expansion of HLA compatible donor lymphocytes. Clinically TaGvHD presents with fever, rash, diarrhoea, hepatitis and pancytopenia 4-30 days after transfusion. This complication of transfusion is eliminated by inactivation of donor lymphocytes by irradiation. The risk associated with individual transfusions depends on the number and viability of contaminating lymphocytes, susceptibility of the host's immune system to their engraftment and the degree of immunological disparity between donor and recipient. <sup><a href="#ref2">2</a>,<a href="#ref3">3</a></sup>
+                  </p>
+                  <p>The table below identifies the patients who have requirements for irradiated and / or CMV seronegative components and the length of time these are required.</p>
+                  <table id="ggcindications" data-role="table">
+                    <thead>
+                      <tr>
+                        <th>Condition:</th>
+                        <th>Cytomegalovirus CMV Seronegative:</th>
+                        <th>Irradiated:</th>
+                      </tr>
+                    </thead>
+                    <tr>
+                      <td>Neonates up to 28 days post EDD</td>
+                      <td>&#10003;</td>
+                      <td>*</td>
+                    </tr>
+                    <tr>
+                      <td>Intrauterine Transfusion (IUT)</td>
+                      <td>&#10003;</td>
+                      <td>&#10003;**</td>
+                    </tr>
+                    <tr>
+                      <td>Neonatal Exchange Transfusion (ET)</td>
+                      <td>&#10003;</td>
+                      <td>***</td>
+                    </tr>
+                    <tr>
+                      <td>All donations from first or second degree relative</td>
+                      <td></td>
+                      <td>&#10003;</td>
+                    </tr>
+                    <tr>
+                      <td>Severe T lymphocyte immunodeficiency syndromes including Di George and Severe Combined Immunodeficiency</td>
+                      <td>&#10003;</td>
+                      <td>&#10003;</td>
+                    </tr>
+                    <tr>
+                      <td>Recipients of haemopoietic stem cell transplantation (HSCT)</td>
+                      <td></td>
+                      <td>&#10003; <b>&#124;&#124;</b></td>
+                    </tr>
+                    <tr>
+                      <td>Stem cell harvesting
+                        <br><i> from mobilisation or 2 weeks before the harvest (whichever is earliest) until harvest is completed</i>
+                      </td>
+                      <td></td>
+                      <td>&#10003;</td>
+                    </tr>
+                    <tr>
+                      <td>All recipients of alemtuzumab (Campath, anti CD-52)</td>
+                      <td></td>
+                      <td>&#10003;</td>
+                    </tr>
+                    <tr>
+                      <td>All patients with Hodgkins lymphoma</td>
+                      <td></td>
+                      <td>&#10003;</td>
+                    </tr>
+                    <tr>
+                      <td>All patients treated with purine analogues, e.g. fludarabine, cladrabine, deoxycoformicin, clofarabine</td>
+                      <td></td>
+                      <td>&#10003;</td>
+                    </tr>
+                    <tr>
+                      <td>All patients with aplastic anaemia treated with immunosuppressive therapy (until lymphocyte count >1.0 x10^9/L)</td>
+                      <td></td>
+                      <td>&#10003;</td>
+                    </tr>
+                    <tr>
+                      <td>Pregnant women on regular transfusion programme</td>
+                      <td>&#10003;</td>
+                      <td></td>
+                    </tr>
+                  </table>
+                  <p><b>Leucodepleted CMV seropositive components (CMV safe) may be used for the above patient groups 
+                in the situation of life-threatening haemorrhage</b>
+                  </p>
+                  <p><b>CMV seronegative components should only be used for CMV negative patients or those in whom CMV status is unknown.</b>
+                  </p>
+                  <p>* Top up transfusions in infants aged &lt;6 months do not require irradiation unless there has been a previous IUT or if the donation is from a first or second-degree relative</p>
+                  <p>** The requirement for irradiation after IUT remains until 6 months after 40 weeks gestation</p>
+                  <p>*** Products for neonatal ET must be irradiated when there has been a previous IUT or if the donation is from a first or second-degree relative.
+                    <br/>For other neonatal ET, irradiation is recommended if irradiation will not delay transfusion</p>
+                  <p>Whilst a diagnosis of severe T lymphocyte immunodeficiency is considered all components transfused should be irradiated and CMV seronegative whilst further tests are being undertaken</p>
+                  <p><b>&#124; &#124;</b> more detailed requirements for transplant recipients are as follows:</p>
+                  <div style="margin-left:25px"> <b><i>allografts</i></b> - irradiated components should be given indefinitely
+                    <br/> <b><i>autografts</i></b> - irradiated components should be given until 6 months post transplant</div>
+                  
+                  <p><b>If there is any doubt as to whether or not a patient has a requirement for 
+              special blood components please discuss with the on call Haematologist at your local site.</b>
+                  </p>
+                  <div style="display: none;">
+                    <h3><u>NOTIFICATION TO THE LABORATORY OF PATIENTS WITH SPECIAL REQUIREMENTS</u>
+                    </h3>
+                    <p>Once a patient has been identified as having a requirement for special blood components, a standard form, used throughout GG&amp;C (see appendix 1 <b><i>[NB: request form not reproduced in this extract]</i></b>), should be fully completed and sent to the local Blood Bank. The information held on this form will be shared with all Blood Banks throughout GG&amp;C.</p>
+                    <p>The form should be signed by the Consultant in charge of the patient's care. It should be photocopied and a copy filed in the case records with the second copy forwarded to Blood Bank. If the patient has been identified as having special blood component requirements out with core working hours and a Consultant is not available, the requirement can be requested on a regular transfusion form and the special requirements form forwarded at the earliest possible opportunity. The information will not be disseminated throughout the Health Board Blood Banks until a Consultant signed copy of the special requirements form is received by the hospital Blood Bank.</p>
+                    <p>If the need for the special blood components changes, an updated form should be forwarded to the hospital Blood Bank so their records can be amended.</p>
+                    <h3>Laboratory Dissemination of Information</h3>
+                    <p>As patients regularly transfer between hospital sites it is important that their transfusion requirement information is available throughout the Health Board Blood Banks. Once a Consultant signed form is received at a local Blood Bank, the form will be scanned and emailed to the Blood Bank managers in the South, North, Clyde and the Golden Jubilee Hospital so that their computer systems can be updated accordingly (as per the Blood Bank special requirements SOP).</p>
+                    <p>The form will be returned to the requesting Consultant to ensure they are aware the laboratory tasks have been completed.</p>
+                    <h3><u>PATIENT COUNSELLING AND CONSENT</u>
+                    </h3>
+                    <p>It is not a legal requirement in the United Kingdom that written consent is obtained before a transfusion of blood components; however, it is considered a required standard of good transfusion practice to ensure that the patient/parent/carer receives adequate information regarding the transfusion. This standard is laid down in the NHS QIS Clinical Standards (2006) now known as Healthcare Improvement Scotland and compliance is monitored. <sup><a href="#ref4">4</a></sup> This discussion should include information about the risks and benefits of transfusion as well as information relating to available alternatives, for example, iron supplementation and must be documented in the case records. Nursing and medical staff therefore, have a professional duty to ensure that they have adequate knowledge of transfusion related issues or that they can access the information and support required by patients undergoing a transfusion.</p>
+                    <p>Booklets are available specifically for patients who require irradiated components and all patients receiving irradiated components should be given these before their first transfusion. They should also be counselled and told to inform nursing and medical staff of this requirement before any future transfusions. Patients should be given a card to carry documenting their special transfusion requirement. An adhesive sticker, taken from the information leaflet, should be placed on the front of case records detailing the requirement. It is the responsibility of the prescribing practitioner to ensure these steps are undertaken.</p>
+                  </div>
+                  <h3>INCIDENT REPORTING</h3>
+                  <p>There have been 13 reported cases of TaGVHD since 1996 but no cases in the last 8 years. 2 cases have been reported in leucodepleted components (1998-99 and 2000-01) indicating that while leucodepletion significantly reduces, it does not eradicate the risk of this condition. It is important therefore that appropriate products are provided for patients at risk.</p>
+                  <p>Errors do occur and the Serous Hazards of Transfusion (SHOT) report 2010 documents 74 cases where special requirements were not met. The majority of these (59 cases) were patients who required irradiated products but did not receive them. <sup><a href="#ref5">5</a></sup> It is important that any errors are documented appropriately to ensure that steps can be taken to avoid them in the future. If it becomes apparent that a patient has failed to receive appropriate components the hospital Blood Bank must be informed immediately. The incident will be fully investigated and reported on DATIX and to SHOT.</p>
+                  <h3><u>REFERENCES</u>
+                  </h3>
+                  <ol>
+                    <li>Transfusion Transmitted Infection. Chapter 13. Practical Transfusion Medicine. Third Edition. P122-145. Murphy MF, Pamphilon DH.</li>
+                    <li>
+                      <a id="ref2"></a>Clinical Blood Transfusion. Chapter 16 Postgraduate Haematology Sixth Edition. P268-300. Hoffbrand AV, Catovsky D, Tuddenham EDD, Green AR.</li>
+                    <li>
+                      <a id="ref3"></a>Guidelines on the use of irradiated blood components prepared by the British Committee for Standards in Haematology blood transfusion task force British Journal of Haematology 2011, 152, 35-51</li>
+                    <li>NHS QIS Clinical Standards - Blood Transfusion <a href="http://www.healthcareimprovementscotland.org/previous_resources/standards/clinical_standards_-_blood_tra.aspx" target="_blank">http://www.healthcareimprovementscotland.org/previous_resources/standards/clinical_standards_-_blood_tra.aspx</a>
+                    </li>
+                    <li>Serious Hazards of Transfusion <a href="http://www.shotuk.org" target="_blank">http://www.shotuk.org/</a>
+                    </li>
+                    <li>Transfusion guidelines for neonates and older children British Journal of Haematology 2004, 124, 433 - 453</li>
+                    <li>Advisory Committee on the Safety of Blood, Tissues and Organs (SaBTO) <a href="http://www.dh.gov.uk/prod_consum_dh/groups/dh_digitalassets/@dh/@en/documents/digitalasset/dh_133086.pdf" target="_blank">http://www.dh.gov.uk/prod_consum_dh/groups/dh_digitalassets/@dh/@en/documents/digitalasset/dh_133086.pdf</a>
+                    </li>
+                  </ol>
+                  <i>Extract from NHS Greater Glasgow and Clyde Blood Transfusion Special Requirements Guideline (March 2013, issue 1), pages 1-8.</i>
+            </div>
+            <div class="guidelinecontainer" data-bind="visible: (section() == 2 || section() == 3) && treatment() == 'lothian'" id="lothian">
+    
+              <div>
+                <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="click: findall"><i class="fa fa-ln">&#xf002;</i></a>
+                <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="visible: searchterm(), click: clearsearch">x</a>
+                <input class="searchbar" placeholder="Search document" type="text" data-bind="value: searchterm, valueUpdate: 'keypress'">
+              </div>
+    
+              <h3>Irradiated Components</h3>
+              <p>For at-risk patients, all red cell, platelet and granulocyte concentrates should be irradiated. It is not necessary to irradiate FFP, cryoprecipitate or fractionated plasma products.</p>
+              <ul>
+                <li>All intrauterine transfusions.</li>
+                <li>All exchange or top-up transfusions in infants where there has been a previous intra-uterine transfusion, until 6 months after the expected delivery date.</li>
+                <li>Exchange transfusion, with no previous intra-uterine transfusion; irradiated blood is recommended provided this does not unduly delay transfusion.</li>
+                <li>Proven or suspected congenital immunodeficiency states (including Severe Combined Immunodeficiency (SCID), Di George's syndrome, Wiskott-Aldrich syndrome, purine nucleoside phosphorylase deficiency, reticular dysgenesis, cell- mediated immunodeficiency (not otherwise classified), primary T lymphocyte immunodeficiencies, adenosine deaminase deficiency, MHC Class I and II deficiency, leucocyte adhesion deficiency, immunodeficiency with eosinophilia, ataxia telangiectasia, chronic mucocutaneous candidiasis).</li>
+                <li>All autologous bone marrow or peripheral blood stem cell transplant recipients from start of conditioning until at least three months after transplant (or until at least six months after transplant if total body irradiation has been given).</li>
+                <li>All allogeneic bone marrow or peripheral blood stem cell transplant recipients from start of conditioning until a minimum of six months after transplant; possibly longer at the discretion of the haematologist e.g. chronic GvHD.</li>
+                <li>Blood transfused to allogeneic bone marrow or peripheral blood stem-cell donors for 7 days before the harvest and until after the last collection.</li>
+                <li>Blood transfused to patients undergoing autologous bone marrow harvest for the 7 days before the harvest and until after the harvest.</li>
+                <li>Blood transfused to patients undergoing autologous peripheral blood stem-cell mobilisation from commencement of the mobilising chemotherapy regimen and until the last collection.</li>
+                <li>Patients with Hodgkin's disease, indefinitely.</li>
+                <li>Patients treated with the purine analogue drugs Fludarabine, Deoxycoformycin, Cladribine, Clofarabine and Bendamustine, indefinitely.</li>
+                <li>All transfusions from first- or second-degree relatives, even if the patient is immunocompetent.</li>
+                <li>All HLA-matched platelet transfusions, even if the patient is immunocompetent.</li>
+                <li>All granulocyte transfusions, which must then be transfused with minimum delay.</li>
+                <li>Patients receiving ALG, ATG, CAMPATH or any other T-cell depleting agents (such as alemtuzumab for non-haematological indications including solid organ transplantation, multiple sclerosis and vasculitis) during treatment and then indefinitely.</li>
+              </ul>
+              <h3>CMV Negative Components</h3>
+              <ul>
+                <li>Intra-uterine transfusion irrespective of the CMV status of the mother.</li>
+                <li>Pregnant women antenatally (pre-delivery only). If CMV negative components are not readily available and a delay will compromise the mother or baby, CMV random components (i.e. untested) are an acceptable alternative.</li>
+                <li>All blood transfusions for infants up to 28 days post expected delivery date.</li>
+              </ul>
+              <i>Extract from NHS Lothian, Blood Transfusion Clinical Policy and Procedures 2013 (v.4), Appendix C: Special Requirements, pages 45-46.</i>
+            </div>
+            
+            <div data-bind="visible: section() == 2 && treatment() != 'app'">
+              <p><b>When you are ready, press the green button to continue.</b></p>
+                <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="click: $root.nextSection">Next page</a>
+            </div>
+            
+            <div data-bind="visible: section() == 4">
+            
+            <h3>Please rate the following statements in relation the <span data-bind="visible: treatment() == 'app'">Special Blood Components App</span> <span data-bind="visible: treatment() == 'lothian'">NHS Lothian special requirements hospital guidelines</span></h3>
+              <h4>It was clear, succinct and easy to use.</h4>
+              <select data-bind="value: rating1">
+                <option value="-1">Please select</option>
+                <option value="sa">Strongly agree</option>
+                <option value="a">Agree</option>
+                <option value="no">No opinion</option>
+                <option value="d">Disagree</option>
+                <option value="sd">Strongly disagree</option>
+                <option value="dn">Don't know</option>
+              </select>
+              
+              <h4>It covered all the most important points.</h4>
+              <select data-bind="value: rating2">
+                <option value="-1">Please select</option>
+                <option value="sa">Strongly agree</option>
+                <option value="a">Agree</option>
+                <option value="no">No opinion</option>
+                <option value="d">Disagree</option>
+                <option value="sd">Strongly disagree</option>
+                <option value="dn">Don't know</option>
+              </select>
+              
+              <h4>Looking up the indications was quick and easy.</h4>
+              <select data-bind="value: rating3">
+                <option value="-1">Please select</option>
+                <option value="sa">Strongly agree</option>
+                <option value="a">Agree</option>
+                <option value="no">No opinion</option>
+                <option value="d">Disagree</option>
+                <option value="sd">Strongly disagree</option>
+                <option value="dn">Don't know</option>
+              </select>
+              
+              <h4>I would recommend it to others.</h4>
+              <select data-bind="value: rating4">
+                <option value="-1">Please select</option>
+                <option value="sa">Strongly agree</option>
+                <option value="a">Agree</option>
+                <option value="no">No opinion</option>
+                <option value="d">Disagree</option>
+                <option value="sd">Strongly disagree</option>
+                <option value="dn">Don't know</option>
+              </select>
+              
+              <h3>Please explain your ratings briefly.</h3>
+              <textarea data-bind="value: comments"></textarea>
+              
+              <h4>Do you use a smartphone or tablet device?</h4>
+              <select data-bind="value: deviceuse">
+                <option value="-1">Please select</option>
+                <option value="both">Yes, both at home and at work</option>
+                <option value="work">Yes, at work</option>
+                <option value="home">Yes, at home</option>
+                <option value="no">No</option>
+                <option value="dn">Don't know</option>
+              </select>
+              
+              <h4>Please indicate your age group</h4>
+              <select data-bind="value: age">
+                <option value="-1">Please select</option>
+                <option value="19">19 and under</option>
+                <option value="20">20-29</option>
+                <option value="30">30-39</option>
+                <option value="40">40-49</option>
+                <option value="50">50-59</option>
+                <option value="60">60 and over</option>
+                <option value="dn">Don't know</option>
+              </select>
+              
+              <h3>You have completed all the questions.</h3>
+              <p>Press the green button to submit your answers.</p>
+              <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right"  data-bind="visible: (saved() == false), click: $root.saveAnswers">Submit answers</a>
+            </div>
+            
+            <div data-bind="visible: section() == 5">
+              <h1>Thank you</h1>
+              <p>Your answers have been recorded. You may close this browser window.</p>
+            </div>
+          <div id="appcontainer" data-bind="html: appCode, visible: treatment() == 'app'"></div>
         </div>
       </div>
-      <div id="appcontainer" data-bind="html: appCode, visible: treatment() == 'app'"></div>
     </div>
     
         <script type="text/javascript" src="json2.js"></script>
