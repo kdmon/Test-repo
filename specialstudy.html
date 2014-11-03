@@ -983,7 +983,8 @@
               }
               $("#selector").selectmenu();
               $(window).scrollTop(0);
-              $("#questionContainer").trigger("create");
+              //$("#questionContainer").trigger("create");
+              $("select").selectmenu();
             }
           });
           target.pageCount = ko.computed(function() {
