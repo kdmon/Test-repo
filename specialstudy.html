@@ -240,13 +240,14 @@
                     <h3>What is your grade?</h3>
                     <select data-bind="value: grade">
                       <option value="">Please select</option>
-                      <option value="consultant">Consultant</option>
-                      <option value="registrar">Specialty Registrar</option>
+                      <option value="fy1">Foundation Year 1</option>
+                      <option value="fy2">Foundation Year 2</option>
+                      <option value="gpt">GP Trainee</option>
+                      <option value="gp">General Practioner</option>
                       <option value="str">Specialty Trainee Registrar (StR)</option>
                       <option value="sas">Specialty and Associate Specialist</option>
-                      <option value="gp">GP Trainee</option>
-                      <option value="fy2">Foundation Year 2</option>
-                      <option value="fy1">Foundation Year 1</option>
+                      <option value="registrar">Specialty Registrar</option>
+                      <option value="consultant">Consultant</option>
                     </select>
                   </div>
                   <div data-bind="reveal: (position() !== '' && position() !== 'dr' && position() !== 'ot' && position() !== 'bb') || (position() !== '' && (grade() !== '' || otherposition() !== ''))">
