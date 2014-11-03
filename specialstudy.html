@@ -795,11 +795,18 @@
 
       function getUrlParameter(sParam) {
         var sPageURL = window.location.search.substring(1);
-        var sURLVariables = sPageURL.split('&');
-        for (var i = 0; i < sURLVariables.length; i++) {
-          var sParameterName = sURLVariables[i].split('=');
-          if (sParameterName[0] == sParam) {
-            return sParameterName[1];
+        if (sPageURL == '' || sPageURL.substr(0,1) !== 'i') {
+          $.get( "randomise.php", function( data ) {
+            window.location.search = 'i=' + data; 
+          });
+        }
+        else {
+          var sURLVariables = sPageURL.split('&');
+          for (var i = 0; i < sURLVariables.length; i++) {
+            var sParameterName = sURLVariables[i].split('=');
+            if (sParameterName[0] == sParam) {
+              return sParameterName[1];
+            }
           }
         }
       }
@@ -904,7 +911,7 @@
         var self = this;
         self.saved = ko.observable(false);
         self.pagenow = ko.observable(1);
-        self.section = ko.observable(getUrlParameter('section') || -1);
+        self.section = ko.observable(-1);
         self.hospital = ko.observable("");
         self.position = ko.observable("");
         self.otherposition = ko.observable("");
@@ -917,7 +924,8 @@
         self.pastwork = ko.observable("");
         self.pastexperience = ko.observable("");
         self.frequency = ko.observable("");
-        self.treatment = ko.observable(getUrlParameter('treatment') || "lothian");
+        self.evalcode = ko.observable(getUrlParameter('i'));
+        self.treatment = ko.observable(self.evalcode().substr(0,1) == 1 ? 'lothian' : 'app');
         self.questionHeading = ko.observableArray(["", "What special blood components are indicated in the following cases?"]);
         self.questionHeading2 = ko.observableArray(["", "What special blood components are indicated in the following cases?"]);
         self.questionBank1 = ko.observableArray(questions.theme1.splice(0, 4).concat(questions.theme2.splice(0, 4))).extend({
