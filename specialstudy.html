@@ -179,7 +179,8 @@
       <div id="loading"><br/><br/><h1>Loading SPECIAL study, please wait...</h1></div>
 
       <div data-role="main" id="maincontainer" class="ui-content centered">
-        <div width="100%" style="width: 100%; text-align: center;" data-bind="visible: pagenow() > 2 && pagenow() < 10">
+        <div width="100%" style="width: 100%; text-align: center;" data-bind="visible: pagenow() > 1 && pagenow() < 10">
+          <div class="progressbox" data-bind="style: {background : pagenow() > 2 ? '#afa' : 'none'}"></div>
           <div class="progressbox" data-bind="style: {background : pagenow() > 3 ? '#afa' : 'none'}"></div>
           <div class="progressbox" data-bind="style: {background : pagenow() > 4 ? '#afa' : 'none'}"></div>
           <div class="progressbox" data-bind="style: {background : pagenow() > 5 ? '#afa' : 'none'}"></div>
@@ -789,7 +790,7 @@
           
             <h4>I feel confident about the indications for special components.</h4>
             <select data-bind="value: rating4">
-              <option value="-1">Please select</option>
+              <option selected value="0">Please select</option>
               <option value="sa">Strongly agree</option>
               <option value="a">Agree</option>
               <option value="no">No opinion</option>
@@ -800,7 +801,7 @@
           
             <h4>Guidance for prescribing special components is easy to use.</h4>
             <select data-bind="value: rating4">
-              <option value="-1">Please select</option>
+              <option selected value="0">Please select</option>
               <option value="sa">Strongly agree</option>
               <option value="a">Agree</option>
               <option value="no">No opinion</option>
@@ -811,7 +812,7 @@
           
             <h4>Having access to an app for special components would be useful.</h4>
             <select data-bind="value: rating4">
-              <option value="-1">Please select</option>
+              <option selected value="0">Please select</option>
               <option value="sa">Strongly agree</option>
               <option value="a">Agree</option>
               <option value="no">No opinion</option>
@@ -822,7 +823,7 @@
             
             <h4>The Special Blood Components App should be made widely available.</h4>
             <select data-bind="value: useful">
-              <option value="-1">Please select</option>
+              <option selected value="0">Please select</option>
               <option value="sa">Strongly agree</option>
               <option value="a">Agree</option>
               <option value="no">No opinion</option>
@@ -833,24 +834,24 @@
             
             <h4>Please indicate your age group</h4>
             <select data-bind="value: age">
-              <option value="-1">Please select</option>
+              <option selected value="0">Please select</option>
               <option value="19">19 and under</option>
               <option value="20">20-29</option>
               <option value="30">30-39</option>
               <option value="40">40-49</option>
               <option value="50">50-59</option>
               <option value="60">60 and over</option>
-              <option value="0">Prefer not to say</option>
+              <option value="1">Prefer not to say</option>
             </select>
             
             <h4>Do you use a smartphone or tablet device?</h4>
             <select data-bind="value: deviceuse">
-              <option value="-1">Please select</option>
+              <option selected value="0">Please select</option>
               <option value="both">Yes, both at home and at work</option>
               <option value="work">Yes, at work</option>
               <option value="home">Yes, at home</option>
               <option value="no">No</option>
-              <option value="0">Prefer not to say</option>
+              <option value="1">Prefer not to say</option>
             </select>
           
             <h4>Acknowledgements</h4>
