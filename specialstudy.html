@@ -111,7 +111,7 @@
       }
       
       .guidelinecontainer {
-        background: white; 
+        background: #FFE; 
         box-shadow: 0px 0px 10px 10px #fff;"
       }
       .ui-content {
@@ -424,7 +424,7 @@
             </div>
           </div>
           <div data-bind="visible: section() == 1">
-            <h3 data-bind="text: questionHeading()[$root.questionBank1.currentPage()-1]"></h3>
+            <h2 data-bind="text: questionHeading()[$root.questionBank1.currentPage()-1]"></h2>
             <p>Please answer without referring to outside help.</p>
             <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank1.currentPage() > 1, click: $root.questionBank1.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
             <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank1.currentPageData">
@@ -449,14 +449,13 @@
           </div>
           <div class="splitview">
             <div data-bind="visible: section() == 2">
-              <h3>You have completed the first set of questions.</h3>
-              <p>Now, please take a moment to study <span data-bind="visible: treatment() == 'app'">the Special Blood Components App</span><span data-bind="visible: treatment() == 'lothian'">the NHS Lothian Special Requirements Guidelines</span><span data-bind="visible: treatment() == 'ggc'">explore an extract of the proposed Scotland-wide hospital guidelines</span> (adjacent) before you answer the remaining questions.</p>
-              <p><b>Only press the green button when you have done so and are ready to continue.</b></p>
+              <h2>You have completed the first set of questions.</h2>
+              <p><b>Please take a moment to study <span data-bind="visible: treatment() == 'app'">the Special Blood Components App</span><span data-bind="visible: treatment() == 'lothian'">the NHS Lothian Special Requirements Guidelines</span><span data-bind="visible: treatment() == 'ggc'">explore an extract of the proposed Scotland-wide hospital guidelines</span> (adjacent) before pressing the green button to answer the remaining questions.</b></p>
               <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right" data-bind="click: $root.nextSection">Answer remaining questions</a>
             </div>
             
             <div data-bind="visible: section() == 3"><br/>
-              <h3 data-bind="text: questionHeading2()[$root.questionBank2.currentPage()-1]"></h3>
+              <h2 data-bind="text: questionHeading2()[$root.questionBank2.currentPage()-1]"></h2>
               <p>You may refer to the <span data-bind="visible: treatment() != 'app'">guidelines</span> <span data-bind="visible: treatment() == 'app'">app</span> (adjacent) when answering.</p>
               <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank2.currentPage() > 1, click: $root.questionBank2.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
               <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank2.currentPageData">
@@ -644,12 +643,13 @@
             </div>
             <div class="guidelinecontainer" data-bind="visible: (section() == 2 || section() == 3) && treatment() == 'lothian'" id="lothian">
     
+              <h3>NHS Lothian Special Requirements Guidelines</h3>
               <div>
                 <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="click: findall"><i class="fa fa-ln">&#xf002;</i></a>
                 <a href="#" style="float: right; margin:0px; height: 0.8em;" data-role="button" data-inline="true" data-bind="visible: searchterm(), click: clearsearch">x</a>
                 <input class="searchbar" placeholder="Search document" type="text" data-bind="value: searchterm, valueUpdate: 'keypress'">
               </div>
-              <h2>NHS Lothian Special Requirements Guidelines</h2>
+              
               <h3>Irradiated Components</h3>
               <p>For at-risk patients, all red cell, platelet and granulocyte concentrates should be irradiated. It is not necessary to irradiate FFP, cryoprecipitate or fractionated plasma products.</p>
               <ul>
@@ -678,90 +678,91 @@
               <i>Extract from NHS Lothian, Blood Transfusion Clinical Policy and Procedures 2013 (v.4), Appendix C: Special Requirements, pages 45-46.</i>
             </div>
             
-            <div data-bind="visible: section() == 4">
+            <div id="appcontainer" data-bind="html: appCode, visible: treatment() == 'app'"></div>
+          </div>
+        
+          <div data-bind="visible: section() == 4">
+          
+          <h3>Please rate the following statements in relation the <span data-bind="visible: treatment() == 'app'">Special Blood Components App</span> <span data-bind="visible: treatment() == 'lothian'">NHS Lothian special requirements hospital guidelines</span></h3>
+            <h4>It was clear, succinct and easy to use.</h4>
+            <select data-bind="value: rating1">
+              <option value="-1">Please select</option>
+              <option value="sa">Strongly agree</option>
+              <option value="a">Agree</option>
+              <option value="no">No opinion</option>
+              <option value="d">Disagree</option>
+              <option value="sd">Strongly disagree</option>
+              <option value="dn">Don't know</option>
+            </select>
             
-            <h3>Please rate the following statements in relation the <span data-bind="visible: treatment() == 'app'">Special Blood Components App</span> <span data-bind="visible: treatment() == 'lothian'">NHS Lothian special requirements hospital guidelines</span></h3>
-              <h4>It was clear, succinct and easy to use.</h4>
-              <select data-bind="value: rating1">
-                <option value="-1">Please select</option>
-                <option value="sa">Strongly agree</option>
-                <option value="a">Agree</option>
-                <option value="no">No opinion</option>
-                <option value="d">Disagree</option>
-                <option value="sd">Strongly disagree</option>
-                <option value="dn">Don't know</option>
-              </select>
-              
-              <h4>It covered all the most important points.</h4>
-              <select data-bind="value: rating2">
-                <option value="-1">Please select</option>
-                <option value="sa">Strongly agree</option>
-                <option value="a">Agree</option>
-                <option value="no">No opinion</option>
-                <option value="d">Disagree</option>
-                <option value="sd">Strongly disagree</option>
-                <option value="dn">Don't know</option>
-              </select>
-              
-              <h4>Looking up the indications was quick and easy.</h4>
-              <select data-bind="value: rating3">
-                <option value="-1">Please select</option>
-                <option value="sa">Strongly agree</option>
-                <option value="a">Agree</option>
-                <option value="no">No opinion</option>
-                <option value="d">Disagree</option>
-                <option value="sd">Strongly disagree</option>
-                <option value="dn">Don't know</option>
-              </select>
-              
-              <h4>I would recommend it to others.</h4>
-              <select data-bind="value: rating4">
-                <option value="-1">Please select</option>
-                <option value="sa">Strongly agree</option>
-                <option value="a">Agree</option>
-                <option value="no">No opinion</option>
-                <option value="d">Disagree</option>
-                <option value="sd">Strongly disagree</option>
-                <option value="dn">Don't know</option>
-              </select>
-              
-              <h3>Please explain your ratings briefly.</h3>
-              <textarea data-bind="value: comments"></textarea>
-              
-              <h4>Do you use a smartphone or tablet device?</h4>
-              <select data-bind="value: deviceuse">
-                <option value="-1">Please select</option>
-                <option value="both">Yes, both at home and at work</option>
-                <option value="work">Yes, at work</option>
-                <option value="home">Yes, at home</option>
-                <option value="no">No</option>
-                <option value="dn">Don't know</option>
-              </select>
-              
-              <h4>Please indicate your age group</h4>
-              <select data-bind="value: age">
-                <option value="-1">Please select</option>
-                <option value="19">19 and under</option>
-                <option value="20">20-29</option>
-                <option value="30">30-39</option>
-                <option value="40">40-49</option>
-                <option value="50">50-59</option>
-                <option value="60">60 and over</option>
-                <option value="dn">Don't know</option>
-              </select>
-              
-              <h3>You have completed all the questions.</h3>
-              <p>Press the green button to submit your answers.</p>
-              <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right"  data-bind="visible: (saved() == false), click: $root.saveAnswers">Submit answers</a>
-            </div>
+            <h4>It covered all the most important points.</h4>
+            <select data-bind="value: rating2">
+              <option value="-1">Please select</option>
+              <option value="sa">Strongly agree</option>
+              <option value="a">Agree</option>
+              <option value="no">No opinion</option>
+              <option value="d">Disagree</option>
+              <option value="sd">Strongly disagree</option>
+              <option value="dn">Don't know</option>
+            </select>
             
-            <div data-bind="visible: section() == 5">
-              <h1>Thank you</h1>
-              <p>Your answers have been recorded. You may close this browser window.</p>
-            </div>
-          <div id="appcontainer" data-bind="html: appCode, visible: treatment() == 'app'"></div>
+            <h4>Looking up the indications was quick and easy.</h4>
+            <select data-bind="value: rating3">
+              <option value="-1">Please select</option>
+              <option value="sa">Strongly agree</option>
+              <option value="a">Agree</option>
+              <option value="no">No opinion</option>
+              <option value="d">Disagree</option>
+              <option value="sd">Strongly disagree</option>
+              <option value="dn">Don't know</option>
+            </select>
+            
+            <h4>I would recommend it to others.</h4>
+            <select data-bind="value: rating4">
+              <option value="-1">Please select</option>
+              <option value="sa">Strongly agree</option>
+              <option value="a">Agree</option>
+              <option value="no">No opinion</option>
+              <option value="d">Disagree</option>
+              <option value="sd">Strongly disagree</option>
+              <option value="dn">Don't know</option>
+            </select>
+            
+            <h3>Please explain your ratings briefly.</h3>
+            <textarea data-bind="value: comments"></textarea>
+            
+            <h4>Do you use a smartphone or tablet device?</h4>
+            <select data-bind="value: deviceuse">
+              <option value="-1">Please select</option>
+              <option value="both">Yes, both at home and at work</option>
+              <option value="work">Yes, at work</option>
+              <option value="home">Yes, at home</option>
+              <option value="no">No</option>
+              <option value="dn">Don't know</option>
+            </select>
+            
+            <h4>Please indicate your age group</h4>
+            <select data-bind="value: age">
+              <option value="-1">Please select</option>
+              <option value="19">19 and under</option>
+              <option value="20">20-29</option>
+              <option value="30">30-39</option>
+              <option value="40">40-49</option>
+              <option value="50">50-59</option>
+              <option value="60">60 and over</option>
+              <option value="dn">Don't know</option>
+            </select>
+            
+            <h3>You have completed all the questions.</h3>
+            <p>Press the green button to submit your answers.</p>
+            <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right"  data-bind="visible: (saved() == false), click: $root.saveAnswers">Submit answers</a>
+          </div>
+          
+          <div data-bind="visible: section() == 5">
+            <h1>Thank you</h1>
+            <p>Your answers have been recorded. You may close this browser window.</p>
+          </div>
         </div>
-      </div>
       </div>
     </div>
     
