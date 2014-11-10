@@ -505,8 +505,8 @@
           
           <div class="splitview">
             <div data-bind="visible: section() == 2">
-              <h2>You have completed the first set of questions.</h2>
-              <p><b>Please take a moment to study <span data-bind="visible: treatment() == 'app'">the Special Blood Components App</span><span data-bind="visible: treatment() == 'lothian'">the NHS Lothian Special Requirements Guidelines</span><span data-bind="visible: treatment() == 'ggc'">explore an extract of the proposed Scotland-wide hospital guidelines</span> (adjacent) before proceeding to answer the remaining questions.</b></p>
+              <h2>Explore </h2>
+              <p><b>You have completed the first set of questions. Please take a moment to study <span data-bind="visible: treatment() == 'app'">the Special Blood Components App</span><span data-bind="visible: treatment() == 'lothian'">the NHS Lothian Special Requirements Guidelines</span><span data-bind="visible: treatment() == 'ggc'">explore an extract of the proposed Scotland-wide hospital guidelines</span> (adjacent) before proceeding to answer the remaining questions.</b> It might take a moment to load.</p>
               <label>
                 <input type="checkbox" data-bind="checked: ready" />I am ready to proceed 
               </label>
@@ -1197,7 +1197,7 @@
         });
         self.appCode = ko.computed(function() {
             var iframeheight =  $( window ).height() - 50; // $( window ).height() - $("#maincontainer").outerHeight() - 10;
-            var code = '<iframe src="http://it4se.com:8080/kdmon/special-app/master/index.html" width="100%" height="' + iframeheight + 'px"></iframe>';
+            var code = '<iframe src="http://optimalblooduse.eu/app/?i=' + model.evalcode() + '" width="100%" height="' + iframeheight + 'px"></iframe>';
             if ((self.section() == 2 || self.section() == 3 || self.section() == 4) && self.treatment() == 'app') return code;
             else return;
         }, this, { deferEvaluation: true });
