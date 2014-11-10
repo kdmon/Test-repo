@@ -587,13 +587,13 @@
               
               <h4>Please explain your ratings</h4>
               
+              <textarea data-bind="value: ratingcomments"></textarea>
+              
               <p>
                 Did you find any confusing, erroneous, dubious, incorrect
                 or unclear information? Did anything not work properly?
                 Comment on any strengths and weaknesses.
               </p>
-              
-              <textarea data-bind="value: ratingcomments"></textarea>
               
               
               <a href="#" data-icon="carat-r" data-iconpos="right" class="positive" data-role="button" data-bind="click: $root.nextSection">Next page</a>
@@ -806,10 +806,18 @@
           </div>
           
           <div data-bind="visible: section() == 5">
-          
-            <h3>What do you think about app based learning?</h3>
-
-            <h4>Would having access to an app about special requirements be useful to you?</h4>
+            
+            <h4>Have you used apps in your education or pratice before?</h4>
+            <select data-bind="value: pastappuse">
+              <option value="-1">Please select</option>
+              <option value="all">Yes, in both my education and practice</option>
+              <option value="education">Yes, in my education only</option>
+              <option value="practice">Yes, in my practice only</option>
+              <option value="no">No</option>
+              <option value="1">Prefer not to say</option>
+            </select>
+            
+            <h4>Is an app about special requirements going to be useful to you?</h4>
             <select data-bind="value: appuseful">
               <option selected value="-1">Please select</option>
               <option value="5">Strongly agree</option>
@@ -820,7 +828,7 @@
               <option value="0">Don't know</option>
             </select>
             
-            <h4>Would you like more apps about safe transfusion practice to be developed?</h4>
+            <h4>Is there a need for more apps aiming to improve transfusion practice?</h4>
             <select data-bind="value: moreapps">
               <option value="-1">Please select</option>
               <option value="5">Strongly agree</option>
@@ -829,16 +837,6 @@
               <option value="2">Disagree</option>
               <option value="1">Strongly disagree</option>
               <option value="0">Don't know</option>
-            </select>
-            
-            <h4>Have you used apps in your education or pratice before?</h4>
-            <select data-bind="value: pastappuse">
-              <option value="-1">Please select</option>
-              <option value="all">Yes, in both my education and practice</option>
-              <option value="education">Yes, in my education only</option>
-              <option value="practice">Yes, in my practice only</option>
-              <option value="no">No</option>
-              <option value="1">Prefer not to say</option>
             </select>
             
             <h4>If you use a smartphone or tablet device, where do you use it?</h4>
@@ -869,15 +867,15 @@
               <input type="checkbox" data-bind="checked: contactprefs" />Yes, I'm happy to be contacted (requires an email address)
             </label>
             
-            <div data-bind="reveal: enterdraw() || contactprefs()">
-              <h4>Please enter your email address:</h4>
-              <input type="text" data-bind="value: followupemail">
-            </div>
-                        
             <h4>Would you like to be entered into the draw for a &pound;50 book voucher?</h4>
             <label>
               <input type="checkbox" data-bind="checked: enterdraw" />Yes, enter me in the draw (requires an email address)
             </label>
+            
+            <div data-bind="visible: enterdraw() || contactprefs()" style="margin-left: 1em;">
+              <h4>Please enter your email address:</h4>
+              <input type="text" data-bind="value: followupemail">
+            </div>
             
             <h4>Do you have any final comments you wish to share?</h4>
             <textarea data-bind="value: comments"></textarea>
