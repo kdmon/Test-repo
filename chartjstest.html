@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css" />
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
+    <script src="http://it4se.com:8080/nnnick/Chart.js/master/Chart.min.js"></script>
+  </head>
+
+  <body>
+
+    <div data-role="page" id="page1">
+      <div data-role="header">
+        <h1>Page 1</h1>
+      </div>
+      <div data-role="main" class="ui-content">
+        <p>This is page one.</p>
+        <canvas id="graph" width="300" height="300"></canvas>
+        <a href="#page2" data-role="button">Page two</a>
+      </div>
+    </div>
+
+    <div data-role="page" id="page2">
+      <div data-role="header">
+        <h1>Page 2</h1>
+      </div>
+      <div data-role="main" class="ui-content">
+        <p>This is page two</p> <a href="#page1" data-role="button">Page one</a>
+      </div>
+    </div>
+    
+    <script>
+      
+      var ctx = $("#graph").get(0).getContext("2d");
+      var data = {
+          labels: ["Pretest", "Posttest"],
+          datasets: [
+              {
+                  label: "My First dataset",
+                  fillColor: "rgba(220,220,220,0.5)",
+                  strokeColor: "rgba(220,220,220,0.8)",
+                  highlightFill: "rgba(220,220,220,0.75)",
+                  highlightStroke: "rgba(220,220,220,1)",
+                  data: [65, 59]
+              },
+              {
+                  label: "My Second dataset",
+                  fillColor: "rgba(151,187,205,0.5)",
+                  strokeColor: "rgba(151,187,205,0.8)",
+                  highlightFill: "rgba(151,187,205,0.75)",
+                  highlightStroke: "rgba(151,187,205,1)",
+                  data: [28, 48]
+              }
+          ]
+      };
+
+      var myBarChart = new Chart(ctx).Bar(data);
+
+      
+    </script>
+  </body>
+
+</html>
