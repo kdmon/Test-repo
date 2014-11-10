@@ -220,7 +220,7 @@
               </div>
               <div data-role="collapsible" data-collapsed="true">
                 <h3>3. Why should I participate?</h3>
-                <p>By taking part, you will help shape the design of a new learning resource. If results are positive, wider dissemination of the app could reduce mistakes and enhance patient safety. Taking part in the study is also an excellent opportunity to test your knowledge in a safe environment. Additionally, there is a chance to win a &pound;50 national book token voucher. Participation is completely voluntary and there are no risks to participating.</p>
+                <p>By taking part, you will help shape the design of a new learning resource. If results are positive, wider dissemination of the app could reduce mistakes and enhance patient safety. Taking part in the study is also an excellent opportunity to test your knowledge in a safe environment, although we regret we are unable to provide you with a test score. Additionally, there is a chance to win a &pound;50 national book token voucher. Participation is completely voluntary and there are no risks to participating.</p>
               </div>
               <div data-role="collapsible" data-collapsed="true" class="even">
                 <h3>4. How will you use my data?</h3>
@@ -238,11 +238,12 @@
               </div>
               <div data-role="collapsible" data-collapsed="true" class="even">
                 <h3>6. Who is conducting the research?</h3>
-                <p>The research is conducted by Mr. Karl Monsen, a PhD candidate at The University of Edinburgh, in collaboration with Ms. Susan Cottrell, Better Blood Transfusion Nurse Specialist in Education at The Scottish National Blood Transfusion Service.</p>
-                <p>Dr. Brian McClelland is medical adviser to the project and the study is supported by Dr. Alastair Nimmo, Chair of the NHS Lothian Transfusion Committee.</p>
+                <p>The research is conducted by Mr. Karl Monsen, a PhD candidate at The University of Edinburgh, in collaboration with Mrs. Susan Cottrell, Nurse Specialist in Education, at The Better Blood Transfusion Team, The Scottish National Blood Transfusion Service.</p>
+                <p>The study is endorsed by Dr. Alastair Nimmo, Chair of The NHS Lothian Transfusion Committee, and Dr. Brian McClelland is medical adviser to the project.</p>
                 <p>If you have any questions, please contact Karl at the following email address: <a href="mailto: k.d.monsen@sms.ed.ac.uk">k.d.monsen@sms.ed.ac.uk</a>.</p>
                 <p>Alternatively, you can write to: Karl Monsen, Centre for Design Informatics, Room 3.10, Evolution House, 78 West Port, Edinburgh, EH1 2L.</p>
                 <p>Thank you for your time.</p>
+                <p>The study has approval from The NHS Lothian Clinical Governance and Risk Management Support Team.</p>
               </div>
               <h2>Ready to begin?</h2>
               <p><b>Press the green button to indicate that you have read the above information and freely consent to take part in the study.</b></p>
@@ -374,6 +375,7 @@
                       <option value="respiratory">Respiratory Medicine</option>
                       <option value="rhematology">Rhematology</option>
                       <option value="theatre">Theatre</option>
+                      <option value="transfusion">Transfusion Medicine</option>
                       <option value="trauma">Trauma and Orthopaedics</option>
                       <option value="urology">Urology</option>
                       <option value="vascularsurgery">Vascular Surgery</option>
@@ -537,9 +539,9 @@
             
             <div data-bind="visible: section() == 4">
             
-            <h3>Please rate the following statements about the <span data-bind="visible: treatment() == 'app'">Special Blood Components App</span> <span data-bind="visible: treatment() == 'lothian'">NHS Lothian Special Requirements Guideline</span></h3>
+            <h3>Please rate the following statements about the <span data-bind="visible: treatment() == 'app'">Special Blood Components App</span> <span data-bind="visible: treatment() == 'lothian'">NHS Lothian Special Requirements Guidelines</span></h3>
   
-              <h4>It was clear and succinctly written.</h4>
+              <h4>It was easy to find what I was looking for.</h4>
               <select data-bind="value: rating1">
                 <option value="-1">Please select</option>
                 <option value="5">Strongly agree</option>
@@ -550,7 +552,7 @@
                 <option value="0">Don't know</option>
               </select>
               
-              <h4>It presented all the information I needed.</h4>
+              <h4>It was enjoyable to use.</h4>
               <select data-bind="value: rating2">
                 <option value="-1">Please select</option>
                 <option value="5">Strongly agree</option>
@@ -561,7 +563,7 @@
                 <option value="0">Don't know</option>
               </select>
               
-              <h4>Looking up the indications was quick and easy.</h4>
+              <h4>I would like to use it again.</h4>
               <select data-bind="value: rating3">
                 <option value="-1">Please select</option>
                 <option value="5">Strongly agree</option>
@@ -572,7 +574,7 @@
                 <option value="0">Don't know</option>
               </select>
               
-              <h4>It helped me learn something new.</h4>
+              <h4>I would recommend it to others.</h4>
               <select data-bind="value: rating4">
                 <option value="-1">Please select</option>
                 <option value="5">Strongly agree</option>
@@ -585,12 +587,14 @@
               
               <h4>Please explain your ratings</h4>
               
-              <textarea data-bind="value: ratingcomments"></textarea>
-              
               <p>
-                If you gave a high or a low rating, please explain why?
+                Did you find any confusing, erroneous, dubious, incorrect
+                or unclear information? Did anything not work properly?
                 Comment on any strengths and weaknesses.
               </p>
+              
+              <textarea data-bind="value: ratingcomments"></textarea>
+              
               
               <a href="#" data-icon="carat-r" data-iconpos="right" class="positive" data-role="button" data-bind="click: $root.nextSection">Next page</a>
               
@@ -765,7 +769,7 @@
               <h3>NHS Lothian Special Requirements Guidelines</h3>
               <div>
                 <input class="searchbar" placeholder="Search document" type="text" data-bind="value: searchterm, valueUpdate: 'keypress'">
-                <a href="#" data-role="button" data-inline="true" data-bind="click: findall">Search guidelines<i class="fa fa-ln">&#xf002;</i></a>
+                <a href="#" data-role="button" data-inline="true" data-bind="click: findall">Search guidelines <i class="fa fa-ln">&#xf002;</i></a>
                 <a href="#" data-role="button" data-inline="true" data-bind="visible: searchterm(), click: clearsearch"> Clear</a>
               </div>
               
@@ -803,64 +807,20 @@
           
           <div data-bind="visible: section() == 5">
           
-            <p>Please tell us what you think about App-based learning by rating the following statements.</p>
+            <h3>What do you think about app based learning?</h3>
 
-            <div data-bind="visible: treatment() == 'app'">
-
-              <h4>I would recommend the Special Blood Components App to colleagues.</h4>
-              
-              <select data-bind="value: recommendapp">
-                <option selected value="-1">Please select</option>
-                <option value="5">Strongly agree</option>
-                <option value="4">Agree</option>
-                <option value="3">No opinion</option>
-                <option value="2">Disagree</option>
-                <option value="1">Strongly disagree</option>
-                <option value="0">Don't know</option>
-              </select>
-              
-              <h4>The Special Blood Components App should be made widely available.</h4>
-              
-              <select data-bind="value: available">
-                <option selected value="-1">Please select</option>
-                <option value="5">Strongly agree</option>
-                <option value="4">Agree</option>
-                <option value="3">No opinion</option>
-                <option value="2">Disagree</option>
-                <option value="1">Strongly disagree</option>
-                <option value="0">Don't know</option>
-              </select>
-              
-            </div>
+            <h4>Would having access to an app about special requirements be useful to you?</h4>
+            <select data-bind="value: appuseful">
+              <option selected value="-1">Please select</option>
+              <option value="5">Strongly agree</option>
+              <option value="4">Agree</option>
+              <option value="3">No opinion</option>
+              <option value="2">Disagree</option>
+              <option value="1">Strongly disagree</option>
+              <option value="0">Don't know</option>
+            </select>
             
-            <div data-bind="visible: treatment() == 'lothian'">
-              
-              <h4>I would recommend the NHS Lothian Special Requirements Guidelines to colleagues.</h4>
-              
-              <select data-bind="value: recommendguideline">
-                <option selected value="-1">Please select</option>
-                <option value="5">Strongly agree</option>
-                <option value="4">Agree</option>
-                <option value="3">No opinion</option>
-                <option value="2">Disagree</option>
-                <option value="1">Strongly disagree</option>
-                <option value="0">Don't know</option>
-              </select>
-              
-              <h4>Having access to an app about special requirements would be useful.</h4>
-              <select data-bind="value: appuseful">
-                <option selected value="-1">Please select</option>
-                <option value="5">Strongly agree</option>
-                <option value="4">Agree</option>
-                <option value="3">No opinion</option>
-                <option value="2">Disagree</option>
-                <option value="1">Strongly disagree</option>
-                <option value="0">Don't know</option>
-              </select>
-              
-            </div>
-            
-            <h4>More apps about safe transfusion practice should be developed.</h4>
+            <h4>Would you like more apps about safe transfusion practice to be developed?</h4>
             <select data-bind="value: moreapps">
               <option value="-1">Please select</option>
               <option value="5">Strongly agree</option>
@@ -870,8 +830,6 @@
               <option value="1">Strongly disagree</option>
               <option value="0">Don't know</option>
             </select>
-            
-            <h3>Tell us about your use of apps</h3>
             
             <h4>Have you used apps in your education or pratice before?</h4>
             <select data-bind="value: pastappuse">
@@ -905,27 +863,27 @@
               <option value="1">Prefer not to say</option>
             </select>
             
-            <h4>Acknowledgements</h4>
+            <h4>Are you happy to be contacted by the researchers for follow 
+            up study in the future?</h4>
+            <label>
+              <input type="checkbox" data-bind="checked: contactprefs" />Yes, I'm happy to be contacted (requires an email address)
+            </label>
             
-            <p>
-              The app has an acknowledgements page where we list people who have
-              helped test and develop the app. If you would like to be listed there,
-              please state your title, name, position and affiliation. <strong>
-              If maintaining your confidentiality is important, then please do not 
-              enter your details.</strong>
-            </p>
+            <div data-bind="reveal: enterdraw() || contactprefs()">
+              <h4>Please enter your email address:</h4>
+              <input type="text" data-bind="value: followupemail">
+            </div>
+                        
+            <h4>Would you like to be entered into the draw for a &pound;50 book voucher?</h4>
+            <label>
+              <input type="checkbox" data-bind="checked: enterdraw" />Yes, enter me in the draw (requires an email address)
+            </label>
             
-            <input type="text" data-bind="value: contributor">
-
-            <h4>If you are happy to be contacted by the researchers for follow 
-            up study in the future, please leave your email address.</h4>
-            
-            <input type="text" data-bind="value: followupemail">
-
-            <h4>Do you have any final comments?</h4>
+            <h4>Do you have any final comments you wish to share?</h4>
             <textarea data-bind="value: comments"></textarea>
             
             <h3>You have completed all the questions.</h3>
+            
             <p>Press the green button to submit your answers.</p>
             <a href="#" class="positive" data-theme="b" data-role="button" data-icon="carat-r" data-iconpos="right"  data-bind="visible: (saved() == false), click: $root.saveAnswers">Submit answers</a>
           </div>
@@ -1162,6 +1120,8 @@
       var ViewModel = function() {
         var self = this;
         self.ready = ko.observable(false);
+        self.contactprefs = ko.observable(false);
+        self.enterdraw = ko.observable(false);
         self.saved = ko.observable(false);
         self.pagenow = ko.observable(1);
         self.section = ko.observable(-1);
@@ -1187,18 +1147,18 @@
         self.rating4 = ko.observable("");
         self.ratingcomments = ko.observable("");
 
-        self.recommendapp = ko.observable("");
-        self.available = ko.observable("");
-        self.recommendguideline = ko.observable("");
         self.appuseful = ko.observable("");
-
         self.moreapps = ko.observable("");
         self.pastappuse = ko.observable("");
         self.deviceuse = ko.observable("");
         self.age = ko.observable("");
+        
+        self.useragent = ko.observable(navigator.userAgent);
+        self.userplatform = ko.observable(navigator.platform);
+        self.userwidth = ko.observable(screen.width);
+        self.userheight = ko.observable(screen.height);
 
         self.followupemail = ko.observable("");
-        self.contributor = ko.observable("");
         self.comments = ko.observable("");
 
         self.evalcode = ko.observable(getUrlParameter('i'));
