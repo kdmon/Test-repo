@@ -479,7 +479,7 @@
             </div>
           </div>
           <div data-bind="visible: section() == 1">
-            <h2 data-bind="text: questionHeading()[$root.questionBank1.currentPage()-1]"></h2>
+            <h3 data-bind="text: questionHeading()[$root.questionBank1.currentPage()-1]"></h3>
             <p>Please answer without referring to outside help.</p>
             <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank1.currentPage() > 1, click: $root.questionBank1.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
             <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank1.currentPageData">
@@ -506,7 +506,7 @@
           <div class="splitview">
             <div data-bind="visible: section() == 2">
               <h2>Explore </h2>
-              <p><b>You have completed the first set of questions. Please take a moment to study <span data-bind="visible: treatment() == 'app'">the Special Blood Components App</span><span data-bind="visible: treatment() == 'lothian'">the NHS Lothian Special Requirements Guidelines</span><span data-bind="visible: treatment() == 'ggc'">explore an extract of the proposed Scotland-wide hospital guidelines</span> (adjacent) before proceeding to answer the remaining questions.</b> It might take a moment to load.</p>
+              <p><b>You have completed the first set of questions. Please take a moment to study <span data-bind="visible: treatment() == 'app'">the Special Blood Components App</span><span data-bind="visible: treatment() == 'lothian'">the NHS Lothian Special Requirements Guidelines</span><span data-bind="visible: treatment() == 'ggc'">explore an extract of the proposed Scotland-wide hospital guidelines</span> (adjacent) before proceeding to answer the remaining questions. (It might take a moment to load.)</b></p>
               <label>
                 <input type="checkbox" data-bind="checked: ready" />I am ready to proceed 
               </label>
@@ -514,7 +514,7 @@
             </div>
             
             <div data-bind="visible: section() == 3">
-              <h2 data-bind="text: questionHeading2()[$root.questionBank2.currentPage()-1]"></h2>
+              <h3 data-bind="text: questionHeading2()[$root.questionBank2.currentPage()-1]"></h3>
               <p><b>You may refer to the <span data-bind="visible: treatment() != 'app'">guidelines</span> <span data-bind="visible: treatment() == 'app'">app</span> (adjacent) when answering.</b></p>
               <a href="#" style="display: none;" data-role="button" data-bind="old-visible: $root.questionBank2.currentPage() > 1, click: $root.questionBank2.movePrevious" data-inline="true"><i class="fa fa-angle-left 2x"></i></a>
               <ul style="margin:0px; padding-left: 0px; list-style: none;" data-bind="foreach: questionBank2.currentPageData">
