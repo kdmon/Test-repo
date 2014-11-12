@@ -18,7 +18,7 @@
       </div>
       <div data-role="main" class="ui-content">
         <p>This is page one.</p>
-        <div id="graph"></div>
+        <div id="graph" style="width: 100%; clear: both; display: inline-block;"></div>
         <a href="#page2" data-role="button">Page two</a>
       </div>
     </div>
@@ -34,35 +34,51 @@
     
     <script>
     
-      function makeChart (elem, data, title) {
-        var ctx = $('<canvas/>', {'Width':400,'Height':300});
-        $(elem).append(ctx);
-        var myBarChart = new Chart(ctx[0].getContext("2d")).Bar(data);
+      function makeChart (elem, labels, values, title,w,h) {
+        
+        var data = {
+          labels: labels,
+          datasets : values
+        };
+        
+        var container = $('<div style="float:left;"><h4 style="margin:0">' + title + '</h4></div>').css({'padding': '10px', 'border':'1px solid #ccc'});
+        var ctx = $('<canvas/>', {'Width':w?w:200,'Height':h?h:200});
+        $(container).append(ctx);
+        $(elem).append(container);
+
+        var opts = {
+          multiTooltipTemplate: "<%= datasetLabel %> - <%= value %>",
+          legendTemplate : '<ol style="font-size: 0.8em; list-style-type: none;">'
+                  +'<% for (var i=0; i<datasets.length; i++) { %>'
+                    +'<li>'
+                    +'<span style=\"border: 1px solid #ccc; padding-left: 16px; margin-right: 6px; background-color:<%=datasets[i].fillColor%>\"> </span> '
+                    +'<% if (datasets[i].label) { %><%= datasets[i].label %><% } %>'
+                  +'</li>'
+                +'<% } %>'
+              +'</ol>'
+        };
+        
+        
+        var myBarChart = new Chart(ctx[0].getContext("2d")).Bar(data, opts);
+        var legend = myBarChart.generateLegend();
+        $(container).append(legend);
       }
       
-      var data = {
-          labels: ["Pretest", "Posttest"],
-          datasets: [
-              {
-                  label: "My First dataset",
-                  fillColor: "rgba(220,220,220,0.5)",
-                  strokeColor: "rgba(220,220,220,0.8)",
-                  highlightFill: "rgba(220,220,220,0.75)",
-                  highlightStroke: "rgba(220,220,220,1)",
-                  data: [65, 59]
-              },
-              {
-                  label: "My Second dataset",
-                  fillColor: "rgba(151,187,205,0.5)",
-                  strokeColor: "rgba(151,187,205,0.8)",
-                  highlightFill: "rgba(151,187,205,0.75)",
-                  highlightStroke: "rgba(151,187,205,1)",
-                  data: [28, 48]
-              }
-          ]
-      };
+      var vals = [
+        {
+            label: "Arm 1",
+            fillColor: "rgba(220,220,220,0.5)",
+            data: [65, 59, 88]
+        },
+        {
+            label: "Arm 2",
+            fillColor: "rgba(151,187,205,0.5)",
+            data: [28, 48, 99]
+        }
+      ];
       
-      makeChart ('#graph', data, 'Test chart');
+      makeChart ('#graph', ["Pretest", "Posttest", "Repeat"], vals, 'Test chart', 200);
+      makeChart ('#graph', ["Pretest", "Posttest", "Repeat"], vals, 'Test chart', 200);
       
     </script>
   </body>
