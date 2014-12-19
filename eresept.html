@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Knockoutjs.com - Control types example - jsFiddle demo</title>
+    <script type='text/javascript' src='//code.jquery.com/jquery-1.9.1.js'></script>
+    <link rel="stylesheet" type="text/css" href="/css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+    <script type='text/javascript' src="http://knockoutjs.com/downloads/knockout-3.0.0.js"></script>
+    <script type='text/javascript' src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
+    <style type='text/css'>
+    </style>
+  </head>
+
+  <body>
+    <div data-role="page" id="front">
+      <div data-role="header"> <a href="#next" data-role="button">Next</a>
+        <h3>Apoteksykehus</h3>
+      </div>
+      <div data-role="main" class="ui-content">
+        <h1>eResept</h1>
+        <table>
+          <tr>
+            <td class="label">Personnummer:</td>
+            <td>
+              <input data-bind="value: personnr" />
+            </td>
+          </tr>
+          <tr>
+            <td class="label">Navn:</td>
+            <td>
+              <input data-bind='value: navn' />
+            </td>
+          </tr>
+          <tr>
+            <td class="label">Medicin</td>
+            <td>
+              <textarea data-bind="value: medicin"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td class="label">Velg apotek:</td>
+            <td>
+              <select data-bind="options: apotekListe, value: valg"></select>
+            </td>
+          </tr>
+        </table>
+        <table>
+          <tr>
+            <td class="label">Navn:</td>
+            <td data-bind="text: navn"></td>
+          </tr>
+          <tr>
+            <td class="label">Personnummmer:</td>
+            <td data-bind="text: personnr"></td>
+          </tr>
+          <tr>
+            <td class="label">Medicin:</td>
+            <td data-bind="text: medicin"></td>
+          </tr>
+          <tr>
+            <td class="label">Apotek:</td>
+            <td data-bind="text: valg"></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div data-role="page" id="next">
+      <div data-role="header"> <a href="#front" data-role="button">Front</a>
+        <h3>Next</h3>
+      </div>
+    </div>
+    <script type='text/javascript'>
+      //<![CDATA[ 
+      /* custom binding handler thanks to Varun http://stackoverflow.com/a/16493161/2308978 */
+      ko.bindingHandlers.slider = {
+        init: function(element, valueAccessor) {
+          console.log("init");
+          // use setTimeout with 0 to run this after Knockout is done
+          setTimeout(function() {
+            // $(element) doesn't work as that has been removed from the DOM
+            var curSlider = $('#' + element.id);
+            // helper function that updates the slider and refreshes the thumb location
+            function setSliderValue(newValue) {
+              curSlider.val(newValue).slider('refresh');
+            }
+            // subscribe to the bound observable and update the slider when it changes
+            valueAccessor().subscribe(setSliderValue);
+            // set up the initial value, which of course is NOT stored in curSlider, but the original element :\
+            setSliderValue($(element).val());
+            // subscribe to the slider's change event and update the bound observable
+            curSlider.bind('change', function() {
+              valueAccessor()(curSlider.val());
+            });
+          }, 250);
+        }
+      };
+      var viewModel = {
+        personnr: ko.observable(""),
+        navn: ko.observable(""),
+        medicin: ko.observable(""),
+        apotek: ko.observable(""),
+        apotekListe: ["Ullevåll", "Rikshospitalet", "Radiumhospitalet"],
+        valg: ko.observable("Ullevåll")
+      };
+      ko.applyBindings(viewModel);
+    </script>
+  </body>
+
+</html>
