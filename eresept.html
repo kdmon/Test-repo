@@ -17,34 +17,34 @@
 
   <body>
     <div data-role="page" id="front">
-      <div data-role="header"> <a href="#next" data-role="button">Next</a>
-        <h3>Apoteksykehus</h3>
+      <div data-role="header"> <a href="#next" data-role="button">Om oss</a>
+        <h3>Sykehusapotekene Sør Øst</h3>
       </div>
       <div data-role="main" class="ui-content">
-        <h1>eResept</h1>
+        <h1>Hvor vil du hente ut din eresept?</h1>
         <table>
           <tr>
-            <td class="label">Personnummer:</td>
+            <td class="label">Velg apotek:</td>
+            <td>
+              <select data-bind="options: apotekListe, value: valg"></select>
+            </td>
+          </tr>
+          <tr>
+            <td class="label">Ditt personnummer:</td>
             <td>
               <input data-bind="value: personnr" />
             </td>
           </tr>
           <tr>
-            <td class="label">Navn:</td>
+            <td class="label">Hele ditt navn:</td>
             <td>
               <input data-bind='value: navn' />
             </td>
           </tr>
           <tr>
-            <td class="label">Medisin</td>
+            <td class="label">Medisin / diagnose på eresepten</td>
             <td>
               <textarea data-bind="value: medisin"></textarea>
-            </td>
-          </tr>
-          <tr>
-            <td class="label">Velg apotek:</td>
-            <td>
-              <select data-bind="options: apotekListe, value: valg"></select>
             </td>
           </tr>
         </table>
@@ -58,8 +58,8 @@
             <td data-bind="text: personnr"></td>
           </tr>
           <tr>
-            <td class="label">Medicin:</td>
-            <td data-bind="text: medicin"></td>
+            <td class="label">Medisin:</td>
+            <td data-bind="text: medisin"></td>
           </tr>
           <tr>
             <td class="label">Apotek:</td>
@@ -104,7 +104,7 @@
         medisin: ko.observable(""),
         apotek: ko.observable(""),
         apotekListe: ["Moss", "Fredrikstad", "Kristiansand", "Radiumhospitalet", "Rikshospitalet"],
-        valg: ko.observable("Moss)
+        valg: ko.observable("Moss")
       };
       ko.applyBindings(viewModel);
     </script>
