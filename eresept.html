@@ -36,9 +36,9 @@
             </td>
           </tr>
           <tr>
-            <td class="label">Medicin</td>
+            <td class="label">Medisin</td>
             <td>
-              <textarea data-bind="value: medicin"></textarea>
+              <textarea data-bind="value: medisin"></textarea>
             </td>
           </tr>
           <tr>
@@ -101,10 +101,10 @@
       var viewModel = {
         personnr: ko.observable(""),
         navn: ko.observable(""),
-        medicin: ko.observable(""),
+        medisin: ko.observable(""),
         apotek: ko.observable(""),
         apotekListe: ["Moss", "Fredrikstad", "Kristiansand", "Radiumhospitalet", "Rikshospitalet"],
-        valg: ko.observable("Ulleÿýll")
+        valg: ko.observable("Moss)
       };
       ko.applyBindings(viewModel);
     </script>
