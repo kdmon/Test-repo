@@ -43,23 +43,23 @@
         </div>
         <div class="ui-field-contain">
           <label for="personnummer">Ditt fødselsnummer:</label>
-          <input id="personnummer" data-bind="value: personnr" />
+          <input id="personnummer" data-bind="value: bestilling.personnr" />
         </div>
         <div class="ui-field-contain">
           <label for="navn">Hele ditt navn:</label>
-          <input id="navn" data-bind='value: navn' />
+          <input id="navn" data-bind='value: bestilling.navn' />
         </div>
         <div class="ui-field-contain">
           <label for="medisin">Medisin om kjent:</label>
-          <textarea id="medisin" data-bind="value: medisin"></textarea>
+          <textarea id="medisin" data-bind="value: bestilling.medisin"></textarea>
         </div>
          <div class="ui-field-contain">
           <label for="telefon">Ditt telefonnummer:</label>
-          <input id="telefon" data-bind="value: telefon" />
+          <input id="telefon" data-bind="value: bestilling.telefon" />
         </div>
          <div class="ui-field-contain">
           <label for="epost">Din e-postadresse:</label>
-          <input id="epost" data-bind="value: epost" />
+          <input id="epost" data-bind="value: bestilling.epost" />
         </div>
         <h3>NB! TEST SIDE KUN!</h3>
         <hr/>
@@ -71,33 +71,46 @@
         <a href="#front" data-role="button">Hjem</a>
         <h3>Bestillinger</h3>
       </div>
+      <div data-role="content">
+        <table>
+          <thead>
+            <tr><th>Apotek</th><th>Navn</th></tr>
+          </thead>
+          <tbody data-bind="foreach: bestillinger">
+              <tr>
+                  <td data-bind="text: apotek"></td>
+                  <td data-bind="text: navn"></td>
+              </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
     <script type='text/javascript'>
-      var viewModel = {
-        personnr: ko.observable(""),
-        navn: ko.observable(""),
-        medisin: ko.observable(""),
-        apotek: ko.observable(""),
-        telefon: ko.observable(""),
-        epost: ko.observable("")
+      var viewModels = {
+        bestilling: {
+          personnr: ko.observable(""),
+          navn: ko.observable(""),
+          medisin: ko.observable(""),
+          apotek: ko.observable(""),
+          telefon: ko.observable(""),
+          epost: ko.observable("")
+        },
+        bestillinger: {}
       };
-      ko.applyBindings(viewModel);
+      ko.applyBindings(viewModels);
 
-      var savedViewModel = {};
-      
+
       function getData() {
-        console.log("getting data");
         $.ajax({
-          type: 'get',
+          type: 'GET',
+          dataType: "json",
           url: "http://it4se.com:1337/prescription/",
           xhrFields: {
             withCredentials: true
           }
         }).done(function(data) {
           console.log("got data");
-          savedViewModel = data;
-          ko.applyBindings(savedViewModel, $("#bestillinger"));
-          alert ("found data" + data);
+          ViewModels.bestillinger(data);
         });
       }
 
@@ -105,7 +118,7 @@
         $.ajax({
           type: 'POST',
           url: "http://it4se.com:1337/prescription/",
-          data: viewModel,
+          data: viewModel.bestilling,
           xhrFields: {
             withCredentials: true
           }
