@@ -14,56 +14,47 @@
   <body>
     <div data-role="page" id="front">
       <div data-role="header"> <a href="#next" data-role="button">Om oss</a>
-        <h3>Sykehusapotekene Sør øst</h3>
+        <h3>NB! KUN TEST SIDE!</h3>
+        <h3>Sykehusapotekene HF </h3>
       </div>
       <div data-role="main" class="ui-content">
         <h3>Hvor vil du hente ut din eresept?</h3>
-        <table>
-          <tr>
-            <td class="label">Velg apotek:</td>
-            <td>
-              <select data-bind="options: apotekListe, value: valg"></select>
-            </td>
-          </tr>
-          <tr>
-            <td class="label">Ditt personnummer:</td>
-            <td>
-              <input data-bind="value: personnr" />
-            </td>
-          </tr>
-          <tr>
-            <td class="label">Hele ditt navn:</td>
-            <td>
-              <input data-bind='value: navn' />
-            </td>
-          </tr>
-          <tr>
-            <td class="label">Medisin / diagnose på eresepten</td>
-            <td>
-              <textarea data-bind="value: medisin"></textarea>
-            </td>
-          </tr>
-        </table>
+        <div class="ui-field-contain">
+          <label for="apotek">Velg apotek:</label>
+          <select id="apotek" data-bind="value: apotek">
+            <option>Arendal</option>
+            <option>Bærum</option>
+            <option>Drammen</option>
+            <option>Elverum</option>
+            <option>Fredrikstad</option>
+            <option>Gjøvik</option>
+            <option>Hamar</option>
+            <option>Kongsvinger</option>
+            <option>Kristiansand</option>
+            <option>Lillehammer</option>
+            <option>Lørenskog</option>
+            <option>Moss</option>
+            <option>Radiumhospitalet</option>
+            <option>Rikshospitalet</option>
+            <option>Skien</option>
+            <option>Tønsberg</option>
+            <option>Ullevål</option>
+          </select>
+        </div>
+        <div class="ui-field-contain">
+          <label for="personnummer">Ditt personnummer:</label>
+          <input id="personnummer" data-bind="value: personnr" />
+        </div>
+        <div class="ui-field-contain">
+          <label for="navn">Hele ditt navn:</label>
+          <input id="navn" data-bind='value: navn' />
+        </div>
+        <div class="ui-field-contain">
+          <label for="medisin">Medisin om kjent:</label>
+          <textarea id="medisin" data-bind="value: medisin"></textarea>
+        </div>
         <hr/>
-        <table>
-          <tr>
-            <td class="label">Navn:</td>
-            <td data-bind="text: navn"></td>
-          </tr>
-          <tr>
-            <td class="label">Personnummmer:</td>
-            <td data-bind="text: personnr"></td>
-          </tr>
-          <tr>
-            <td class="label">Medisin:</td>
-            <td data-bind="text: medisin"></td>
-          </tr>
-          <tr>
-            <td class="label">Apotek:</td>
-            <td data-bind="text: valg"></td>
-          </tr>
-        </table>
-        <a href="#" onclick="javascript: sendData();" data-role="button">Send inn din bestilling</a>
+       <a href="#" onclick="javascript: sendData();" data-role="button">Send inn din bestilling</a>
       </div>
     </div>
     <div data-role="page" id="next">
@@ -100,25 +91,21 @@
         personnr: ko.observable(""),
         navn: ko.observable(""),
         medisin: ko.observable(""),
-        apotek: ko.observable(""),
-        apotekListe: ["Moss", "Fredrikstad", "Kristiansand", "Radiumhospitalet", "Rikshospitalet"],
-        valg: ko.observable("Moss")
+        apotek: ko.observable("")
       };
       ko.applyBindings(viewModel);
-      
-      
-      function sendData () {
-        console.log("running")
-        var request = $.ajax({
-            type: 'GET',
-            url: "it4se.com:1337/user",
-            dataType: "json",
-            xhrFields: {
-                withCredentials: true
-            }});
-        request.done(function(data){
-            console.log("data ", data);
-        });    
+
+      function sendData() {
+        $.ajax({
+          type: 'POST',
+          url: "http://it4se.com:1337/prescription/",
+          data: viewModel,
+          xhrFields: {
+            withCredentials: true
+          }
+        }).done(function(msg) {
+          console.log("message: ", msg);
+        });
       }
     </script>
   </body>
