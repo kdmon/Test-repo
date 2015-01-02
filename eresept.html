@@ -6,13 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>eresept Sykehusapotekene Sør øst</title>
     <script type='text/javascript' src='//code.jquery.com/jquery-1.9.1.js'></script>
-    <link rel="stylesheet" type="text/css" href="/css/normalize.css">
-    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
     <script type='text/javascript' src="http://knockoutjs.com/downloads/knockout-3.0.0.js"></script>
     <script type='text/javascript' src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
     <link rel="stylesheet" type="text/css" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
-    <style type='text/css'>
-    </style>
   </head>
 
   <body>
@@ -67,7 +63,7 @@
             <td data-bind="text: valg"></td>
           </tr>
         </table>
-        <a href="#" onclick="alert(ko.toJSON(viewModel))" data-role="button">Send inn din bestilling</a>
+        <a href="#" onclick="javascript: sendData();" data-role="button">Send inn din bestilling</a>
       </div>
     </div>
     <div data-role="page" id="next">
@@ -109,6 +105,21 @@
         valg: ko.observable("Moss")
       };
       ko.applyBindings(viewModel);
+      
+      
+      function sendData () {
+        console.log("running")
+        var request = $.ajax({
+            type: 'GET',
+            url: "it4se.com:1337/user",
+            dataType: "json",
+            xhrFields: {
+                withCredentials: true
+            }});
+        request.done(function(data){
+            console.log("data ", data);
+        });    
+      }
     </script>
   </body>
 
