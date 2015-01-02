@@ -42,7 +42,7 @@
           </select>
         </div>
         <div class="ui-field-contain">
-          <label for="personnummer">Ditt personnummer:</label>
+          <label for="personnummer">Ditt fødselsnummer:</label>
           <input id="personnummer" data-bind="value: personnr" />
         </div>
         <div class="ui-field-contain">
@@ -52,6 +52,14 @@
         <div class="ui-field-contain">
           <label for="medisin">Medisin om kjent:</label>
           <textarea id="medisin" data-bind="value: medisin"></textarea>
+        </div>
+         <div class="ui-field-contain">
+          <label for="telefon">Ditt telefonnummer:</label>
+          <input id="telefon" data-bind="value: telefon" />
+        </div>
+         <div class="ui-field-contain">
+          <label for="epost">Din e-postadresse:</label>
+          <input id="epost" data-bind="value: epost" />
         </div>
         <hr/>
        <a href="#" onclick="javascript: sendData();" data-role="button">Send inn din bestilling</a>
@@ -91,7 +99,9 @@
         personnr: ko.observable(""),
         navn: ko.observable(""),
         medisin: ko.observable(""),
-        apotek: ko.observable("")
+        apotek: ko.observable(""),
+        telefon: ko.observable(""),
+        epost: ko.observable("")
       };
       ko.applyBindings(viewModel);
 
