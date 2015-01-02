@@ -21,7 +21,7 @@
         <h3>Hvor vil du hente ut din eresept?</h3>
         <div class="ui-field-contain">
           <label for="apotek">Velg apotek:</label>
-          <select id="apotek" data-bind="value: apotek">
+          <select id="apotek" data-bind="value: bestilling.apotek">
             <option>Arendal</option>
             <option>Bærum</option>
             <option>Drammen</option>
@@ -95,7 +95,7 @@
           telefon: ko.observable(""),
           epost: ko.observable("")
         },
-        bestillinger: {}
+        bestillinger: ko.observableArray()
       };
       ko.applyBindings(viewModels);
 
@@ -110,7 +110,7 @@
           }
         }).done(function(data) {
           console.log("got data");
-          ViewModels.bestillinger(data);
+          viewModels.bestillinger(data);
         });
       }
 
@@ -118,7 +118,7 @@
         $.ajax({
           type: 'POST',
           url: "http://it4se.com:1337/prescription/",
-          data: viewModel.bestilling,
+          data: viewModels.bestilling,
           xhrFields: {
             withCredentials: true
           }
