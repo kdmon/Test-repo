@@ -13,9 +13,9 @@
 
   <body>
     <div data-role="page" id="front">
-      <div data-role="header"> <a href="#next" data-role="button">Om oss</a>
-        <h3>NB! TEST SIDE KUN!</h3>
+      <div data-role="header">
         <h3>Sykehusapotekene HF </h3>
+        <a href="#bestillinger" data-role="button">Liste</a>
       </div>
       <div data-role="main" class="ui-content">
         <h3>Hvor vil du hente ut din eresept?</h3>
@@ -61,40 +61,18 @@
           <label for="epost">Din e-postadresse:</label>
           <input id="epost" data-bind="value: epost" />
         </div>
+        <h3>NB! TEST SIDE KUN!</h3>
         <hr/>
        <a href="#" onclick="javascript: sendData();" data-role="button">Send inn din bestilling</a>
       </div>
     </div>
-    <div data-role="page" id="next">
-      <div data-role="header"> <a href="#front" data-role="button">Front</a>
-        <h3>Next</h3>
+    <div data-role="page" id="bestillinger">
+      <div data-role="header">
+        <a href="#front" data-role="button">Hjem</a>
+        <h3>Bestillinger</h3>
       </div>
     </div>
     <script type='text/javascript'>
-      //<![CDATA[ 
-      /* custom binding handler thanks to Varun http://stackoverflow.com/a/16493161/2308978 */
-      ko.bindingHandlers.slider = {
-        init: function(element, valueAccessor) {
-          console.log("init");
-          // use setTimeout with 0 to run this after Knockout is done
-          setTimeout(function() {
-            // $(element) doesn't work as that has been removed from the DOM
-            var curSlider = $('#' + element.id);
-            // helper function that updates the slider and refreshes the thumb location
-            function setSliderValue(newValue) {
-              curSlider.val(newValue).slider('refresh');
-            }
-            // subscribe to the bound observable and update the slider when it changes
-            valueAccessor().subscribe(setSliderValue);
-            // set up the initial value, which of course is NOT stored in curSlider, but the original element :\
-            setSliderValue($(element).val());
-            // subscribe to the slider's change event and update the bound observable
-            curSlider.bind('change', function() {
-              valueAccessor()(curSlider.val());
-            });
-          }, 250);
-        }
-      };
       var viewModel = {
         personnr: ko.observable(""),
         navn: ko.observable(""),
@@ -104,6 +82,24 @@
         epost: ko.observable("")
       };
       ko.applyBindings(viewModel);
+
+      var savedViewModel = {};
+      
+      function getData() {
+        console.log("getting data");
+        $.ajax({
+          type: 'get',
+          url: "http://it4se.com:1337/prescription/",
+          xhrFields: {
+            withCredentials: true
+          }
+        }).done(function(data) {
+          console.log("got data");
+          savedViewModel = data;
+          ko.applyBindings(savedViewModel, $("#bestillinger"));
+          alert ("found data" + data);
+        });
+      }
 
       function sendData() {
         $.ajax({
@@ -117,6 +113,11 @@
           console.log("message: ", msg);
         });
       }
+    
+      $("#bestillinger").on( "pageinit", function( event ) {
+        getData();
+      });
+      
     </script>
   </body>
 
