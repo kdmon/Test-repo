@@ -20,8 +20,12 @@
           var regex = /\s+/gi;
           var wordCount = words.trim().replace(regex, ' ').split(' ').length;
         };
-        words = wordCount + "words. " + words.substr(words.length-78);
-        var a = new Audio("http://it4se.com/upload/kevin/audio.php?l=en-us&s=" + words);
+        var sentence = wordCount + "words. ";
+        
+        if (words.length>78) sentence += words.substr(words.length-78);
+        else sentence += words;
+        
+        var a = new Audio("http://it4se.com/upload/kevin/audio.php?l=en-us&s=" + sentence);
         a.play();
       }
       $(window).keydown(function(e) {
