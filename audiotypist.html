@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+   
+  </head>
+  <body>
+    <h1>Audio writer</h1>
+    <p>Press ctrl+enter to preview last sentence.</p>
+    <textarea id="textwriter" rows="10" cols="80"></textarea>
+     <script>
+      function say() {
+        var words = $("#textwriter").val()
+        words = words.substr(words.length-80);
+        var a = new Audio("http://it4se.com/upload/kevin/audio.php?l=en-us&s=" + words);
+        //var a = new Audio("http://translate.google.com/translate_tts?ie=utf-8&tl=en-us&q=" + words);
+        a.play();
+      }
+      $(window).keydown(function(e) {
+        // Ctrl-Enter pressed
+        if (e.ctrlKey && (e.keyCode == 13 || e.keyCode == 10)) {
+          say();
+        }
+      });
+    </script> 
+  </body>
+</html>
