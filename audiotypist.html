@@ -52,17 +52,20 @@
           var character = $("#textwriter").val().substr(caret-1, 1);
           
           //repeat last word
-          if (character == ' ' || character == "," || character == ":" || character == ";") {
+          if (character == ' ' || character == "," || character == ":" || character == ";" || character == "." || character == "?" || character == "!") {
             var startpos = caret;
-            while (character != ' ' || startpos < 0){
-              character = $("#textwriter").val().substr(startpos-1, 1);
+            var newcharacter = '';
+            while (!(newcharacter == ' ' || newcharacter == "," || newcharacter == ":" || newcharacter == ";" || newcharacter == "." || newcharacter == "!" || newcharacter == "?") && startpos > 0){
+              newcharacter = $("#textwriter").val().substr(startpos-2, 1);
               startpos --;
-              console.log (startpos + ' ' + character);
+              console.log (startpos + ' ' + newcharacter);
             }
             
-            say($("#textwriter").val().substr(startpos, caret));
+            var text = $("#textwriter").val().substr(startpos, caret-startpos);
+            if (text) say(text);
           }
           
+          /*
           //repeat sentence
           else if (character == ".") {
             var startpos = caret;
@@ -72,6 +75,8 @@
             }
             say($("#textwriter").val().substr(startpos, caret));
           }
+          */
+          
         }, 50);
         if (e.ctrlKey && (e.keyCode == 13 || e.keyCode == 10)) {
           say();
