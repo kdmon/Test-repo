@@ -4,37 +4,80 @@
   <head>
     <meta charset="UTF-8">
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-   
   </head>
+
   <body>
     <h1>Audio writer</h1>
     <p>Press ctrl+enter to preview last sentence.</p>
     <textarea id="textwriter" rows="10" cols="80"></textarea>
-     <script>
+    <script>
+      function caretPosition(ctrl) {
+        var CaretPos = 0; // IE Support
+        if (document.selection) {
+          ctrl.focus();
+          var Sel = document.selection.createRange();
+          Sel.moveStart('character', -ctrl.value.length);
+          CaretPos = Sel.text.length;
+        }
+        // Firefox support
+        else if (ctrl.selectionStart || ctrl.selectionStart == '0') CaretPos = ctrl.selectionStart;
+        return (CaretPos);
+      };
+      
       $("#textwriter").val(localStorage.storedText);
-      function say() {
-        
-        var words = $("#textwriter").val();
-    
-        if (words.length != 0) {
+
+      function say(words) {
+        var wordCount = '';
+        var sentence = '';
+        if (!words) {
+          words = $("#textwriter").val();
           var regex = /\s+/gi;
-          var wordCount = words.trim().replace(regex, ' ').split(' ').length;
+          wordCount = words.trim().replace(regex, ' ').split(' ').length;
+          sentence += wordCount + "words. ";
         };
-        var sentence = wordCount + "words. ";
-        
-        if (words.length>78) sentence += words.substr(words.length-78);
+        if (words.length > 78) sentence += words.substr(words.length - 78);
         else sentence += words;
-        
         var a = new Audio("http://it4se.com/upload/kevin/audio.php?l=en-us&s=" + sentence);
         a.play();
       }
+      
+      var timerid;
+      
       $(window).keydown(function(e) {
         // Ctrl-Enter pressed
-        setTimeout(function(){localStorage.storedText = $("#textwriter").val();}, 50);
+        clearTimeout(timerid);
+        timerid = setTimeout(function() {
+          localStorage.storedText = $("#textwriter").val();
+          var caret = caretPosition(document.getElementById('textwriter'));
+          var character = $("#textwriter").val().substr(caret-1, 1);
+          
+          //repeat last word
+          if (character == ' ' || character == "," || character == ":" || character == ";") {
+            var startpos = caret;
+            while (character != ' ' || startpos < 0){
+              character = $("#textwriter").val().substr(startpos-1, 1);
+              startpos --;
+              console.log (startpos + ' ' + character);
+            }
+            
+            say($("#textwriter").val().substr(startpos, caret));
+          }
+          
+          //repeat sentence
+          else if (character == ".") {
+            var startpos = caret;
+            while (character != '.' || startpos > 2){
+              character = $("#textwriter").val().substr(startpos-1, 1);
+              startpos --;
+            }
+            say($("#textwriter").val().substr(startpos, caret));
+          }
+        }, 50);
         if (e.ctrlKey && (e.keyCode == 13 || e.keyCode == 10)) {
           say();
         }
       });
-    </script> 
+    </script>
   </body>
+
 </html>
