@@ -1,0 +1,26 @@
+<html>
+  <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+
+  <body>
+    <iframe width=300 class="player" height="100" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/102561665&amp;auto_play=true&amp;hide_related=false&amp;visual=false"></iframe>
+    <h1>Happy dog</h1>
+    <div>
+      <img src="http://www.moillusions.com/wp-content/uploads/2013/01/optical_illusion_rotating_vortex.jpg " id="happyDog1 " style="position: fixed; top: 25%; left:25%; opacity: 1 ">
+      <img src="http://www.moillusions.com/wp-content/uploads/2013/01/optical_illusion_rotating_vortex.jpg " id="happyDog2 " style="position: fixed; top: 25%; left:25%; opacity: 0.5 ">
+      <script type="text/javascript ">
+        var prevDeg = 0;
+        var deg = 1;
+        setInterval(function() {
+          deg += 10;
+          $("#happyDog1 ").css({
+            'transform': 'rotate(' + deg + 'deg) scale(' + (Math.sin(deg / 100) + 3.2) * 2 + ')'
+          });
+          $("#happyDog2 ").css({
+            'transform': 'rotate(' + -deg + 'deg) scale(' + (Math.cos(deg / 100) + 3.2) * 2 + ')'
+          });
+        }, 150);
+      </script>
+    </div>
+  </body>
+
+</html>
