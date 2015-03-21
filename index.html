@@ -1127,12 +1127,15 @@
       function upload() {
         var file = document.getElementById('fileBox').files[0]; //Files[0] = 1st file
         var reader = new FileReader();
+        var fileEncoding = 'UTF-8'
         if (file.type.match('text/plain')) {
           reader.readAsText(file, 'UTF-8');
         } else {
           reader.readAsBinaryString(file, 'UTF-8');
+          fileEncoding = 'base64';
         }
         reader.onload = function(event) {
+          toggleLoading(true);
           var content = event.target.result;
           var message = document.getElementById("uploadmsg").value;
           var repoOwner = account.username;
@@ -1146,9 +1149,11 @@
             commitContent: content,
             commitMessage: message,
             committerName: account.username,
-            committerEmail: account.email
+            committerEmail: account.email,
+            encoding: fileEncoding
           }, function(data) {
-            alert("Committed " + data.content.size + " bytes of data.");
+            toggleLoading(false);
+            alert("Committed " + data.content.size + " bytes of data as " + encoding);
           });
         };
         //reader.onloadstart = ...
