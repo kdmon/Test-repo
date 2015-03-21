@@ -3,7 +3,7 @@
 
   <head>
     <meta charset="UTF-8">
-    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="/js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript">
       $(document).bind('mobileinit', function() {
         // disable ajax loading - interfers with URL rewrites
@@ -12,8 +12,8 @@
         $.mobile.activeBtnClass = 'aBtnSelector';
       });
     </script>
-    <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-    <script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
+    <script src="/js/jquery-ui.js"></script>
+    <script src="/js/jquery.mobile-1.4.2.min.js"></script>
     <script src="/js/simplewebrtc-latest.js"></script>
     <script src="/js/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="/js/src-noconflict/ext-language_tools.js" type="text/javascript"></script>
@@ -31,7 +31,7 @@
     <script src="/js/beautify-html.js"></script>
     <script src="/js/jquery.ui.touch-punch.min.js"></script>
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css" />
+    <link rel="stylesheet" href="/css/jquery.mobile-1.4.2.min.css" />
     <style type="text/css" media="screen">
       .ui-mobile,
       .ui-mobile body {
@@ -1127,15 +1127,13 @@
       function upload() {
         var file = document.getElementById('fileBox').files[0]; //Files[0] = 1st file
         var reader = new FileReader();
-        var fileEncoding = 'UTF-8'
         if (file.type.match('text/plain')) {
           reader.readAsText(file, 'UTF-8');
         } else {
           reader.readAsBinaryString(file, 'UTF-8');
-          fileEncoding = 'base64';
         }
         reader.onload = function(event) {
-          toggleLoading(true);
+          toggleLoading(false);
           var content = event.target.result;
           var message = document.getElementById("uploadmsg").value;
           var repoOwner = account.username;
@@ -1149,11 +1147,10 @@
             commitContent: content,
             commitMessage: message,
             committerName: account.username,
-            committerEmail: account.email,
-            encoding: fileEncoding
+            committerEmail: account.email
           }, function(data) {
-            toggleLoading(false);
-            alert("Committed " + data.content.size + " bytes of data as " + encoding);
+            toggleLoading(true);
+            alert("Committed " + data.content.size + " bytes of data.");
           });
         };
         //reader.onloadstart = ...
