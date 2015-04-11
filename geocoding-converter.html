@@ -8,46 +8,46 @@
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
     <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.5/proj4.js"></script>
-
-    <script>
-      
-      // Assign leaflet map to a Div element, identified by its 'id' attribute.
-      
-      var map = L.map('leafletmap');
-      L.tileLayer('http://{s}.tiles.mapbox.com/v3/MapID/{z}/{x}/{y}.png', {
-          attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-          maxZoom: 18
-      }).addTo(map);
-
-
-      function plot () {
-        
-        // Read inputs
-        var easting = $("#easting").val();
-        var northing = $("#northing").val();
-        
-        // Convert from EU89 UTM to lat/lon
-        var projection = "+proj=utm +zone=32 +ellps=WGS84 +datum=WGS84 +units=m +no_defs";
-        var latlon = proj4(projection,'WGS84', [easting,northing]);
-        
-        // Add marker and centre map.
-        var marker = L.marker(latlon).addTo(map);
-        map.setView(latlon, 13);
-      }
-      
-    </script>
-    
   </head>
 
   <body>
   
     <h1>Enter Easting/Northing</h1>
-    <p>Easting: <input id="easting" type="text"></p>
-    <p>Northing: <input id="northing" type="text"></p>
-    <button onpress="plot()">Plot on map</button>
-    <br/>
-    <div id="leafletmap" style="height:360px" ></div>
-  
+    <p>Easting:
+      <input id="easting" value="596633.482" type="text">
+    </p>
+    <p>Northing:
+      <input id="northing" value="6643466.434" type="text">
+    </p>
+    <button onclick="plot()">Plot on map</button>
+    <hr/>
+    <div id="leafletmap" style="height:360px"></div>
+    <script>
+      // Assign leaflet map to a Div element, identified by its 'id' attribute.
+      var map = L.map('leafletmap');
+          
+    	// create the tile layer with correct attribution
+    	var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    	var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+    	var osm = new L.TileLayer(osmUrl, {minZoom: 4, maxZoom: 18, attribution: osmAttrib});
+    	map.setView(new L.LatLng(51.3, 0.7),9);
+    	map.addLayer(osm);
+
+      function plot() {
+        // Read inputs
+        var easting = $("#easting").val();
+        var northing = $("#northing").val();
+        // Convert from EU89 UTM to lat/lon
+        var projection = "+proj=utm +zone=32 +ellps=WGS84 +datum=WGS84 +units=m +no_defs";
+        var latlon = proj4(projection, 'WGS84', [easting, northing]);
+        var longitude = latlon[1];
+        var latitude = latlon[0];
+        console.log(latlon)
+        // Add marker and centre map.
+        var marker = L.marker([longitude,latitude]).addTo(map);
+        map.setView([longitude,latitude], 13);
+      }
+    </script>
   </body>
 
 </html>
