@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Proj4js+Leafletjs+OSM tiles</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.5/proj4.js"></script>
+
+    <script>
+      
+      // Assign leaflet map to a Div element, identified by its 'id' attribute.
+      
+      var map = L.map('leafletmap');
+      L.tileLayer('http://{s}.tiles.mapbox.com/v3/MapID/{z}/{x}/{y}.png', {
+          attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+          maxZoom: 18
+      }).addTo(map);
+
+
+      function plot () {
+        
+        // Read inputs
+        var easting = $("#easting").val();
+        var northing = $("#northing").val();
+        
+        // Convert from EU89 UTM to lat/lon
+        var projection = "+proj=utm +zone=32 +ellps=WGS84 +datum=WGS84 +units=m +no_defs";
+        var latlon = proj4(projection,'WGS84', [easting,northing]);
+        
+        // Add marker and centre map.
+        var marker = L.marker(latlon).addTo(map);
+        map.setView(latlon, 13);
+      }
+      
+    </script>
+    
+  </head>
+
+  <body>
+  
+    <h1>Enter Easting/Northing</h1>
+    <p>Easting: <input id="easting" type="text"></p>
+    <p>Northing: <input id="northing" type="text"></p>
+    <button onpress="plot()">Plot on map</button>
+    <br/>
+    <div id="leafletmap" style="height:360px" ></div>
+  
+  </body>
+
+</html>
