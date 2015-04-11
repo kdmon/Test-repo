@@ -30,20 +30,21 @@
     	var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
     	var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
     	var osm = new L.TileLayer(osmUrl, {minZoom: 4, maxZoom: 18, attribution: osmAttrib});
-    	map.setView(new L.LatLng(51.3, 0.7),9);
     	map.addLayer(osm);
 
       function plot() {
+        
         // Read inputs
         var easting = $("#easting").val();
         var northing = $("#northing").val();
+        
         // Convert from EU89 UTM to lat/lon
         var projection = "+proj=utm +zone=32 +ellps=WGS84 +datum=WGS84 +units=m +no_defs";
         var latlon = proj4(projection, 'WGS84', [easting, northing]);
         var longitude = latlon[1];
         var latitude = latlon[0];
-        console.log(latlon)
-        // Add marker and centre map.
+        
+        // Add marker and centre the map on it.
         var marker = L.marker([longitude,latitude]).addTo(map);
         map.setView([longitude,latitude], 13);
       }
