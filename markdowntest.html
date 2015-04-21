@@ -5,14 +5,17 @@
   <title>Marked in the browser</title>
   <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
   <script src="http://it4se.com:8080/chjj/marked/master/lib/marked.js"></script>
-  <script src="lib/marked.js"></script>
   <style>
     table {border-collapse: collapse;}
     tr, td {border: 1px solid black;}
   </style>
+  <link rel="stylesheet" href="http://it4se.com:8080/css/jquery.mobile-1.4.2.min.css" />
 </head>
-<body>
-    <textarea id="text-input" oninput="this.editor.update()" rows="6" cols="30" style="position:fixed; right: 0px; top: 0px;">Type **Markdown** here.</textarea>
+<body onload="init()">
+    <div style="position:fixed; right:0px; top:0px; width: 550px; height: 500px">
+      <textarea id="text-input" oninput="this.editor.update()" rows="10" cols="50">Type **Markdown** here.</textarea>
+      <img src="http://i0.wp.com/www.mauricebakker.nl/wp-content/uploads/2015/01/Afbeelding-039.png" style="width:550px;">
+    </div>
     <div id="preview"> </div>
     <script>
       function Editor(input, preview) {
@@ -22,8 +25,10 @@
         input.editor = this;
         this.update();
       }
-      var $ = function (id) { return document.getElementById(id); };
-      new Editor($("text-input"), $("preview"));
+      function init() {
+        var $ = function (id) { return document.getElementById(id); };
+        new Editor($("text-input"), $("preview"));
+      }
     </script>
   </body>
 </html>
