@@ -5,8 +5,8 @@ define(["knockout", "text!./testcomponent.html"],function(ko, loadedTemplate){
   }
 
   return ({
-    viewModel: testcomponent;
-    template: loadedTemplate;
+    viewModel: testcomponent,
+    template: loadedTemplate
   });
   
 });
