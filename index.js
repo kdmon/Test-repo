@@ -14,9 +14,10 @@ require.config({
 });
 
 
-define(["knockout", "text","jquery", "bootstrap"], function (ko,txt,$,bootstrap) {
+define(["knockout", "jquery"], function (ko,$) {
 
-  ko.components.register("testcomponent", {require: "testcomponent"} );
+  ko.components.register("testcomponent", {require: "testcomponent"});
   
-  
+  ko.applyBindings({});
+
 });
