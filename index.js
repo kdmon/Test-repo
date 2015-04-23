@@ -16,6 +16,7 @@ require.config({
 
 define(["knockout", "text","jquery", "bootstrap"], function (ko,txt,$,bootstrap) {
 
-  alert("Loaded all deps?");
+  ko.components.register("testcomponent", {require: "testcomponent"} );
+  
   
 });
