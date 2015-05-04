@@ -9,7 +9,9 @@
 
   <body>
     <h1>Rolodex</h1>
-    <ol data-bind="foreach:documentContainers">
+    <select data-bind="options:projectList"></select>
+    
+    <ol data-bind="foreach:projects">
       <li><h3  data-bind="text:title"></h3>
         <ol data-bind="foreach:documents">
           <li data-bind="text:title">
@@ -19,11 +21,11 @@
         <a href="#" data-bind="click: closeDocument(1)">Close</a>
       </li>
     </ol>
-    <a href="#" data-bind="click: addDocumentContainer('zippo')">New Container</a> |
-    <a href="#" data-bind="click: closeDocumentContainer()">Close container</a>
+    <a href="#" data-bind="click: addProject('zippo')">New Project</a> |
+    <a href="#" data-bind="click: closeProject()">Close Project</a>
     <hr/>
-    
-    <ol data-bind="foreach:currentDocuments">
+    <h1>Active project files</h1>
+    <ol data-bind="foreach:projectDocuments">
       <li><h3  data-bind="text:title"></h3></li>
     </ol>
     <hr/>
