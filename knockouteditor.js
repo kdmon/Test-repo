@@ -1,18 +1,4 @@
-var Document = function(title) {
-  var self = this;
-  self.title = ko.observable(title || 'zebra');
-};
- 
-var Project = function( title) {
-  // Stores an array of documents
-  var self = this;
-  self.title = ko.observable(title || 'lion');
-  self.documents = ko.observableArray([new Document()]);
-  // Operations
-  self.addDocument = function(title) { self.documents.push(new Document(title || "Untitled ")) };
-  self.closeDocument = function(id) { self.documents.pop() };
-};
-
+var webAppEditor = ace.edit("editor");
 var Model = function() {
   var self = this;
   self.projects = ko.observableArray([new Project('New...')]);
@@ -20,19 +6,42 @@ var Model = function() {
   // Return documents associated with the current or specific project
   self.projectDocuments = ko.computed(function () {
     var docs = self.projects()[self.activeProject()];
-    if (docs) return docs.documents()
+    if (docs) return docs.documents();
     else return;
   });
   // Return list of projects
   self.projectList = ko.computed(function () {
-    return ["Existing", "New..."]
+    return ["Existing", "New..."];
   });
   // Operations
   self.addProject = function(title) { self.projects.push(new Project(title || "Untitled " + Math.random())) };
-  self.closeProject = function(id) { self.projects.pop() };
+  self.closeProject = function(project) { self.projects.remove(project) };
 };
 
-var app = new Model()
+var Project = function(title, root) {
+  // Stores an array of documents
+  var self = this;
+  self.title = ko.observable(title || 'lion');
+  self.root = ko.observable(root);
+  self.documents = ko.observableArray([new Document()]);
+  // Operations
+  self.addDocument = function(title, content, mode) {
+    var editSession = ace.createEditSession(content || '', mode || '');
+    self.documents.push(new Document(title || "Untitled", editSession));
+    webAppEditor.setSession(editSession);
+  };
+  self.closeDocument = function(doc) {
+    self.documents.remove(doc);
+  };
+};
+
+var Document = function(title, editSession) {
+  var self = this;
+  self.title = ko.observable(title || 'zebra');
+  self.editSession = editSession;
+};
+
+var app = new Model();
 ko.applyBindings(app);
 
 
