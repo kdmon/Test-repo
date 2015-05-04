@@ -9,22 +9,20 @@
 
   <body>
     <h1>Rolodex</h1>
-    <a href="#add" data-bind="click: addProject()">New Project</a> |
     <select data-bind="options:projectList"></select>
     
-    <div data-bind="with: currentProject()">
+    <div data-bind="foreach: projects">
       <h1 data-bind="text:title"></h1>
-      <ol data-bind="foreach:documents">
-        <li>
-          <span data-bind="text:title"></span> | 
-          <a href="#close" data-bind="click: $parent.closeDocument">Close</a>
+      <ol data-bind="foreach: documents">
+        <li style="display: inline;">
+          <button data-bind="text:title"></button> <a href="#close" data-bind="click: $parent.closeDocument">[x]</a>
         </li>
       </ol>
-      <a href="#add" data-bind="click: addDocument()">New Doc</a> |
+      <a href="#add" data-bind="click: addDocument">New Doc</a> |
       <a href="#close" data-bind="click: $parent.closeProject">Close Project</a>
     </div>
     
-    
+    <a href="#add" data-bind="click: addProject">New Project</a>
     <hr/>
     
     <div id="editor" style="width: 500px; height: 200px;">blah</div>
