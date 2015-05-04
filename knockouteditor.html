@@ -14,15 +14,15 @@
     <ol data-bind="foreach:projects">
       <li><h3  data-bind="text:title"></h3>
         <ol data-bind="foreach:documents">
-          <li data-bind="text:title">
+          <li><span data-bind="text:title"></span> | <a href="#close" data-bind="click: $parent.closeDocument">Close</a>
           </li>
         </ol>
-        <a href="#" data-bind="click: addDocument()">New Doc</a> |
-        <a href="#" data-bind="click: closeDocument(1)">Close</a>
+        <a href="#add" data-bind="click: addDocument()">New Doc</a> |
+        
       </li>
+      <a href="#close" data-bind="click: $parent.closeProject">Close Project</a>
     </ol>
-    <a href="#" data-bind="click: addProject('zippo')">New Project</a> |
-    <a href="#" data-bind="click: closeProject()">Close Project</a>
+    <a href="#add" data-bind="click: addProject('zippo')">New Project</a> |
     <hr/>
     <h1>Active project files</h1>
     <ol data-bind="foreach:projectDocuments">
