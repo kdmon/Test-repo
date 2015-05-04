@@ -9,25 +9,22 @@
 
   <body>
     <h1>Rolodex</h1>
+    <a href="#add" data-bind="click: addProject()">New Project</a> |
     <select data-bind="options:projectList"></select>
     
-    <ol data-bind="foreach:projects">
-      <li><h3  data-bind="text:title"></h3>
-        <ol data-bind="foreach:documents">
-          <li><span data-bind="text:title"></span> | <a href="#close" data-bind="click: $parent.closeDocument">Close</a>
-          </li>
-        </ol>
-        <a href="#add" data-bind="click: addDocument()">New Doc</a> |
-        
-      </li>
+    <div data-bind="with: currentProject()">
+      <h1 data-bind="text:title"></h1>
+      <ol data-bind="foreach:documents">
+        <li>
+          <span data-bind="text:title"></span> | 
+          <a href="#close" data-bind="click: $parent.closeDocument">Close</a>
+        </li>
+      </ol>
+      <a href="#add" data-bind="click: addDocument()">New Doc</a> |
       <a href="#close" data-bind="click: $parent.closeProject">Close Project</a>
-    </ol>
-    <a href="#add" data-bind="click: addProject('zippo')">New Project</a> |
-    <hr/>
-    <h1>Active project files</h1>
-    <ol data-bind="foreach:projectDocuments">
-      <li><h3  data-bind="text:title"></h3></li>
-    </ol>
+    </div>
+    
+    
     <hr/>
     
     <div id="editor" style="width: 500px; height: 200px;">blah</div>
