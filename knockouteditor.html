@@ -1,132 +1,29 @@
 <!doctype html>
 <html>
+
   <head>
     <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="http://ace.c9.io/build/src/ace.js" data-ace-base="src" type="text/javascript" charset="utf-8"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
   </head>
+
   <body>
-    <h1 data-bind="text:contextLabel">hi</h1>
-    <ol data-bind="foreach:contextFiles">
-      <li data-bind="text:filename"></li>
+    <h1>Rolodex</h1>
+    <ol data-bind="foreach:documentContainers">
+      <li><h3  data-bind="text:title"></h3>
+        <ol data-bind="foreach:documents">
+          <li data-bind="text:title">
+          </li>
+        </ol>
+        <a href="#" data-bind="click: addDocument()">New Doc</a> |
+        <a href="#" data-bind="click: closeDocument(1)">Close</a>
+      </li>
     </ol>
-    <div id="editor" style="width: 500px; height: 200px;"></div>
-    
-    <script>
-    
-      var sampleContext = [
-        {
-          label: "Test-repo context",
-          repository: 'Test-repo',
-          username: "kdmon",
-          branch: "master",
-          temporary: false,
-          documents: [
-            {
-              id: '0',
-              label: "Untitled.html",
-              value: "html document",
-              unsaved: false
-            }
-          ],
-          files: [
-            {
-              filename: 'index.html',
-              path: "/",
-              value: "html document",
-              unsaved: false
-            }
-          ]
-        }
-      ];
-      
-      var Editor = function (contexts, settings) {
-        var self = this;
-        self.label = "editor";
-        self.context = 0;
-        self.currentContext = 0;
-        self.contexts = ko.observableArray(ko.utils.arrayMap(contexts, function(context) {
-          return {
-            label: context.label,
-            repository: context.repository,
-            username: context.username,
-            branch: context.branch,
-            temporary: context.temporary,
-            documents: context.documents,
-            files: context.files,
-          };
-        }));
-        self.addContext = function () {};
-        self.addRemove = function () {};
-        self.contextLabel =  ko.computed(function() {
-          return self.contexts()[self.context].label;
-        });
-        self.contextFiles =  ko.computed(function() {
-          return self.contexts()[self.context].files;
-        });
-      };
-      
-      ko.applyBindings(new Editor(sampleContext));
-    
-    /*
-        self.documents = ko.observableArray(ko.utils.arrayMap(documents, function(document) {
-          return {
-            id: document.id,
-            label: document.label,
-            value: document.value,
-            unsaved: document.unsaved
-          };
-        }));
-        self.files = ko.observableArray(ko.utils.arrayMap(files, function(file) {
-          return {
-            name: document.id,
-            path: document.label,
-            type: document.value,
-            unsaved: document.unsaved
-          };
-        }));
-    */
-    
-    /*
-      var file = {
-        "name":"",
-        "path":"",
-        "type":"",
-        "opened": false,
-        "unsaved": false
-      };
-      
-      var model = {
-        "auth": {
-          "state": false,
-          "user": "guest"
-        },
-        "chat": {
-          "room": "lobby",
-          "remoteVideos": ko.observableArray(),
-          "participants": ko.observableArray()
-          },
-        "context": [
-          {
-            "label": "",
-            "temporary": false,
-            "repository" : "",
-            "owner": "",
-            "branch" : "",
-            "documents": ko.observableArray(),
-            "files" : ko.observableArray(),
-           
-            
-          }
-        ],
-        "settings": {
-          "fontsize": 12,
-          "theme": "light"
-        }
-      };
-      */
-      
-      ace.edit("editor");
-    </script>
+    <a href="#" data-bind="click: addDocumentContainer('zippo')">New Container</a> |
+    <a href="#" data-bind="click: closeDocumentContainer()">Close container</a>
+    <br/>
+    <div id="editor" style="width: 500px; height: 200px;">blah</div>
+    <script src="knockouteditor.js"></script>
   </body>
+
 </html>
