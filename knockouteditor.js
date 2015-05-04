@@ -7,7 +7,7 @@ var DocumentContainer = function( title) {
     // Stores an array of documents
     var self = this;
     self.title = ko.observable(title || 'lion');
-    self.documents = ko.observableArray();
+    self.documents = ko.observableArray([new Document()]);
     // Operations
     self.addDocument = function(title) { self.documents.push(new Document(title || "Untitled ")) };
     self.closeDocument = function(id) { self.documents.pop() };
@@ -16,14 +16,21 @@ var DocumentContainer = function( title) {
 var Model = function() {
     // Stores an array of documents
     var self = this;
-    self.documentContainers = ko.observableArray();
+    self.documentContainers = ko.observableArray([new DocumentContainer('New...')]);
+    self.currentContainer = ko.observable(0);
+    self.currentDocuments = ko.computed(function () {
+      var currentDocs = self.documentContainers()[self.currentContainer()];
+      if (currentDocs) return currentDocs.documents()
+      else return;
+      }
+    );
     // Operations
     self.addDocumentContainer = function(title) { self.documentContainers.push(new DocumentContainer(title || "Untitled " + Math.random())) };
     self.closeDocumentContainer = function(id) { self.documentContainers.pop() };
 };
 
-
-ko.applyBindings(new Model());
+var app = new Model()
+ko.applyBindings(app);
 
 
 /*
