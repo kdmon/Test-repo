@@ -1,3 +1,67 @@
+var Document = function(title) {
+    var self = this;
+    self.title = ko.observable(title || 'zebra');
+};
+ 
+var DocumentContainer = function( title) {
+    // Stores an array of documents
+    var self = this;
+    self.title = ko.observable(title || 'lion');
+    self.documents = ko.observableArray();
+    // Operations
+    self.addDocument = function(title) { self.documents.push(new Document(title || "Untitled ")) };
+    self.closeDocument = function(id) { self.documents.pop() };
+};
+
+var Model = function() {
+    // Stores an array of documents
+    var self = this;
+    self.documentContainers = ko.observableArray();
+    // Operations
+    self.addDocumentContainer = function(title) { self.documentContainers.push(new DocumentContainer(title || "Untitled " + Math.random())) };
+    self.closeDocumentContainer = function(id) { self.documentContainers.pop() };
+};
+
+
+ko.applyBindings(new Model());
+
+
+/*
+
+// Class to represent a document
+function Document(title, obj) {
+    var self = this;
+    self.title = ko.observable(title);
+    self.obj = obj;
+    // Put documents methods here... save rename delete close ?
+}
+
+
+function Model (contexts, settings) {
+  var self = this;
+  self.editor = ace.edit("editor");
+  self.documents = ko.observableArray();
+  self.addDocument = function(title, content, mode) {
+    var editSession = ace.createEditSession('','');
+    self.documents.push(new Document(title, editSession));
+    self.editor.setSession(editSession);
+  };
+  self.setDocument = function(id) {
+    self.editor.setSession(self.documents[id]);
+  };
+  self.closeDocument = function(id) {
+    //self.documents.splice(id, 1);
+    self.documents.pop();
+    //self.documents.remove(id);
+  };
+  self.currentDocument = ko.computed(function() {
+    return self.editor.getSession();
+  });
+};
+//var instance = new Model(sampleContext);
+ko.applyBindings(new Model ());
+*/
+/*
 var sampleContext = [{
   label: "Test-repo context",
   repository: 'Test-repo',
@@ -17,10 +81,12 @@ var sampleContext = [{
     unsaved: false
   }]
 }];
-var Model = function(contexts, settings) {
-  var self = this;
-  self.label = "editor";
-  self.context = 0;
+  
+  self.addContext = function(context) {};
+  self.setContext = function(id) {};
+  self.delContext = function(id) {};
+  
+  self.context = ko.observable(0);
   self.contexts = ko.observableArray(ko.utils.arrayMap(contexts, function(context) {
     return {
       label: context.label,
@@ -28,47 +94,17 @@ var Model = function(contexts, settings) {
       username: context.username,
       branch: context.branch,
       temporary: context.temporary,
-      documents: context.documents,
-      files: context.files,
+      documents: ko.observableArray(context.documents),
+      files: ko.observableArray(context.files),
     };
   }));
   self.currentContext = ko.computed(function() {
-    return self.contexts()[self.context].label;
+    return self.contexts()[self.context()].label;
   });
   self.contextFiles = ko.computed(function() {
-    return self.contexts()[self.context].files;
+    return self.contexts()[self.context()].files;
   });
-  self.addContext = function(context) {};
-  self.setContext = function(id) {};
-  self.delContext = function(id) {};
-  self.sessions = ko.observableArray();
-  self.addSession = function(session) {
-    self.sessions.push(session)
-  };
-  self.delSession = function(id) {
-    self.sessions.splice(id, 1);
-  };
-  self.setSession = function(id) {
-    editor.setSession(sessions[id].session);
-  };
-};
-ko.applyBindings(new Model(sampleContext));
-var editor = ace.edit("editor");
-var cssMode = '';
-var occurSession0 = editor.getSession();
-var occurSession1 = ace.createEditSession('File 2', cssMode);
-var occurSession2 = ace.createEditSession('File 3', cssMode);
-//Test          
-$('#link0').click(function(eventObject) {
-  editor.setSession(occurSession0);
-});
-$('#link1').click(function(eventObject) {
-  editor.setSession(occurSession1);
-});
-$('#link2').click(function(eventObject) {
-  editor.setSession(occurSession2);
-});
-/*
+  
         self.documents = ko.observableArray(ko.utils.arrayMap(documents, function(document) {
           return {
             id: document.id,
