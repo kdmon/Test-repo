@@ -21,7 +21,13 @@
     </ol>
     <a href="#" data-bind="click: addDocumentContainer('zippo')">New Container</a> |
     <a href="#" data-bind="click: closeDocumentContainer()">Close container</a>
-    <br/>
+    <hr/>
+    
+    <ol data-bind="foreach:currentDocuments">
+      <li><h3  data-bind="text:title"></h3></li>
+    </ol>
+    <hr/>
+    
     <div id="editor" style="width: 500px; height: 200px;">blah</div>
     <script src="knockouteditor.js"></script>
   </body>
