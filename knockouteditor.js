@@ -2,11 +2,11 @@ var webAppEditor = ace.edit("editor");
 var Model = function() {
   var self = this;
   self.activeProject = ko.observable(0);
-  self.projects = ko.observableArray([new Project("Hello world")]);
+  self.projects = ko.observableArray();
   // Return documents associated with the current or specific project
   self.projectDocuments = ko.computed(function () {
-    var docs = self.projects()[self.activeProject()];
-    if (docs) return docs.documents();
+    var docs = self.projects[self.activeProject];
+    if (docs) return docs.documents;
     else return;
   });
   self.currentProject = ko.computed(function () {
@@ -21,7 +21,8 @@ var Model = function() {
     return list;
   });
   // Operations
-  self.addProject = function(title) { self.projects.push(new Project(title || "Untitled " + Math.random())) };
+  // passing in params ot possinle from dom binding!
+  self.addProject = function() { self.projects.push(new Project("Untitled " + Math.random())) };
   self.closeProject = function(project) { self.projects.remove(project) };
 };
 
@@ -32,13 +33,12 @@ var Project = function(title, root) {
   self.root = ko.observable(root);
   self.documents = ko.observableArray();
   // Operations
-  self.addDocument = function(title, content, mode) {
-    var editSession = ace.createEditSession(content || '', mode || '');
-    self.documents.push(new Document(title || "Untitled", editSession));
+  self.addDocument = function() {
+    var editSession = ace.createEditSession('',  '');
+    self.documents.push(new Document("Untitled", editSession));
     webAppEditor.setSession(editSession);
   };
   self.closeDocument = function(doc) {
-    console.log(doc);
     self.documents.remove(doc);
   };
 };
