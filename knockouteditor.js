@@ -1,32 +1,35 @@
 var Document = function(title) {
-    var self = this;
-    self.title = ko.observable(title || 'zebra');
+  var self = this;
+  self.title = ko.observable(title || 'zebra');
 };
  
-var DocumentContainer = function( title) {
-    // Stores an array of documents
-    var self = this;
-    self.title = ko.observable(title || 'lion');
-    self.documents = ko.observableArray([new Document()]);
-    // Operations
-    self.addDocument = function(title) { self.documents.push(new Document(title || "Untitled ")) };
-    self.closeDocument = function(id) { self.documents.pop() };
+var Project = function( title) {
+  // Stores an array of documents
+  var self = this;
+  self.title = ko.observable(title || 'lion');
+  self.documents = ko.observableArray([new Document()]);
+  // Operations
+  self.addDocument = function(title) { self.documents.push(new Document(title || "Untitled ")) };
+  self.closeDocument = function(id) { self.documents.pop() };
 };
 
 var Model = function() {
-    // Stores an array of documents
-    var self = this;
-    self.documentContainers = ko.observableArray([new DocumentContainer('New...')]);
-    self.currentContainer = ko.observable(0);
-    self.currentDocuments = ko.computed(function () {
-      var currentDocs = self.documentContainers()[self.currentContainer()];
-      if (currentDocs) return currentDocs.documents()
-      else return;
-      }
-    );
-    // Operations
-    self.addDocumentContainer = function(title) { self.documentContainers.push(new DocumentContainer(title || "Untitled " + Math.random())) };
-    self.closeDocumentContainer = function(id) { self.documentContainers.pop() };
+  var self = this;
+  self.projects = ko.observableArray([new Project('New...')]);
+  self.activeProject = ko.observable(0);
+  // Return documents associated with the current or specific project
+  self.projectDocuments = ko.computed(function () {
+    var docs = self.projects()[self.activeProject()];
+    if (docs) return docs.documents()
+    else return;
+  });
+  // Return list of projects
+  self.projectList = ko.computed(function () {
+    return ["Existing", "New..."]
+  });
+  // Operations
+  self.addProject = function(title) { self.projects.push(new Project(title || "Untitled " + Math.random())) };
+  self.closeProject = function(id) { self.projects.pop() };
 };
 
 var app = new Model()
