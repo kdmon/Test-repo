@@ -8,24 +8,24 @@
   </head>
 
   <body>
-    <h1>Rolodex</h1>
-    <select data-bind="options:projectList"></select>
+    <button data-bind="click: addProject">New Project</button>
+    <select style="width:100px" data-bind="options: projectList, value: currentProject"></select>
+    <span data-bind="with:currentProject"><button data-bind="click: $parent.closeProject">Close Project</button></span>
     
-    <div data-bind="foreach: projects">
-      <h1 data-bind="text:title"></h1>
+    <div data-bind="with: currentProject">
+      <h4 data-bind="text:title"></h4>
       <ol data-bind="foreach: documents">
         <li style="display: inline;">
-          <button data-bind="text:title"></button> <a href="#close" data-bind="click: $parent.closeDocument">[x]</a>
+          <button data-bind="text:title, click:$parent.showDocument"></button> <a href="#close" data-bind="click: $parent.closeDocument">[x]</a>
         </li>
       </ol>
-      <a href="#add" data-bind="click: addDocument">New Doc</a> |
-      <a href="#close" data-bind="click: $parent.closeProject">Close Project</a>
+      <button data-bind="click: addDocument">New Doc</button>
     </div>
-    
-    <a href="#add" data-bind="click: addProject">New Project</a>
     <hr/>
     
-    <div id="editor" style="width: 500px; height: 200px;">blah</div>
+    <div data-bind="with: currentProject">
+      <div data-bind="visible: hasDocument" id="editor" style="width: 500px; height: 200px;">No documents opened!</div>
+    </div>
     <script src="knockouteditor.js"></script>
   </body>
 
