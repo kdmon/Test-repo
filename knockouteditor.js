@@ -3,7 +3,7 @@ var Model = function() {
   var self = this;
   self.activeProject = ko.observable(0);
   self.projects = ko.observableArray();
-  // Return documents associated with the current or specific project
+  // Return documents associated with the active project
   self.projectDocuments = ko.computed(function () {
     var docs = self.projects[self.activeProject];
     if (docs) return docs.documents;
@@ -14,15 +14,14 @@ var Model = function() {
   });
   // Return list of projects
   self.projectList = ko.computed(function () {
-    var list = ['New...'];
+    var list = [];
     for (i=0;i<self.projects().length;i++) {
       list.unshift(self.projects()[i].title);
     }
     return list;
   });
-  // Operations
-  // passing in params ot possinle from dom binding!
-  self.addProject = function() { self.projects.push(new Project("Untitled " + Math.random())) };
+  // Passing in params is not possible from dom binding!
+  self.addProject = function() { self.projects.push(new Project("Untitled " + Math.random()));};
   self.closeProject = function(project) { self.projects.remove(project) };
 };
 
@@ -32,6 +31,9 @@ var Project = function(title, root) {
   self.title = ko.observable(title || 'lion');
   self.root = ko.observable(root);
   self.documents = ko.observableArray();
+  self.hasDocument = ko.computed(function() {
+    return self.documents().length;
+  });
   // Operations
   self.addDocument = function() {
     var editSession = ace.createEditSession('',  '');
@@ -40,6 +42,9 @@ var Project = function(title, root) {
   };
   self.closeDocument = function(doc) {
     self.documents.remove(doc);
+  };
+  self.showDocument = function(doc) {
+    webAppEditor.setSession(doc.editSession);
   };
 };
 
