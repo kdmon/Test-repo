@@ -4,6 +4,7 @@
   <head>
     <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="http://ace.c9.io/build/src/ace.js" data-ace-base="src" type="text/javascript" charset="utf-8"></script>
+    <script src="http://it4se.com:8080/js/src-noconflict/ext-split.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
   </head>
 
@@ -20,8 +21,8 @@
         </li>
       </ol>
       <button data-bind="click: addDocument">New Doc</button>
-      <div data-bind="visible: documents().length>0" id="editor" style="width: 500px; height: 200px;">No documents opened!</div>
     </div>
+    <div id="editor" style="width: 500px; height: 200px;">No documents opened!</div>
     <script src="knockouteditor.js"></script>
   </body>
 
