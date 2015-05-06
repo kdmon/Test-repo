@@ -1,4 +1,8 @@
+
 var webAppEditor = ace.edit("editor");
+
+var UndoManager = ace.require("ace/ext/split");
+
 var Model = function() {
   var self = this;
   self.activeProject = ko.observable(0);
@@ -20,36 +24,44 @@ var Model = function() {
     }
     return list;
   });
-  // Passing in params is not possible from dom binding!
+  // Explicitly passing in params not possible from dom binding
+  // Instead can be implicit if inside ko context, with, foreach etc.
   self.addProject = function() { self.projects.push(new Project("Untitled " + Math.random()));};
   self.closeProject = function(project) { self.projects.remove(project) };
+  self.selectProject = function(project) {self.activeProject(project)};
+  // Act on project change
+  self.projects.subscribe(function(newValue) {
+    console.log("Projects changed");
+  });
+};
+
+var Editor = function () {
+  var self = this;
+  self.document = ko.observable();
 };
 
 var Project = function(title, root) {
-  // Stores an array of documents
   var self = this;
-  self.title = ko.observable(title || 'lion');
+  self.title = ko.observable(title || 'Untitled project');
   self.root = ko.observable(root);
   self.documents = ko.observableArray();
-  // Operations
   self.addDocument = function() {
     var editSession = ace.createEditSession('',  '');
     self.documents.push(new Document("Untitled", editSession));
-    webAppEditor.setSession(editSession);
-    webAppEditor.resize();
-    webAppEditor.renderer.updateFull();
   };
   self.closeDocument = function(doc) {
     self.documents.remove(doc);
-    webAppEditor.setSession(self.documents()[self.documents().length-1].editSession);
-    webAppEditor.resize();
-    webAppEditor.renderer.updateFull();
   };
   self.showDocument = function(doc) {
     webAppEditor.setSession(doc.editSession);
+  };
+  // Act on document change
+  self.documents.subscribe(function(newValue) {
+    console.log("Documents changed - setting editor to last item in list");
+    webAppEditor.setSession(self.documents()[self.documents().length-1].editSession);
     webAppEditor.resize();
     webAppEditor.renderer.updateFull();
-  };
+  });
 };
 
 var Document = function(title, editSession) {
