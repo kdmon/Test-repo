@@ -31,20 +31,24 @@ var Project = function(title, root) {
   self.title = ko.observable(title || 'lion');
   self.root = ko.observable(root);
   self.documents = ko.observableArray();
-  self.hasDocument = ko.computed(function() {
-    return self.documents().length;
-  });
   // Operations
   self.addDocument = function() {
     var editSession = ace.createEditSession('',  '');
     self.documents.push(new Document("Untitled", editSession));
     webAppEditor.setSession(editSession);
+    webAppEditor.resize();
+    webAppEditor.renderer.updateFull();
   };
   self.closeDocument = function(doc) {
     self.documents.remove(doc);
+    webAppEditor.setSession(self.documents()[self.documents().length-1].editSession);
+    webAppEditor.resize();
+    webAppEditor.renderer.updateFull();
   };
   self.showDocument = function(doc) {
     webAppEditor.setSession(doc.editSession);
+    webAppEditor.resize();
+    webAppEditor.renderer.updateFull();
   };
 };
 
@@ -55,7 +59,9 @@ var Document = function(title, editSession) {
 };
 
 var app = new Model();
-ko.applyBindings(app);
+setTimeout(function(){
+  ko.applyBindings(app);
+},250);
 
 
 /*
