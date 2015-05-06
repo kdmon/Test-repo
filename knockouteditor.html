@@ -20,11 +20,7 @@
         </li>
       </ol>
       <button data-bind="click: addDocument">New Doc</button>
-    </div>
-    <hr/>
-    
-    <div data-bind="with: currentProject">
-      <div data-bind="visible: hasDocument" id="editor" style="width: 500px; height: 200px;">No documents opened!</div>
+      <div data-bind="visible: documents().length>0" id="editor" style="width: 500px; height: 200px;">No documents opened!</div>
     </div>
     <script src="knockouteditor.js"></script>
   </body>
