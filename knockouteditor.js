@@ -1,7 +1,35 @@
+var github = new Github({
+  token: "",
+  auth: "oauth"
+});
+
+var repo = github.getRepo("kdmon", "cats");
+
+var queue = [];
+
+function queueSave (sha, file, content, message) {
+  queue.push ({sha:sha, file: file, content: content, message:message});
+}
+
+function queueProcess () {
+  if (queue.length > 0) {
+    var item = queue.pop();
+    repo.write(item.sha, item.file, item.content, item.message, function (err) {
+      if (err) alert ("Error saving " + item.file);
+      console.log(err);
+    });
+    setTimeout(function () {queueProcess()},500);
+  }
+}
+
+queueSave('master', 'file7.txt', 'File 7', 'Test commit');
+queueSave('master', 'file8.txt', 'File 8', 'Test commit');
+queueSave('master', 'file9.txt', 'File 9', 'Test commit');
+queueSave('master', 'file10.txt', 'File 10', 'Test commit');
+queueProcess ();
+
 
 var webAppEditor = ace.edit("editor");
-
-var UndoManager = ace.require("ace/ext/split");
 
 var Model = function() {
   var self = this;
