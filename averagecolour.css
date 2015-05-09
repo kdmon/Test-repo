@@ -1,7 +1,10 @@
 
 body {
-    background: blue;
-    color: #ccc;
+    background: linear-gradient(0deg, #000, #502);
+    font-family: arial, sans;
+    text-shadow: 0px 10px 10px red;
+    font-weight: bold;
+    color: white;
     margin: 0px;
     padding: 5px;
 }
@@ -15,9 +18,7 @@ body {
 #gallery img {
     max-width: 150px;
     height: 150px;
-    display: inline;
     margin-left: 3px;
-    padding: 1px;
     border-right: 150px solid #FFF;}
 
 .del:hover {opacity: 0.5;}
