@@ -7,24 +7,209 @@
     <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="http://ace.c9.io/build/src/ace.js" data-ace-base="src" type="text/javascript" charset="utf-8"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
+    <script src="/shagstrom/split-pane/master/split-pane.js"></script>
+    <style>
+        
+    	html, body {
+    		height: 100%;
+    		min-height: 100%;
+    		margin: 0;
+    		padding: 0;
+    		background: #eee;
+    	}
+    	
+    	.split-pane {
+      	position: relative;
+      	height: 100%;
+      	width: 100%;
+      	overflow: hidden;
+      }
+      
+      .split-pane.fixed-top > .split-pane-component,
+      .split-pane.fixed-bottom > .split-pane-component,
+      .split-pane.horizontal-percent > .split-pane-component {
+      	position: absolute;
+      	left: 0;
+      	width: 100%;
+      	overflow: auto;
+      	top: auto;
+      	bottom: 0;
+      	z-index: 1;
+      }
+      
+      .split-pane.fixed-top > .split-pane-component:first-child,
+      .split-pane.fixed-bottom > .split-pane-component:first-child,
+      .split-pane.horizontal-percent > .split-pane-component:first-child {
+      	top: 0;
+      	bottom: auto;
+      }
+      
+      .split-pane.fixed-top > .split-pane-divider,
+      .split-pane.fixed-bottom > .split-pane-divider,
+      .split-pane.horizontal-percent > .split-pane-divider {
+      	position: absolute;
+      	width: 100%;
+      	left: 0;
+      	cursor: ns-resize;
+      	cursor: n-resize\9;
+      	z-index: 2;
+      }
+      
+      .split-pane.fixed-left > .split-pane-component,
+      .split-pane.fixed-right > .split-pane-component,
+      .split-pane.vertical-percent > .split-pane-component {
+      	position: absolute;
+      	top: 0;
+      	height: 100%;
+      	overflow: auto;
+      	left: auto;
+      	right: 0;
+      	z-index: 1;
+      }
+      
+      .split-pane.fixed-left > .split-pane-component:first-child,
+      .split-pane.fixed-right > .split-pane-component:first-child,
+      .split-pane.vertical-percent > .split-pane-component:first-child {
+      	left: 0;
+      	right: auto;
+      }
+      
+      .split-pane.fixed-left > .split-pane-divider,
+      .split-pane.fixed-right > .split-pane-divider,
+      .split-pane.vertical-percent > .split-pane-divider {
+      	position: absolute;
+      	height: 100%;
+      	top: 0;
+      	cursor: ew-resize;
+      	cursor: w-resize\9;
+      	z-index: 2;
+    		background: #aaa;
+      }
+      
+      .split-pane-resize-shim {
+      	position: absolute;
+      	top: 0;
+      	left: 0;
+      	width: 100%;
+      	height: 100%;
+      	z-index: 10000;
+      	display: none;
+      }
+      
+      .split-pane.fixed-left > .split-pane-resize-shim,
+      .split-pane.fixed-right > .split-pane-resize-shim,
+      .split-pane.vertical-percent > .split-pane-resize-shim {
+      	cursor: ew-resize;
+      	cursor: w-resize\9;
+      }
+      
+      .split-pane.fixed-top > .split-pane-resize-shim,
+      .split-pane.fixed-bottom > .split-pane-resize-shim,
+      .split-pane.horizontal-percent > .split-pane-resize-shim {
+      	cursor: ns-resize;
+      	cursor: n-resize\9;
+      }
+      
+      .preview-url, .preview-url input {
+        height: 2em;
+        width: 100%;
+        overflow: hidden;
+      }
+      
+      .preview-iframe {
+        height: calc(100% - 2em);
+        overflow: hidden;
+      }
+    
+      #container {
+        width: 100%;
+        height: calc(100% - 80px);
+      }
+      
+      #tool-bar {
+        width: 100%;
+        background: #ccc;
+        height: 80px;
+      }
+      
+    	#left-component {
+    		min-width: 10em;
+    		max-width: 10em;
+    	}
+    
+    	#first-divider {
+    		left: 10em;
+    		width: 5px;
+    	}
+    
+    	#right-component {
+    		left: 10em;
+    		margin-left: 5px;
+    	  min-width: 17em;
+    	}
+    
+    	#inner-left-component {
+    		min-width: 12em;
+    		right: 10em;
+    		margin-right: 5px;
+    	}
+    
+    	#second-divider {
+    		right: 10em;
+    		width: 5px;
+    	}
+    
+    	#inner-right-component {
+    	  min-width: 5em;
+    		width: 10em;
+    	}
+    </style>
   </head>
 
   <body>
-    <button data-bind="click: addProject">New Project</button>
-    <select style="width:100px" data-bind="options: projectList, value: currentProject"></select>
-    <span data-bind="with:currentProject"><button data-bind="click: $parent.closeProject">Close Project</button></span>
-    
-    <div data-bind="with: currentProject">
-      <h4 data-bind="text:title"></h4>
-      <ol data-bind="foreach: documents">
-        <li style="display: inline;">
-          <button data-bind="text:title, click:$parent.showDocument"></button> <a href="#close" data-bind="click: $parent.closeDocument">[x]</a>
-        </li>
-      </ol>
-      <button data-bind="click: addDocument">New Doc</button>
+    <div id="tool-bar">
+      <button data-bind="click: addProject">New Project</button>
+      <select style="width:100px" data-bind="options: projectList, value: currentProject"></select>
+      <span data-bind="with:currentProject">
+        <button data-bind="click: $parent.closeProject">Close Project</button>
+      </span>
+      <div data-bind="with: currentProject">
+        <b data-bind="text:title"></b> <button data-bind="click: addDocument">New Doc</button>
+        <ol data-bind="foreach: documents">
+          <li style="display: inline;">
+            <button data-bind="text:title, click:$parent.showDocument"></button> <a href="#close" data-bind="click: $parent.closeDocument">[x]</a>
+          </li>
+        </ol>
+      </div>
     </div>
-    <div id="editor" style="width: 500px; height: 200px;">No documents opened!</div>
+    <div id="container">
+      <div class="split-pane fixed-left">
+        <div class="split-pane-component" id="left-component">
+          <h1>File browser</h1>
+        </div>
+        <div class="split-pane-divider" id="first-divider"></div>
+        <div class="split-pane-component" id="right-component">
+          <div class="split-pane fixed-right">
+            <div class="split-pane-component" id="inner-left-component">
+              <div id="editor" style="width: 100%; height: 100%;">No documents opened!</div>
+            </div>
+            <div class="split-pane-divider" id="second-divider"></div>
+            <div class="split-pane-component" style="height: 100%" id="inner-right-component">
+              <div class="preview-url"><input id="url"></div>
+              <div class="preview-iframe">
+                <iframe src="http://it4se.com:8080/kdmon/Test-repo/master/averagecolour.html" style="width: 100%; height: 100%;"></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <script src="knockouteditor.js"></script>
+    <script>
+      $(function() {
+        $('div.split-pane').splitPane();
+      });
+    </script>
   </body>
 
 </html>
