@@ -1,0 +1,23 @@
+
+body {
+    background: #fff;
+    color: #ccc;
+    margin: 0px;
+    padding: 5px;
+}
+
+#gallery {
+    background: #000;
+    margin: 0px;
+    padding: 3px;
+}
+
+#gallery img {
+    max-width: 150px;
+    height: 150px;
+    display: inline;
+    margin-left: 3px;
+    padding: 1px;
+    border-right: 150px solid #FFF;}
+
+.del:hover {opacity: 0.5;}
