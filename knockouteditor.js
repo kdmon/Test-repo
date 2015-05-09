@@ -26,10 +26,11 @@ queueSave('master', 'file7.txt', 'File 7', 'Test commit');
 queueSave('master', 'file8.txt', 'File 8', 'Test commit');
 queueSave('master', 'file9.txt', 'File 9', 'Test commit');
 queueSave('master', 'file10.txt', 'File 10', 'Test commit');
-queueProcess ();
+//queueProcess ();
 
 
 var webAppEditor = ace.edit("editor");
+$("#editor").hide();
 
 var Model = function() {
   var self = this;
@@ -82,13 +83,16 @@ var Project = function(title, root) {
   };
   self.showDocument = function(doc) {
     webAppEditor.setSession(doc.editSession);
+    webAppEditor.focus();
   };
   // Act on document change
   self.documents.subscribe(function(newValue) {
-    console.log("Documents changed - setting editor to last item in list");
-    webAppEditor.setSession(self.documents()[self.documents().length-1].editSession);
-    webAppEditor.resize();
-    webAppEditor.renderer.updateFull();
+    if (self.documents().length>0){
+      $("#editor").show();
+      webAppEditor.setSession(self.documents()[self.documents().length-1].editSession);
+      webAppEditor.focus();
+    }
+    else $("#editor").hide();
   });
 };
 
