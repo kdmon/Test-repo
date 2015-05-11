@@ -72,7 +72,7 @@ html, body {
 	cursor: ew-resize;
 	cursor: w-resize\9;
 	z-index: 2;
-	background: #aaa;
+	background: #aaa linear-gradient(90deg, #aaa, #fff, #aaa);
 }
 
 .split-pane-resize-shim {
@@ -110,6 +110,9 @@ html, body {
   overflow: hidden;
 }
 
+#toggle-pane-left {
+  float: right;
+}
 #container {
   width: 100%;
   height: calc(100% - 80px);
@@ -128,12 +131,12 @@ html, body {
 
 #first-divider {
 	left: 10em;
-	width: 5px;
+	width: 10px;
 }
 
 #right-component {
 	left: 10em;
-	margin-left: 5px;
+	margin-left: 10px;
   min-width: 17em;
 }
 
@@ -145,7 +148,7 @@ html, body {
 
 #second-divider {
 	right: 10em;
-	width: 5px;
+	width: 10px;
 }
 
 #inner-right-component {
