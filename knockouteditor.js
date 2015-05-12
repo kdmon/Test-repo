@@ -1,21 +1,13 @@
 (function () {
   
-	// TABS-WEST - sortable
-	$(".ui-layout-west").tabs().find(".ui-tabs-nav").sortable({ axis: 'x', zIndex: 2 });
-
-	// TABS-EAST - sortable
-	$(".ui-layout-east").tabs().find(".ui-tabs-nav").sortable({ axis: 'x', zIndex: 2 });
-
-	// TABS-CENTER - sortable
-	$(".ui-layout-center").tabs({change: function () {  }}).find(".ui-tabs-nav").sortable({ axis: 'x', zIndex: 2 })	;
-
-	// PAGE LAYOUT
-	myLayout = $('body').layout({
-    west__size: 0.33,
-    east__size: 0.33,
-    south__initClosed: true
-	});
-	
+  $("#toggle-pane-left").on("click", function () {
+      
+    $("#left-component").width(0);
+    $("#first-divider").css("left", 0);
+    $("#right-component").css("left", 0);
+    $("#left-component").closest('.split-pane').trigger('_splitpaneparentresize');
+  });
+  
   var github = new Github({
     token: "",
     auth: "oauth"
