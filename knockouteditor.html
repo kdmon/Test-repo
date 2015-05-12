@@ -2,104 +2,61 @@
 <html>
 
   <head>
-    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-  	<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
-  	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-layout/1.4.3/jquery.layout.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
-    <script src="http://ace.c9.io/build/src/ace.js" data-ace-base="src" type="text/javascript" charset="utf-8"></script>
     <script src="/michael/github/master/lib/underscore-min.js"></script>
     <script src="/michael/github/b6cfa64b01c3bd4d1e14e1617a7e97548f6fa3e8/github.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-layout/1.4.3/layout-default.css" />
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/redmond/jquery-ui.css"/>
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="http://ace.c9.io/build/src/ace.js" data-ace-base="src" type="text/javascript" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
+    <script src="/shagstrom/split-pane/master/split-pane.js"></script>
     <link rel="stylesheet" href="knockouteditor.css" />
     
   </head>
 
   <body>
-    
-    <div class="ui-layout-north">
-      <div id="tool-bar">
-        <button data-bind="click: addProject">New Project</button>
-        <select style="width:100px" data-bind="options: projectList, value: currentProject"></select>
-        <span data-bind="with:currentProject">
-          <button data-bind="click: $parent.closeProject">Close Project</button>
-        </span>
-        <div data-bind="with: currentProject">
-          <b data-bind="text:title"></b> <button data-bind="click: addDocument">New Doc</button>
-          <ol data-bind="foreach: documents">
-            <li style="display: inline;">
-              <button data-bind="text:title, click:$parent.showDocument"></button> <a href="#close" data-bind="click: $parent.closeDocument">[x]</a>
-            </li>
-          </ol>
-        </div>
+    <div id="tool-bar">
+      <button data-bind="click: addProject">New Project</button>
+      <select style="width:100px" data-bind="options: projectList, value: currentProject"></select>
+      <span data-bind="with:currentProject">
+        <button data-bind="click: $parent.closeProject">Close Project</button>
+      </span>
+      <div data-bind="with: currentProject">
+        <b data-bind="text:title"></b> <button data-bind="click: addDocument">New Doc</button>
+        <ol data-bind="foreach: documents">
+          <li style="display: inline;">
+            <button data-bind="text:title, click:$parent.showDocument"></button> <a href="#close" data-bind="click: $parent.closeDocument">[x]</a>
+          </li>
+        </ol>
       </div>
     </div>
-    
-    
-    <div class="ui-layout-west">
-    	<ul>
-    		<li><a href="#tabs-west-0">Directory</a></li>
-    		<li><a href="#tabs-west-1">File 1</a></li>
-    		<li><a href="#tabs-west-2">File 2</a></li>
-    	</ul>
-    	
-    	<div class="ui-layout-content ui-widget-content">
-    		<div id="tabs-west-0">
-    			<p>File browser</p>
-    		</div>
-    		<div id="tabs-west-1">
-    			<p>File 1.</p>
-    		</div>
-    		<div id="tabs-west-2">
-    			<p>File 2.</p>
-    			</div>
-    	</div>
-    </div>
-    
-    <div class="ui-layout-center">
-    	<ul>
-    		<li><a href="#tabs-center-1">File 3</a></li>
-    		<li><a href="#tabs-center-2">File 4</a></li>
-    	</ul>
-    	
-    	<div class="ui-layout-content ui-widget-content ui-corner-bottom">
-    		<div id="tabs-center-1">
-    		  <div class="editor-container" id="editor">No documents opened!</div>
-    		</div>
-    		<div id="tabs-center-2">
-    		  <p>File 4</p>
-    		</div>
-    	</div>
-    </div>
-    
-    
-    <div class="ui-layout-east">
-    	<ul>
-    		<li><a href="#tabs-east-1">File 5</a></li>
-    		<li><a href="#tabs-east-2">Preview</a></li>
-    	</ul>
-    	<div id="tabs-east-1" class="ui-widget-content">
-    		<p>File 5.</p>
-    	</div>
-    	<div id="tabs-east-2" class="ui-widget-content">
-    		<div class="split-pane-component" style="height: 100%" id="inner-right-component">
-          <div>
-            <div class="preview-url"><input id="url"></div>
-            <div class="preview-iframe">
-              <iframe src="http://it4se.com:8080/kdmon/Test-repo/master/averagecolour.html" style="width: 100%; height: 100%;"></iframe>
+    <div id="container">
+      <div class="split-pane fixed-left">
+        <div class="split-pane-component" id="left-component">
+        <button id="toggle-pane-left">x</button>
+          <h1>File browser</h1>
+        </div>
+        <div class="split-pane-divider" id="first-divider"></div>
+        <div class="split-pane-component" id="right-component">
+          <div class="split-pane fixed-right">
+            <div class="split-pane-component" id="inner-left-component">
+              <div id="editor" style="width: 100%; height: 100%;">No documents opened!</div>
+            </div>
+            <div class="split-pane-divider" id="second-divider"></div>
+            <div class="split-pane-component" style="height: 100%" id="inner-right-component">
+              <div class="preview-url"><input id="url"></div>
+              <div class="preview-iframe">
+                <iframe src="http://it4se.com:8080/kdmon/Test-repo/master/averagecolour.html" style="width: 100%; height: 100%;"></iframe>
+              </div>
             </div>
           </div>
         </div>
-    	</div>
+      </div>
     </div>
-    
-    
-    <div class="ui-layout-south">
-    	Console, terminal, error log etc...
-    </div>
-
     <script src="knockouteditor.js"></script>
-    
+    <script>
+      $(function() {
+        $('div.split-pane').splitPane();
+      });
+    </script>
   </body>
 
 </html>
