@@ -1,9 +1,34 @@
-var pstyle = 'border: 0px solid #dfdfdf; padding: 0px; margin: 2px;';
+var pstyle = 'border: 0px solid #dfdfdf; padding: 0px; margin: 0px;';
 
 $('#layout').w2layout({
     name: 'layout',
     panels: [
-        { type: 'top', size: 50, resizable: true, style: pstyle, content: 'top',
+        { type: 'top', size: 50, resizable: false, style: pstyle, content: 'top'},
+        { type: 'left', size: 150, resizable: true, style: pstyle, content: 'split' },
+        { type: 'main', style: pstyle, content: 'split' ,
+      tabs: {
+        active: 'taba',
+        tabs: [{
+          id: 'taba',
+          caption: 'Files',
+          closable: 'false'
+        }, {
+          id: 'tabb',
+          caption: 'Options',
+          closable: 'false'
+        }, {
+          id: 'tabc',
+          caption: 'Custom tab',
+          closable: 'true'
+        }],
+        onClose: function(event) {
+          this.owner.click ('tab2');
+        },
+        onClick: function(event) {
+          w2ui.layout.html('main', 'Active tab: '+ event.target);
+          //this.owner.content('main', 'event' + event.target);
+        }
+      },
         toolbar: {
   items: [{
     type: 'button',
@@ -32,7 +57,9 @@ $('#layout').w2layout({
   }, {
     type: 'menu',
     id: 'more',
-    caption: 'More',
+    caption: '',
+    icon: 'fa fa-bars',
+    arrow: false,
     items: [{
       text: 'Search',
       icon: 'fa fa-search',
@@ -56,22 +83,20 @@ $('#layout').w2layout({
   },{
     type: 'button',
     id: 'hide',
-    caption: 'Hide',
+    caption: '',
     icon: 'fa fa-close'
   },{
     type: 'button',
     id: 'split',
-    caption: 'Split',
+    caption: '',
     icon: 'fa fa-minus-square-o'
   }],
   onClick: function(event) {
     if(event.target == "hide") w2ui['layout'].toggle('top', window.instant);
+    if(event.target == "split") w2ui['layout'].toggle('preview', window.instant);
     console.log(event);
   }}
-          
-        },
-        { type: 'left', size: 150, resizable: true, style: pstyle, content: 'split' },
-        { type: 'main', style: pstyle, content: 'split' },
+          },
         { type: 'preview', size: '50%', resizable: true, hidden:true, style: pstyle, content: 'split' },
         { type: 'right', size: 200, resizable: true,style: pstyle, content: 'split' },
         { type: 'bottom', size: 50, resizable: true, style: pstyle, content: 'bottom' }
@@ -89,7 +114,7 @@ $().w2layout({
 $().w2layout({
     name: 'middlesplit',
     panels: [
-        { type: 'main',  resizable: true, style: pstyle, content: 'main' },
+        { type: 'main',  resizable: true, style: pstyle, content: 'main'},
         { type: 'display', resizable: true, hidden: true, style: pstyle, content: 'display' }
     ]
 });
