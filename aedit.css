@@ -5,6 +5,33 @@ html, body, #layout {
   margin: 0;
 }
 
+.panel-button {
+  background: white;
+  border: none;
+  position:relative;
+  width: 20px;
+  height: 20px;
+  float: right;
+}
+  
+.panel-button:before {
+  position:absolute;
+  font-family: FontAwesome;
+  content: "\f147";
+  font-size: 1.5em;
+  top: 0;
+  left: 0;
+}
+
+.close-panel:before {
+  content: "\f00d";
+}
+
+.split-panel:before {
+  content: "\f147";
+}
+
+
 .w2ui-tabs, .w2ui-toolbar {
   overflow-x: auto !important;
 }
