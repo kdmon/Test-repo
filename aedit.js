@@ -5,99 +5,100 @@ $('#layout').w2layout({
     panels: [
         { type: 'top', size: 50, resizable: false, style: pstyle, content: 'top'},
         { type: 'left', size: 150, resizable: true, style: pstyle, content: 'split' },
-        { type: 'main', style: pstyle, content: 'split' ,
-      tabs: {
-        active: 'taba',
-        tabs: [{
-          id: 'taba',
-          caption: 'Files',
-          closable: 'false'
-        }, {
-          id: 'tabb',
-          caption: 'Options',
-          closable: 'false'
-        }, {
-          id: 'tabc',
-          caption: 'Custom tab',
-          closable: 'true'
-        }],
-        onClose: function(event) {
-          this.owner.click ('tab2');
-        },
-        onClick: function(event) {
-          w2ui.layout.html('main', 'Active tab: '+ event.target);
-          //this.owner.content('main', 'event' + event.target);
-        }
-      },
-        toolbar: {
-  items: [{
-    type: 'button',
-    id: 'save',
-    caption: 'Save',
-    icon: 'fa fa-save',
-    hint: 'Save file'
-  },{
-    type: 'break',
-    id: 'break1'
-  }, {
-    type: 'button',
-    id: 'undo',
-    caption: 'Undo',
-    icon: 'fa fa-reply',
-    hint: 'Undo last edit'
-  },{
-    type: 'button',
-    id: 'redo',
-    caption: 'Redo',
-    icon: 'fa fa-share',
-    hint: 'Redo last edit'
-  },{
-    type: 'break',
-    id: 'break3'
-  }, {
-    type: 'menu',
-    id: 'more',
-    caption: '',
-    icon: 'fa fa-bars',
-    arrow: false,
-    items: [{
-      text: 'Search',
-      icon: 'fa fa-search',
-    }, {
-      text: 'Replace',
-      value: 'Item Three',
-      icon: 'fa fa-edit'
-    }, {
-      text: 'Go to line',
-      icon: 'fa fa-level-down'
-    }, {
-      text: 'Clean up indentation',
-      value: 'Item Three',
-      icon: 'fa fa-magic'
-    },{
-      text: 'File history',
-      icon: 'fa fa-history'
-    }]
-  },{
-    type: 'spacer'
-  },{
-    type: 'button',
-    id: 'hide',
-    caption: '',
-    icon: 'fa fa-close'
-  },{
-    type: 'button',
-    id: 'split',
-    caption: '',
-    icon: 'fa fa-minus-square-o'
-  }],
-  onClick: function(event) {
-    if(event.target == "hide") w2ui['layout'].toggle('top', window.instant);
-    if(event.target == "split") w2ui['layout'].toggle('preview', window.instant);
-    console.log(event);
-  }}
+        { type: 'main', style: pstyle, content: 'split',
+          title: 'Panel <button id="layout-preview-split" class="panel-button split-panel"></button>',
+          tabs: {
+            active: 'taba',
+            tabs: [{
+              id: 'taba',
+              caption: 'Files',
+              closable: 'false'
+            }, {
+              id: 'tabb',
+              caption: 'Options',
+              closable: 'false'
+            }, {
+              id: 'tabc',
+              caption: 'Custom tab',
+              closable: 'true'
+            }],
+            onClose: function(event) {
+              this.owner.click ('tab2');
+            },
+            onClick: function(event) {
+              w2ui.layout.html('main', 'Active tab: '+ event.target);
+              //this.owner.content('main', 'event' + event.target);
+            }
           },
-        { type: 'preview', size: '50%', resizable: true, hidden:true, style: pstyle, content: 'split' },
+          toolbar: {
+            items: [{
+              type: 'button',
+              id: 'save',
+              caption: 'Save',
+              icon: 'fa fa-save',
+              hint: 'Save file'
+            },{
+              type: 'break',
+              id: 'break1'
+            }, {
+              type: 'button',
+              id: 'undo',
+              caption: 'Undo',
+              icon: 'fa fa-reply',
+              hint: 'Undo last edit'
+            },{
+              type: 'button',
+              id: 'redo',
+              caption: 'Redo',
+              icon: 'fa fa-share',
+              hint: 'Redo last edit'
+            },{
+              type: 'break',
+              id: 'break3'
+            }, {
+              type: 'menu',
+              id: 'more',
+              caption: '',
+              icon: 'fa fa-bars',
+              arrow: false,
+              items: [{
+                text: 'Search',
+                icon: 'fa fa-search',
+              }, {
+                text: 'Replace',
+                value: 'Item Three',
+                icon: 'fa fa-edit'
+              }, {
+                text: 'Go to line',
+                icon: 'fa fa-level-down'
+              }, {
+                text: 'Clean up indentation',
+                value: 'Item Three',
+                icon: 'fa fa-magic'
+              },{
+                text: 'File history',
+                icon: 'fa fa-history'
+              }]
+            },{
+              type: 'spacer'
+            },{
+              type: 'button',
+              id: 'hide',
+              caption: '',
+              icon: 'fa fa-close'
+            },{
+              type: 'button',
+              id: 'split',
+              caption: '',
+              icon: 'fa fa-minus-square-o'
+            }],
+            onClick: function(event) {
+              if(event.target == "hide") w2ui['layout'].toggle('top', window.instant);
+              if(event.target == "split") w2ui['layout'].toggle('preview', window.instant);
+              console.log(event);
+            }}
+          },
+        { type: 'preview', size: '50%', resizable: true, hidden:true, style: pstyle, content: 'split', title: 'Sub-panel <button class="panel-button close-panel"></button>' },
         { type: 'right', size: 200, resizable: true,style: pstyle, content: 'split' },
         { type: 'bottom', size: 50, resizable: true, style: pstyle, content: 'bottom' }
     ]
@@ -130,6 +131,15 @@ $().w2layout({
 w2ui['layout'].content('left', w2ui['leftsplit']);
 w2ui['layout'].content('middle', w2ui['middlesplit']);
 w2ui['layout'].content('right', w2ui['rightsplit']);
+
+setTimeout(function () {
+  $(".panel-button").on("click", function (event) {
+    console.log(event);
+    var id = event.target.id.split("-");
+    w2ui[id[0]].toggle(id[1], window.instant);
+  });
+  
+},499);
 
 var emptyToolbar = {};
 
