@@ -5,7 +5,7 @@ html, body, #layout {
   margin: 0;
 }
 
-.w2ui-tabs {
+.w2ui-tabs, .w2ui-toolbar {
   overflow-x: auto !important;
 }
 
