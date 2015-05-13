@@ -6,7 +6,8 @@ $('#layout').w2layout({
         { type: 'top', size: 50, resizable: false, style: pstyle, content: 'top'},
         { type: 'left', size: 150, resizable: true, style: pstyle, content: 'split' },
         { type: 'main', style: pstyle, content: 'split',
-          title: 'Panel <button id="layout-preview-split" class="panel-button split-panel"></button>',
+          title: 'Panel <span id="layout-preview-split" class="panel-button split-panel"></span>' +
+          '<span id="layout-main-close" class="panel-button close-panel"></span>',
           tabs: {
             active: 'taba',
             tabs: [{
@@ -26,8 +27,8 @@ $('#layout').w2layout({
               this.owner.click ('tab2');
             },
             onClick: function(event) {
-              w2ui.layout.html('main', 'Active tab: '+ event.target);
-              //this.owner.content('main', 'event' + event.target);
+              //w2ui.layout.html('main', 'Active tab: '+ event.target);
+              this.owner.content('main', 'event' + event.target);
             }
           },
           toolbar: {
@@ -98,7 +99,100 @@ $('#layout').w2layout({
               console.log(event);
             }}
           },
-        { type: 'preview', size: '50%', resizable: true, hidden:true, style: pstyle, content: 'split', title: 'Sub-panel <button class="panel-button close-panel"></button>' },
+        { type: 'preview', size: '50%', resizable: true, hidden:true, style: pstyle, content: 'split',
+          title: 'Sub-panel <span id="layout-preview-close" class="panel-button close-panel"></span>',
+          tabs: {
+            active: 'tab1',
+            tabs: [{
+              id: 'tab1',
+              caption: 'tab1',
+              closable: 'false'
+            }, {
+              id: 'tab2',
+              caption: 'tab2',
+              closable: 'false'
+            }, {
+              id: 'tab3',
+              caption: 'tab3',
+              closable: 'true'
+            }],
+            onClose: function(event) {
+              this.owner.click ('tab2');
+            },
+            onClick: function(event) {
+              //w2ui.layout.html('main', 'Active tab: '+ event.target);
+              this.owner.content('preview', 'event' + event.target);
+              w2ui.layout.resizeh();
+            }
+          },
+          toolbar: {
+            items: [{
+              type: 'button',
+              id: 'save',
+              caption: 'Save',
+              icon: 'fa fa-save',
+              hint: 'Save file'
+            },{
+              type: 'break',
+              id: 'break1'
+            }, {
+              type: 'button',
+              id: 'undo',
+              caption: 'Undo',
+              icon: 'fa fa-reply',
+              hint: 'Undo last edit'
+            },{
+              type: 'button',
+              id: 'redo',
+              caption: 'Redo',
+              icon: 'fa fa-share',
+              hint: 'Redo last edit'
+            },{
+              type: 'break',
+              id: 'break3'
+            }, {
+              type: 'menu',
+              id: 'more',
+              caption: '',
+              icon: 'fa fa-bars',
+              arrow: false,
+              items: [{
+                text: 'Search',
+                icon: 'fa fa-search',
+              }, {
+                text: 'Replace',
+                value: 'Item Three',
+                icon: 'fa fa-edit'
+              }, {
+                text: 'Go to line',
+                icon: 'fa fa-level-down'
+              }, {
+                text: 'Clean up indentation',
+                value: 'Item Three',
+                icon: 'fa fa-magic'
+              },{
+                text: 'File history',
+                icon: 'fa fa-history'
+              }]
+            },{
+              type: 'spacer'
+            },{
+              type: 'button',
+              id: 'hide',
+              caption: '',
+              icon: 'fa fa-close'
+            },{
+              type: 'button',
+              id: 'split',
+              caption: '',
+              icon: 'fa fa-minus-square-o'
+            }],
+            onClick: function(event) {
+              if(event.target == "hide") w2ui['layout'].toggle('top', window.instant);
+              if(event.target == "split") w2ui['layout'].toggle('preview', window.instant);
+              console.log(event);
+            }}
+          },
         { type: 'right', size: 200, resizable: true,style: pstyle, content: 'split' },
         { type: 'bottom', size: 50, resizable: true, style: pstyle, content: 'bottom' }
     ]
@@ -136,7 +230,13 @@ setTimeout(function () {
   $(".panel-button").on("click", function (event) {
     console.log(event);
     var id = event.target.id.split("-");
-    w2ui[id[0]].toggle(id[1], window.instant);
+    if (id[2] == 'split') {
+      w2ui[id[0]].toggle(id[1], window.instant);
+      $(this).toggleClass("expanded-panel");
+    }
+    else {
+      w2ui[id[0]].sizeTo(id[1], 30);
+    }
   });
   
 },499);
