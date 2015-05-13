@@ -9,6 +9,17 @@ html, body, #layout {
   overflow-x: auto !important;
 }
 
+.w2ui-tab:not(.active) {
+  background: #ddd !important;
+}
+
+.w2ui-icon {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+}
+
 
 [draggable] {
   -ms-user-select: none;
