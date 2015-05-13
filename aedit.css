@@ -4,3 +4,7 @@ html, body, #layout {
   padding: 0;
   margin: 0;
 }
+
+.w2ui-tabs {
+  overflow-x: auto !important;
+}
