@@ -1,4 +1,3 @@
-$(function() {
   var pstyle = 'border: 1px solid #dfdfdf; padding: 5px;';
   $('#layout').w2layout({
     name: 'layout',
@@ -8,7 +7,7 @@ $(function() {
       size: 30,
       resizable: true,
       style: pstyle,
-      content: ''
+      content: '',
     }, {
       type: 'left',
       size: 150,
@@ -43,59 +42,55 @@ $(function() {
       },
       toolbar: {
         items: [{
-          type: 'check',
-          id: 'item1',
-          caption: 'Check',
-          img: 'icon-page',
-          checked: true
-        }, {
-          type: 'break',
-          id: 'break0'
-        }, {
-          type: 'menu',
-          id: 'item2',
-          caption: 'Drop Down',
-          img: 'icon-folder',
-          items: [{
-            text: 'Item 1',
-            icon: 'icon-page'
-          }, {
-            text: 'Item 2',
-            icon: 'icon-page'
-          }, {
-            text: 'Item 3',
-            value: 'Item Three',
-            icon: 'icon-page'
-          }]
-        }, {
+          type: 'button',
+          id: 'save',
+          caption: 'Save',
+          icon: 'fa fa-save',
+          hint: 'Save file'
+        },{
           type: 'break',
           id: 'break1'
-        }, {
-          type: 'radio',
-          id: 'item3',
-          group: '1',
-          caption: 'Radio 1',
-          img: 'icon-page',
-          hint: 'Hint for item 3',
-          checked: true
-        }, {
-          type: 'radio',
-          id: 'item4',
-          group: '1',
-          caption: 'Radio 2',
-          img: 'icon-page',
-          hint: 'Hint for item 4'
-        }, {
-          type: 'spacer'
-        }, {
+        },
+        {
           type: 'button',
-          id: 'item5',
-          caption: 'Item 5',
-          icon: 'w2ui-icon-check',
-          hint: 'Hint for item 5'
+          id: 'undo',
+          caption: 'Undo',
+          icon: 'fa fa-reply',
+          hint: 'Undo last edit'
+        },{
+          type: 'button',
+          id: 'redo',
+          caption: 'Redo',
+          icon: 'fa fa-share',
+          hint: 'Redo last edit'
+        },{
+          type: 'break',
+          id: 'break3'
+        }, {
+          type: 'menu',
+          id: 'more',
+          caption: 'More',
+          items: [{
+            text: 'Search',
+            icon: 'fa fa-search',
+          }, {
+            text: 'Replace',
+            value: 'Item Three',
+            icon: 'fa fa-edit'
+          }, {
+            text: 'Go to line',
+            icon: 'fa fa-level-down'
+          }, {
+            text: 'Clean up indentation',
+            value: 'Item Three',
+            icon: 'fa fa-magic'
+          },{
+            text: 'File history',
+            icon: 'fa fa-history'
+          }]
         }],
         onClick: function(event) {
-          alert (event.target);
+          //alert (event.target);
           //this.owner.content('main', event);
         }
       },
@@ -107,13 +102,10 @@ $(function() {
   $(".w2ui-tab").parent().attr("draggable", "true");
   
   $(".w2ui-tabs").on("dragstart", function (event) {
-    //this.style.opacity = '0.1';
     event.originalEvent.dataTransfer.setData('text', event.target.id);
   });
   
   $(".w2ui-panel-tabs td").on("dragover", function (event) {
-    this.style.opacity = '0.5';
-    console.log("dragover");
     event.preventDefault();
   });
   
@@ -122,7 +114,15 @@ $(function() {
     var data = event.originalEvent.dataTransfer.getData("text");
     console.log("dropping " + data + " into ", event.currentTarget.id);
     $("#" + data).insertBefore($('#'+event.currentTarget.id));
+    
+        for (var item in w2ui){
+            if (w2ui[item].resize){
+                w2ui[item].resize();
+            }
+        }
+        
+    // Update tab definitions
+    // redraw all tab panels
   });
   
   
-});
