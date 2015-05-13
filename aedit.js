@@ -8,6 +8,30 @@
       resizable: true,
       style: pstyle,
       content: '',
+      tabs: {
+        name: "tabcontainer1",
+        active: 'taba',
+        tabs: [{
+          id: 'taba',
+          caption: 'Tab a',
+          closable: 'true'
+        }, {
+          id: 'tabb',
+          caption: 'Tab b',
+          closable: 'true'
+        }, {
+          id: 'tabc',
+          caption: 'Tab c',
+          closable: 'true'
+        }],
+        onClose: function(event) {
+          this.owner.click ('tab2');
+        },
+        onClick: function(event) {
+          w2ui.layout.html('main', 'Active tab: '+ event.target);
+          //this.owner.content('main', 'event' + event.target);
+        }
+      }
     }, {
       type: 'left',
       size: 150,
@@ -20,6 +44,7 @@
       style: pstyle + 'border-top: 0px;',
       content: 'main',
       tabs: {
+        name: "tabcontainer2",
         active: 'tab1',
         tabs: [{
           id: 'tab1',
@@ -27,17 +52,19 @@
           closable: 'true'
         }, {
           id: 'tab2',
-          caption: 'Tab 2'
+          caption: 'Tab 2',
+          closable: 'true'
         }, {
           id: 'tab3',
-          caption: 'Tab 3'
-        }, ],
+          caption: 'Tab 3',
+          closable: 'true'
+        }],
         onClose: function(event) {
           this.owner.click ('tab2');
         },
         onClick: function(event) {
-          //w2ui.layout.html('main', 'Active tab: '+ event.target);
-          this.owner.content('main', 'event' + event.target);
+          w2ui.layout.html('main', 'Active tab: '+ event.target);
+          //this.owner.content('main', 'event' + event.target);
         }
       },
       toolbar: {
@@ -98,31 +125,46 @@
     }]
   });
   
-  
-  $(".w2ui-tab").parent().attr("draggable", "true");
-  
-  $(".w2ui-tabs").on("dragstart", function (event) {
-    event.originalEvent.dataTransfer.setData('text', event.target.id);
-  });
-  
-  $(".w2ui-panel-tabs td").on("dragover", function (event) {
-    event.preventDefault();
-  });
-  
-  $(".w2ui-panel-tabs td").on("drop", function (event) {
-    event.preventDefault();
-    var data = event.originalEvent.dataTransfer.getData("text");
-    console.log("dropping " + data + " into ", event.currentTarget.id);
-    $("#" + data).insertBefore($('#'+event.currentTarget.id));
+  function refreshTabs(disableDrag) {
     
-        for (var item in w2ui){
-            if (w2ui[item].resize){
-                w2ui[item].resize();
-            }
-        }
+    var targetSelector = ".w2ui-tabs";
+    var tabSelector = ".w2ui-panel-tabs td";
+    
+    // Clear any existing bindings
+    $(targetSelector).off("dragstart");
+    $(tabSelector).off("dragover").off("drop");
+    
+    // Update all tab strips
+    w2ui['layout'].refresh();
+    
+    // Enable dragging
+    if (!disableDrag) {
+      //alert ("rebinding");
+      $(".w2ui-tab").parent().attr("draggable", "true");
+      $(".w2ui-tabs").on("dragstart", function (event) {
+        event.originalEvent.dataTransfer.setData('text', event.target.id);
+      });
+      $(".w2ui-panel-tabs td").on("dragover", function (event) {
+        event.preventDefault();
+      });
+      $(".w2ui-panel-tabs td").on("drop", function (event) {
+        event.preventDefault();
+        console.log(event);
+        var id = event.originalEvent.dataTransfer.getData("text");
+        var caption = $("#" + id).text();
+        var oldContainer = 'tabs';//$("#" + id).parent().attr(name);
+        var newContainer = 'tabs';//$("#" + event.currentTarget.id).parent().attr(name);
         
-    // Update tab definitions
-    // redraw all tab panels
-  });
+        w2ui[oldContainer].remove(id);
+        w2ui[newName].add({id: id, caption: caption});
+        //$("#" + data).insertBefore($('#'+event.currentTarget.id));
+        // Refresh tab widgets!
+        refreshTabs();
+      });
+    }
+  }
+  
+  refreshTabs();
+  
   
   
