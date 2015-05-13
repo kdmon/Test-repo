@@ -33,7 +33,9 @@ $(function() {
           id: 'tab3',
           caption: 'Tab 3'
         }, ],
-        onClose: function(event) {},
+        onClose: function(event) {
+          this.owner.click ('tab2');
+        },
         onClick: function(event) {
           //w2ui.layout.html('main', 'Active tab: '+ event.target);
           this.owner.content('main', 'event' + event.target);
@@ -93,10 +95,33 @@ $(function() {
           hint: 'Hint for item 5'
         }],
         onClick: function(event) {
-          this.owner.content('main', event);
+          alert (event.target);
+          //this.owner.content('main', event);
         }
       },
       title: 'Editor panel'
     }]
   });
+  
+  
+  $(".w2ui-tab").parent().attr("draggable", "true");
+  
+  $(".w2ui-tabs").parent().on("drag", function (event) {
+    console.log("drag");
+    event.dataTransfer.setData("text", event.target.id);
+  });
+  
+  $(".w2ui-panel-tabs").on("dragover", function (event) {
+    console.log("dragover");
+    event.preventDefault();
+  });
+  
+  $(".w2ui-panel-tabs").on("drop", function (event) {
+    console.log("drop"); 
+    event.preventDefault();
+    var data = event.dataTransfer.getData("text");
+    event.target.appendChild(document.getElementById(data));
+  });
+  
+  
 });
