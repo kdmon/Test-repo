@@ -106,21 +106,22 @@ $(function() {
   
   $(".w2ui-tab").parent().attr("draggable", "true");
   
-  $(".w2ui-tabs").parent().on("drag", function (event) {
-    console.log("drag");
-    event.dataTransfer.setData("text", event.target.id);
+  $(".w2ui-tabs").on("dragstart", function (event) {
+    //this.style.opacity = '0.1';
+    event.originalEvent.dataTransfer.setData('text', event.target.id);
   });
   
-  $(".w2ui-panel-tabs").on("dragover", function (event) {
+  $(".w2ui-panel-tabs td").on("dragover", function (event) {
+    this.style.opacity = '0.5';
     console.log("dragover");
     event.preventDefault();
   });
   
-  $(".w2ui-panel-tabs").on("drop", function (event) {
-    console.log("drop"); 
+  $(".w2ui-panel-tabs td").on("drop", function (event) {
     event.preventDefault();
-    var data = event.dataTransfer.getData("text");
-    event.target.appendChild(document.getElementById(data));
+    var data = event.originalEvent.dataTransfer.getData("text");
+    console.log("dropping " + data + " into ", event.currentTarget.id);
+    $("#" + data).insertBefore($('#'+event.currentTarget.id));
   });
   
   
