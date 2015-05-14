@@ -9,6 +9,7 @@ $('#layout').w2layout({
           title: 'Panel <span id="layout-preview-split" class="panel-button split-panel"></span>' +
           '<span id="layout-main-close" class="panel-button close-panel"></span>',
           tabs: {
+            name: "tabs",
             active: 'taba',
             tabs: [{
               id: 'taba',
@@ -122,7 +123,7 @@ $('#layout').w2layout({
             onClick: function(event) {
               //w2ui.layout.html('main', 'Active tab: '+ event.target);
               this.owner.content('preview', 'event' + event.target);
-              w2ui.layout.resizeh();
+              w2ui.layout.resize();
             }
           },
           toolbar: {
@@ -201,24 +202,24 @@ $('#layout').w2layout({
 $().w2layout({
     name: 'leftsplit',
     panels: [
-        { type: 'main', resizable: true, style: pstyle, content: 'main' },
-        { type: 'display', resizable: true, hidden: true, style: pstyle, content: 'display' }
+        { type: 'main', resizable: true, style: pstyle, content: 'left main' },
+        { type: 'preview', resizable: true, hidden: false, style: pstyle, content: 'left subpanel' }
     ]
 });
 
 $().w2layout({
     name: 'middlesplit',
     panels: [
-        { type: 'main',  resizable: true, style: pstyle, content: 'main'},
-        { type: 'display', resizable: true, hidden: true, style: pstyle, content: 'display' }
+        { type: 'main',  resizable: true, style: pstyle, content: 'middle-main'},
+        { type: 'preview', resizable: true, hidden: false, style: pstyle, content: 'middle subpanel' }
     ]
 });
 
 $().w2layout({
     name: 'rightsplit',
     panels: [
-        { type: 'main', resizable: true, style: pstyle, content: 'top' },
-        { type: 'display', resizable: true, hidden: true, style: pstyle, content: 'bottom' }
+        { type: 'main', resizable: true, style: pstyle, content: 'right-main' },
+        { type: 'preview', resizable: true, hidden: false, style: pstyle, content: 'right subpanel' }
     ]
 });
 
@@ -240,75 +241,6 @@ setTimeout(function () {
   });
   
 },499);
-
-var emptyToolbar = {};
-
-//w2ui['leftsplit.left_toolbar'] = ;
-
-var editorToolbar = {
-  items: [{
-    type: 'button',
-    id: 'save',
-    caption: 'Save',
-    icon: 'fa fa-save',
-    hint: 'Save file'
-  },{
-    type: 'break',
-    id: 'break1'
-  }, {
-    type: 'button',
-    id: 'undo',
-    caption: 'Undo',
-    icon: 'fa fa-reply',
-    hint: 'Undo last edit'
-  },{
-    type: 'button',
-    id: 'redo',
-    caption: 'Redo',
-    icon: 'fa fa-share',
-    hint: 'Redo last edit'
-  },{
-    type: 'break',
-    id: 'break3'
-  }, {
-    type: 'menu',
-    id: 'more',
-    caption: 'More',
-    items: [{
-      text: 'Search',
-      icon: 'fa fa-search',
-    }, {
-      text: 'Replace',
-      value: 'Item Three',
-      icon: 'fa fa-edit'
-    }, {
-      text: 'Go to line',
-      icon: 'fa fa-level-down'
-    }, {
-      text: 'Clean up indentation',
-      value: 'Item Three',
-      icon: 'fa fa-magic'
-    },{
-      text: 'File history',
-      icon: 'fa fa-history'
-    }]
-  },{
-    type: 'spacer'
-  },{
-    type: 'button',
-    id: 'hide',
-    caption: 'Hide',
-    icon: 'fa fa-close'
-  },{
-    type: 'button',
-    id: 'split',
-    caption: 'Split',
-    icon: 'fa fa-minus-square-o'
-  }],
-  onClick: function(event) {
-    console.log(event);
-  }
-};
 
 
   function refreshTabs(disableDrag) {
