@@ -1,20 +1,21 @@
 html, body, #layout {
-  height:100%;
+  height: 100%;
   width: 100%;
   padding: 0;
   margin: 0;
+  background: black;
 }
 
 .panel-button {
   margin-left: 10px;
-  position:relative;
+  position: relative;
   width: 20px;
   height: 20px;
   float: right;
 }
   
 .panel-button:before {
-  position:absolute;
+  position: absolute;
   font-family: FontAwesome;
   content: "\f147";
   font-size: 1.25em;
