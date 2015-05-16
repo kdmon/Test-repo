@@ -281,11 +281,13 @@ setTimeout(function () {
       $(".w2ui-tab").parent().attr("draggable", "true");
       $(".w2ui-tabs").on("dragstart", function (event) {
         event.originalEvent.dataTransfer.setData('text', event.target.id);
+        $(".w2ui-panel-tabs table").css({"background": "#afa"});
       });
       $(".w2ui-panel-tabs td").on("dragover", function (event) {
         event.preventDefault();
       });
       $(".w2ui-panel-tabs td").on("drop", function (event) {
+        $(".w2ui-panel-tabs table").css({"background": "#aaa"});
         event.preventDefault();
 
         var origin = event.originalEvent.dataTransfer.getData("text").split("_");
