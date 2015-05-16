@@ -277,29 +277,38 @@ setTimeout(function () {
     
     // Enable dragging
     if (!disableDrag) {
-      //alert ("rebinding");
       $(".w2ui-tab").parent().attr("draggable", "true");
+      
       $(".w2ui-tabs").on("dragstart", function (event) {
         event.originalEvent.dataTransfer.setData('text', event.target.id);
         $(".w2ui-panel-tabs table").css({"background": "#afa"});
       });
+      $(".w2ui-tabs").on("dragend", function (event) {
+        $(".w2ui-panel-tabs table").css({"background": "#aaa"});
+      });
+      
       $(".w2ui-panel-tabs td").on("dragover", function (event) {
         event.preventDefault();
       });
+      
       $(".w2ui-panel-tabs td").on("drop", function (event) {
         $(".w2ui-panel-tabs table").css({"background": "#aaa"});
         event.preventDefault();
-
-        var origin = event.originalEvent.dataTransfer.getData("text").split("_");
-        var originalCaption = $("#" + event.originalEvent.dataTransfer.getData("text")).text();
+        
+        var originalId = event.originalEvent.dataTransfer.getData("text");
+        var origin = originalId.split("_");
+        var originalCaption = $("#" + originalId).text();
         var originalLayout = origin[1];
         var originalPane = origin[2];
         var originalTab = origin[5];
-
-        var target = event.currentTarget.id.split("_");
+        
+        var targetId = event.currentTarget.id;
+        var target = targetId.split("_");
         var targetLayout = target[1];
         var targetPane = target[2];
         var targetTab = target[5];
+        
+        if (originalId == targetId) return; // do nothing if dropped on itself.
         
         w2ui[originalLayout].get(originalPane).tabs.remove(originalTab);
         if (targetTab) w2ui[targetLayout].get(targetPane).tabs.insert(targetTab, {id: originalTab, caption: originalCaption, closable: 'true'});
