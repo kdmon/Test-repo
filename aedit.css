@@ -40,6 +40,12 @@ html, body, #layout {
 .w2ui-tabs, .w2ui-toolbar {
   overflow-x: auto !important;
 }
+.w2ui-panel-tabs {
+  background: #aaa !important;
+}
+.w2ui-tabs table {
+  height: 25px;
+}
 
 .w2ui-tab:not(.active) {
   background: #ddd !important;
