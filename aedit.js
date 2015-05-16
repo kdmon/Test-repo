@@ -9,6 +9,12 @@ $('#layout').w2layout({
           title: 'Panel <span id="layout-preview-split" class="panel-button split-panel"></span>' +
           '<span id="layout-main-close" class="panel-button close-panel"></span>',
           tabs: {
+            active: 'taba',
+            tabs: [{
+              id: 'taba',
+              caption: 'tab a',
+              closable: 'true'
+            }],
             onClose: function(event) {
               //this.owner.click ('tab2');
             },
@@ -22,7 +28,6 @@ $('#layout').w2layout({
         { type: 'preview', size: '50%', resizable: true, hidden:true, style: pstyle, content: 'split',
           title: 'Sub-panel <span id="layout-preview-close" class="panel-button close-panel"></span>',
           tabs: {
-            name: 'tabs2',
             active: 'tab1',
             tabs: [{
               id: 'tab1',
@@ -38,7 +43,7 @@ $('#layout').w2layout({
               closable: 'true'
             }],
             onClose: function(event) {
-              this.owner.click ('tab2');
+             // this.owner.click ('tab2');
             },
             onClick: function(event) {
               //w2ui.layout.html('main', 'Active tab: '+ event.target);
@@ -114,7 +119,22 @@ $('#layout').w2layout({
               console.log(event);
             }}
           },
-        { type: 'right', size: 100, resizable: true,style: pstyle, content: 'split' },
+        { type: 'right', size: 100, resizable: true,style: pstyle, content: 'split',
+        tabs: {
+            active: 'tabx',
+            tabs: [{
+              id: 'tabx',
+              caption: 'tab x',
+              closable: 'true'
+            }],
+            onClose: function(event) {
+              //this.owner.click ('tab2');
+            },
+            onClick: function(event) {
+              //w2ui.layout.html('main', 'Active tab: '+ event.target);
+              this.owner.content('right', 'event' + event.target);
+            }
+          }, },
         { type: 'bottom', size: 50, resizable: true, style: pstyle, content: 'bottom' }
     ]
 });
@@ -219,8 +239,6 @@ $().w2toolbar({
   }
 });
 
-setTimeout(function () {
-  
 //1. You can use w2ui object to find your tabs - w2ui[layout_name + '_' + panel + '_tabs'].add(...)
 //2. You can use panel to find your tabs - w2ui[layout_name].get(panel).tabs.add(...);
 //w2ui['layout'].get('main').tabs.add(w2ui['editortabs']);
@@ -228,6 +246,8 @@ w2ui['layout'].content('left', w2ui['leftsplit']);
 w2ui['layout'].content('middle', w2ui['middlesplit']);
 w2ui['layout'].content('right', w2ui['rightsplit']);
 
+setTimeout(function () {
+  
   $(".panel-button").on("click", function (event) {
     console.log(event);
     var id = event.target.id.split("-");
@@ -240,7 +260,7 @@ w2ui['layout'].content('right', w2ui['rightsplit']);
     }
   });
   
-},499);
+}, 50);
 
 
   function refreshTabs(disableDrag) {
@@ -253,7 +273,7 @@ w2ui['layout'].content('right', w2ui['rightsplit']);
     $(tabSelector).off("dragover").off("drop");
     
     // Update all tab strips
-    w2ui['layout'].refresh();
+    //w2ui['layout'].refresh();
     
     // Enable dragging
     if (!disableDrag) {
@@ -280,8 +300,10 @@ w2ui['layout'].content('right', w2ui['rightsplit']);
         var targetTab = target[5];
         
         w2ui[originalLayout].get(originalPane).tabs.remove(originalTab);
-        w2ui[targetLayout].get(targetPane).tabs.insert(targetTab, {id: originalTab, caption: originalCaption, closable: 'true'});
+        if (targetTab) w2ui[targetLayout].get(targetPane).tabs.insert(targetTab, {id: originalTab, caption: originalCaption, closable: 'true'});
+        else w2ui[targetLayout].get(targetPane).tabs.add({id: originalTab, caption: originalCaption, closable: 'true'});
         refreshTabs();
+        //w2ui[originalLayout].get(originalPane).tabs.click(originalTab);
         w2ui[targetLayout].get(targetPane).tabs.click(originalTab);
       });
     }
