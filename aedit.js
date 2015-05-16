@@ -22,6 +22,7 @@ $('#layout').w2layout({
         { type: 'preview', size: '50%', resizable: true, hidden:true, style: pstyle, content: 'split',
           title: 'Sub-panel <span id="layout-preview-close" class="panel-button close-panel"></span>',
           tabs: {
+            name: 'tabs2',
             active: 'tab1',
             tabs: [{
               id: 'tab1',
@@ -266,18 +267,22 @@ w2ui['layout'].content('right', w2ui['rightsplit']);
       });
       $(".w2ui-panel-tabs td").on("drop", function (event) {
         event.preventDefault();
+
+        var origin = event.originalEvent.dataTransfer.getData("text").split("_");
+        var originalCaption = $("#" + event.originalEvent.dataTransfer.getData("text")).text();
+        var originalLayout = origin[1];
+        var originalPane = origin[2];
+        var originalTab = origin[5];
+
         var target = event.currentTarget.id.split("_");
-        console.log(target);
-        var id = event.originalEvent.dataTransfer.getData("text");
-        var caption = $("#" + id).text();
-        var oldContainer = target[1]; // parent
-        var newContainer = target[1];
+        var targetLayout = target[1];
+        var targetPane = target[2];
+        var targetTab = target[5];
         
-        w2ui['tabs1'].remove(id);
-        w2ui[newName].add({id: id, caption: caption});
-        //$("#" + data).insertBefore($('#'+event.currentTarget.id));
-        // Refresh tab widgets!
+        w2ui[originalLayout].get(originalPane).tabs.remove(originalTab);
+        w2ui[targetLayout].get(targetPane).tabs.insert(targetTab, {id: originalTab, caption: originalCaption, closable: 'true'});
         refreshTabs();
+        w2ui[targetLayout].get(targetPane).tabs.click(originalTab);
       });
     }
   }
