@@ -1,12 +1,12 @@
 /* SETUP PANELS */
 
-var pstyle = '';
+var pstyle = 'background: #eee; border: none; padding: 0; margin:0;';
 $('#layout').w2layout({
   name: 'layout',
   panels: [
     {
     type: 'top',
-    size: 40,
+    size: 38,
     toolbar: {
       items: [
       {
@@ -47,6 +47,8 @@ $('#layout').w2layout({
     content: 'split'
   }]
 });
+
+pstyle = 'background: white;';
 $().w2layout({
   name: 'leftsplit',
   panels: [
@@ -445,3 +447,12 @@ function tabClose(obj, event) {
   console.log(event);
 }
 
+
+var resizeTimer = setTimeout(function(){},50);
+
+$(window).on("resize", function () {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(function(){
+    w2ui.layout.resize();
+  },50);
+})
