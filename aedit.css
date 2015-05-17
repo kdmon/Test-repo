@@ -3,37 +3,7 @@ html, body, #layout {
   width: 100%;
   padding: 0;
   margin: 0;
-  background: black;
-}
-
-.panel-button {
-  margin-left: 10px;
-  position: relative;
-  width: 20px;
-  height: 20px;
-  float: right;
-}
-  
-.panel-button:before {
-  position: absolute;
-  font-family: FontAwesome;
-  content: "\f147";
-  font-size: 1.25em;
-  color: #444;
-  top: 0;
-  left: 0;
-}
-
-.close-panel:before {
-  content: "\f066";
-}
-
-.split-panel:before {
-  content: "\f196";
-}
-
-.expanded-panel:before {
-  content: "\f147";
+  background: #fff;
 }
 
 
@@ -41,7 +11,7 @@ html, body, #layout {
   overflow-x: auto !important;
 }
 .w2ui-panel-tabs {
-  background: #aaa !important;
+  background: #eee !important;
 }
 .w2ui-tabs table {
   height: 25px;
@@ -51,6 +21,46 @@ html, body, #layout {
   background: #ddd !important;
 }
 
+#layout_layout_panel_left .w2ui-panel,
+#layout_layout_panel_main .w2ui-panel,
+#layout_layout_panel_right .w2ui-panel
+{
+  border: 1px solid black;
+  background: red;
+}
+
+#layout_leftsplit_resizer_preview, 
+#layout_mainsplit_resizer_preview, 
+#layout_rightsplit_resizer_preview {
+  height: 10px !important;
+  width: 50px !important;
+  left: 50% !important;
+  top: 100%;
+  margin-left:-25px;
+  margin-top:-5px;
+  opacity: 1;
+  background:
+    radial-gradient(#fff 30%, transparent 5%) 0 0,
+    radial-gradient(#fff 30%, transparent 5%) 0 5px;
+  background-color:#999;
+  background-size:5px 5px;
+}
+
+#layout_layout_resizer_left, 
+#layout_layout_resizer_right {
+  width: 10px !important;
+  top: 49% !important;
+  height: 50px !important;
+  margin-left: -5px;
+  opacity: 1;
+  background:
+    radial-gradient(#fff 30%, transparent 5%) 0 0,
+    radial-gradient(#fff 30%, transparent 5%) 0 5px;
+  background-color:#999;
+  background-size:5px 5px;
+}
+
+
 .w2ui-panel-title {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -59,6 +69,7 @@ html, body, #layout {
     -ms-user-select: none;
     user-select: none;;
 }
+
 .w2ui-icon {
   width: 20px;
   height: 20px;
