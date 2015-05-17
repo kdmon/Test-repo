@@ -10,6 +10,13 @@ $('#layout').w2layout({
     toolbar: {
       items: [
       {
+        id: 'leftcolumn',
+        type: 'check',
+        caption: '',
+        icon: 'fa fa-caret-square-o-left',
+        hint: 'Toggle left column'
+      },
+      {
         id: 'selectproject',
         type: 'html',
         html: '<div style="padding: 3px 10px;">Switch project: <select><option>A project</option><option>New project</option></select></div>'
@@ -20,7 +27,19 @@ $('#layout').w2layout({
         caption: 'Close project',
         icon: 'fa fa-close',
         hint: 'Close current project'
-      }],
+      },
+      {
+        id: 'topspace',
+        type: 'spacer'
+      },
+      {
+        id: 'rightcolumn',
+        type: 'button',
+        caption: '',
+        icon: 'fa fa-caret-square-o-right',
+        hint: 'Toggle right column'
+      },
+      ],
       onClick: function(event) {
         toolbarClick(this, event);
       }
@@ -31,6 +50,7 @@ $('#layout').w2layout({
   }, {
     type: 'left',
     size: '25%',
+    hidden: true,
     resizable: true,
     style: pstyle,
     content: 'split'
@@ -42,6 +62,7 @@ $('#layout').w2layout({
   }, {
     type: 'right',
     size: '25%',
+    hidden: true,
     resizable: true,
     style: pstyle,
     content: 'split'
@@ -319,6 +340,14 @@ function toolbarClick(obj, event) {
       w2ui[id[0]].toggle('preview', window.instant);
     break;
     
+    case 'leftcolumn':
+      w2ui.layout.toggle('left', window.instant);
+    break;
+    
+    case 'rightcolumn':
+      w2ui.layout.toggle('right', window.instant);
+    break;
+    
     case 'hide':
       w2ui[id[0]].toggle(id[1], window.instant);
     break;
@@ -455,4 +484,4 @@ $(window).on("resize", function () {
   resizeTimer = setTimeout(function(){
     w2ui.layout.resize();
   },50);
-})
+});
