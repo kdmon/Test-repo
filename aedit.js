@@ -1,81 +1,50 @@
+/* SETUP PANELS */
+
 var pstyle = '';
 $('#layout').w2layout({
   name: 'layout',
   panels: [
     {
     type: 'top',
-    size: 50,
+    size: 40,
     toolbar: {
-      items: [],
+      items: [
+      {
+        id: 'selectproject',
+        type: 'html',
+        html: '<div style="padding: 3px 10px;">Switch project: <select><option>A project</option><option>New project</option></select></div>'
+      },
+      {
+        id: 'closeproject',
+        type: 'button',
+        caption: 'Close project',
+        icon: 'fa fa-close',
+        hint: 'Close current project'
+      }],
       onClick: function(event) {
         toolbarClick(this, event);
       }
     },
     resizable: false,
     style: pstyle,
-    content: 'top'
+    content: ''
   }, {
     type: 'left',
-    size: '20%',
+    size: '25%',
     resizable: true,
     style: pstyle,
     content: 'split'
   }, {
     type: 'main',
-    style: pstyle,
-    content: 'main top',
-    //title: 'Panel <span id="layout-preview-split" class="panel-button split-panel"></span>' + '<span id="layout-main-close" class="panel-button close-panel"></span>',
-    tabs: {
-      tabs: [],
-      onClose: function(event) {
-        tabClose(this, event);
-      },
-      onClick: function(event) {
-        tabClick(this, event);
-      }
-    },
-    toolbar: {
-      items: [],
-      onClick: function(event) {
-        toolbarClick(this, event);
-      }
-    },
-  }, {
-    type: 'preview',
-    size: '50%',
-    resizable: true,
-    hidden: true,
-    style: pstyle,
-    content: 'split bottom',
-    title: 'Sub-panel <span id="layout-preview-close" class="panel-button close-panel"></span>',
-    tabs: {
-      tabs: [],
-      onClose: function(event) {
-        tabClose(this, event);
-      },
-      onClick: function(event) {
-        tabClick(this, event);
-      }
-    },
-    toolbar: {
-      items: [],
-      onClick: function(event) {
-        toolbarClick(this, event);
-      }
-    }
-  }, {
-    type: 'right',
-    size: '30%',
     resizable: true,
     style: pstyle,
     content: 'split'
   }, {
-    type: 'bottom',
-    size: 50,
-    hidden: true,
+    type: 'right',
+    size: '25%',
     resizable: true,
     style: pstyle,
-    content: 'bottom'
+    content: 'split'
   }]
 });
 $().w2layout({
@@ -108,6 +77,53 @@ $().w2layout({
     hidden: true,
     style: pstyle,
     content: 'left subpanel',
+    tabs: {
+      tabs: [],
+      onClose: function(event) {
+        tabClose(this, event);
+      },
+      onClick: function(event) {
+        tabClick(this, event);
+      }
+    },
+    toolbar: {
+      items: [],
+      onClick: function(event) {
+        toolbarClick(this, event);
+      }
+    }
+  }]
+});
+$().w2layout({
+  name: 'mainsplit',
+  panels: [
+    {
+    type: 'main',
+    resizable: true,
+    style: pstyle,
+    content: 'middle main',
+    tabs: {
+      tabs: [],
+      onClose: function(event) {
+        tabClose(this, event);
+      },
+      onClick: function(event) {
+        tabClick(this, event);
+      }
+    },
+    toolbar: {
+      items: [],
+      onClick: function(event) {
+        toolbarClick(this, event);
+      }
+    }
+  }, {
+    type: 'preview',
+    size: '50%',
+    resizable: true,
+    hidden: true,
+    style: pstyle,
+    content: 'middle subpanel',
     tabs: {
       tabs: [],
       onClose: function(event) {
@@ -172,29 +188,17 @@ $().w2layout({
     }
   }]
 });
-w2ui['layout'].content('left', w2ui['leftsplit']);
-w2ui['layout'].content('right', w2ui['rightsplit']);
-
-function tabClick(obj, event) {
-  console.log(obj);
-  obj.owner.content('main', 'event' + event.target);
-}
-
-function tabClose(obj, event) {
-  console.log(obj);
-  console.log(event);
-}
+w2ui.layout.content('left', w2ui.leftsplit);
+w2ui.layout.content('main', w2ui.mainsplit);
+w2ui.layout.content('right', w2ui.rightsplit);
 
 
-function toolbarClick(obj, event) {
-  console.log(obj);
-  obj.owner.content('main', 'event' + event.target);
-}
+/* SETUP TOOLBAR */
 
 var toolbars = {
-  all: ['save', 'savebreak', 'undo','redo','redobreak','more','pause','url','refresh','share'],
-  editor: ['save', 'undo','redo','more'],
+  editor: ['save', 'undo','redo','more','spacer','split','hide'],
   preview: ['pause','url','refresh','share'],
+  project: ['newproject','selectproject','closeproject'],
   chat: ['url','refresh','share'],
   prefs: ['url','refresh','share'],
   files: ['url','refresh','share'],
@@ -204,37 +208,37 @@ var toolbars = {
 
 var buttons = {
   save: {
-    type: 'button',
     id: 'save',
+    type: 'button',
     caption: 'Save',
     icon: 'fa fa-save',
     hint: 'Save file'
   },
   savebreak:{
-    type: 'break',
-    id: 'savebreak'
+    id: 'savebreak',
+    type: 'break'
   },
   undo: {
-    type: 'button',
     id: 'undo',
+    type: 'button',
     caption: 'Undo',
     icon: 'fa fa-reply',
     hint: 'Undo last edit'
   },
   redo: {
-    type: 'button',
     id: 'redo',
+    type: 'button',
     caption: 'Redo',
     icon: 'fa fa-share',
     hint: 'Redo last edit'
   },
   redobreak: {
-    type: 'break',
-    id: 'redobreak'
+    id: 'redobreak',
+    type: 'break'
   },
   menu: {
-    type: 'menu',
     id: 'more',
+    type: 'menu',
     caption: '',
     icon: 'fa fa-bars',
     arrow: false,
@@ -256,14 +260,93 @@ var buttons = {
       text: 'File history',
       icon: 'fa fa-history'
     }]
+  },
+  spacer: {
+    id: 'spacer',
+    type: 'spacer'
+  },
+  hide: {
+    id: 'hide',
+    type: 'button',
+    caption: '',
+    icon: 'fa fa-eye-slash',
+    hint: 'Hide view'
+  },
+  split: {
+    id: 'split',
+    type: 'button',
+    caption: '',
+    icon: 'fa fa-sort',
+    hint: 'Split view'
+  },
+  pause: {
+    id: 'pause',
+    type: 'button',
+    caption: '',
+    icon: 'fa fa-pause',
+    hint: 'Pause'
+  },
+  url: {
+    id: 'url',
+    type: 'html',
+    html: '<div style="padding: 3px 10px;">Input: <input size="10" style="' +
+          'padding: 3px; border-radius: 2px; border: 1px solid silver"/></div>'
+  },
+  refresh: {
+    id: 'refresh',
+    type: 'button',
+    caption: '',
+    icon: 'fa fa-reload',
+    hint: 'Force preview reload'
+  },
+  share: {
+    id: 'share',
+    type: 'button',
+    caption: '',
+    icon: 'fa fa-pause',
+    hint: 'Open preview externally'
   }
 };
 
-function initialiseToolbar(layout, panel, toolbar) {
+function toolbarClick(obj, event) {
 
+  var id = obj.name.split("_");
+  
+  switch (event.target) {
+    case 'split':
+      w2ui[id[0]].toggle('preview', window.instant);
+    break;
+    
+    case 'hide':
+      w2ui[id[0]].toggle(id[1], window.instant);
+    break;
+    
+    default:
+      obj.owner.content('main', 'event' + event.target);
+    break;
+  }
+}
+
+function switchToolbar(layout, panel, toolbar) {
+  
+  var tb = toolbars[toolbar];
+  var tbContainer = w2ui[layout].get([panel]).toolbar;
+  if (tb === undefined || tbContainer === undefined) return;
+  
+  // only show relevant buttons
   for (var button in buttons) {
     var item = buttons[button];
-    console.log(item);
+    if (tb.indexOf(item.id) > -1) tbContainer.show(item.id);
+    else tbContainer.hide(item.id);
+  }
+  
+}
+
+function initialiseToolbar(layout, panel, toolbar) {
+
+  // First add all buttons to toolbar
+  for (var button in buttons) {
+    var item = buttons[button];
     
     w2ui[layout].get([panel]).toolbar.add({
       id: item.id,
@@ -274,23 +357,22 @@ function initialiseToolbar(layout, panel, toolbar) {
       items: item.items
     });
   }
+  
+  // Then toggle which buttons to show
+  switchToolbar (layout, panel, toolbar);
 }
 
-initialiseToolbar ('layout','main','editor');
+initialiseToolbar ('leftsplit','main','editor');
+initialiseToolbar ('leftsplit','preview','editor');
+
+initialiseToolbar ('mainsplit','main','editor');
+initialiseToolbar ('mainsplit','preview','editor');
+
+initialiseToolbar ('rightsplit','main','editor');
+initialiseToolbar ('rightsplit','preview','editor');
 
 
-setTimeout(function() {
-  $(".panel-button").on("click", function(event) {
-    console.log(event);
-    var id = event.target.id.split("-");
-    if (id[2] == 'split') {
-      w2ui[id[0]].toggle(id[1], window.instant);
-      $(this).toggleClass("expanded-panel");
-    } else {
-      w2ui[id[0]].sizeTo(id[1], 30);
-    }
-  });
-}, 50);
+/* SETUP TABS */
 
 function refreshTabs(disableDrag) {
   var targetSelector = ".w2ui-tabs";
@@ -353,146 +435,13 @@ function refreshTabs(disableDrag) {
 }
 refreshTabs();
 
+function tabClick(obj, event) {
+  console.log(obj);
+  obj.owner.content('main', 'event' + event.target);
+}
 
+function tabClose(obj, event) {
+  console.log(obj);
+  console.log(event);
+}
 
-/*
-
-
-$().w2toolbar({
-  name: 'editortoolbar',
-  items: [
-  {
-    type: 'button',
-    id: 'save',
-    caption: 'Save',
-    icon: 'fa fa-save',
-    hint: 'Save file'
-  }, {
-    type: 'break',
-    id: 'break1'
-  }, {
-    type: 'button',
-    id: 'undo',
-    caption: 'Undo',
-    icon: 'fa fa-reply',
-    hint: 'Undo last edit'
-  }, {
-    type: 'button',
-    id: 'redo',
-    caption: 'Redo',
-    icon: 'fa fa-share',
-    hint: 'Redo last edit'
-  }, {
-    type: 'break',
-    id: 'break3'
-  }, {
-    type: 'menu',
-    id: 'more',
-    caption: '',
-    icon: 'fa fa-bars',
-    arrow: false,
-    items: [{
-      text: 'Search',
-      icon: 'fa fa-search',
-    }, {
-      text: 'Replace',
-      value: 'Item Three',
-      icon: 'fa fa-edit'
-    }, {
-      text: 'Go to line',
-      icon: 'fa fa-level-down'
-    }, {
-      text: 'Clean up indentation',
-      value: 'Item Three',
-      icon: 'fa fa-magic'
-    }, {
-      text: 'File history',
-      icon: 'fa fa-history'
-    }]
-  }, {
-    type: 'spacer'
-  }, {
-    type: 'button',
-    id: 'hide',
-    caption: '',
-    icon: 'fa fa-close'
-  }, {
-    type: 'button',
-    id: 'split',
-    caption: '',
-    icon: 'fa fa-minus-square-o'
-  }],
-  onClick: function(event) {
-    if (event.target == "hide") w2ui['layout'].toggle('top', window.instant);
-    if (event.target == "split") w2ui['layout'].toggle('preview', window.instant);
-    console.log(event);
-  }
-});
-
-toolbar: {
-  items: [{
-    type: 'button',
-    id: 'save',
-    caption: 'Save',
-    icon: 'fa fa-save',
-    hint: 'Save file'
-  }, {
-    type: 'break',
-    id: 'break1'
-  }, {
-    type: 'button',
-    id: 'undo',
-    caption: 'Undo',
-    icon: 'fa fa-reply',
-    hint: 'Undo last edit'
-  }, {
-    type: 'button',
-    id: 'redo',
-    caption: 'Redo',
-    icon: 'fa fa-share',
-    hint: 'Redo last edit'
-  }, {
-    type: 'break',
-    id: 'break3'
-  }, {
-    type: 'menu',
-    id: 'more',
-    caption: '',
-    icon: 'fa fa-bars',
-    arrow: false,
-    items: [{
-      text: 'Search',
-      icon: 'fa fa-search',
-    }, {
-      text: 'Replace',
-      value: 'Item Three',
-      icon: 'fa fa-edit'
-    }, {
-      text: 'Go to line',
-      icon: 'fa fa-level-down'
-    }, {
-      text: 'Clean up indentation',
-      value: 'Item Three',
-      icon: 'fa fa-magic'
-    }, {
-      text: 'File history',
-      icon: 'fa fa-history'
-    }]
-  }, {
-    type: 'button',
-    id: 'hide',
-    caption: '',
-    icon: 'fa fa-close'
-  }, {
-    type: 'button',
-    id: 'split',
-    caption: '',
-    icon: 'fa fa-minus-square-o'
-  }],
-  onClick: function(event) {
-    if (event.target == "hide") w2ui['layout'].toggle('top', window.instant);
-    if (event.target == "split") w2ui['layout'].toggle('preview', window.instant);
-    console.log(event);
-  };
-  */
-  
