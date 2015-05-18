@@ -118,7 +118,7 @@ $().w2layout({
   }]
 });
 $().w2layout({
-  name: 'mainsplit',
+  name: 'middlesplit',
   panels: [
     {
     type: 'main',
@@ -212,7 +212,7 @@ $().w2layout({
   }]
 });
 w2ui.layout.content('left', w2ui.leftsplit);
-w2ui.layout.content('main', w2ui.mainsplit);
+w2ui.layout.content('main', w2ui.middlesplit);
 w2ui.layout.content('right', w2ui.rightsplit);
 
 
@@ -389,8 +389,8 @@ function initialiseToolbar(layout, panel, toolbar) {
 initialiseToolbar ('leftsplit','main','editor');
 initialiseToolbar ('leftsplit','preview','editor');
 
-initialiseToolbar ('mainsplit','main','editor');
-initialiseToolbar ('mainsplit','preview','editor');
+initialiseToolbar ('middlesplit','main','editor');
+initialiseToolbar ('middlesplit','preview','editor');
 
 initialiseToolbar ('rightsplit','main','editor');
 initialiseToolbar ('rightsplit','preview','editor');
@@ -434,40 +434,38 @@ function refreshTabs(disableDrag) {
       var origin = originalId.split("_");
       var originalCaption = $("#" + originalId).text();
       var originalLayout = origin[1];
-      var originalPane = origin[2];
+      var originalPanel = origin[2];
       var originalTab = origin[5];
       var targetId = event.currentTarget.id;
       var target = targetId.split("_");
       var targetLayout = target[1];
-      var targetPane = target[2];
+      var targetPanel = target[2];
       var targetTab = target[5];
       if (originalId == targetId) return; // do nothing if dropped on itself.
-      w2ui[originalLayout].get(originalPane).tabs.remove(originalTab);
-      if (targetTab) w2ui[targetLayout].get(targetPane).tabs.insert(targetTab, {
+      w2ui[originalLayout].get(originalPanel).tabs.remove(originalTab);
+      console.log(originalTab);
+      tabList[originalTab].editorInstance = editorPanels.indexOf(targetLayout+targetPanel);
+      if (targetTab) w2ui[targetLayout].get(targetPanel).tabs.insert(targetTab, {
         id: originalTab,
         caption: originalCaption,
         closable: 'true'
       });
-      else w2ui[targetLayout].get(targetPane).tabs.add({
+      else w2ui[targetLayout].get(targetPanel).tabs.add({
         id: originalTab,
         caption: originalCaption,
         closable: 'true'
       });
       refreshTabs();
       //w2ui[originalLayout].get(originalPane).tabs.click(originalTab);
-      w2ui[targetLayout].get(targetPane).tabs.click(originalTab);
+      w2ui[targetLayout].get(targetPanel).tabs.click(originalTab);
     });
   }
 }
-refreshTabs();
 
 function tabClick(obj, event) {
-  console.log(this);
-  console.log(obj);
-  console.log(event.target);
-  //obj.owner.content('main', 'event' + event.target);
-  editors[2].setSession(event.target);
-  
+  var item = tabList[event.target];
+  editors[item.editorInstance].setSession(item.editSession);
+  editors[item.editorInstance].focus();
 }
 
 function tabClose(obj, event) {
@@ -486,8 +484,6 @@ $(window).on("resize", function () {
 
 /* SETUP EDITOR AND VIEWMODEL */
 
-w2ui.mainsplit.content('main', '<div id="editor">blah blah</div>');
-
 var editors = [];
 
 
@@ -496,8 +492,8 @@ setTimeout(function(){
   var editorPanels = [
     'layout_leftsplit_panel_main',
     'layout_leftsplit_panel_preview',
-    'layout_mainsplit_panel_main',
-    'layout_mainsplit_panel_preview',
+    'layout_middlesplit_panel_main',
+    'layout_middlesplit_panel_preview',
     'layout_rightsplit_panel_main',
     'layout_rightsplit_panel_preview'
   ];
@@ -506,17 +502,23 @@ setTimeout(function(){
   $(".w2ui-panel-content").each(function(){
     var panelId = $(this).parent().attr('id');
     if (editorPanels.indexOf(panelId) > -1) {
-      console.log(panelId);
       $(this).append('<div id="editor' + i + '" class="editor"></div>');
       editors[i] = ace.edit($(this).find(".editor")[0]);
       i++;
     }
   });
   
+  startDoc("document1", 'thisisjustatestdocument', 'leftsplit', 'main', false, 'test','red');
+  startDoc("document2", 'anothertestdocumentonly', 'leftsplit', 'preview', false, 'test','red');
   
-  startDoc("document1", 'thisisjustatestdocument', editors[2], false, 'test','red');
-  startDoc("document2", 'anothertestdocumentonly', editors[2], false, 'test','red');
-}, 500);
+  startDoc("document3", 'thisisjustatestdocument1', 'middlesplit', 'main', false, 'test','red');
+  startDoc("document4", 'anothertestdocumentonly1', 'middlesplit', 'preview', false, 'test','red');
+  
+  startDoc("document5", 'thisisjustatestdocument2', 'rightsplit', 'main', false, 'test','red');
+  startDoc("document6", 'anothertestdocumentonly2', 'rightsplit', 'preview', false, 'test','red');
+  
+  refreshTabs();
+}, 250);
 
 var Model = function() {
   var self = this;
@@ -598,19 +600,23 @@ setTimeout(function(){
 
 connection = new sharejs.Connection("http://it4se.com:8081/channel");
 
+var editorPanels = ['leftsplitmain', 'leftsplitpreview', 'middlesplitmain', 'middlesplitpreview', 'rightsplitmain', 'rightsplitpreview'];
 
-function startDoc (title, url, editorObj, preserveContent, username, color) {
+function startDoc (title, url, layout, panel, preserveContent, username, color) {
   
+  var editorInstance = editorPanels.indexOf(layout+panel);
+  var editorObj = editors[editorInstance];
   var editSession = ace.createEditSession('',  '');
   editorObj.setSession(editSession);
   
   tabList[title] = {
     id: title,
     caption: title,
-    editSession: editSession
+    editSession: editSession,
+    editorInstance: editorInstance
   };
   
-  w2ui.mainsplit.get('main').tabs.add({id: title, caption:title});
+  w2ui[layout].get(panel).tabs.add({id: title, caption:title});
   
   connection.open(url, 'text', function(error, doc) {
     doc.attach_ace(editorObj, preserveContent, username, color);
@@ -638,5 +644,5 @@ function startDoc (title, url, editorObj, preserveContent, username, color) {
       }
     });
   });
-};
+}
 
