@@ -412,22 +412,16 @@ function refreshTabs(disableDrag) {
     $(".w2ui-tab").parent().attr("draggable", "true");
     $(".w2ui-tabs").on("dragstart", function(event) {
       event.originalEvent.dataTransfer.setData('text', event.target.id);
-      $(".w2ui-panel-tabs table").css({
-        "background": "#afa"
-      });
+      $(".w2ui-panel-tabs table").addClass('drop-highlight');
     });
     $(".w2ui-tabs").on("dragend", function(event) {
-      $(".w2ui-panel-tabs table").css({
-        "background": "#aaa"
-      });
+      $(".w2ui-panel-tabs table").removeClass('drop-highlight');
     });
     $(".w2ui-panel-tabs td").on("dragover", function(event) {
       event.preventDefault();
     });
     $(".w2ui-panel-tabs td").on("drop", function(event) {
-      $(".w2ui-panel-tabs table").css({
-        "background": "#aaa"
-      });
+      $(".w2ui-panel-tabs table").removeClass('drop-highlight');
       event.preventDefault();
       var originalId = event.originalEvent.dataTransfer.getData("text");
       var origin = originalId.split("_");
@@ -477,6 +471,10 @@ function tabClose(obj, event) {
 $(window).on("resize", updateLayout());
 w2ui.layout.onResize = updateLayout();
 
+// Prevent toolbars from stealing focus from editor
+$(".w2ui-toolbar").on('mousedown', function () {
+  event.preventDefault();
+});
 
 var resizeTimer = setTimeout(function(){},50);
 
