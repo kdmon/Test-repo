@@ -1,6 +1,6 @@
 /* SETUP PANELS */
 
-var pstyle = 'background: #eee; border: none; padding: 0; margin:0;';
+var pstyle = 'background: #eee;';
 $('#layout').w2layout({
   name: 'layout',
   panels: [
@@ -219,7 +219,7 @@ w2ui.layout.content('right', w2ui.rightsplit);
 /* SETUP TOOLBAR */
 
 var toolbars = {
-  editor: ['save', 'undo','redo','more','spacer','split','hide'],
+  editor: ['save', 'undo','redo','more','spacer','split'],
   preview: ['pause','url','refresh','share'],
   project: ['newproject','selectproject','closeproject'],
   chat: ['url','refresh','share'],
@@ -287,13 +287,6 @@ var buttons = {
   spacer: {
     id: 'spacer',
     type: 'spacer'
-  },
-  hide: {
-    id: 'hide',
-    type: 'button',
-    caption: '',
-    icon: 'fa fa-eye-slash',
-    hint: 'Hide view'
   },
   split: {
     id: 'split',
@@ -476,12 +469,120 @@ function tabClose(obj, event) {
   console.log(event);
 }
 
-
 var resizeTimer = setTimeout(function(){},50);
-
 $(window).on("resize", function () {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(function(){
     w2ui.layout.resize();
   },50);
 });
+
+
+/* SETUP EDITOR AND VIEWMODEL */
+
+w2ui.mainsplit.content('main', '<div id="editor">blah blah</div>');
+
+var editors = [];
+
+
+setTimeout(function(){
+    
+  var editorPanels = [
+    'layout_leftsplit_panel_main',
+    'layout_leftsplit_panel_preview',
+    'layout_mainsplit_panel_main',
+    'layout_mainsplit_panel_preview',
+    'layout_rightsplit_panel_main',
+    'layout_rightsplit_panel_preview'
+  ];
+  var i = 0;
+  
+  $(".w2ui-panel-content").each(function(){
+    var panelId = $(this).parent().attr('id');
+    if (editorPanels.indexOf(panelId) > -1) {
+      console.log(panelId);
+      $(this).append('<div id="editor' + i + '" class="editor"></div>');
+      editors[i] = ace.edit($(this).find(".editor")[0]);
+      i++;
+    }
+  });
+  
+}, 50);
+
+var Model = function() {
+  var self = this;
+  self.activeProject = ko.observable(0);
+  self.projects = ko.observableArray();
+  // Return documents associated with the active project
+  self.projectDocuments = ko.computed(function () {
+    var docs = self.projects[self.activeProject];
+    if (docs) return docs.documents;
+    else return;
+  });
+  self.currentProject = ko.computed(function () {
+    return self.projects()[self.activeProject()];
+  });
+  // Return list of projects
+  self.projectList = ko.computed(function () {
+    var list = [];
+    for (i=0;i<self.projects().length;i++) {
+      list.unshift(self.projects()[i].title);
+    }
+    return list;
+  });
+  // Explicitly passing in params not possible from dom binding
+  // Instead can be implicit if inside ko context, with, foreach etc.
+  self.addProject = function() { self.projects.push(new Project("Untitled " + Math.random()));};
+  self.closeProject = function(project) { self.projects.remove(project) };
+  self.selectProject = function(project) {self.activeProject(project)};
+  // Act on project change
+  self.projects.subscribe(function(newValue) {
+    console.log("Projects changed");
+  });
+};
+
+var Editor = function () {
+  var self = this;
+  self.document = ko.observable();
+};
+
+var Project = function(title, root) {
+  var self = this;
+  self.title = ko.observable(title || 'Untitled project');
+  self.root = ko.observable(root);
+  self.documents = ko.observableArray();
+  self.addDocument = function() {
+    var editSession = ace.createEditSession('',  '');
+    self.documents.push(new Document("Untitled", editSession));
+  };
+  self.closeDocument = function(doc) {
+    self.documents.remove(doc);
+  };
+  self.showDocument = function(doc) {
+    webAppEditor.setSession(doc.editSession);
+    webAppEditor.focus();
+  };
+  // Act on document change
+  self.documents.subscribe(function(newValue) {
+    if (self.documents().length>0){
+      $("#editor").show();
+      webAppEditor.setSession(self.documents()[self.documents().length-1].editSession);
+      webAppEditor.focus();
+    }
+    else $("#editor").hide();
+  });
+};
+
+var Document = function(title, editSession) {
+  var self = this;
+  self.title = ko.observable(title || 'zebra');
+  self.editSession = editSession;
+};
+
+var app = new Model();
+setTimeout(function(){
+  ko.applyBindings(app);
+},250);
+
+
+
