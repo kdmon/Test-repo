@@ -18,7 +18,7 @@ html, body, #layout {
   background: #eee !important;
 }
 .w2ui-tabs table {
-  height: 25px;
+  height: 26px;
 }
 
 .w2ui-tab:not(.active) {
@@ -30,7 +30,6 @@ html, body, #layout {
 #layout_layout_panel_right .w2ui-panel
 {
   border: 1px solid black;
-  background: red;
 }
 
 #layout_leftsplit_resizer_preview, 
