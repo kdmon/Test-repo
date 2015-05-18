@@ -398,6 +398,8 @@ initialiseToolbar ('rightsplit','preview','editor');
 
 /* SETUP TABS */
 
+var tabList = {};
+
 function refreshTabs(disableDrag) {
   var targetSelector = ".w2ui-tabs";
   var tabSelector = ".w2ui-panel-tabs td";
@@ -460,8 +462,12 @@ function refreshTabs(disableDrag) {
 refreshTabs();
 
 function tabClick(obj, event) {
+  console.log(this);
   console.log(obj);
-  obj.owner.content('main', 'event' + event.target);
+  console.log(event.target);
+  //obj.owner.content('main', 'event' + event.target);
+  editors[2].setSession(event.target);
+  
 }
 
 function tabClose(obj, event) {
@@ -507,28 +513,30 @@ setTimeout(function(){
     }
   });
   
-}, 50);
+  
+  startDoc("document1", 'thisisjustatestdocument', editors[2], false, 'test','red');
+  startDoc("document2", 'anothertestdocumentonly', editors[2], false, 'test','red');
+}, 500);
 
 var Model = function() {
   var self = this;
-  self.activeProject = ko.observable(0);
+  // Tracks opened projects
   self.projects = ko.observableArray();
-  // Return documents associated with the active project
-  self.projectDocuments = ko.computed(function () {
-    var docs = self.projects[self.activeProject];
-    if (docs) return docs.documents;
-    else return;
-  });
-  self.currentProject = ko.computed(function () {
-    return self.projects()[self.activeProject()];
-  });
-  // Return list of projects
+  // Tracks opened files/tabs
+  self.documentCounter = ko.observable(0);
+  // Return list of all projects
   self.projectList = ko.computed(function () {
     var list = [];
     for (i=0;i<self.projects().length;i++) {
       list.unshift(self.projects()[i].title);
     }
     return list;
+  });
+  // Track currently active project
+  self.activeProject = ko.observable(0);
+  // Return active project object
+  self.currentProject = ko.computed(function () {
+    return self.projects()[self.activeProject()];
   });
   // Explicitly passing in params not possible from dom binding
   // Instead can be implicit if inside ko context, with, foreach etc.
@@ -539,11 +547,6 @@ var Model = function() {
   self.projects.subscribe(function(newValue) {
     console.log("Projects changed");
   });
-};
-
-var Editor = function () {
-  var self = this;
-  self.document = ko.observable();
 };
 
 var Project = function(title, root) {
@@ -577,7 +580,15 @@ var Document = function(title, editSession) {
   var self = this;
   self.title = ko.observable(title || 'zebra');
   self.editSession = editSession;
+  
 };
+
+
+var Editor = function () {
+  var self = this;
+  self.document = ko.observable();
+};
+
 
 var app = new Model();
 setTimeout(function(){
@@ -585,4 +596,47 @@ setTimeout(function(){
 },250);
 
 
+connection = new sharejs.Connection("http://it4se.com:8081/channel");
+
+
+function startDoc (title, url, editorObj, preserveContent, username, color) {
+  
+  var editSession = ace.createEditSession('',  '');
+  editorObj.setSession(editSession);
+  
+  tabList[title] = {
+    id: title,
+    caption: title,
+    editSession: editSession
+  };
+  
+  w2ui.mainsplit.get('main').tabs.add({id: title, caption:title});
+  
+  connection.open(url, 'text', function(error, doc) {
+    doc.attach_ace(editorObj, preserveContent, username, color);
+    doc.shout({
+      action: "announce",
+      msg: username + ' opened document.'
+    });
+    doc.on('shout', function(data) {
+      switch (data.action) {
+        case "announce":
+          alert(data.msg);
+          break;
+        case "cursor":
+          cursors[data.user] = {
+            row: data.row,
+            column: data.column,
+            color: data.color
+          };
+          updateCursor(data.user, index);
+          break;
+        case "selection":
+          selections[data.user] = [data.row, data.column, data.row2, data.column2, data.color];
+          //updateSelections(data.user, index);
+        break;
+      }
+    });
+  });
+};
 
