@@ -6,7 +6,7 @@ $('#layout').w2layout({
   panels: [
     {
     type: 'top',
-    size: 36,
+    size: 50,
     toolbar: {
       items: [
       {
@@ -63,6 +63,13 @@ $('#layout').w2layout({
     type: 'right',
     size: '25%',
     hidden: true,
+    resizable: true,
+    style: pstyle,
+    content: ''
+  }, {
+    type: 'bottom',
+    size: '5',
+    hidden: false,
     resizable: true,
     style: pstyle,
     content: ''
@@ -447,6 +454,7 @@ function refreshTabs(disableDrag) {
         caption: originalCaption,
         closable: 'true'
       });
+      updateLayout();
       refreshTabs();
       //w2ui[originalLayout].get(originalPane).tabs.click(originalTab);
       w2ui[targetLayout].get(targetPanel).tabs.click(originalTab);
@@ -513,10 +521,10 @@ setTimeout(function(){
       $(this).append('<div id="editor' + i + '" class="editor"></div>');
       editors[i] = ace.edit($(this).find(".editor")[0]);
       editors[i].on('focus', function(event, obj) {
-        $(obj.container).css("border","5px solid #ffb");
+        $(obj.container).addClass('active-editor');
       });
       editors[i].on('blur', function(event, obj) {
-        $(obj.container).css("border","none");
+        $(obj.container).removeClass('active-editor');
       });
 
       i++;
@@ -533,7 +541,7 @@ setTimeout(function(){
   startDoc("document6", 'anothertestdocumentonly2', 'rightsplit', 'preview', false, 'test','red');
   
   refreshTabs();
-}, 2500);
+}, 25);
 
 var Model = function() {
   var self = this;
