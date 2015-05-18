@@ -6,7 +6,7 @@ $('#layout').w2layout({
   panels: [
     {
     type: 'top',
-    size: 38,
+    size: 36,
     toolbar: {
       items: [
       {
@@ -34,7 +34,7 @@ $('#layout').w2layout({
       },
       {
         id: 'rightcolumn',
-        type: 'button',
+        type: 'check',
         caption: '',
         icon: 'fa fa-caret-square-o-right',
         hint: 'Toggle right column'
@@ -53,19 +53,19 @@ $('#layout').w2layout({
     hidden: true,
     resizable: true,
     style: pstyle,
-    content: 'split'
+    content: ''
   }, {
     type: 'main',
     resizable: true,
     style: pstyle,
-    content: 'split'
+    content: ''
   }, {
     type: 'right',
     size: '25%',
     hidden: true,
     resizable: true,
     style: pstyle,
-    content: 'split'
+    content: ''
   }]
 });
 
@@ -77,7 +77,7 @@ $().w2layout({
     type: 'main',
     resizable: true,
     style: pstyle,
-    content: 'left main',
+    content: '',
     tabs: {
       tabs: [],
       onClose: function(event) {
@@ -99,7 +99,7 @@ $().w2layout({
     resizable: true,
     hidden: true,
     style: pstyle,
-    content: 'left subpanel',
+    content: '',
     tabs: {
       tabs: [],
       onClose: function(event) {
@@ -124,7 +124,7 @@ $().w2layout({
     type: 'main',
     resizable: true,
     style: pstyle,
-    content: 'middle main',
+    content: '',
     tabs: {
       tabs: [],
       onClose: function(event) {
@@ -146,7 +146,7 @@ $().w2layout({
     resizable: true,
     hidden: true,
     style: pstyle,
-    content: 'middle subpanel',
+    content: '',
     tabs: {
       tabs: [],
       onClose: function(event) {
@@ -171,7 +171,7 @@ $().w2layout({
     type: 'main',
     resizable: true,
     style: pstyle,
-    content: 'right-main',
+    content: '',
     tabs: {
       tabs: [],
       onClose: function(event) {
@@ -193,7 +193,7 @@ $().w2layout({
     hidden: true,
     size: '50%',
     style: pstyle,
-    content: 'right subpanel',
+    content: '',
     tabs: {
       tabs: [],
       onClose: function(event) {
@@ -406,8 +406,7 @@ function refreshTabs(disableDrag) {
   // Clear any existing bindings
   $(targetSelector).off("dragstart");
   $(tabSelector).off("dragover").off("drop");
-  // Update all tab strips
-  //w2ui['layout'].refresh();
+  
   // Enable dragging
   if (!disableDrag) {
     $(".w2ui-tab").parent().attr("draggable", "true");
@@ -472,13 +471,25 @@ function tabClose(obj, event) {
   console.log(event);
 }
 
+
+/* Resize events */
+
+$(window).on("resize", updateLayout());
+w2ui.layout.onResize = updateLayout();
+
+
 var resizeTimer = setTimeout(function(){},50);
-$(window).on("resize", function () {
+
+function updateLayout () {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(function(){
     w2ui.layout.resize();
+    for (var i = 0; i<editors.length; i++) {
+      editors[i].resize();
+    }
   },50);
-});
+}
+
 
 
 /* SETUP EDITOR AND VIEWMODEL */
@@ -503,6 +514,13 @@ setTimeout(function(){
     if (editorPanels.indexOf(panelId) > -1) {
       $(this).append('<div id="editor' + i + '" class="editor"></div>');
       editors[i] = ace.edit($(this).find(".editor")[0]);
+      editors[i].on('focus', function(event, obj) {
+        $(obj.container).css("border","5px solid #ffb");
+      });
+      editors[i].on('blur', function(event, obj) {
+        $(obj.container).css("border","none");
+      });
+
       i++;
     }
   });
@@ -517,7 +535,7 @@ setTimeout(function(){
   startDoc("document6", 'anothertestdocumentonly2', 'rightsplit', 'preview', false, 'test','red');
   
   refreshTabs();
-}, 250);
+}, 2500);
 
 var Model = function() {
   var self = this;
