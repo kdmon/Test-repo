@@ -529,12 +529,12 @@ function refreshTabs(disableDrag) {
         caption: originalCaption,
         closable: 'true'
       });
-      updateLayout();
       refreshTabs();
       //w2ui[originalLayout].get(originalPane).tabs.click(originalTab);
       w2ui[targetLayout].get(targetPanel).tabs.click(originalTab);
     });
   }
+  updateLayout();
 }
 
 function tabClick(obj, event) {
