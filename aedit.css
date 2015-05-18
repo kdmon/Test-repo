@@ -33,7 +33,7 @@ html, body, #layout {
 }
 
 #layout_leftsplit_resizer_preview, 
-#layout_mainsplit_resizer_preview, 
+#layout_middlesplit_resizer_preview, 
 #layout_rightsplit_resizer_preview {
   height: 10px !important;
   width: 50px !important;
