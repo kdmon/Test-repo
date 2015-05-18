@@ -65,7 +65,7 @@ html, body, #layout {
 }
 
 
-.w2ui-panel-title {
+.w2ui-panel-title, .w2ui-toolbar {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
