@@ -9,61 +9,96 @@ html, body, #layout {
 .editor {
   height: 100%;
   width: 100%;
+  border: 4px solid #fff;
+}
+
+.active-editor {
+  border: 4px solid #ffa;
+}
+
+.fa {
+  color: #444 !important;
+}
+
+#layout_layout_panel_top .w2ui-toolbar {
+  background: linear-gradient(0deg, #778, #bce 20%,#fff) !important;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.drop-highlight {
+  background: linear-gradient(0deg, #afa, #5a5) !important;
+}
+
+.w2ui-toolbar {
+  background: linear-gradient(0deg, #ccc,#fff);
 }
 
 .w2ui-tabs, .w2ui-toolbar {
   overflow-x: auto !important;
 }
 .w2ui-panel-tabs {
-  background: #eee !important;
+  background: linear-gradient(0deg, #aaf 20%, #55a 60%, #bbd) !important;
+  padding: 0px !important;
+}
+.w2ui-panel-tabs td {
+  padding-top:5px !important;
 }
 .w2ui-tabs table {
-  height: 26px;
+  height: 30px;
 }
 
 .w2ui-tab:not(.active) {
-  background: #ddd !important;
+  background: linear-gradient(0deg, #ccc 20%, #99a 80%, #ddd) !important;
+  box-shadow: 0px 0px 5px 0px black;
+  
+}
+
+.w2ui-tabs .active {
+  background: linear-gradient(0deg, #fff 20%, #ccc 80%, #fff) !important;
+  box-shadow: 0px 0px 5px 0px black;
 }
 
 #layout_layout_panel_left .w2ui-panel,
 #layout_layout_panel_main .w2ui-panel,
-#layout_layout_panel_right .w2ui-panel
+#layout_layout_panel_right .w2ui-panel,
+#layout_layout_panel_bottom .w2ui-panel,
+#layout_layout_panel_left,
+#layout_layout_panel_main,
+#layout_layout_panel_bottom,
+#layout_layout_panel_right
 {
-  border: 1px solid black;
+  margin: 0px !important;
+  box-shadow: 0px 0px 2px 2px #559 !important;
 }
 
 #layout_leftsplit_resizer_preview, 
 #layout_middlesplit_resizer_preview, 
-#layout_rightsplit_resizer_preview {
-  height: 10px !important;
-  width: 50px !important;
-  left: 50% !important;
-  top: 150%;
-  margin-left:-25px;
-  margin-top:-5px;
-  opacity: 1;
+#layout_rightsplit_resizer_preview, 
+#layout_layout_resizer_bottom {
+  height: 8px !important;
+  margin-top:-4px;
   background:
     radial-gradient(#fff 30%, transparent 5%) 0 0,
-    radial-gradient(#fff 30%, transparent 5%) 0 5px;
-  background-color:#999;
-  background-size:5px 5px;
+    radial-gradient(#fff 30%, transparent 5%) 2px 2px;
+  background-color:#ccc;
+  background-size: 4px 4px;
+  opacity: 0.4;
 }
 
 #layout_layout_resizer_left, 
-#layout_layout_resizer_right {
-  width: 10px !important;
-  top: 49% !important;
-  height: 50px !important;
-  margin-left: -5px;
-  left: -150%;
-  opacity: 1;
+#layout_layout_resizer_right,
+#layout_bottomsplit_resizer_left, 
+#layout_bottomsplit_resizer_right {
+  width: 8px !important;
+  margin-left: -4px;
   background:
     radial-gradient(#fff 30%, transparent 5%) 0 0,
-    radial-gradient(#fff 30%, transparent 5%) 0 5px;
-  background-color:#999;
-  background-size:5px 5px;
+    radial-gradient(#fff 30%, transparent 5%) 2px 2px;
+  background-color:#ccc;
+  background-size: 4px 4px;
+  opacity: 0.4;
 }
-
 
 .w2ui-panel-title, .w2ui-toolbar {
     -webkit-touch-callout: none;
@@ -73,14 +108,6 @@ html, body, #layout {
     -ms-user-select: none;
     user-select: none;;
 }
-
-.w2ui-icon {
-  width: 20px;
-  height: 20px;
-  margin: 0;
-  padding: 0;
-}
-
 
 [draggable] {
   -ms-user-select: none;
