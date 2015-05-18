@@ -68,8 +68,6 @@ $('#layout').w2layout({
     content: ''
   }, {
     type: 'bottom',
-    size: '5',
-    hidden: false,
     resizable: true,
     style: pstyle,
     content: ''
@@ -218,9 +216,82 @@ $().w2layout({
     }
   }]
 });
+$().w2layout({
+  name: 'bottomsplit',
+  panels: [
+    {
+      type: 'left',
+      resizable: true,
+      hidden: true,
+      size: '50%',
+      style: pstyle,
+      content: '',
+      tabs: {
+        tabs: [],
+        onClose: function(event) {
+          tabClose(this, event);
+        },
+        onClick: function(event) {
+          tabClick(this, event);
+        }
+      },
+      toolbar: {
+        items: [],
+        onClick: function(event) {
+          toolbarClick(this, event);
+        }
+      }
+    },
+    {
+      type: 'main',
+      resizable: true,
+      style: pstyle,
+      content: '',
+      tabs: {
+        tabs: [],
+        onClose: function(event) {
+          tabClose(this, event);
+        },
+        onClick: function(event) {
+          tabClick(this, event);
+        }
+      },
+      toolbar: {
+        items: [],
+        onClick: function(event) {
+          toolbarClick(this, event);
+        }
+      }
+    }, {
+      type: 'right',
+      resizable: true,
+      hidden: true,
+      size: '50%',
+      style: pstyle,
+      content: '',
+      tabs: {
+        tabs: [],
+        onClose: function(event) {
+          tabClose(this, event);
+        },
+        onClick: function(event) {
+          tabClick(this, event);
+        }
+      },
+      toolbar: {
+        items: [],
+        onClick: function(event) {
+          toolbarClick(this, event);
+        }
+      }
+    }
+  ]
+});
+
 w2ui.layout.content('left', w2ui.leftsplit);
 w2ui.layout.content('main', w2ui.middlesplit);
 w2ui.layout.content('right', w2ui.rightsplit);
+w2ui.layout.content('bottom', w2ui.bottomsplit);
 
 
 /* SETUP TOOLBAR */
@@ -402,6 +473,10 @@ initialiseToolbar ('middlesplit','preview','editor');
 initialiseToolbar ('rightsplit','main','editor');
 initialiseToolbar ('rightsplit','preview','editor');
 
+initialiseToolbar ('bottomsplit','left','editor');
+initialiseToolbar ('bottomsplit','main','editor');
+initialiseToolbar ('bottomsplit','right','editor');
+
 
 /* SETUP TABS */
 
@@ -511,14 +586,17 @@ setTimeout(function(){
     'layout_middlesplit_panel_main',
     'layout_middlesplit_panel_preview',
     'layout_rightsplit_panel_main',
-    'layout_rightsplit_panel_preview'
+    'layout_rightsplit_panel_preview',
+    'layout_bottomsplit_panel_left',
+    'layout_bottomsplit_panel_main',
+    'layout_bottomsplit_panel_right',
   ];
   var i = 0;
   
   $(".w2ui-panel-content").each(function(){
     var panelId = $(this).parent().attr('id');
     if (editorPanels.indexOf(panelId) > -1) {
-      $(this).append('<div id="editor' + i + '" class="editor"></div>');
+      $(this).append('<div id="panel' + i + '"></div><div id="editor' + i + '" class="editor"></div>');
       editors[i] = ace.edit($(this).find(".editor")[0]);
       editors[i].on('focus', function(event, obj) {
         $(obj.container).addClass('active-editor');
@@ -526,7 +604,6 @@ setTimeout(function(){
       editors[i].on('blur', function(event, obj) {
         $(obj.container).removeClass('active-editor');
       });
-
       i++;
     }
   });
@@ -539,6 +616,8 @@ setTimeout(function(){
   
   startDoc("document5", 'thisisjustatestdocument2', 'rightsplit', 'main', false, 'test','red');
   startDoc("document6", 'anothertestdocumentonly2', 'rightsplit', 'preview', false, 'test','red');
+  
+  startDoc("document7", 'anothertestdocumentonly3', 'bottomsplit', 'main', false, 'test','red');
   
   refreshTabs();
 }, 25);
@@ -623,7 +702,17 @@ setTimeout(function(){
 
 connection = new sharejs.Connection("http://it4se.com:8081/channel");
 
-var editorPanels = ['leftsplitmain', 'leftsplitpreview', 'middlesplitmain', 'middlesplitpreview', 'rightsplitmain', 'rightsplitpreview'];
+var editorPanels = [
+  'leftsplitmain',
+  'leftsplitpreview',
+  'middlesplitmain',
+  'middlesplitpreview',
+  'rightsplitmain',
+  'rightsplitpreview',
+  'bottomsplitleft',
+  'bottomsplitmain',
+  'bottomsplitright'
+  ];
 
 function startDoc (title, url, layout, panel, preserveContent, username, color) {
   
