@@ -443,7 +443,6 @@ function refreshTabs(disableDrag) {
       var targetTab = target[5];
       if (originalId == targetId) return; // do nothing if dropped on itself.
       w2ui[originalLayout].get(originalPanel).tabs.remove(originalTab);
-      console.log(originalTab);
       tabList[originalTab].editorInstance = editorPanels.indexOf(targetLayout+targetPanel);
       if (targetTab) w2ui[targetLayout].get(targetPanel).tabs.insert(targetTab, {
         id: originalTab,
