@@ -6,6 +6,10 @@ html, body, #layout {
   background: #fff;
 }
 
+.editor {
+  height: 100%;
+  width: 100%;
+}
 
 .w2ui-tabs, .w2ui-toolbar {
   overflow-x: auto !important;
