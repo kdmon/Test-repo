@@ -10,11 +10,11 @@ $('#layout').w2layout({
     toolbar: {
       items: [
         { type: 'html',  id: 'item6',
-            html: '<h1 id="logo"><span class="fa fa-2x fa-mobile"></span> WebAppEditor.com</h1>' 
+            html: '<h1 id="logo"><span class="fa fa-2x fa-mobile"></span> WebAppEditor</h1>' 
         },
         { type: 'menu',
           id: 'projectmenu',
-          caption: 'Editing /kdmon/Test-repo/',
+          caption: '/kdmon/Test-repo/',
           icon: 'fa fa-github',
           items: [
           { text: 'New project', icon: 'fa fa-file' }, 
@@ -46,12 +46,16 @@ $('#layout').w2layout({
           hint: 'Preferences'
         },
         {
+          id: 'topbreak2', 
+          type: 'break'
+        },
+        {
           id: 'signout',
           type: 'button',
           caption: 'Sign out',
-          icon: 'fa fa-logout',
+          icon: 'fa fa-power-off',
           hint: 'Log out'
-        },
+        }, 
         {
           id: 'leftcolumn',
           type: 'check',
@@ -785,7 +789,7 @@ function startDoc (title, url, layout, panel, preserveContent, username, color) 
     doc.on('shout', function(data) {
       switch (data.action) {
         case "announce":
-          alert(data.msg);
+          console.log(data.msg);
           break;
         case "cursor":
           cursors[data.user] = {
