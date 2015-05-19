@@ -562,8 +562,11 @@ function refreshTabs(disableDrag) {
       var targetPanel = target[2];
       var targetTab = target[5];
       if (originalId == targetId) return; // do nothing if dropped on itself.
+      
+      // Otherwise work out where tab was dropped
+      
+      tabList[originalTab].panel = panelAreas.indexOf("layout_"+targetLayout+"_panel_"+targetPanel);
       w2ui[originalLayout].get(originalPanel).tabs.remove(originalTab);
-      tabList[originalTab].editorInstance = editorPanels.indexOf(targetLayout+targetPanel);
       if (targetTab) w2ui[targetLayout].get(targetPanel).tabs.insert(targetTab, {
         id: originalTab,
         caption: originalCaption,
@@ -584,8 +587,27 @@ function refreshTabs(disableDrag) {
 
 function tabClick(obj, event) {
   var item = tabList[event.target];
-  editors[item.editorInstance].setSession(item.editSession);
-  editors[item.editorInstance].focus();
+  console.log(item)
+  switch (item.type) {
+    case 'editor':
+      editors[item.panel].setSession(item.editSession);
+      editors[item.panel].focus();
+      $("#editor" + item.panel).show();
+      $("#content" + item.panel).hide();
+    break;
+    
+    case 'filebrowser':
+      $("#content" + item.panel).w2render('filebrowser');
+      $("#editor" + item.panel).hide();
+      $("#content" + item.panel).show();
+    break;
+    
+    default: 
+      return; 
+    break;
+  }
+
+  
 }
 
 function tabClose(obj, event) {
@@ -623,26 +645,32 @@ function updateLayout () {
 var editors = [];
 
 
-setTimeout(function(){
+var panelAreas = [
+  'layout_leftsplit_panel_main',
+  'layout_leftsplit_panel_preview',
+  'layout_middlesplit_panel_main',
+  'layout_middlesplit_panel_preview',
+  'layout_rightsplit_panel_main',
+  'layout_rightsplit_panel_preview',
+  'layout_bottomsplit_panel_left',
+  'layout_bottomsplit_panel_main',
+  'layout_bottomsplit_panel_right',
+];
+
+
+// Wait until w2ui is ready, then initalise widgets
+setTimeout(function(){init ()}, 50);
     
-  var editorPanels = [
-    'layout_leftsplit_panel_main',
-    'layout_leftsplit_panel_preview',
-    'layout_middlesplit_panel_main',
-    'layout_middlesplit_panel_preview',
-    'layout_rightsplit_panel_main',
-    'layout_rightsplit_panel_preview',
-    'layout_bottomsplit_panel_left',
-    'layout_bottomsplit_panel_main',
-    'layout_bottomsplit_panel_right',
-  ];
+function init () {
   var i = 0;
   
   $(".w2ui-panel-content").each(function(){
     var panelId = $(this).parent().attr('id');
-    if (editorPanels.indexOf(panelId) > -1) {
-      $(this).append('<div id="panel' + i + '"></div><div id="editor' + i + '" class="editor"></div>');
-      editors[i] = ace.edit($(this).find(".editor")[0]);
+    if (panelAreas.indexOf(panelId) > -1) {
+      $(this).append('<div id="container' + i + '" class="panel-container">' +
+      '<div id="content' + i + '" class="panel-content"></div>' +
+      '<div id="editor' + i + '" class="panel-editor"></div></div>');
+      editors[i] = ace.edit($(this).find(".panel-editor")[0]);
       editors[i].on('focus', function(event, obj) {
         $('.w2ui_tabs').removeClass('active');
         $('.w2ui_tabs').removeClass('active-tab');
@@ -669,8 +697,12 @@ setTimeout(function(){
   
   startDoc("document7", 'anothertestdocumentonly3', 'bottomsplit', 'main', false, 'test','red');
   
+  
+  fileBrowser("kdmon", "ace-builds");
+  
   refreshTabs();
-}, 25);
+  
+}
 
 var Model = function() {
   var self = this;
@@ -752,36 +784,127 @@ setTimeout(function(){
 
 connection = new sharejs.Connection("http://it4se.com:8081/channel");
 
-var editorPanels = [
-  'leftsplitmain',
-  'leftsplitpreview',
-  'middlesplitmain',
-  'middlesplitpreview',
-  'rightsplitmain',
-  'rightsplitpreview',
-  'bottomsplitleft',
-  'bottomsplitmain',
-  'bottomsplitright'
-  ];
 
-function startDoc (title, url, layout, panel, preserveContent, username, color) {
+var github = new Github({
+  token: "",
+  auth: "oauth"
+});
+
+
+// Create a side bar for browsing repository files
+
+function fileBrowser (user, repository, branch, path, panel) {
+
+  // 1. Fetch repo files, recursively?
   
-  var editorInstance = editorPanels.indexOf(layout+panel);
-  var editorObj = editors[editorInstance];
+  var repo = github.getRepo(user, repository);
+  repo.contents(branch || 'master', path || '', function (err, data) {
+    
+    if (err) {
+      console.log("Error retrieving files");
+    }
+    
+    // 2. Generate widget
+    
+    else {
+      var fileNodes = generateFileTree(data);
+      var location = pickPanel(panel);
+      
+      // 3 Insert tab+widget in panel
+      
+      $().w2sidebar({ 
+        name: 'filebrowser',
+        nodes: fileNodes
+      });
+      
+      // 4. Handle events
+      w2ui.filebrowser.on('*', function (event) {
+        console.log('Event: ' + event.type + ' Target: ' + event.target);
+      }); 
+      
+      // 5. Insert tab and activate it
+          
+      var title = "File Browser";
+      var id = "filebrowser";
+      
+      tabList[id] = {
+        id: id,
+        caption: title,
+        type: 'filebrowser',
+        panel: location.area
+      };
+      
+      w2ui[location.layout].get(location.panel).tabs.add({id: id, caption: title});
+  
+      
+      refreshTabs();
+    }
+  }); 
+ 
+}
+
+// Create sidebar widget nodes from GitHub API data
+
+function generateFileTree (data) {
+  var files = [];
+  var folders = [];
+  
+  for (var item in data) {
+    var file = data[item];
+    if (file.type == 'file') {
+      files.push({
+        id: 'file' + item,
+        text: file.name,
+        icon: 'fa fa-file'
+      });
+    }
+    else {
+      folders.push({
+        id: 'folder' + item,
+        text: file.name,
+        icon: 'fa fa-folder',
+        nodes: [{
+          id: 'expand' + item,
+          text: "Fetching files",
+          icon: 'fa fa-refresh'}]
+      });
+    }
+  }
+  
+  return folders.concat(files);
+}
+
+
+// Return best panel for new tabs
+
+function pickPanel (identifier) {
+  return {
+    layout: 'middlesplit',
+    panel: 'main',
+    area: 2
+    };
+}
+
+
+
+function startDoc (title, url, area, preserveContent, username, color) {
+  
+  var location = pickPanel();
   var editSession = ace.createEditSession('',  '');
-  editorObj.setSession(editSession);
+  var editorObj = editors[location.area].setSession(editSession);
   
   tabList[title] = {
     id: title,
     caption: title,
-    editSession: editSession,
-    editorInstance: editorInstance
+    panel: location.area,
+    type: 'editor',
+    editSession: editSession
   };
   
-  w2ui[layout].get(panel).tabs.add({id: title, caption:title});
+  w2ui[location.layout].get(location.panel).tabs.add({id: title, caption:title});
   
   connection.open(url, 'text', function(error, doc) {
-    doc.attach_ace(editorObj, preserveContent, username, color);
+    doc.attach_ace(editors[location.area], preserveContent, username, color);
     doc.shout({
       action: "announce",
       msg: username + ' opened document.'
@@ -807,4 +930,3 @@ function startDoc (title, url, layout, panel, preserveContent, username, color) 
     });
   });
 }
-
