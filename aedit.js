@@ -597,7 +597,7 @@ function tabClick(obj, event) {
     break;
     
     case 'filebrowser':
-      $("#content" + item.panel).w2render('filebrowser');
+      $("#content" + item.panel).w2render(item.id);
       $("#editor" + item.panel).hide();
       $("#content" + item.panel).show();
     break;
@@ -699,6 +699,7 @@ function init () {
   
   
   fileBrowser("kdmon", "ace-builds");
+  fileBrowser("kdmon", "cats");
   
   refreshTabs();
   
@@ -800,6 +801,9 @@ function fileBrowser (user, repository, branch, path, panel) {
   var repo = github.getRepo(user, repository);
   repo.contents(branch || 'master', path || '', function (err, data) {
     
+  var title = "File Browser " + repository;
+  var id = "filebrowser" + Math.round(Math.random()*10000000);
+  console.log(id);
     if (err) {
       console.log("Error retrieving files");
     }
@@ -812,20 +816,18 @@ function fileBrowser (user, repository, branch, path, panel) {
       
       // 3 Insert tab+widget in panel
       
-      $().w2sidebar({ 
-        name: 'filebrowser',
+      $().w2sidebar({
+        name: id,
         nodes: fileNodes
       });
       
       // 4. Handle events
-      w2ui.filebrowser.on('*', function (event) {
+      w2ui[id].on('*', function (event) {
         console.log('Event: ' + event.type + ' Target: ' + event.target);
       }); 
       
       // 5. Insert tab and activate it
           
-      var title = "File Browser";
-      var id = "filebrowser";
       
       tabList[id] = {
         id: id,
