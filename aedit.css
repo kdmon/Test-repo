@@ -4,21 +4,16 @@ html, body, #container, #layout {
   padding: 0;
   margin: 0;
   background: #fff;
-  background: blue;
 }
 
-#container {
-  background: url("http://it4se.com/upload/hat.png");
+#logo {
+  background: url("httpw://it4se.com/upload/hat.png");
   background-repeat: no-repeat;
-  background-size: 90px 50px;
-  background-position: 0px 0px;
-  text-align: middle;
-}
-.logo {
-  font-size: 2em;
+  background-size: 35px 20px;
+  background-position: 0 0;
+  font-size: 1.5em;
   font-family: sans;
-  padding: 0.5em;
-  padding-left: 5em;
+  padding: 0.3em 1em 0em 1em;
   font-weight: normal;
   margin: 0;
 }
@@ -39,7 +34,7 @@ html, body, #container, #layout {
 
 #layout_layout_panel_top .w2ui-toolbar {
   background: linear-gradient(0deg, #77a, #bce 20%,#fff) !important;
-  padding-top: 10px;
+  padding-top: 15px;
   padding-bottom: 10px;
 }
 
@@ -117,7 +112,7 @@ html, body, #container, #layout {
   opacity: 0.4;
 }
 
-.w2ui-panel-title, .w2ui-toolbar {
+.w2ui-panel-title, .w2ui-toolbar:not(.selectable) {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
