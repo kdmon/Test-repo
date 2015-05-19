@@ -10,7 +10,7 @@ $('#layout').w2layout({
     toolbar: {
       items: [
         { type: 'html',  id: 'item6',
-            html: '<h1 id="logo">Web App Editor</h1>' 
+            html: '<h1 id="logo"><span class="fa fa-2x fa-mobile"></span> WebAppEditor.com</h1>' 
         },
         { type: 'menu',
           id: 'projectmenu',
