@@ -9,36 +9,70 @@ $('#layout').w2layout({
     size: 50,
     toolbar: {
       items: [
-      {
-        id: 'leftcolumn',
-        type: 'check',
-        caption: '',
-        icon: 'fa fa-caret-square-o-left',
-        hint: 'Toggle left column'
-      },
-      {
-        id: 'selectproject',
-        type: 'html',
-        html: '<div style="padding: 3px 10px;">Switch project: <select><option>A project</option><option>New project</option></select></div>'
-      },
-      {
-        id: 'closeproject',
-        type: 'button',
-        caption: 'Close project',
-        icon: 'fa fa-close',
-        hint: 'Close current project'
-      },
-      {
-        id: 'topspace',
-        type: 'spacer'
-      },
-      {
-        id: 'rightcolumn',
-        type: 'check',
-        caption: '',
-        icon: 'fa fa-caret-square-o-right',
-        hint: 'Toggle right column'
-      },
+        { type: 'html',  id: 'item6',
+            html: '<h1 id="logo">Web App Editor</h1>' 
+        },
+        { type: 'menu',
+          id: 'projectmenu',
+          caption: 'Editing /kdmon/Test-repo/',
+          icon: 'fa fa-github',
+          items: [
+          { text: 'New project', icon: 'fa fa-file' }, 
+          { text: 'Open project', icon: 'fa fa-folder-open' },
+          { text: 'Close current project', icon: 'fa fa-close' }, 
+          { text: '/kdmon/Test-repo/ (editing)', icon: 'fa fa-github' }, 
+          { text: '/kdmon/Three.js/', icon: 'fa fa-github' }
+        ]},
+        {
+          id: 'topspace',
+          type: 'spacer'
+        },
+        {
+          id: 'collaborate',
+          type: 'check',
+          caption: 'Collaborate',
+          icon: 'fa fa-users',
+          hint: 'Collaborate'
+        },
+        {
+          id: 'topbreak1',
+          type: 'break'
+        },
+        {
+          id: 'preferences',
+          type: 'check',
+          caption: 'Preferences',
+          icon: 'fa fa-wrench',
+          hint: 'Preferences'
+        },
+        {
+          id: 'signout',
+          type: 'button',
+          caption: 'Sign out',
+          icon: 'fa fa-logout',
+          hint: 'Log out'
+        },
+        {
+          id: 'leftcolumn',
+          type: 'check',
+          caption: '',
+          icon: 'fa fa-caret-square-o-left',
+          hint: 'Toggle left column'
+        },
+        {
+          id: 'bottomrow',
+          type: 'check',
+          caption: '',
+          icon: 'fa fa-caret-square-o-down',
+          hint: 'Toggle bottom row'
+        },
+        {
+          id: 'rightcolumn',
+          type: 'check',
+          caption: '',
+          icon: 'fa fa-caret-square-o-right',
+          hint: 'Toggle right column'
+        },
       ],
       onClick: function(event) {
         toolbarClick(this, event);
@@ -68,8 +102,10 @@ $('#layout').w2layout({
     content: ''
   }, {
     type: 'bottom',
+    size: '25%',
     resizable: true,
     style: pstyle,
+    hidden: true,
     content: ''
   }]
 });
@@ -415,6 +451,10 @@ function toolbarClick(obj, event) {
       w2ui.layout.toggle('left', window.instant);
     break;
     
+    case 'bottomrow':
+      w2ui.layout.toggle('bottom', window.instant);
+    break;
+    
     case 'rightcolumn':
       w2ui.layout.toggle('right', window.instant);
     break;
@@ -506,6 +546,7 @@ function refreshTabs(disableDrag) {
       $(".w2ui-panel-tabs table").removeClass('drop-highlight');
       event.preventDefault();
       var originalId = event.originalEvent.dataTransfer.getData("text");
+      if (originalId.indexOf('tabs_') < 0) return; // Non-tab dropped
       var origin = originalId.split("_");
       var originalCaption = $("#" + originalId).text();
       var originalLayout = origin[1];
@@ -555,8 +596,8 @@ $(window).on("resize", updateLayout());
 w2ui.layout.onResize = updateLayout();
 
 // Prevent toolbars from stealing focus from editor
-$(".w2ui-toolbar").on('mousedown', function () {
-  event.preventDefault();
+$(".w2ui-toolbar:not(.selectable)").on('mousedown', function (event) {
+  if (event.target.className.indexOf('selectable') < 0) event.preventDefault();
 });
 
 var resizeTimer = setTimeout(function(){},50);
@@ -599,7 +640,12 @@ setTimeout(function(){
       $(this).append('<div id="panel' + i + '"></div><div id="editor' + i + '" class="editor"></div>');
       editors[i] = ace.edit($(this).find(".editor")[0]);
       editors[i].on('focus', function(event, obj) {
+        $('.w2ui_tabs').removeClass('active');
+        $('.w2ui_tabs').removeClass('active-tab');
         $(obj.container).addClass('active-editor');
+        //work out which tab is active
+        console.log(obj);
+        $('.w2ui_tabs').addClass('active-tab');
       });
       editors[i].on('blur', function(event, obj) {
         $(obj.container).removeClass('active-editor');
