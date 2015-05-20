@@ -81,6 +81,11 @@ body,
   background: linear-gradient(0deg, #afa, #5a5) !important;
 }
 
+#temporarytab {
+  min-width: 110px !important;
+  background: yellow;
+}
+
 
 #layout_layout_panel_left .w2ui-panel,
 #layout_layout_panel_main .w2ui-panel,
@@ -123,22 +128,18 @@ body,
   opacity: 0.4;
 }
 
-.w2ui-panel-title, .w2ui-toolbar:not(.selectable) {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;;
+body:not(.selectable) {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 [draggable] {
-  -ms-user-select: none;
-  -moz-user-select: none;
-  -khtml-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
   /* Required to make elements draggable in old WebKit */
   -khtml-user-drag: element;
   -webkit-user-drag: element;
+  user-drag: none; 
 }
