@@ -58,13 +58,32 @@ body,
 }
 .w2ui-panel-tabs {
   background: linear-gradient(0deg, #aab, #558) !important;
-  padding: 0px !important;
+  padding-top: 2px !important;
 }
-.w2ui-panel-tabs td {
-  padding-top:5px !important;
+.w2ui-tabs .w2ui-tab {
+  padding: 4px 0 0 4px!important;
+  margin: 0 !important;
+  height: 28px !important;
+  max-height: 28px !important;
+  text-align: left !important;
+  width: 150px !important;
+  white-space: normal !important;
+  overflow: inherit;
+  text-overflow: ellipsis;
 }
+
+.w2ui-tabs .w2ui-tab .closable{
+  
+}
+
+#temporarytab {
+  background: linear-gradient(0deg, #afa, #5a5) !important;
+  min-width: 150px !important;
+}
+
 .w2ui-tabs table {
-  height: 30px;
+  height: 28px !important;
+  max-height: 28px !important;
 }
 
 .w2ui-tab:not(.active) {
@@ -77,13 +96,8 @@ body,
   box-shadow: 0px 0px 5px 0px black;
 }
 
-.drop-highlight {
+.drop-hioghlight {
   background: linear-gradient(0deg, #afa, #5a5) !important;
-}
-
-#temporarytab {
-  min-width: 110px !important;
-  background: yellow;
 }
 
 
