@@ -526,8 +526,6 @@ initialiseToolbar ('bottomsplit','right','editor');
 
 var tabList = {};
 
-var dragInProgress = false;
-
 function refreshTabs() {
   
   // Reset draggable events
@@ -545,8 +543,8 @@ function refreshTabs() {
   $(tabSelector).on("dragenter", function(event) {
     event.preventDefault();
     var x = event.originalEvent.offsetX;
-    if (dragInProgress) dropArea(this, 60);
-    else dropArea(this, x);
+    var y = event.originalEvent.offsetX;
+    dropArea(this, x, y);
   });
   
   $(tabSelector).on("drag", function(event) {
@@ -568,14 +566,14 @@ function refreshTabs() {
 
 // Insert tab drop area and bind events to it
 
-function dropArea (elem,x,hide) {
- // console.log(elem);
+function dropArea (elem,x,y,hide) {
+   console.log(y);
   // Clean up
   var tabArea = "#temporarytab";
   $(tabArea).off("dragstart").off("dragenter").off("drag").off("dragend");
   $(tabArea).remove();
   
-  if (hide) {console.log("stopping"); dragInProgress = true; return;}
+  if (hide) {console.log("stopping"); return;}
   
   // Reset element and bind events
   var insertBefore = (x>50) ? true : false;
@@ -593,13 +591,13 @@ function dropArea (elem,x,hide) {
     console.log("left drag area");
     event.preventDefault();
     var x = event.originalEvent.offsetX;
-    dropArea(this, x, true);
+    var y = event.originalEvent.offsetX;
+    dropArea(this, x, y );
   });
   
   
   $(tabArea).on("drop", function(event) {
     event.preventDefault();
-    console.log(event);
     $(".w2ui-panel-tabs table").removeClass('drop-highlight');
     var originalId = event.originalEvent.dataTransfer.getData("text");
 
@@ -618,7 +616,8 @@ function dropArea (elem,x,hide) {
     var targetLayout = target[1];
     var targetPanel = target[2];
     var targetTab = target[5];
-    var nextTab = $(elem).next().attr('id').split("_")[5];
+    var nextTabId = $(elem).next().attr('id');
+    var nextTab = (nextTabId === undefined) ? false : nextTabId.split("_")[5];
 
     // Exit if dropped on itself.
     if (originalId == targetId) return; 
@@ -626,23 +625,27 @@ function dropArea (elem,x,hide) {
     // Otherwise work out where tab was dropped and shuffle tabs
     tabList[originalTab].panel = panelAreas.indexOf("layout_"+targetLayout+"_panel_"+targetPanel);
     w2ui[originalLayout].get(originalPanel).tabs.remove(originalTab);
+    
+    // Insert before
     if (targetTab && insertBefore) w2ui[targetLayout].get(targetPanel).tabs.insert(targetTab, {
       id: originalTab,
       caption: originalCaption,
       closable: 'true'
     });
+    // Insert after
     else if (targetTab) w2ui[targetLayout].get(targetPanel).tabs.insert(nextTab, {
       id: originalTab,
       caption: originalCaption,
       closable: 'true'
     });
+    // Empty tab bar
     else w2ui[targetLayout].get(targetPanel).tabs.add({
       id: originalTab,
       caption: originalCaption,
       closable: 'true'
     });
     refreshTabs();
-    w2ui[targetLayout].get(targetPanel).tabs.click(originalTab);
+    //w2ui[targetLayout].get(targetPanel).tabs.click(originalTab);
     dragInProgress = false;
   });
 }
@@ -863,7 +866,7 @@ function fileBrowser (user, repository, branch, path, panel) {
   var repo = github.getRepo(user, repository);
   repo.contents(branch || 'master', path || '', function (err, data) {
     
-  var title = "File Browser " + repository;
+  var title = "File Browser is a long tabe name like few" + repository;
   var id = "filebrowser" + Math.round(Math.random()*10000000);
   console.log(id);
     if (err) {
