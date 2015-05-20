@@ -636,6 +636,7 @@ function dropArea (elem,x,hide) {
     });
     refreshTabs();
     w2ui[targetLayout].get(targetPanel).tabs.click(originalTab);
+    dragInProgress = false;
   });
 }
 
