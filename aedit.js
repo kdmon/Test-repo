@@ -578,7 +578,8 @@ function dropArea (elem,x,hide) {
   if (hide) {console.log("stopping"); dragInProgress = true; return;}
   
   // Reset element and bind events
-  if (x>50) $('<td id="temporarytab"></td>').insertBefore(elem);
+  var insertBefore = (x>50) ? true : false;
+  if (insertBefore) $('<td id="temporarytab"></td>').insertBefore(elem);
   else $('<td id="temporarytab"></td>').insertAfter(elem);
 
   $(tabArea).attr("draggable", "true");
@@ -617,14 +618,20 @@ function dropArea (elem,x,hide) {
     var targetLayout = target[1];
     var targetPanel = target[2];
     var targetTab = target[5];
-    
+    var nextTab = $(elem).next().attr('id').split("_")[5];
+
     // Exit if dropped on itself.
     if (originalId == targetId) return; 
     
     // Otherwise work out where tab was dropped and shuffle tabs
     tabList[originalTab].panel = panelAreas.indexOf("layout_"+targetLayout+"_panel_"+targetPanel);
     w2ui[originalLayout].get(originalPanel).tabs.remove(originalTab);
-    if (targetTab) w2ui[targetLayout].get(targetPanel).tabs.insert(targetTab, {
+    if (targetTab && insertBefore) w2ui[targetLayout].get(targetPanel).tabs.insert(targetTab, {
+      id: originalTab,
+      caption: originalCaption,
+      closable: 'true'
+    });
+    else if (targetTab) w2ui[targetLayout].get(targetPanel).tabs.insert(nextTab, {
       id: originalTab,
       caption: originalCaption,
       closable: 'true'
