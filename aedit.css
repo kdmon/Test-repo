@@ -61,18 +61,20 @@ body,
   padding-top: 2px !important;
 }
 .w2ui-tabs .w2ui-tab {
-  padding: 4px 0 0 4px!important;
+  padding: 5px 15px 0 4px !important;
   margin: 0 !important;
-  height: 28px !important;
-  max-height: 28px !important;
+  height: 29px !important;
+  max-height: 29px !important;
   text-align: left !important;
   width: 150px !important;
-  white-space: normal !important;
-  overflow: inherit;
+  white-space: nowrap !important;
+  overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.w2ui-tabs .w2ui-tab .closable{
+.w2ui-tab-close{
+  position:absolute;
+  margin-left: 130px !important;
   
 }
 
@@ -87,6 +89,8 @@ body,
 }
 
 .w2ui-tab:not(.active) {
+  height: 25px !important;
+  max-height: 25px !important;
   background: linear-gradient(0deg, #aaa 20%, #bbb 80%, #ccc) !important;
   box-shadow: 0px 0px 5px 0px black;
 }
