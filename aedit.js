@@ -537,14 +537,14 @@ function refreshTabs() {
   $(tabSelector).on("dragstart", function(event) {
     event.originalEvent.dataTransfer.setData('text', event.target.id);
     $(".w2ui-panel-tabs table").addClass('drop-highlight');
-    dropArea(this, 0);
+    //dropArea(this, 0);
   });
   
   $(tabSelector).on("dragenter", function(event) {
     event.preventDefault();
     var x = event.originalEvent.offsetX;
     var y = event.originalEvent.offsetX;
-    dropArea(this, x, y);
+    dropArea(this, x);
   });
   
   $(tabSelector).on("drag", function(event) {
@@ -557,7 +557,6 @@ function refreshTabs() {
     dropArea(this, 0, true);
     $(".w2ui-panel-tabs table").removeClass('drop-highlight');
     $(this).show();
-    dragInProgress = false; 
   });
   
   updateLayout();
@@ -566,17 +565,18 @@ function refreshTabs() {
 
 // Insert tab drop area and bind events to it
 
-function dropArea (elem,x,y,hide) {
-   console.log(y);
+function dropArea (elem,x,hide) {
+  // console.log(y);
   // Clean up
   var tabArea = "#temporarytab";
+  var tabExists = ($(tabArea).length > 0) ? true : false;
   $(tabArea).off("dragstart").off("dragenter").off("drag").off("dragend");
   $(tabArea).remove();
   
   if (hide) {console.log("stopping"); return;}
   
   // Reset element and bind events
-  var insertBefore = (x>50) ? true : false;
+  var insertBefore = (x>50 || !tabExists) ? true : false;
   if (insertBefore) $('<td id="temporarytab"></td>').insertBefore(elem);
   else $('<td id="temporarytab"></td>').insertAfter(elem);
 
@@ -627,7 +627,7 @@ function dropArea (elem,x,y,hide) {
     w2ui[originalLayout].get(originalPanel).tabs.remove(originalTab);
     
     // Insert before
-    if (targetTab && insertBefore) w2ui[targetLayout].get(targetPanel).tabs.insert(targetTab, {
+    if (targetTab && (insertBefore || !tabExists)) w2ui[targetLayout].get(targetPanel).tabs.insert(targetTab, {
       id: originalTab,
       caption: originalCaption,
       closable: 'true'
@@ -645,8 +645,6 @@ function dropArea (elem,x,y,hide) {
       closable: 'true'
     });
     refreshTabs();
-    //w2ui[targetLayout].get(targetPanel).tabs.click(originalTab);
-    dragInProgress = false;
   });
 }
 
