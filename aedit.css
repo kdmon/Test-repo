@@ -62,11 +62,11 @@ body,
 }
 .w2ui-tabs .w2ui-tab {
   padding: 5px 15px 0 4px !important;
-  margin: 0 !important;
-  height: 29px !important;
-  max-height: 29px !important;
+  margin: 1 !important;
+  height: 30px !important;
+  max-height: 30px !important;
   text-align: left !important;
-  width: 150px !important;
+  width: 120px !important;
   white-space: nowrap !important;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -74,18 +74,18 @@ body,
 
 .w2ui-tab-close{
   position:absolute;
-  margin-left: 130px !important;
+  margin-left: 100px !important;
   
 }
 
 #temporarytab {
   background: linear-gradient(0deg, #afa, #5a5) !important;
-  min-width: 150px !important;
+  min-width: 120px !important;
 }
 
 .w2ui-tabs table {
-  height: 28px !important;
-  max-height: 28px !important;
+  height: 30px !important;
+  max-height: 30px !important;
 }
 
 .w2ui-tab:not(.active) {
