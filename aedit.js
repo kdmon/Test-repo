@@ -448,23 +448,23 @@ function toolbarClick(obj, event) {
   
   switch (event.target) {
     case 'split':
-      w2ui[id[0]].toggle('preview', window.instant);
+      w2ui[id[0]].toggle('preview', true);
     break;
     
     case 'leftcolumn':
-      w2ui.layout.toggle('left', window.instant);
+      w2ui.layout.toggle('left',true);
     break;
     
     case 'bottomrow':
-      w2ui.layout.toggle('bottom', window.instant);
+      w2ui.layout.toggle('bottom',true);
     break;
     
     case 'rightcolumn':
-      w2ui.layout.toggle('right', window.instant);
+      w2ui.layout.toggle('right',true);
     break;
     
     case 'hide':
-      w2ui[id[0]].toggle(id[1], window.instant);
+      w2ui[id[0]].toggle(id[1],true);
     break;
     
     default:
@@ -529,7 +529,7 @@ var tabList = {};
 function refreshTabs() {
   
   // Reset draggable events
-  var tabSelector = ".w2ui-panel-tabs td";
+  var tabSelector = ".w2ui-panel-tabs td+td";
   
   $(tabSelector).off("dragstart").off("dragenter").off("drag").off("dragend");
   $(tabSelector).attr("draggable", "true");
@@ -644,6 +644,12 @@ function dropArea (elem,x,hide) {
       caption: originalCaption,
       closable: 'true'
     });
+    
+    var tabLength = w2ui[targetLayout].get(targetPanel).tabs.tabs.length;
+    
+    // activate tab if dragged to empty new panel
+    if (tabLength === 1) w2ui[targetLayout].get(targetPanel).tabs.click(originalTab);
+
     refreshTabs();
   });
 }
