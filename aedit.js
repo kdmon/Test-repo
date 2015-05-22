@@ -831,6 +831,15 @@ var github = new Github({
 function fileBrowser(user, repository, branch, path, panel) {
   // 1. Fetch repo files, recursively?
   var repo = github.getRepo(user, repository);
+  repo.getTree('master?recursive=true', function (err, tree) {
+     if (err) {
+      console.log("Error retrieving files", err);
+    }
+    // 2. Generate widget
+    else {
+      var fileNodes = generateNodes(tree);
+      }
+  });
   repo.contents(branch || 'master', path || '', function(err, data) {
     var title = "File Browser " + repository;
     var id = "filebrowser" + Math.round(Math.random() * 10000000);
@@ -882,6 +891,86 @@ function fileBrowser(user, repository, branch, path, panel) {
     }
   });
 }
+
+// Create sidebar widget nodes from GitHub API tree
+function generateNodes(tree) {
+  
+  // Sort files and directories
+  var files = tree.sort(function(a,b){
+    
+    var typeComparison = 0; // same type
+    if(a.type < b.type) typeComparison = 1; // folder (tree)
+    if(a.type > b.type) typeComparison = -1; // file (blob)
+    
+    // Path depth
+    var pathComparison = a.path.split('/').length - b.path.split('/').length;
+    
+    var filename = 0; // same filename
+    if(a.path < b.path) filename = -1;
+    if(a.path > b.path) filename = 1;
+    
+    // List folders first, sorted by path depth and then filename
+    
+    if(typeComparison > 0) return 1; // promote folders over files
+    if(typeComparison < 0) return -1; // demote files over folders
+    
+    // If same type, sort by depth and then filename
+
+    if(typeComparison === 0)  { 
+      // If files are on the same depth, use filename as sort criteria
+      if (pathComparison === 0) return filename;
+      else return pathComparison; // otherwise use depth as sort criteria
+    }
+    
+    // if files are identical (should not occur), return zero
+    return 0;
+    
+  });
+  
+  //console.log(files);
+  
+  var nodes = [];
+  
+  for (var index in files) {
+    var file = files[index];
+    
+    
+    if (file.path.split){}
+        
+    // directory
+    if (file.type === "tree") {
+      dirs.push(file);
+    }
+    // file
+    else {
+      files.push(file);
+    }
+  }
+  
+  // sort by hierarchy
+  files.sort(function(a,b){
+    return a.path.split('/').length - b.path.split('/').length;
+  });
+  
+  
+  // sort alphabetical
+  dirs.sort(function(a, b){
+    if(a.path < b.path) return -1;
+    if(a.path > b.path) return 1;
+    return 0;
+  });
+  
+  // sort alphabetical
+  files.sort(function(a, b){
+    if(a.path < b.path) return -1;
+    if(a.path > b.path) return 1;
+    return 0;
+  });
+  
+  console.log(dirs);
+  console.log(files);
+}
+
 // Create sidebar widget nodes from GitHub API data
 function generateFileTree(data) {
   var files = [];
