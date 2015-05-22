@@ -14,69 +14,69 @@ $('#layout').w2layout({
         },
         { type: 'menu',
           id: 'projectmenu',
-          caption: '/kdmon/Test-repo/',
-          icon: 'fa fa-github',
+          caption: 'Editing: /kdmon/Test-repo/',
+          icon: '',
           items: [
           { text: 'New project', icon: 'fa fa-file' }, 
           { text: 'Open project', icon: 'fa fa-folder-open' },
-          { text: 'Close current project', icon: 'fa fa-close' }, 
+          { text: 'Close current project', icon: 'fa fa-close' },
+          {},
           { text: '/kdmon/Test-repo/ (editing)', icon: 'fa fa-github' }, 
-          { text: '/kdmon/Three.js/', icon: 'fa fa-github' }
+          { text: '/kdmon/Three.js/', icon: 'fa fa-github' },
         ]},
+        {
+          id: 'collaborate',
+          type: 'button',
+          caption: 'Collaborate',
+          icon: 'fa fa-comments-o',
+          hint: 'Edit with friends via real-time text, audio and video chat.'
+        },
         {
           id: 'topspace',
           type: 'spacer'
         },
+        { type: 'menu',
+          id: 'optionsmenu',
+          caption: '',
+          hint: 'Change layout.',
+          icon: 'fa fa-columns',
+          items: [
+            { text: 'Preferences', icon: 'fa fa-wrench' },
+          {
+            id: 'leftcolumn',
+            type: 'check',
+            caption: '',
+            icon: 'fa fa-caret-square-o-left',
+            hint: 'Toggle left column'
+          },
+          {
+            id: 'bottomrow',
+            type: 'check',
+            caption: '',
+            icon: 'fa fa-caret-square-o-down',
+            hint: 'Toggle bottom row'
+          },
+          {
+            id: 'rightcolumn',
+            type: 'check',
+            caption: '',
+            icon: 'fa fa-caret-square-o-right',
+            hint: 'Toggle right column'
+          },
+        ]},
         {
-          id: 'collaborate',
-          type: 'check',
-          caption: 'Collaborate',
-          icon: 'fa fa-users',
-          hint: 'Collaborate'
-        },
-        {
-          id: 'topbreak1',
+          id: 'topbreak2',
           type: 'break'
         },
-        {
-          id: 'preferences',
-          type: 'check',
-          caption: 'Preferences',
-          icon: 'fa fa-wrench',
-          hint: 'Preferences'
-        },
-        {
-          id: 'topbreak2', 
-          type: 'break'
-        },
-        {
-          id: 'signout',
-          type: 'button',
-          caption: 'Sign out',
-          icon: 'fa fa-power-off',
-          hint: 'Log out'
-        }, 
-        {
-          id: 'leftcolumn',
-          type: 'check',
-          caption: '',
-          icon: 'fa fa-caret-square-o-left',
-          hint: 'Toggle left column'
-        },
-        {
-          id: 'bottomrow',
-          type: 'check',
-          caption: '',
-          icon: 'fa fa-caret-square-o-down',
-          hint: 'Toggle bottom row'
-        },
-        {
-          id: 'rightcolumn',
-          type: 'check',
-          caption: '',
-          icon: 'fa fa-caret-square-o-right',
-          hint: 'Toggle right column'
-        },
+        { type: 'menu',
+          id: 'accountmenu',
+          caption: 'Account',
+          title: 'Manage your account',
+          icon: 'fa fa-user',
+          items: [
+          { text: 'Preferences', icon: 'fa fa-wrench' }, 
+          { text: 'Sign out', icon: 'fa fa-power-off' }
+        ]}
       ],
       onClick: function(event) {
         toolbarClick(this, event);
