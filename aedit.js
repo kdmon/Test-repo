@@ -529,21 +529,22 @@ var tabList = {};
 function refreshTabs() {
   
   // Reset draggable events
-  var tabSelector = ".w2ui-panel-tabs td+td";
+  var tabSelector = ".w2ui-panel-tabs td:not(:last-child)";
+  var tabContainer = ".w2ui-panel-tabs td:last-child";
+  var tabArea = "#temporarytab";
   
-  $(tabSelector).off("dragstart").off("dragenter").off("drag").off("dragend");
+  $(tabSelector).off("dragstart").off("dragenter").off("dragleave").off("drag").off("dragend").off("drop");
   $(tabSelector).attr("draggable", "true");
   
   $(tabSelector).on("dragstart", function(event) {
     event.originalEvent.dataTransfer.setData('text', event.target.id);
-    $(".w2ui-panel-tabs table").addClass('drop-highlight');
+    $(tabContainer).addClass('drop-highlight');
     //dropArea(this, 0);
   });
   
   $(tabSelector).on("dragenter", function(event) {
     event.preventDefault();
     var x = event.originalEvent.offsetX;
-    var y = event.originalEvent.offsetX;
     dropArea(this, x);
   });
   
@@ -555,9 +556,75 @@ function refreshTabs() {
   $(tabSelector).on("dragend", function(event) {
     event.preventDefault();
     dropArea(this, 0, true);
-    $(".w2ui-panel-tabs table").removeClass('drop-highlight');
+    $(tabContainer).removeClass('drop-highlight');
     $(this).show();
   });
+  
+  $(tabContainer).off("dragstart").off("dragenter").off("dragleave").off("drag").off("dragend").off("drop");
+  $(tabContainer).attr("draggable", "true");
+  
+  // Allow dropping by preventing default event!
+  $(tabContainer).on("dragover", function(event) {
+    event.preventDefault();
+  });
+  
+  $(tabContainer).on("drop", function(event) {
+    event.preventDefault();
+    $(tabContainer).removeClass('drop-highlight');
+    $(tabArea).remove();
+    var originalId = event.originalEvent.dataTransfer.getData("text");
+    
+    // Exit if non-tab dropped
+    if (originalId.indexOf('tabs_') < 0) return; 
+    
+    var origin = originalId.split("_");
+    var originalCaption = $("#" + originalId).text();
+    var originalLayout = origin[1];
+    var originalPanel = origin[2];
+    var originalTab = origin[5];
+    var targetId = this.id;
+    var target = targetId.split("_");
+    var targetLayout = target[1];
+    var targetPanel = target[2];
+    var targetTab = target[5];
+    var nextTabId = $(this).next().attr('id');
+    var nextTab = (nextTabId === undefined) ? false : nextTabId.split("_")[5];
+
+    // Exit if dropped on itself.
+    if (originalId == targetId) return; 
+    
+    // Otherwise work out where tab was dropped and shuffle tabs
+    tabList[originalTab].panel = panelAreas.indexOf("layout_"+targetLayout+"_panel_"+targetPanel);
+    w2ui[originalLayout].get(originalPanel).tabs.remove(originalTab);
+    
+    // Insert before
+    if (targetTab && (insertBefore || !tabExists)) w2ui[targetLayout].get(targetPanel).tabs.insert(targetTab, {
+      id: originalTab,
+      caption: originalCaption,
+      closable: 'true'
+    });
+    // Insert after
+    else if (targetTab) w2ui[targetLayout].get(targetPanel).tabs.insert(nextTab, {
+      id: originalTab,
+      caption: originalCaption,
+      closable: 'true'
+    });
+    // Empty tab bar
+    else w2ui[targetLayout].get(targetPanel).tabs.add({
+      id: originalTab,
+      caption: originalCaption,
+      closable: 'true'
+    });
+    
+    var tabLength = w2ui[targetLayout].get(targetPanel).tabs.tabs.length;
+    
+    // activate tab if dragged to empty new panel
+    if (tabLength === 1) w2ui[targetLayout].get(targetPanel).tabs.click(originalTab);
+
+    refreshTabs();
+  });
+  
+  
   
   updateLayout();
 }
@@ -566,42 +633,41 @@ function refreshTabs() {
 // Insert tab drop area and bind events to it
 
 function dropArea (elem,x,hide) {
-  // console.log(y);
+  
   // Clean up
   var tabArea = "#temporarytab";
   var tabExists = ($(tabArea).length > 0) ? true : false;
-  $(tabArea).off("dragstart").off("dragenter").off("drag").off("dragend");
+  $(tabArea).off("dragstart").off("dragenter").off("dragleave").off("drag").off("dragend").off("drop");
   $(tabArea).remove();
   
-  if (hide) {console.log("stopping"); return;}
+  if (hide) {return;}
   
   // Reset element and bind events
+  
   var insertBefore = (x>50 || !tabExists) ? true : false;
   if (insertBefore) $('<td id="temporarytab"></td>').insertBefore(elem);
   else $('<td id="temporarytab"></td>').insertAfter(elem);
 
   $(tabArea).attr("draggable", "true");
   
-  // Allow drop by preventing default event
+  // Allow dropping by preventing default event!
   $(tabArea).on("dragover", function(event) {
     event.preventDefault();
   });
   
   $(tabArea).on("dragleave", function(event) {
-    console.log("left drag area");
     event.preventDefault();
     var x = event.originalEvent.offsetX;
-    var y = event.originalEvent.offsetX;
-    dropArea(this, x, y );
+    dropArea(this, x);
   });
   
   
   $(tabArea).on("drop", function(event) {
     event.preventDefault();
     $(".w2ui-panel-tabs table").removeClass('drop-highlight');
+    $(tabArea).remove();
     var originalId = event.originalEvent.dataTransfer.getData("text");
 
-    $(tabArea).remove();
     
     // Exit if non-tab dropped
     if (originalId.indexOf('tabs_') < 0) return; 
