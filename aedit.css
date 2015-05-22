@@ -43,6 +43,11 @@ body,
   color: #444 !important;
 }
 
+.w2ui-icon {
+  width: 22px !important;
+  height: 22px !important;
+}
+
 #layout_layout_panel_top .w2ui-toolbar {
   background: linear-gradient(0deg, #77a, #bce 20%,#fff) !important;
   padding-top: 15px;
