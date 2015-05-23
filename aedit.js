@@ -97,7 +97,7 @@ $('#layout').w2layout({
   }, {
     type: 'left',
     size: '25%',
-    hidden: true,
+    hidden: false,
     resizable: true,
     style: pstyle,
     content: ''
@@ -109,7 +109,7 @@ $('#layout').w2layout({
   }, {
     type: 'right',
     size: '25%',
-    hidden: true,
+    hidden: false,
     resizable: true,
     style: pstyle,
     content: ''
@@ -118,7 +118,7 @@ $('#layout').w2layout({
     size: '25%',
     resizable: true,
     style: pstyle,
-    hidden: true,
+    hidden: false,
     content: ''
   }]
 });
@@ -397,6 +397,13 @@ var buttons = {
     }, {
       text: 'File history',
       icon: 'fa fa-history'
+    }, {
+    }, {
+      text: 'Split panel horizontally',
+      icon: 'fa fa-arrow-right'
+    }, {
+      text: 'Split panel vertically',
+      icon: 'fa fa-arrow-down'
     }]
   },
   spacer: {
@@ -507,6 +514,7 @@ function refreshTabs() {
   var tabSelector = ".w2ui-panel-tabs td:not(:last-child)";
   var tabContainer = ".w2ui-panel-tabs td:last-child";
   var tabArea = "#temporarytab";
+  $(tabContainer).removeClass('drop-highlight');
   $(tabSelector).off("dragstart").off("dragenter").off("dragleave").off("drag").off("dragend").off("drop");
   $(tabSelector).attr("draggable", "true");
   $(tabSelector).on("dragstart", function(event) {
@@ -530,7 +538,7 @@ function refreshTabs() {
     $(this).show();
   });
   $(tabContainer).off("dragstart").off("dragenter").off("dragleave").off("drag").off("dragend").off("drop");
-  $(tabContainer).attr("draggable", "true");
+  //$(tabContainer).attr("draggable", "true");
   // Allow dropping by preventing default event!
   $(tabContainer).on("dragover", function(event) {
     event.preventDefault();
@@ -589,7 +597,8 @@ function refreshTabs() {
     else if (lastTab === 0) {
       var oldPanel = panelAreas.indexOf("layout_" + originalLayout + "_panel_" + originalPanel);
       //console.log("hiding panel " + oldPanel);
-      $("#content" + oldPanel).html("<h1>Panel inactive</h1><h3>Drag a tab to this panel's bar.</h3>");
+      $("#content" + oldPanel).html('<div class="inactive-panel">' +
+      '<h1>Panel inactive</h1><h3>Drag a tab over to reactivate it.</h3></div>');
       $("#content" + oldPanel).show();
       $("#editor" + oldPanel).hide();
       $("#container"+ oldPanel + " .w2ui-sidebar").hide();
