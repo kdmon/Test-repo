@@ -739,13 +739,15 @@ function init() {
   });
   startDoc("document1", 'thisisjustatestdocument', 'leftsplit', 'main', false, 'test', 'red');
   startDoc("document2", 'anothertestdocumentonly', 'leftsplit', 'preview', false, 'test', 'red');
+  /*
   startDoc("document3", 'thisisjustatestdocument1', 'middlesplit', 'main', false, 'test', 'red');
   startDoc("document4", 'anothertestdocumentonly1', 'middlesplit', 'preview', false, 'test', 'red');
   startDoc("document5", 'thisisjustatestdocument2', 'rightsplit', 'main', false, 'test', 'red');
   startDoc("document6", 'anothertestdocumentonly2', 'rightsplit', 'preview', false, 'test', 'red');
   startDoc("document7", 'anothertestdocumentonly3', 'bottomsplit', 'main', false, 'test', 'red');
   fileBrowser("kdmon", "ace-builds");
-  fileBrowser("kdmon", "cats");
+  */
+  fileBrowser("kdmon", "Dungeon-World");
   refreshTabs();
 }
 var Model = function() {
@@ -850,23 +852,17 @@ function fileBrowser(user, repository, branch, path, panel) {
       });
       // 4. Handle events
       // directory opened
+      w2ui[id].on('collapse', function(event) {
+        event.object.icon = 'fa fa-folder';
+      });
       w2ui[id].on('expand', function(event) {
-        return;
-        repo.contents(branch || 'master', event.object.text || '', function(err, data) {
-          
-          if (err) {
-            console.log("Error retrieving files", err);
-          }
-          else {
-            var nodes = generateFileTree(data);
-             w2ui[id].insert(event.target, nodes);
-          }
-        });
+        event.object.icon = 'fa fa-folder-open';
       });
       // file open
       w2ui[id].on('click', function(event) {
+        startDoc("document3", 'thisisjustatestdocument1', 'middlesplit', 'main', false, 'test', 'red');
         if (event.target.substr(0, 6) === "folder") return;
-        console.log('Event: ' + event.type + ' Target: ' + event.target);
+        //console.log('Event: ' + event.type + ' Target: ' + event.target);
       });
       // 5. Insert tab and activate it
       tabList[id] = {
@@ -943,7 +939,7 @@ function generateNodes(tree) {
     
     var file = files[index];
     var id = uid + "_" + file.path;
-    var icon = (file.type === "tree") ? 'fa fa-folder' : 'fa fa-file';
+    var icon = (file.type === "tree") ? 'fa fa-folder' : 'fa fa-file-o';
     var paths = file.path.split('/');
     var filename = paths.pop();
     var depth = paths.length;
