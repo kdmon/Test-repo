@@ -579,13 +579,22 @@ function refreshTabs() {
     });
     var tabLength = w2ui[targetLayout].get(targetPanel).tabs.tabs.length;
     var lastTab = w2ui[originalLayout].get(originalPanel).tabs.tabs.length;
-    var lastId = w2ui[originalLayout].get(originalPanel).tabs.tabs[lastTab - 1].id;
+    var lastId = (lastTab > 0) ?w2ui[originalLayout].get(originalPanel).tabs.tabs[lastTab - 1].id : 0;
     console.log(lastTab, lastId);
     // problem here is focus stealing from editor
-    /*
+    
     // activate last remaining tab in orginal panel
-    if (lastTab === 1) w2ui[originalLayout].get(originalPanel).tabs.click(lastId);
-    */
+    if (lastTab > 0) w2ui[originalLayout].get(originalPanel).tabs.click(lastId);
+
+    // Clear panel if empty
+    else if (lastTab === 0) {
+      var oldPanel = panelAreas.indexOf("layout_" + originalLayout + "_panel_" + originalPanel);
+      console.log("hiding panel " + oldPanel);
+      $("#contents" + oldPanel).hide();
+      $("#editor" + oldPanel).hide();
+      $("#container"+ oldPanel + " .w2ui-sidebar").hide();
+    }
+    
     // activate tab if dragged to empty new panel
     if (tabLength === 1) w2ui[targetLayout].get(targetPanel).tabs.click(originalTab);
     refreshTabs();
