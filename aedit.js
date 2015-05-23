@@ -707,6 +707,20 @@ setTimeout(function() {
   init()
 }, 50);
 
+var github = new Github({
+  token: localStorage["token"],
+  auth: "oauth"
+});
+
+var global = {
+  user: 'kdmon',
+  repo: 'ace-builds'
+};
+
+var dirtyFileTimer = setTimeout(function (){}, 50);
+
+var repo = github.getRepo(global.user, global.repo);
+  
 function init() {
   var i = 0;
   $(".w2ui-panel-content").each(function() {
@@ -727,19 +741,18 @@ function init() {
       i++;
     }
   });
-  startDoc("document1", 'thisisjustatestdocument', 'leftsplit', 'main', false, 'test', 'red');
-  startDoc("document2", 'anothertestdocumentonly', 'leftsplit', 'preview', false, 'test', 'red');
+//  startDoc("document1", 'thisisjustatestdocument', 'leftsplit', 'main', false, 'test', 'red');
+//  startDoc("document2", 'anothertestdocumentonly', 'leftsplit', 'preview', false, 'test', 'red');
   /*
   startDoc("document3", 'thisisjustatestdocument1', 'middlesplit', 'main', false, 'test', 'red');
   startDoc("document4", 'anothertestdocumentonly1', 'middlesplit', 'preview', false, 'test', 'red');
   startDoc("document5", 'thisisjustatestdocument2', 'rightsplit', 'main', false, 'test', 'red');
   startDoc("document6", 'anothertestdocumentonly2', 'rightsplit', 'preview', false, 'test', 'red');
   startDoc("document7", 'anothertestdocumentonly3', 'bottomsplit', 'main', false, 'test', 'red');
-  fileBrowser("kdmon", "ace-builds");
   */
   fileBrowser({
-    user:"kdmon",
-    repository: "ace-builds"
+    user: global.user || "kdmon",
+    repository: global.repo || "ace-builds"
   });
   
   //fileBrowser("kdmon", "Three.js");
@@ -820,10 +833,7 @@ setTimeout(function() {
   ko.applyBindings(app);
 }, 250);
 connection = new sharejs.Connection("http://it4se.com:8081/channel");
-var github = new Github({
-  token: localStorage["token"],
-  auth: "oauth"
-});
+
 // Create a sidebar for browsing repository files
 function fileBrowser(settings) {
   var user = settings.user;
@@ -831,8 +841,7 @@ function fileBrowser(settings) {
   var branch = settings.branch;
   var path = settings.path;
   var panel = settings.panel;
-  // 1. Fetch repo files, recursively?
-  var repo = github.getRepo(user, repository);
+  // 1. Fetch repo files, recursively
   repo.getTree('master?recursive=true', function (err, tree) {
     var title = "File Browser " + repository;
     var id = "filebrowser" + Math.round(Math.random() * 10000000);
@@ -878,10 +887,12 @@ function fileBrowser(settings) {
       });
       // file open
       w2ui[id].on('dblClick', function(event) {
-        console.log(event.target);
-        startDoc("document3", 'thisisjustatestdocument1', 'middlesplit', 'main', false, 'test', 'red');
-        if (event.target.substr(0, 6) === "folder") return;
-        //console.log('Event: ' + event.type + ' Target: ' + event.target);
+        if(event.target.substr(0,5) === "folder") return;
+        var path = event.target.substr(event.target.indexOf("_")+1);
+        startDoc({
+          title: path,
+          path: path
+        });
       });
       
     }
@@ -1021,47 +1032,204 @@ function pickPanel(identifier) {
   };
 }
 
-function startDoc(title, url, area, preserveContent, username, color) {
+function startDoc(settings) {
+  var title = settings.title || 'untitled';
+  var tabId = title;
+  var path = settings.path;
+  var branch = settings.branch || "master";
+  var preserveContent = settings.preserveContent || false;
+  var color = settings.color || "red";
+  var username = global.user;
+  var repository = global.repo;
+  var url = encodeURIComponent("/"+username+"/"+repository+"/"+branch+"/"+path);
   var location = pickPanel();
-  var editSession = ace.createEditSession('', '');
-  var editorObj = editors[location.area].setSession(editSession);
-  tabList[title] = {
-    id: title,
-    caption: title,
-    panel: location.area,
-    type: 'editor',
-    editSession: editSession
-  };
-  w2ui[location.layout].get(location.panel).tabs.add({
-    id: title,
-    caption: title
-  });
-  connection.open(url, 'text', function(error, doc) {
-    doc.attach_ace(editors[location.area], preserveContent, username, color);
-    doc.shout({
-      action: "announce",
-      msg: username + ' opened document.'
-    });
-    doc.on('shout', function(data) {
-      switch (data.action) {
-        case "announce":
-          console.log(data.msg);
-          break;
-        case "cursor":
-          cursors[data.user] = {
-            row: data.row,
-            column: data.column,
-            color: data.color
-          };
-          updateCursor(data.user, index);
-          break;
-        case "selection":
-          selections[data.user] = [data.row, data.column, data.row2, data.column2, data.color];
-          //updateSelections(data.user, index);
-          break;
-      }
-    });
-  });
   
+  //console.log("opening " + url);
+  
+  // fetch file via github api
+  
+  repo.read(branch, path, function(err, value) {
+    if(err) {
+      alert ("unable to read file", err);
+    }
+    
+    else {
+      connection.open(url, 'text', function(error, doc) {
+        if(error) {
+          alert ("Unable to initiate real-time document", error);
+        }
+        else {
+          doc.attach_ace(editors[location.area], preserveContent, username, color);
+          doc.shout({
+            action: "announce",
+            msg: username + ' opened document.'
+          });
+          doc.on('shout', function(data) {
+            switch (data.action) {
+              case "announce":
+                console.log(data.msg);
+              break;
+              case "cursor":
+                cursors[data.user] = {
+                  row: data.row,
+                  column: data.column,
+                  color: data.color
+                };
+                updateCursor(data.user, index);
+              break;
+              case "selection":
+                selections[data.user] = [data.row, data.column, data.row2, data.column2, data.color];
+                //updateSelections(data.user, index);
+              break;
+            }
+          });
+          
+          editors[location.area].selection.on("changeCursor", function(data) {
+            var position = editors[location.area].selection.getCursor();
+            doc.shout({
+              action: "cursor",
+              user: username,
+              color: cursorColor,
+              column: position.column,
+              row: position.row
+            });
+          });
+          editors[location.area].selection.on("changeSelection", function(data) {
+            var position = editors[location.area].getSelectionRange();
+            if (position.first) doc.shout({
+              action: "selections",
+              user: username,
+              color: cursorColor,
+              column: position.first.column,
+              row: position.first.row,
+              column2: position.end.column,
+              row2: position.end.row
+            });
+          });
+          
+        var editSession = ace.createEditSession('', '');
+        var editorObj = editors[location.area].setSession(editSession);
+        tabList[title] = {
+          id: title,
+          caption: title,
+          panel: location.area,
+          type: 'editor',
+          editSession: editSession
+        };
+        var modelist = ace.require('ace/ext/modelist');
+        var UndoManager = ace.require("ace/undomanager").UndoManager;
+        ace.require("ace/ext/emmet");
+        editors[location.area] = ace.edit("editor" + location.area);
+        editors[location.area].setBehavioursEnabled(true);
+        
+        //if (localStorage.fontSize) {$(".editor").css("font-size", localStorage.fontSize + "px");}
+        
+        
+        editors[location.area].setOptions({
+          enableBasicAutocompletion: true
+        });
+        editors[location.area].focus();
+        var mode = modelist.getModeForPath(path).mode;
+        editors[location.area].getSession().setMode(mode);
+        editors[location.area].setOption("enableEmmet", true);
+        editors[location.area].getSession().setTabSize(2);
+        
+        if (localStorage.lineWrap > 0) editors[location.area].getSession().setUseWrapMode(true);
+        else editors[location.area].getSession().setUseWrapMode(false);
+        
+        //editors[location.area].session.setValue(value);
+        editors[location.area].setValue(value, -1);
+        editors[location.area].getSession().setUndoManager(new UndoManager());
+        
+        /*
+        // Hover over text in editor to trigger guides
+        editors[location.area].on('mousemove', function(e) {
+          var position = e.getDocumentPosition();
+          var token = editors[location.area].session.getTokenAt(position.row, position.column);
+          if (token.type == 'support.type' || token.type == 'support.function') {
+            switch (token.value) {
+  	      case '': break;
+            }
+          //console.log(token);
+          }
+        });
+        */
+
+        editors[location.area].getSession().on('change', function(e) {
+          clearTimeout(dirtyFileTimer);
+          dirtyFileTimer = setTimeout(function () {
+
+            // force browsersync update
+            $.get("http://it4se.com:3000/__browser_sync__?method=reload&args=" +url, function (data) {});
+
+            if (editors[location.area].getSession().getUndoManager().isClean()) w2ui[location.layout].get(location.panel).set(tabId, { caption: path });
+            else w2ui[location.layout].get(location.panel).set(tabId, { caption: ' * ' + path});
+
+            if (editors[currentFile].getSession().getUndoManager().hasUndo()) console.log("enable undo button");
+            else console.log("disable undo button");
+
+            if (editors[currentFile].getSession().getUndoManager().hasRedo()) console.log("enable redo button");
+            else console.log("disable redo button");
+
+            //checkUnsaved();
+
+          }, 500);
+
+          /*
+          // alert ("livecoding: " + liveCoding + "\nDelay:" + liveCodingDelay + "\nrunning?" + editors[currentFile].running);
+          if (liveCodingDelay > 0 && editors[currentFile].running) {
+            clearTimeout(liveCodingTimer);
+            liveCodingTimer = setTimeout(function() {
+              runCode();
+            }, liveCodingDelay);
+          }
+          */
+        });
+        
+        
+        if (localStorage.editorTheme) {editors[location.area].setTheme(localStorage.editorTheme);}
+        else {
+            
+          if (localStorage.uitheme == "dark") {
+            editors[location.area].setTheme("ace/theme/vibrant_ink");
+          } else {
+            editors[location.area].setTheme("ace/theme/chrome");
+          }
+        }
+          
+          // add tab and listen for tab close clicks
+          w2ui[location.layout].get(location.panel).tabs.add({
+            id: tabId,
+            caption: title
+          });
+          
+          // needs to be handled elsewhere for all tabs at once!
+          /*
+          w2ui.tabs.on('close', function(event) {
+            
+            var proceed = false;
+            
+            var editorIndex = tabList[tabId].panel;
+            var saved = editors[editorIndex].getSession().getUndoManager().isClean();
+
+            if (!saved) proceed = confirm ("Are you sure you want to close this unsaved file?")
+
+            if (saved || proceed) {
+              doc.close();
+              doc.detach_ace();
+              // Remove editsession from editor object ???
+              // editors[editorIndex].destroy();
+              delete tabList[tabId];
+            }
+
+            // Don't close it
+            else event.preventDefault();
+            
+          });
+          */
+        }
+      });
+    }
+  });
   w2ui[location.layout].get(location.panel).tabs.click(title);
 }
