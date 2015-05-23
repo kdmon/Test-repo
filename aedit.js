@@ -537,78 +537,17 @@ function refreshTabs() {
     $(tabContainer).removeClass('drop-highlight');
     $(this).show();
   });
+  // remove existing events on tabcontainer
   $(tabContainer).off("dragstart").off("dragenter").off("dragleave").off("drag").off("dragend").off("drop");
-  //$(tabContainer).attr("draggable", "true");
   // Allow dropping by preventing default event!
   $(tabContainer).on("dragover", function(event) {
     event.preventDefault();
   });
   $(tabContainer).on("drop", function(event) {
     event.preventDefault();
-    $(tabContainer).removeClass('drop-highlight');
-    $(tabArea).remove();
     var originalId = event.originalEvent.dataTransfer.getData("text");
-    // Exit if non-tab dropped
-    if (originalId.indexOf('tabs_') < 0) return;
-    var origin = originalId.split("_");
-    var originalCaption = $("#" + originalId).text();
-    var originalLayout = origin[1];
-    var originalPanel = origin[2];
-    var originalTab = origin[5];
-    var targetId = this.id;
-    var target = targetId.split("_");
-    var targetLayout = target[1];
-    var targetPanel = target[2];
-    var targetTab = target[5];
-    var nextTabId = $(this).next().attr('id');
-    var nextTab = (nextTabId === undefined) ? false : nextTabId.split("_")[5];
-    // Exit if dropped on itself.
-    if (originalId == targetId) return;
-    // Otherwise work out where tab was dropped and shuffle tabs
-    tabList[originalTab].panel = panelAreas.indexOf("layout_" + targetLayout + "_panel_" + targetPanel);
-    w2ui[originalLayout].get(originalPanel).tabs.remove(originalTab);
-    // Insert before
-    if (targetTab && (insertBefore || !tabExists)) w2ui[targetLayout].get(targetPanel).tabs.insert(targetTab, {
-      id: originalTab,
-      caption: originalCaption,
-      closable: 'true'
-    });
-    // Insert after
-    else if (targetTab) w2ui[targetLayout].get(targetPanel).tabs.insert(nextTab, {
-      id: originalTab,
-      caption: originalCaption,
-      closable: 'true'
-    });
-    // Empty tab bar
-    else w2ui[targetLayout].get(targetPanel).tabs.add({
-      id: originalTab,
-      caption: originalCaption,
-      closable: 'true'
-    });
-    var tabLength = w2ui[targetLayout].get(targetPanel).tabs.tabs.length;
-    var lastTab = w2ui[originalLayout].get(originalPanel).tabs.tabs.length;
-    var lastId = (lastTab > 0) ?w2ui[originalLayout].get(originalPanel).tabs.tabs[lastTab - 1].id : 0;
-    
-    // Activate the next tab in in original pane if the active tab is moved
-    if (lastTab > 0 && w2ui[originalLayout].get(originalPanel).tabs.active === originalTab)
-      w2ui[originalLayout].get(originalPanel).tabs.click(lastId);
-
-    // Clear original panel's content if empty
-    else if (lastTab === 0) {
-      var oldPanel = panelAreas.indexOf("layout_" + originalLayout + "_panel_" + originalPanel);
-      //console.log("hiding panel " + oldPanel);
-      $("#content" + oldPanel).html('<div class="inactive-panel">' +
-      '<h1>Panel inactive</h1><h3>Drag a tab over to reactivate it.</h3></div>');
-      $("#content" + oldPanel).show();
-      $("#editor" + oldPanel).hide();
-      $("#container"+ oldPanel + " .w2ui-sidebar").hide();
-    }
-    
-    // activate tab if dragged to empty new panel
-    if (tabLength === 1) w2ui[targetLayout].get(targetPanel).tabs.click(originalTab);
-    refreshTabs();
+    handleDrop (originalId, this);
   });
-  updateLayout();
 }
 // Insert tab drop area and bind events to it
 function dropArea(elem, x, hide) {
@@ -636,51 +575,82 @@ function dropArea(elem, x, hide) {
   });
   $(tabArea).on("drop", function(event) {
     event.preventDefault();
-    $(".w2ui-panel-tabs table").removeClass('drop-highlight');
-    $(tabArea).remove();
     var originalId = event.originalEvent.dataTransfer.getData("text");
-    // Exit if non-tab dropped
-    if (originalId.indexOf('tabs_') < 0) return;
-    var origin = originalId.split("_");
-    var originalCaption = $("#" + originalId).text();
-    var originalLayout = origin[1];
-    var originalPanel = origin[2];
-    var originalTab = origin[5];
-    var targetId = elem.id;
-    var target = targetId.split("_");
-    var targetLayout = target[1];
-    var targetPanel = target[2];
-    var targetTab = target[5];
-    var nextTabId = $(elem).next().attr('id');
-    var nextTab = (nextTabId === undefined) ? false : nextTabId.split("_")[5];
-    // Exit if dropped on itself.
-    if (originalId == targetId) return;
-    // Otherwise work out where tab was dropped and shuffle tabs
-    tabList[originalTab].panel = panelAreas.indexOf("layout_" + targetLayout + "_panel_" + targetPanel);
-    w2ui[originalLayout].get(originalPanel).tabs.remove(originalTab);
-    // Insert before
-    if (targetTab && (insertBefore || !tabExists)) w2ui[targetLayout].get(targetPanel).tabs.insert(targetTab, {
-      id: originalTab,
-      caption: originalCaption,
-      closable: 'true'
-    });
-    // Insert after
-    else if (targetTab) w2ui[targetLayout].get(targetPanel).tabs.insert(nextTab, {
-      id: originalTab,
-      caption: originalCaption,
-      closable: 'true'
-    });
-    // Empty tab bar
-    else w2ui[targetLayout].get(targetPanel).tabs.add({
-      id: originalTab,
-      caption: originalCaption,
-      closable: 'true'
-    });
-    var tabLength = w2ui[targetLayout].get(targetPanel).tabs.tabs.length;
-    // activate tab if dragged to empty new panel
-    if (tabLength === 1) w2ui[targetLayout].get(targetPanel).tabs.click(originalTab);
-    refreshTabs();
+    handleDrop (originalId, elem, insertBefore);
   });
+}
+
+function handleDrop(source, destination, insertBefore) {
+  $(".w2ui-panel-tabs table").removeClass('drop-highlight');
+  var tabArea = "#temporarytab";
+  $(tabArea).remove();
+  var originalId = source;
+  // Exit if non-tab dropped
+  if (originalId.indexOf('tabs_') < 0) return;
+  var origin = originalId.split("_");
+  var originalCaption = $("#" + originalId).text();
+  var originalLayout = origin[1];
+  var originalPanel = origin[2];
+  var originalTab = origin[5];
+  var targetId = destination.id;
+  var target = targetId.split("_");
+  var targetLayout = target[1];
+  var targetPanel = target[2];
+  var targetTab = target[5];
+  var tabExists = ($(tabArea).length > 0) ? true : false;
+  var nextTabId = $(destination).next().attr('id');
+  var nextTab = (nextTabId === undefined) ? false : nextTabId.split("_")[5];
+  // Exit if dropped on itself.
+  if (originalId == targetId) return;
+  // Otherwise work out where tab was dropped and shuffle tabs
+  tabList[originalTab].panel = panelAreas.indexOf("layout_" + targetLayout + "_panel_" + targetPanel);
+  w2ui[originalLayout].get(originalPanel).tabs.remove(originalTab);
+  // Insert before
+  if (targetTab && (insertBefore || !tabExists)) w2ui[targetLayout].get(targetPanel).tabs.insert(targetTab, {
+    id: originalTab,
+    caption: originalCaption,
+    closable: 'true'
+  });
+  // Insert after
+  else if (targetTab) w2ui[targetLayout].get(targetPanel).tabs.insert(nextTab, {
+    id: originalTab,
+    caption: originalCaption,
+    closable: 'true'
+  });
+  // Empty tab bar
+  else w2ui[targetLayout].get(targetPanel).tabs.add({
+    id: originalTab,
+    caption: originalCaption,
+    closable: 'true'
+  });
+  
+  var tabLength = w2ui[targetLayout].get(targetPanel).tabs.tabs.length;
+  var lastTab = w2ui[originalLayout].get(originalPanel).tabs.tabs.length;
+  var lastId = (lastTab > 0) ?w2ui[originalLayout].get(originalPanel).tabs.tabs[lastTab - 1].id : 0;
+  
+  // Activate last tab in original pane if it exists and the active tab is moved
+  if (lastTab > 0 && w2ui[originalLayout].get(originalPanel).tabs.active === originalTab)
+    w2ui[originalLayout].get(originalPanel).tabs.click(lastId);
+
+  // Clear original panel's content if empty
+  else if (lastTab === 0) {
+    var oldPanel = panelAreas.indexOf("layout_" + originalLayout + "_panel_" + originalPanel);
+    //console.log("hiding panel " + oldPanel);
+    $("#content" + oldPanel).html('<div class="inactive-panel">' +
+    '<h1>Panel empty</h1><h3>Drag a tab over to reactivate it.</h3></div>');
+    $("#content" + oldPanel).show();
+    $("#editor" + oldPanel).hide();
+    $("#container"+ oldPanel + " .w2ui-sidebar").hide();
+  }
+  
+  // activate tab if dragged to empty new panel
+  if (tabLength === 1) w2ui[targetLayout].get(targetPanel).tabs.click(originalTab);
+  else { // otherwise activate active tab in destination panel
+    var activeTab = w2ui[targetLayout].get(targetPanel).tabs.active;
+    w2ui[targetLayout].get(targetPanel).tabs.click(activeTab);
+  }
+  refreshTabs();
+  updateLayout();
 }
 
 function tabClick(obj, event) {
@@ -699,6 +669,7 @@ function tabClick(obj, event) {
     case 'filebrowser':
       var elem = $("#container_" + item.id).detach();
       elem.appendTo("#container" + item.panel).show();
+      updateLayout();
       break;
     default:
       return;
@@ -766,7 +737,11 @@ function init() {
   startDoc("document7", 'anothertestdocumentonly3', 'bottomsplit', 'main', false, 'test', 'red');
   fileBrowser("kdmon", "ace-builds");
   */
-  fileBrowser("kdmon", "ace-builds");
+  fileBrowser({
+    user:"kdmon",
+    repository: "ace-builds"
+  });
+  
   //fileBrowser("kdmon", "Three.js");
   refreshTabs();
 }
@@ -850,7 +825,12 @@ var github = new Github({
   auth: "oauth"
 });
 // Create a sidebar for browsing repository files
-function fileBrowser(user, repository, branch, path, panel) {
+function fileBrowser(settings) {
+  var user = settings.user;
+  var repository = settings.repository;
+  var branch = settings.branch;
+  var path = settings.path;
+  var panel = settings.panel;
   // 1. Fetch repo files, recursively?
   var repo = github.getRepo(user, repository);
   repo.getTree('master?recursive=true', function (err, tree) {
