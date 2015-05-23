@@ -667,18 +667,20 @@ function dropArea(elem, x, hide) {
 
 function tabClick(obj, event) {
   var item = tabList[event.target];
-  console.log(item);
+
+  $("#editor" + item.panel).hide();
+  $("#content" + item.panel).hide();
+  $("#container" + item.panel + " .w2ui-sidebar").hide();
+  
   switch (item.type) {
     case 'editor':
       editors[item.panel].setSession(item.editSession);
       editors[item.panel].focus();
       $("#editor" + item.panel).show();
-      $("#content" + item.panel).hide();
       break;
     case 'filebrowser':
-      $("#content" + item.panel).w2render(item.id);
-      $("#editor" + item.panel).hide();
-      $("#content" + item.panel).show();
+      var elem = $("#container_" + item.id).detach();
+      elem.appendTo("#container" + item.panel).show();
       break;
     default:
       return;
@@ -747,7 +749,8 @@ function init() {
   startDoc("document7", 'anothertestdocumentonly3', 'bottomsplit', 'main', false, 'test', 'red');
   fileBrowser("kdmon", "ace-builds");
   */
-  fileBrowser("kdmon", "Dungeon-World");
+  fileBrowser("kdmon", "ace-builds");
+  //fileBrowser("kdmon", "Three.js");
   refreshTabs();
 }
 var Model = function() {
@@ -829,7 +832,7 @@ var github = new Github({
   token: localStorage["token"],
   auth: "oauth"
 });
-// Create a side bar for browsing repository files
+// Create a sidebar for browsing repository files
 function fileBrowser(user, repository, branch, path, panel) {
   // 1. Fetch repo files, recursively?
   var repo = github.getRepo(user, repository);
@@ -845,26 +848,8 @@ function fileBrowser(user, repository, branch, path, panel) {
       var fileNodes = generateNodes(tree);
       //var fileNodes = generateFileTree(data);
       var location = pickPanel(panel);
-      // 3 Insert tab+widget in panel
-      $().w2sidebar({
-        name: id,
-        nodes: fileNodes
-      });
-      // 4. Handle events
-      // directory opened
-      w2ui[id].on('collapse', function(event) {
-        event.object.icon = 'fa fa-folder';
-      });
-      w2ui[id].on('expand', function(event) {
-        event.object.icon = 'fa fa-folder-open';
-      });
-      // file open
-      w2ui[id].on('click', function(event) {
-        startDoc("document3", 'thisisjustatestdocument1', 'middlesplit', 'main', false, 'test', 'red');
-        if (event.target.substr(0, 6) === "folder") return;
-        //console.log('Event: ' + event.type + ' Target: ' + event.target);
-      });
-      // 5. Insert tab and activate it
+      
+      // 3. Show tab
       tabList[id] = {
         id: id,
         caption: title,
@@ -876,6 +861,32 @@ function fileBrowser(user, repository, branch, path, panel) {
         caption: title
       });
       refreshTabs();
+      
+      
+      // 4. render into temporary dom element once
+      $('<div id="container_' + id +'" class="panel-content" style="display:none"></div>').appendTo( "body" );
+      $("#container_"+id).w2sidebar({
+        name: id,
+        nodes: fileNodes
+      });
+      
+      // 5. Handle events
+      // directory opened
+      w2ui[id].on('collapse', function(event) {
+        event.object.icon = 'fa fa-folder';
+      });
+      w2ui[id].on('expand', function(event) {
+        event.object.icon = 'fa fa-folder-open';
+        console.log(event);
+      });
+      // file open
+      w2ui[id].on('dblClick', function(event) {
+        console.log(event.target);
+        startDoc("document3", 'thisisjustatestdocument1', 'middlesplit', 'main', false, 'test', 'red');
+        if (event.target.substr(0, 6) === "folder") return;
+        //console.log('Event: ' + event.type + ' Target: ' + event.target);
+      });
+      
     }
   });
 }
@@ -934,7 +945,7 @@ function generateNodes(tree) {
   var nodes = [];
   
   var uid = Math.round(Math.random() * 1000000000);
-  
+  console.log(files.length);
   for (var index in files) {
     
     var file = files[index];
