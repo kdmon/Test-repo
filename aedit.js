@@ -580,17 +580,17 @@ function refreshTabs() {
     var tabLength = w2ui[targetLayout].get(targetPanel).tabs.tabs.length;
     var lastTab = w2ui[originalLayout].get(originalPanel).tabs.tabs.length;
     var lastId = (lastTab > 0) ?w2ui[originalLayout].get(originalPanel).tabs.tabs[lastTab - 1].id : 0;
-    console.log(lastTab, lastId);
-    // problem here is focus stealing from editor
     
-    // activate last remaining tab in orginal panel
-    if (lastTab > 0) w2ui[originalLayout].get(originalPanel).tabs.click(lastId);
+    // Activate the next tab in in original pane if the active tab is moved
+    if (lastTab > 0 && w2ui[originalLayout].get(originalPanel).tabs.active === originalTab)
+      w2ui[originalLayout].get(originalPanel).tabs.click(lastId);
 
-    // Clear panel if empty
+    // Clear original panel's content if empty
     else if (lastTab === 0) {
       var oldPanel = panelAreas.indexOf("layout_" + originalLayout + "_panel_" + originalPanel);
-      console.log("hiding panel " + oldPanel);
-      $("#contents" + oldPanel).hide();
+      //console.log("hiding panel " + oldPanel);
+      $("#content" + oldPanel).html("<h1>Panel inactive</h1><h3>Drag a tab to this panel's bar.</h3>");
+      $("#content" + oldPanel).show();
       $("#editor" + oldPanel).hide();
       $("#container"+ oldPanel + " .w2ui-sidebar").hide();
     }
@@ -739,7 +739,6 @@ function init() {
         $('.w2ui_tabs').removeClass('active-tab');
         $(obj.container).addClass('active-editor');
         //work out which tab is active
-        console.log(obj);
         $('.w2ui_tabs').addClass('active-tab');
       });
       editors[i].on('blur', function(event, obj) {
@@ -869,6 +868,7 @@ function fileBrowser(user, repository, branch, path, panel) {
         id: id,
         caption: title
       });
+      
       refreshTabs();
       
       
@@ -886,7 +886,6 @@ function fileBrowser(user, repository, branch, path, panel) {
       });
       w2ui[id].on('expand', function(event) {
         event.object.icon = 'fa fa-folder-open';
-        console.log(event);
       });
       // file open
       w2ui[id].on('dblClick', function(event) {
@@ -897,7 +896,9 @@ function fileBrowser(user, repository, branch, path, panel) {
       });
       
     }
+  w2ui[location.layout].get(location.panel).tabs.click(id);
   });
+  
 }
 
 
@@ -954,7 +955,7 @@ function generateNodes(tree) {
   var nodes = [];
   
   var uid = Math.round(Math.random() * 1000000000);
-  console.log(files.length);
+  
   for (var index in files) {
     
     var file = files[index];
@@ -1072,4 +1073,6 @@ function startDoc(title, url, area, preserveContent, username, color) {
       }
     });
   });
+  
+  w2ui[location.layout].get(location.panel).tabs.click(title);
 }
