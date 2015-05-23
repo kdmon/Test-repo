@@ -9,7 +9,11 @@ body,
   padding: 0;
   margin: 0;
   background: #fff;
-  padding: 0px;
+}
+
+body, .panel-content {
+  font-family: sans;
+  font-size: 0.5em;
 }
 
 .panel-editor {
@@ -107,6 +111,12 @@ body,
 
 .drop-highlight {
   background: linear-gradient(0deg, #afa, #5a5) !important;
+}
+
+.inactive-panel {
+  background: linear-gradient(0deg, #fff, #aac, #fff) !important;
+  text-shadow: 1px 1px white;
+  padding: 0 10px 0 10px;
 }
 
 
