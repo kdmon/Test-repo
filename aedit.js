@@ -752,7 +752,8 @@ function init() {
   */
   fileBrowser({
     user: global.user || "kdmon",
-    repository: global.repo || "ace-builds"
+    repository: global.repo || "ace-builds",
+    panel: 0
   });
   
   //fileBrowser("kdmon", "Three.js");
@@ -1025,6 +1026,13 @@ function generateFileTree(data) {
 }
 // Return best panel for new tabs
 function pickPanel(identifier) {
+  if (identifier) 
+    return {
+      layout: panelAreas[identifier],
+      panel: 'main',
+      area: identifier
+    };
+  else
   return {
     layout: 'middlesplit',
     panel: 'main',
@@ -1155,6 +1163,7 @@ function startDoc(settings) {
         });
         */
 
+/*
         editors[location.area].getSession().on('change', function(e) {
           clearTimeout(dirtyFileTimer);
           dirtyFileTimer = setTimeout(function () {
@@ -1174,8 +1183,7 @@ function startDoc(settings) {
             //checkUnsaved();
 
           }, 500);
-
-          /*
+          
           // alert ("livecoding: " + liveCoding + "\nDelay:" + liveCodingDelay + "\nrunning?" + editors[currentFile].running);
           if (liveCodingDelay > 0 && editors[currentFile].running) {
             clearTimeout(liveCodingTimer);
@@ -1183,9 +1191,9 @@ function startDoc(settings) {
               runCode();
             }, liveCodingDelay);
           }
-          */
         });
         
+        */
         
         if (localStorage.editorTheme) {editors[location.area].setTheme(localStorage.editorTheme);}
         else {
@@ -1227,9 +1235,16 @@ function startDoc(settings) {
             
           });
           */
+          
+          
+                  
+          // alert ("running");
+          refreshTabs();
+          w2ui[location.layout].get(location.panel).tabs.click(title);
+            
         }
+        
       });
+
     }
-  });
-  w2ui[location.layout].get(location.panel).tabs.click(title);
-}
+  });}
