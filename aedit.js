@@ -11,7 +11,7 @@ $('#layout').w2layout({
       items: [{
         type: 'html',
         id: 'logo',
-        html: '<h1 id="logo"><span class="fa fa-2x fa-mobile"></span> WebAppEditor.com</h1>'
+        html: '<h1 id="logo" title="Edit Web Applications"><span class="fa fa-2x fa-mobile"></span><span class="fa fa-pencil" style="top: -5px; left: -5px"></span>WebAppEditor.com</h1>'
       },{
       type: 'menu',
       id: 'projectmenu',
@@ -785,13 +785,13 @@ function showProjects () {
         if (item.fork)
           forked.nodes.push({
             id: item.full_name + '_' + Math.round(Math.random*1000000),
-            text: item.full_name,
+            text: item.name,
             icon: "fa fa-code-fork"
           });
         else if (item.private)
           secret.nodes.push({
             id: item.full_name + '_' + Math.round(Math.random*1000000),
-            text: item.full_name,
+            text: item.name,
             icon:  "fa fa-eye-slash"
           });
         else if (item.owner.login !== config.user)
@@ -802,7 +802,7 @@ function showProjects () {
         else
           open.nodes.push({
             id: item.full_name + '_' + Math.round(Math.random*1000000),
-            text: item.full_name,
+            text: item.name,
             icon: "fa fa-github"
           });
       }
@@ -840,7 +840,7 @@ function showProjects () {
   });
 
   w2popup.open({
-    title: 'Open a project',
+    title: 'Open an existing project',
     width: 1200,
     height: 1000,
     body: '<div id="popup"></div>',
