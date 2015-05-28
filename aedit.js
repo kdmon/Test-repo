@@ -712,15 +712,17 @@ var github = new Github({
   auth: "oauth"
 });
 
-var global = {
+var config = {
   user: 'kdmon',
-  repo: 'ace-builds'
+  repo: 'phdthesis'
 };
 
 var dirtyFileTimer = setTimeout(function (){}, 50);
 
-var repo = github.getRepo(global.user, global.repo);
+var repo = github.getRepo(config.user, config.repo);
+
   
+
 function init() {
   var i = 0;
   $(".w2ui-panel-content").each(function() {
@@ -751,8 +753,8 @@ function init() {
   startDoc("document7", 'anothertestdocumentonly3', 'bottomsplit', 'main', false, 'test', 'red');
   */
   fileBrowser({
-    user: global.user || "kdmon",
-    repository: global.repo || "ace-builds",
+    user: config.user || "kdmon",
+    repository: "phdthesis",
     panel: 0
   });
   
@@ -836,6 +838,8 @@ setTimeout(function() {
 connection = new sharejs.Connection("http://it4se.com:8081/channel");
 
 // Create a sidebar for browsing repository files
+// assume repository and branch has already been
+// initiated, perhaps pass in repo object?
 function fileBrowser(settings) {
   var user = settings.user;
   var repository = settings.repository;
@@ -895,9 +899,8 @@ function fileBrowser(settings) {
           path: path
         });
       });
-      
+      w2ui[location.layout].get(location.panel).tabs.click(id);
     }
-  w2ui[location.layout].get(location.panel).tabs.click(id);
   });
   
 }
@@ -1047,8 +1050,8 @@ function startDoc(settings) {
   var branch = settings.branch || "master";
   var preserveContent = settings.preserveContent || false;
   var color = settings.color || "red";
-  var username = global.user;
-  var repository = global.repo;
+  var username = config.user;
+  var repository = config.repo;
   var url = encodeURIComponent("/"+username+"/"+repository+"/"+branch+"/"+path);
   var location = pickPanel();
   
