@@ -11,12 +11,12 @@ $('#layout').w2layout({
       items: [{
         type: 'html',
         id: 'logo',
-        html: '<h1 id="logo"><span class="fa fa-2x fa-mobile"></span> WebAppEditor</h1>'
+        html: '<h1 id="logo"><span class="fa fa-2x fa-mobile"></span> WebAppEditor.com</h1>'
       },{
       type: 'menu',
       id: 'projectmenu',
-      caption: 'Project switcher',
-      icon: '',
+      caption: 'Manage Projects',
+      icon: 'fa fa-sitemap',
       items: [{
         text: 'Start new project',
         icon: 'fa fa-file'
@@ -31,7 +31,7 @@ $('#layout').w2layout({
         type: 'button',
         caption: 'Collaborate',
         icon: 'fa fa-comments-o',
-        hint: 'Edit with friends via real-time text, audio and video chat.'
+        hint: 'Collaborate with friends via real-time text, audio and video chat.'
       }, {
         id: 'topspace',
         type: 'spacer'
@@ -438,6 +438,18 @@ var buttons = {
   }
 };
 
+
+$().w2layout({
+  name: 'popupLayout',
+  panels: [
+    { type: 'left', size: 300, resizable: true, minSize: 300 },
+    { type: 'main', minSize: 350, overflow: 'hidden' }
+  ]
+});
+  
+
+
+
 function toolbarClick(obj, event) {
   var id = obj.name.split("_");
   console.log(event.target);
@@ -752,10 +764,10 @@ function showProjects () {
     
     else {
       
-      var secret = {id: 'secret', text: 'Private projects', group: true, expanded: true, nodes: []};
-      var open = {id: 'public', text: 'Public projects', group: true, expanded: true, nodes: []};
-      var shared = {id: 'shared', text: 'Projects shared with you', group: true, expanded: true, nodes: []};
-      var forked =  {id: 'forked', text: 'Forked projects', group: true, expanded: true, nodes: []};
+      var secret = {id: 'secret', text: 'Your private projects (', group: true, expanded: true, nodes: []};
+      var open = {id: 'public', text: 'Your public projects (', group: true, expanded: true, nodes: []};
+      var shared = {id: 'shared', text: 'Projects shared with you (', group: true, expanded: true, nodes: []};
+      var forked =  {id: 'forked', text: 'Projects you have forked (', group: true, expanded: true, nodes: []};
       
       var obj = repos.sort(function(a,b){
         if(a.full_name.toLowerCase() > b.full_name.toLowerCase()) return 1;
@@ -792,9 +804,19 @@ function showProjects () {
           });
       }
       
+      // update count
+      
+      open.text += open.nodes.length + ')';
+      shared.text += shared.nodes.length + ')';
+      secret.text += secret.nodes.length + ')';
+      forked.text += forked.nodes.length + ')';
+      
+      if (w2ui.projectList) w2ui.projectList.destroy();
+      
       $().w2sidebar({
         name: 'projectList',
-        showMax : true,
+        topHTML: '<div style="background-color: #eee; padding: 10px 5px; border-bottom: 1px solid silver">Existing projects</div>',
+        showMax: true,
         nodes: [
           secret,
           open,
@@ -806,7 +828,9 @@ function showProjects () {
         }
       });
       
-      $('#projectList').w2render('projectList');
+      $('#popup').w2render('popupLayout');
+      w2ui.popupLayout.content('left', w2ui.projectList);
+      w2ui.popupLayout.content('main', '<h1>Select project</h1>');
       w2ui.layout.resize();
       w2popup.unlock();
     }
@@ -814,11 +838,12 @@ function showProjects () {
 
   w2popup.open({
     title: 'Open a project',
-    showMax : true,
-    body: '<div id="projectList" class="popup-content"></div>',
+    width: 1200,
+    height: 1000,
+    body: '<div id="popup"></div>',
     onOpen  : function (event) {
       event.onComplete = function () {
-        $('#projectList').w2render('projectList');
+        $('#projectList').w2render('popupLayout');
       };
     },
     onToggle: function (event) {
@@ -827,7 +852,6 @@ function showProjects () {
       };
     }
   });
-  
   w2popup.lock('Loading projects ...', true);
 
 }
