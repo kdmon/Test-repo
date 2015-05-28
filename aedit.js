@@ -794,13 +794,14 @@ function showProjects () {
       
       $().w2sidebar({
         name: 'projectList',
+        showMax : true,
         nodes: [
           secret,
           open,
           shared,
           forked
         ],
-        onClick: function (event) {
+        onDblClick: function (event) {
           w2alert ("Opening " + event.target);
         }
       });
@@ -814,20 +815,20 @@ function showProjects () {
   w2popup.open({
     title: 'Open a project',
     showMax : true,
-    body: '<div id="projectList" class="popup-content">Loading list ...</div>',
+    body: '<div id="projectList" class="popup-content"></div>',
     onOpen  : function (event) {
       event.onComplete = function () {
         $('#projectList').w2render('projectList');
       };
     },
-    onToggle: function (event) { 
+    onToggle: function (event) {
       event.onComplete = function () {
         w2ui.projectList.resize();
       };
-    }        
+    }
   });
   
-  w2popup.lock();
+  w2popup.lock('Loading projects ...', true);
 
 }
 
