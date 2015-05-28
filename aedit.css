@@ -16,6 +16,13 @@ body, .panel-content {
   font-size: 0.8em;
 }
 
+.custom-icon {
+  position: relative;
+  margin-left: -20px;
+  margin-top: -5px;
+  height: 16px;
+}
+
 #popup {
   position: absolute;
   left: 0;
@@ -38,12 +45,22 @@ body, .panel-content {
 }
 
 #logo {
+  cursor: pointer;
   font-size: 1.5em;
   font-family: sans;
   vertical-align: bottom;
   font-weight: normal;
-  margin-top: -15px !important;
-  text-shadow: 1px 1px #eee !important;
+  margin-top: -30px;
+  padding: 15px 15px 15px 15px;
+  margin-left: 0px;
+  text-decoration: underline;
+  text-shadow: 1px 1px #eee;
+  background: linear-gradient(90deg, rgba(255,255,255,0.9) 20% , rgba(255,255,255,0.3));
+}
+
+#logo:hover {
+  background: linear-gradient(45deg, rgba(255,255,255,0.9) 20% , rgba(250,250,250,0.3)) !important;
+  padding: 14px 15px 16px 15px;
 }
 
 #logo span {
@@ -77,6 +94,11 @@ body, .panel-content {
   background: linear-gradient(0deg, #aab, #558) !important;
   padding-top: 2px !important;
 }
+
+.w2ui-panel-toolbar {
+  padding-left: 0 !important;
+}
+
 .w2ui-tabs .w2ui-tab {
   padding: 5px 15px 0 4px !important;
   margin: 1 !important;
