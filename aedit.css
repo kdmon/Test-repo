@@ -16,7 +16,7 @@ body, .panel-content {
   font-size: 0.8em;
 }
 
-.popup-content {
+#popup {
   position: absolute;
   left: 0;
   top: 0;
