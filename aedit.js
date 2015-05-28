@@ -335,6 +335,7 @@ var toolbars = {
   prefs: ['url', 'refresh', 'share'],
   files: ['url', 'refresh', 'share'],
   media: ['url', 'refresh', 'share'],
+  empty: [''],
   help: ['']
 };
 var buttons = {
@@ -506,15 +507,15 @@ function initialiseToolbar(layout, panel, toolbar) {
   // Then toggle which buttons to show
   switchToolbar(layout, panel, toolbar);
 }
-initialiseToolbar('leftsplit', 'main', 'editor');
-initialiseToolbar('leftsplit', 'preview', 'editor');
-initialiseToolbar('middlesplit', 'main', 'editor');
-initialiseToolbar('middlesplit', 'preview', 'editor');
-initialiseToolbar('rightsplit', 'main', 'editor');
-initialiseToolbar('rightsplit', 'preview', 'editor');
-initialiseToolbar('bottomsplit', 'left', 'editor');
-initialiseToolbar('bottomsplit', 'main', 'editor');
-initialiseToolbar('bottomsplit', 'right', 'editor');
+initialiseToolbar('leftsplit', 'main', 'empty');
+initialiseToolbar('leftsplit', 'preview', 'empty');
+initialiseToolbar('middlesplit', 'main', 'empty');
+initialiseToolbar('middlesplit', 'preview', 'empty');
+initialiseToolbar('rightsplit', 'main', 'empty');
+initialiseToolbar('rightsplit', 'preview', 'empty');
+initialiseToolbar('bottomsplit', 'left', 'empty');
+initialiseToolbar('bottomsplit', 'main', 'empty');
+initialiseToolbar('bottomsplit', 'right', 'empty');
 /* SETUP TABS */
 var tabList = {};
 
