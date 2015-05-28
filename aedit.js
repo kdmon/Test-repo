@@ -326,6 +326,9 @@ w2ui.layout.content('left', w2ui.leftsplit);
 w2ui.layout.content('main', w2ui.middlesplit);
 w2ui.layout.content('right', w2ui.rightsplit);
 w2ui.layout.content('bottom', w2ui.bottomsplit);
+
+//w2ui.layout.on('resizing', function(event) {updateLayout();});
+
 /* SETUP TOOLBAR */
 var toolbars = {
   editor: ['save', 'undo', 'redo', 'more', 'spacer', 'split'],
@@ -443,7 +446,7 @@ var buttons = {
 $().w2layout({
   name: 'popupLayout',
   panels: [
-    { type: 'left', size: 300, resizable: true, minSize: 300 },
+    { type: 'left', size: 250, resizable: true, minSize: 200 },
     { type: 'main', minSize: 350, overflow: 'hidden' }
   ]
 });
@@ -794,8 +797,7 @@ function showProjects () {
         else if (item.owner.login !== config.user)
           shared.nodes.push({
             id: item.full_name + '_' + Math.round(Math.random*1000000),
-            text: item.full_name,
-            icon:  "fa fa-users"
+            text: '<img class="custom-icon" src="' + item.owner.avatar_url +'"/> ' + item.full_name
           });
         else
           open.nodes.push({
@@ -816,7 +818,7 @@ function showProjects () {
       
       $().w2sidebar({
         name: 'projectList',
-        topHTML: '<div style="background-color: #eee; padding: 10px 5px; border-bottom: 1px solid silver">Existing projects</div>',
+        topHTML: '<div style="background-color: #eee; text-align: center; padding: 10px 5px; border-bottom: 1px solid silver">YOUR PROJECTS</div>',
         showMax: true,
         nodes: [
           secret,
