@@ -16,6 +16,14 @@ body, .panel-content {
   font-size: 0.8em;
 }
 
+.popup-content {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0; 
+  bottom: 0;
+}
+
 .panel-editor {
   border: 4px solid #fff;
 }
