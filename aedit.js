@@ -1,7 +1,6 @@
 /* SETUP PANELS */
 if (localStorage["token"] === undefined) localStorage["token"] = prompt("Github token required:");
 var token = localStorage["token"];
-var pstyle = 'background: #eee;';
 $('#layout').w2layout({
   name: 'layout',
   panels: [{
@@ -11,7 +10,11 @@ $('#layout').w2layout({
       items: [{
         type: 'html',
         id: 'logo',
-        html: '<h1 id="logo" title="Edit Web Applications"><span class="fa fa-2x fa-mobile"></span><span class="fa fa-pencil" style="top: -5px; left: -5px"></span>WebAppEditor.com</h1>'
+        html: '<h1 id="logo" title="Edit Web Applications">'
+        + '<span class="fa fa-2x fa-mobile logo"></span>'
+        + '<span class="fa fa-pencil logo" style="top: -5px; left: -5px"></span>'
+        + '<span id="alpha">v.0.1</span>'
+        + 'WebAppEditor.com</h1>'
       },{
       type: 'menu',
       id: 'projectmenu',
@@ -85,43 +88,36 @@ $('#layout').w2layout({
       }
     },
     resizable: false,
-    style: pstyle,
     content: ''
   }, {
     type: 'left',
     size: '25%',
     hidden: false,
     resizable: true,
-    style: pstyle,
     content: ''
   }, {
     type: 'main',
     resizable: true,
-    style: pstyle,
     content: ''
   }, {
     type: 'right',
     size: '25%',
     hidden: false,
     resizable: true,
-    style: pstyle,
     content: ''
   }, {
     type: 'bottom',
     size: '25%',
     resizable: true,
-    style: pstyle,
     hidden: false,
     content: ''
   }]
 });
-pstyle = 'background: white;';
 $().w2layout({
   name: 'leftsplit',
   panels: [{
     type: 'main',
     resizable: true,
-    style: pstyle,
     content: '',
     tabs: {
       tabs: [],
@@ -143,7 +139,6 @@ $().w2layout({
     size: '50%',
     resizable: true,
     hidden: true,
-    style: pstyle,
     content: '',
     tabs: {
       tabs: [],
@@ -167,7 +162,6 @@ $().w2layout({
   panels: [{
     type: 'main',
     resizable: true,
-    style: pstyle,
     content: '',
     tabs: {
       tabs: [],
@@ -189,7 +183,6 @@ $().w2layout({
     size: '50%',
     resizable: true,
     hidden: true,
-    style: pstyle,
     content: '',
     tabs: {
       tabs: [],
@@ -213,7 +206,6 @@ $().w2layout({
   panels: [{
     type: 'main',
     resizable: true,
-    style: pstyle,
     content: '',
     tabs: {
       tabs: [],
@@ -235,7 +227,6 @@ $().w2layout({
     resizable: true,
     hidden: true,
     size: '50%',
-    style: pstyle,
     content: '',
     tabs: {
       tabs: [],
@@ -261,7 +252,6 @@ $().w2layout({
     resizable: true,
     hidden: true,
     size: '50%',
-    style: pstyle,
     content: '',
     tabs: {
       tabs: [],
@@ -281,7 +271,6 @@ $().w2layout({
   }, {
     type: 'main',
     resizable: true,
-    style: pstyle,
     content: '',
     tabs: {
       tabs: [],
@@ -303,7 +292,6 @@ $().w2layout({
     resizable: true,
     hidden: true,
     size: '50%',
-    style: pstyle,
     content: '',
     tabs: {
       tabs: [],
@@ -327,12 +315,20 @@ w2ui.layout.content('main', w2ui.middlesplit);
 w2ui.layout.content('right', w2ui.rightsplit);
 w2ui.layout.content('bottom', w2ui.bottomsplit);
 
-//w2ui.layout.on('resizing', function(event) {updateLayout();});
+$().w2layout({
+  name: 'popupLayout',
+  panels: [
+    { type: 'left', size: 250, resizable: true, minSize: 200 },
+    { type: 'main', minSize: 350, overflow: 'hidden' }
+  ]
+});
+
+var connection = new sharejs.Connection("http://it4se.com:8081/channel");
 
 /* SETUP TOOLBAR */
 var toolbars = {
   editor: ['save', 'undo', 'redo', 'more', 'spacer', 'split'],
-  preview: ['pause', 'url', 'refresh', 'share'],
+  preview: ['pause', 'previewurl', 'refresh', 'share'],
   project: ['newproject', 'selectproject', 'closeproject'],
   chat: ['url', 'refresh', 'share'],
   prefs: ['url', 'refresh', 'share'],
@@ -407,13 +403,6 @@ var buttons = {
     id: 'spacer',
     type: 'spacer'
   },
-  split: {
-    id: 'split',
-    type: 'button',
-    caption: '',
-    icon: 'fa fa-sort',
-    hint: 'Split view'
-  },
   pause: {
     id: 'pause',
     type: 'button',
@@ -421,38 +410,34 @@ var buttons = {
     icon: 'fa fa-pause',
     hint: 'Pause'
   },
-  url: {
-    id: 'url',
+  previewurl: {
     type: 'html',
-    html: '<div style="padding: 3px 10px;">Input: <input size="10" style="' + 'padding: 3px; border-radius: 2px; border: 1px solid silver"/></div>'
+    id: 'previewurl',
+    html: '<div style="padding: 3px 10px;">Input: <input size="10" style="' +
+    'padding: 3px; border-radius: 2px; border: 1px solid silver"/></div>'
+  },
+  split: {
+    id: 'split',
+    type: 'button',
+    caption: '',
+    icon: 'fa fa-sort',
+    hint: 'Split view'
   },
   refresh: {
     id: 'refresh',
     type: 'button',
     caption: '',
-    icon: 'fa fa-reload',
+    icon: 'fa fa-refresh',
     hint: 'Force preview reload'
   },
   share: {
     id: 'share',
     type: 'button',
     caption: '',
-    icon: 'fa fa-pause',
+    icon: 'fa fa-external-link',
     hint: 'Open preview externally'
   }
 };
-
-
-$().w2layout({
-  name: 'popupLayout',
-  panels: [
-    { type: 'left', size: 250, resizable: true, minSize: 200 },
-    { type: 'main', minSize: 350, overflow: 'hidden' }
-  ]
-});
-  
-
-
 
 function toolbarClick(obj, event) {
   var id = obj.name.split("_");
@@ -510,15 +495,16 @@ function initialiseToolbar(layout, panel, toolbar) {
   // Then toggle which buttons to show
   switchToolbar(layout, panel, toolbar);
 }
-initialiseToolbar('leftsplit', 'main', 'empty');
+initialiseToolbar('leftsplit', 'main', 'project');
 initialiseToolbar('leftsplit', 'preview', 'empty');
-initialiseToolbar('middlesplit', 'main', 'empty');
+initialiseToolbar('middlesplit', 'main', 'editor');
 initialiseToolbar('middlesplit', 'preview', 'empty');
-initialiseToolbar('rightsplit', 'main', 'empty');
+initialiseToolbar('rightsplit', 'main', 'preview');
 initialiseToolbar('rightsplit', 'preview', 'empty');
 initialiseToolbar('bottomsplit', 'left', 'empty');
 initialiseToolbar('bottomsplit', 'main', 'empty');
 initialiseToolbar('bottomsplit', 'right', 'empty');
+
 /* SETUP TABS */
 var tabList = {};
 
@@ -562,6 +548,7 @@ function refreshTabs() {
     handleDrop (originalId, this);
   });
 }
+
 // Insert tab drop area and bind events to it
 function dropArea(elem, x, hide) {
   // Clean up
@@ -694,36 +681,52 @@ function tabClose(obj, event) {
   console.log(obj);
   console.log(event);
 }
-/* Resize events */
-$(window).on("resize", updateLayout());
-w2ui.layout.onResize = updateLayout();
-// Prevent toolbars from stealing focus from editor
-$(".w2ui-toolbar:not(.selectable)").on('mousedown', function(event) {
-  if (event.target.className.indexOf('selectable') < 0) event.preventDefault();
-});
-var resizeTimer = setTimeout(function() {}, 50);
 
 function updateLayout() {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(function() {
     w2ui.layout.resize();
     for (var i = 0; i < editors.length; i++) {
-      editors[i].resize();
+    //  editors[i].resize();
     }
   }, 50);
 }
+
+/* Resize events */
+$(window).on("resize", updateLayout());
+w2ui.layout.onResize = updateLayout();
+
+// Prevent toolbars from stealing focus from editor
+$(".w2ui-toolbar:not(.selectable)").on('mousedown', function(event) {
+  if (event.target.className.indexOf('selectable') < 0) event.preventDefault();
+});
+
+var resizeTimer = setTimeout(function() {}, 50);
+
 /* SETUP EDITOR AND VIEWMODEL */
 var editors = [];
-var panelAreas = ['layout_leftsplit_panel_main', 'layout_leftsplit_panel_preview', 'layout_middlesplit_panel_main', 'layout_middlesplit_panel_preview', 'layout_rightsplit_panel_main', 'layout_rightsplit_panel_preview', 'layout_bottomsplit_panel_left', 'layout_bottomsplit_panel_main', 'layout_bottomsplit_panel_right', ];
+var panelAreas = [
+  'layout_leftsplit_panel_main',
+  'layout_leftsplit_panel_preview',
+  'layout_middlesplit_panel_main',
+  'layout_middlesplit_panel_preview',
+  'layout_rightsplit_panel_main',
+  'layout_rightsplit_panel_preview',
+  'layout_bottomsplit_panel_left',
+  'layout_bottomsplit_panel_main',
+  'layout_bottomsplit_panel_right'
+];
+
 var github = new Github({
-  token: localStorage["token"],
+  token: localStorage.token,
   auth: "oauth"
 });
+
 var config = {
   user: 'kdmon',
   repo: 'phdthesis'
 };
-var repo;
+
 
 // Wait until w2ui is ready, then initalise widgets
 setTimeout(function() {
@@ -736,11 +739,13 @@ setTimeout(function() {
 
 
 function init() {
-  //var i = 0;
-  $(".w2ui-panel-content").each(function(i) {
+  var i = 0;
+  $(".w2ui-panel-content").each(function() {
     var panelId = $(this).parent().attr('id');
     if (panelAreas.indexOf(panelId) > -1) {
-      $(this).append('<div id="container' + i + '" class="panel-container">' + '<div id="content' + i + '" class="panel-content"></div>' + '<div id="editor' + i + '" class="panel-editor"></div></div>');
+      $(this).append('<div id="container' + i + '" class="panel-container">'
+      + '<div id="content' + i + '" class="panel-content"></div>'
+      + '<div id="editor' + i + '" class="panel-editor"></div></div>');
       editors[i] = ace.edit($(this).find(".panel-editor")[0]);
       editors[i].on('focus', function(event, obj) {
         $('.w2ui_tabs').removeClass('active');
@@ -752,7 +757,7 @@ function init() {
       editors[i].on('blur', function(event, obj) {
         $(obj.container).removeClass('active-editor');
       });
-      //i++;
+      i++;
     }
   });
   
@@ -771,7 +776,7 @@ function showProjects () {
       var secret = {id: 'secret', text: 'Your private projects (', group: true, expanded: true, nodes: []};
       var open = {id: 'public', text: 'Your public projects (', group: true, expanded: true, nodes: []};
       var shared = {id: 'shared', text: 'Projects shared with you (', group: true, expanded: true, nodes: []};
-      var forked =  {id: 'forked', text: 'Projects you have forked (', group: true, expanded: true, nodes: []};
+      var forked =  {id: 'forked', text: 'Your forked projects (', group: true, expanded: true, nodes: []};
       
       var obj = repos.sort(function(a,b){
         if(a.full_name.toLowerCase() > b.full_name.toLowerCase()) return 1;
@@ -781,27 +786,28 @@ function showProjects () {
         
       for (var i in obj) {
         var item = obj[i];
+        var rnd = Math.round(Math.random()*1000000);
         
         if (item.fork)
           forked.nodes.push({
-            id: item.full_name + '_' + Math.round(Math.random*1000000),
+            id: item.full_name + '_' + rnd,
             text: item.name,
             icon: "fa fa-code-fork"
           });
         else if (item.private)
           secret.nodes.push({
-            id: item.full_name + '_' + Math.round(Math.random*1000000),
+            id: item.full_name + '_' + rnd,
             text: item.name,
             icon:  "fa fa-eye-slash"
           });
         else if (item.owner.login !== config.user)
           shared.nodes.push({
-            id: item.full_name + '_' + Math.round(Math.random*1000000),
+            id: item.full_name + '_' + rnd,
             text: '<img class="custom-icon" src="' + item.owner.avatar_url +'"/> ' + item.full_name
           });
         else
           open.nodes.push({
-            id: item.full_name + '_' + Math.round(Math.random*1000000),
+            id: item.full_name + '_' + rnd,
             text: item.name,
             icon: "fa fa-github"
           });
@@ -827,7 +833,11 @@ function showProjects () {
           forked
         ],
         onDblClick: function (event) {
-          w2alert ("Opening " + event.target);
+          //console.log(event, this)
+          var target = event.target.split('_')[0].split('/');
+          //w2alert ("Opening " + event.target);
+          w2popup.lock('Loading ' + target[1], true);
+          openProject(target[0],target[1]);
         }
       });
       
@@ -859,116 +869,24 @@ function showProjects () {
 
 }
 
-function openProject (repo) {
-  repo = github.getRepo(config.user, repo);
-  fileBrowser({
-    user: config.user,
-    repository: repo,
-    panel: 0
-  });
- refreshTabs();
-}
- 
-
-var Model = function() {
-  var self = this;
-  // Tracks opened projects
-  self.projects = ko.observableArray();
-  // Tracks opened files/tabs
-  self.documentCounter = ko.observable(0);
-  // Return list of all projects
-  self.projectList = ko.computed(function() {
-    var list = [];
-    for (i = 0; i < self.projects().length; i++) {
-      list.unshift(self.projects()[i].title);
-    }
-    return list;
-  });
-  // Track currently active project
-  self.activeProject = ko.observable(0);
-  // Return active project object
-  self.currentProject = ko.computed(function() {
-    return self.projects()[self.activeProject()];
-  });
-  // Explicitly passing in params not possible from dom binding
-  // Instead can be implicit if inside ko context, with, foreach etc.
-  self.addProject = function() {
-    self.projects.push(new Project("Untitled " + Math.random()));
-  };
-  self.closeProject = function(project) {
-    self.projects.remove(project)
-  };
-  self.selectProject = function(project) {
-    self.activeProject(project)
-  };
-  // Act on project change
-  self.projects.subscribe(function(newValue) {
-    console.log("Projects changed");
-  });
-};
-var Project = function(title, root) {
-  var self = this;
-  self.title = ko.observable(title || 'Untitled project');
-  self.root = ko.observable(root);
-  self.documents = ko.observableArray();
-  self.addDocument = function() {
-    var editSession = ace.createEditSession('', '');
-    self.documents.push(new Document("Untitled", editSession));
-  };
-  self.closeDocument = function(doc) {
-    self.documents.remove(doc);
-  };
-  self.showDocument = function(doc) {
-    webAppEditor.setSession(doc.editSession);
-    webAppEditor.focus();
-  };
-  // Act on document change
-  self.documents.subscribe(function(newValue) {
-    if (self.documents().length > 0) {
-      $("#editor").show();
-      webAppEditor.setSession(self.documents()[self.documents().length - 1].editSession);
-      webAppEditor.focus();
-    } else $("#editor").hide();
-  });
-};
-var Document = function(title, editSession) {
-  var self = this;
-  self.title = ko.observable(title || 'zebra');
-  self.editSession = editSession;
-};
-var Editor = function() {
-  var self = this;
-  self.document = ko.observable();
-};
-var app = new Model();
-setTimeout(function() {
-  ko.applyBindings(app);
-}, 250);
-connection = new sharejs.Connection("http://it4se.com:8081/channel");
 
 // Create a sidebar for browsing repository files
-// assume repository and branch has already been
-// initiated, perhaps pass in repo object?
-function fileBrowser(settings) {
-  var user = settings.user;
-  var repository = settings.repository;
-  var branch = settings.branch;
-  var path = settings.path;
-  var panel = settings.panel;
-  // 1. Fetch repo files, recursively
-  repo.getTree('master?recursive=true', function (err, tree) {
+function openProject (user, repository, branch, panel) {
+  var repo = github.getRepo(user, repository);
+  branch = (branch !== undefined) ? branch : 'master';
+  // 1. Fetch repo files, recursively - should be allocated to a worker
+  repo.getTree(branch + '?recursive=true', function (err, tree) {
     var title = "File Browser " + repository;
     var id = "filebrowser" + Math.round(Math.random() * 10000000);
-    
+
     if (err) {
       console.log("Error retrieving files", err);
     }
     // 2. Generate widget
     else {
-      var fileNodes = generateNodes(tree);
-      //var fileNodes = generateFileTree(data);
       var location = pickPanel(panel);
-      
+      var fileNodes = generateNodes(tree);
+
       // 3. Show tab
       tabList[id] = {
         id: id,
@@ -1008,6 +926,8 @@ function fileBrowser(settings) {
           path: path
         });
       });
+      w2popup.close();
+      updateLayout();
       w2ui[location.layout].get(location.panel).tabs.click(id);
     }
   });
@@ -1109,47 +1029,21 @@ function generateNodes(tree) {
   return nodes;
 }
 
-// Create sidebar widget nodes from GitHub API data
-function generateFileTree(data) {
-  var files = [];
-  var folders = [];
-  for (var item in data) {
-    var file = data[item];
-    if (file.type == 'file') {
-      files.push({
-        id: 'file' + item,
-        text: file.name,
-        icon: 'fa fa-file'
-      });
-    } else {
-      folders.push({
-        id: 'folder' + item,
-        text: file.name,
-        icon: 'fa fa-folder',
-        nodes: [{
-          id: 'expand' + item,
-          text: "Fetching files",
-          icon: 'fa fa-refresh'
-        }]
-      });
-    }
-  }
-  return folders.concat(files);
-}
 // Return best panel for new tabs
 function pickPanel(identifier) {
-  if (identifier) 
-    return {
-      layout: panelAreas[identifier],
-      panel: 'main',
-      area: identifier
-    };
-  else
-  return {
+  var obj = {
     layout: 'middlesplit',
     panel: 'main',
     area: 2
   };
+
+  if (identifier >=-1 && identifier < 9) obj = {
+    layout: panelAreas[identifier].split('_')[1],
+    panel: 'main',
+    area: identifier
+  };
+
+  return obj;
 }
 
 function startDoc(settings) {
@@ -1359,4 +1253,84 @@ function startDoc(settings) {
       });
 
     }
-  });}
+  });
+}
+
+
+// KNOCKOUT MODEL - not implemented
+
+var Model = function() {
+  var self = this;
+  // Tracks opened projects
+  self.projects = ko.observableArray();
+  // Tracks opened files/tabs
+  self.documentCounter = ko.observable(0);
+  // Return list of all projects
+  self.projectList = ko.computed(function() {
+    var list = [];
+    for (i = 0; i < self.projects().length; i++) {
+      list.unshift(self.projects()[i].title);
+    }
+    return list;
+  });
+  // Track currently active project
+  self.activeProject = ko.observable(0);
+  // Return active project object
+  self.currentProject = ko.computed(function() {
+    return self.projects()[self.activeProject()];
+  });
+  // Explicitly passing in params not possible from dom binding
+  // Instead can be implicit if inside ko context, with, foreach etc.
+  self.addProject = function() {
+    self.projects.push(new Project("Untitled " + Math.random()));
+  };
+  self.closeProject = function(project) {
+    self.projects.remove(project)
+  };
+  self.selectProject = function(project) {
+    self.activeProject(project)
+  };
+  // Act on project change
+  self.projects.subscribe(function(newValue) {
+    console.log("Projects changed");
+  });
+};
+var Project = function(title, root) {
+  var self = this;
+  self.title = ko.observable(title || 'Untitled project');
+  self.root = ko.observable(root);
+  self.documents = ko.observableArray();
+  self.addDocument = function() {
+    var editSession = ace.createEditSession('', '');
+    self.documents.push(new Document("Untitled", editSession));
+  };
+  self.closeDocument = function(doc) {
+    self.documents.remove(doc);
+  };
+  self.showDocument = function(doc) {
+    webAppEditor.setSession(doc.editSession);
+    webAppEditor.focus();
+  };
+  // Act on document change
+  self.documents.subscribe(function(newValue) {
+    if (self.documents().length > 0) {
+      $("#editor").show();
+      webAppEditor.setSession(self.documents()[self.documents().length - 1].editSession);
+      webAppEditor.focus();
+    } else $("#editor").hide();
+  });
+};
+var Document = function(title, editSession) {
+  var self = this;
+  self.title = ko.observable(title || 'zebra');
+  self.editSession = editSession;
+};
+var Editor = function() {
+  var self = this;
+  self.document = ko.observable();
+};
+var app = new Model();
+
+setTimeout(function() {
+  ko.applyBindings(app);
+}, 250);
