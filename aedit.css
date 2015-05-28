@@ -51,21 +51,25 @@ body, .panel-content {
   vertical-align: bottom;
   font-weight: normal;
   margin-top: -30px;
-  padding: 15px 15px 15px 15px;
-  margin-left: 0px;
-  text-decoration: underline;
+  padding: 20px 10px 10px 10px;
   text-shadow: 1px 1px #eee;
-  background: linear-gradient(90deg, rgba(255,255,255,0.9) 20% , rgba(255,255,255,0.3));
+  background: linear-gradient(90deg, rgba(255,255,255,0.9) 20% , rgba(255,255,255,0.0));
 }
 
 #logo:hover {
   background: linear-gradient(45deg, rgba(255,255,255,0.9) 20% , rgba(250,250,250,0.3)) !important;
-  padding: 14px 15px 16px 15px;
 }
-
-#logo span {
+.logo {
   top: 5px;
   position: relative;
+}
+
+#alpha {
+  position: absolute;
+  top: 10px;
+  left: 175px;
+  font-size: 0.5em;
+  font-style: italic;
 }
 
 .fa {
@@ -81,6 +85,10 @@ body, .panel-content {
   background: linear-gradient(0deg, #77a, #bce 20%,#fff) !important;
   padding-top: 15px;
   padding-bottom: 10px;
+}
+
+.w2ui-panel-content {
+  background: #fff important;  
 }
 
 .w2ui-toolbar {
