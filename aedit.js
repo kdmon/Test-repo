@@ -10,30 +10,23 @@ $('#layout').w2layout({
     toolbar: {
       items: [{
         type: 'html',
-        id: 'item6',
+        id: 'logo',
         html: '<h1 id="logo"><span class="fa fa-2x fa-mobile"></span> WebAppEditor</h1>'
+      },{
+      type: 'menu',
+      id: 'projectmenu',
+      caption: 'Project switcher',
+      icon: '',
+      items: [{
+        text: 'Start new project',
+        icon: 'fa fa-file'
       }, {
-        type: 'menu',
-        id: 'projectmenu',
-        caption: 'Editing: /kdmon/Test-repo/',
-        icon: '',
-        items: [{
-          text: 'New project',
-          icon: 'fa fa-file'
-        }, {
-          text: 'Open project',
-          icon: 'fa fa-folder-open'
-        }, {
-          text: 'Close current project',
-          icon: 'fa fa-close'
-        }, {}, {
-          text: '/kdmon/Test-repo/ (editing)',
-          icon: 'fa fa-github'
-        }, {
-          text: '/kdmon/Three.js/',
-          icon: 'fa fa-github'
-        }, ]
+        text: 'Open existing project',
+        icon: 'fa fa-folder-open'
       }, {
+        text: 'Close current project',
+        icon: 'fa fa-close'
+      }]},{
         id: 'collaborate',
         type: 'button',
         caption: 'Collaborate',
@@ -447,9 +440,13 @@ var buttons = {
 
 function toolbarClick(obj, event) {
   var id = obj.name.split("_");
+  console.log(event.target);
   switch (event.target) {
     case 'split':
       w2ui[id[0]].toggle('preview', true);
+      break;
+    case 'projectmenu:Open existing project':
+      showProjects();
       break;
     case 'leftcolumn':
       w2ui.layout.toggle('left', true);
@@ -702,30 +699,29 @@ function updateLayout() {
 /* SETUP EDITOR AND VIEWMODEL */
 var editors = [];
 var panelAreas = ['layout_leftsplit_panel_main', 'layout_leftsplit_panel_preview', 'layout_middlesplit_panel_main', 'layout_middlesplit_panel_preview', 'layout_rightsplit_panel_main', 'layout_rightsplit_panel_preview', 'layout_bottomsplit_panel_left', 'layout_bottomsplit_panel_main', 'layout_bottomsplit_panel_right', ];
-// Wait until w2ui is ready, then initalise widgets
-setTimeout(function() {
-  init()
-}, 50);
-
 var github = new Github({
   token: localStorage["token"],
   auth: "oauth"
 });
-
 var config = {
   user: 'kdmon',
   repo: 'phdthesis'
 };
+var repo;
 
-var dirtyFileTimer = setTimeout(function (){}, 50);
+// Wait until w2ui is ready, then initalise widgets
+setTimeout(function() {
+  init();
+}, 50);
 
-var repo = github.getRepo(config.user, config.repo);
 
-  
+
+// var dirtyFileTimer = setTimeout(function (){}, 50);
+
 
 function init() {
-  var i = 0;
-  $(".w2ui-panel-content").each(function() {
+  //var i = 0;
+  $(".w2ui-panel-content").each(function(i) {
     var panelId = $(this).parent().attr('id');
     if (panelAreas.indexOf(panelId) > -1) {
       $(this).append('<div id="container' + i + '" class="panel-container">' + '<div id="content' + i + '" class="panel-content"></div>' + '<div id="editor' + i + '" class="panel-editor"></div></div>');
@@ -740,27 +736,112 @@ function init() {
       editors[i].on('blur', function(event, obj) {
         $(obj.container).removeClass('active-editor');
       });
-      i++;
+      //i++;
     }
   });
-//  startDoc("document1", 'thisisjustatestdocument', 'leftsplit', 'main', false, 'test', 'red');
-//  startDoc("document2", 'anothertestdocumentonly', 'leftsplit', 'preview', false, 'test', 'red');
-  /*
-  startDoc("document3", 'thisisjustatestdocument1', 'middlesplit', 'main', false, 'test', 'red');
-  startDoc("document4", 'anothertestdocumentonly1', 'middlesplit', 'preview', false, 'test', 'red');
-  startDoc("document5", 'thisisjustatestdocument2', 'rightsplit', 'main', false, 'test', 'red');
-  startDoc("document6", 'anothertestdocumentonly2', 'rightsplit', 'preview', false, 'test', 'red');
-  startDoc("document7", 'anothertestdocumentonly3', 'bottomsplit', 'main', false, 'test', 'red');
-  */
-  fileBrowser({
-    user: config.user || "kdmon",
-    repository: "phdthesis",
-    panel: 0
+  
+}
+
+// Show and generate project list dialogue
+
+function showProjects () {
+  
+  github.getUser().repos(function(err, repos) {
+    
+    if (err) w2alert('No repositories are accessible');
+    
+    else {
+      
+      var secret = {id: 'secret', text: 'Private projects', group: true, expanded: true, nodes: []};
+      var open = {id: 'public', text: 'Public projects', group: true, expanded: true, nodes: []};
+      var shared = {id: 'shared', text: 'Projects shared with you', group: true, expanded: true, nodes: []};
+      var forked =  {id: 'forked', text: 'Forked projects', group: true, expanded: true, nodes: []};
+      
+      var obj = repos.sort(function(a,b){
+        if(a.full_name.toLowerCase() > b.full_name.toLowerCase()) return 1;
+        if (a.full_name.toLowerCase() < b.full_name.toLowerCase()) return -1;
+        else return 0;
+      });
+        
+      for (var i in obj) {
+        var item = obj[i];
+        
+        if (item.fork)
+          forked.nodes.push({
+            id: item.full_name + '_' + Math.round(Math.random*1000000),
+            text: item.full_name,
+            icon: "fa fa-code-fork"
+          });
+        else if (item.private)
+          secret.nodes.push({
+            id: item.full_name + '_' + Math.round(Math.random*1000000),
+            text: item.full_name,
+            icon:  "fa fa-eye-slash"
+          });
+        else if (item.owner.login !== config.user)
+          shared.nodes.push({
+            id: item.full_name + '_' + Math.round(Math.random*1000000),
+            text: item.full_name,
+            icon:  "fa fa-users"
+          });
+        else
+          open.nodes.push({
+            id: item.full_name + '_' + Math.round(Math.random*1000000),
+            text: item.full_name,
+            icon: "fa fa-github"
+          });
+      }
+      
+      $().w2sidebar({
+        name: 'projectList',
+        nodes: [
+          secret,
+          open,
+          shared,
+          forked
+        ],
+        onClick: function (event) {
+          w2alert ("Opening " + event.target);
+        }
+      });
+      
+      $('#projectList').w2render('projectList');
+      w2ui.layout.resize();
+      w2popup.unlock();
+    }
+  });
+
+  w2popup.open({
+    title: 'Open a project',
+    showMax : true,
+    body: '<div id="projectList" class="popup-content">Loading list ...</div>',
+    onOpen  : function (event) {
+      event.onComplete = function () {
+        $('#projectList').w2render('projectList');
+      };
+    },
+    onToggle: function (event) { 
+      event.onComplete = function () {
+        w2ui.projectList.resize();
+      };
+    }        
   });
   
-  //fileBrowser("kdmon", "Three.js");
-  refreshTabs();
+  w2popup.lock();
+
 }
+
+function openProject (repo) {
+  repo = github.getRepo(config.user, repo);
+  fileBrowser({
+    user: config.user,
+    repository: repo,
+    panel: 0
+  });
+ refreshTabs();
+}
+ 
+
 var Model = function() {
   var self = this;
   // Tracks opened projects
