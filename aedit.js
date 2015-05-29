@@ -1085,6 +1085,15 @@ function startDoc(settings) {
           alert ("Unable to initiate real-time document", error);
         }
         else {
+          var editSession = ace.createEditSession('', '');
+          var editorObj = editors[location.area].setSession(editSession);
+          tabList[tabId] = {
+            id: tabId,
+            caption: title,
+            panel: location.area,
+            type: 'editor',
+            editSession: editSession
+          };
           doc.attach_ace(editors[location.area], preserveContent, username, color);
           doc.shout({
             action: "announce",
@@ -1115,7 +1124,7 @@ function startDoc(settings) {
             doc.shout({
               action: "cursor",
               user: username,
-              color: cursorColor,
+              color: color,
               column: position.column,
               row: position.row
             });
@@ -1133,15 +1142,6 @@ function startDoc(settings) {
             });
           });
           
-        var editSession = ace.createEditSession('', '');
-        var editorObj = editors[location.area].setSession(editSession);
-        tabList[tabId] = {
-          id: tabId,
-          caption: title,
-          panel: location.area,
-          type: 'editor',
-          editSession: editSession
-        };
         var modelist = ace.require('ace/ext/modelist');
         var UndoManager = ace.require("ace/undomanager").UndoManager;
         ace.require("ace/ext/emmet");
