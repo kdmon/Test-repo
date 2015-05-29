@@ -655,6 +655,7 @@ function handleDrop(source, destination, insertBefore) {
 
 function tabClick(obj, event) {
   var item = tabList[event.target];
+  console.log(event);
 
   $("#editor" + item.panel).hide();
   $("#content" + item.panel).hide();
@@ -885,7 +886,7 @@ function openProject (user, repository, branch, panel) {
     // 2. Generate widget
     else {
       var location = pickPanel(panel);
-      var fileNodes = generateNodes(tree);
+      var fileNodes = generateNodes(tree, user, repository, branch);
 
       // 3. Show tab
       tabList[id] = {
@@ -920,38 +921,31 @@ function openProject (user, repository, branch, panel) {
       // file open
       w2ui[id].on('dblClick', function(event) {
         if(event.target.substr(0,5) === "folder") return;
-        var path = event.target.substr(event.target.indexOf("_")+1);
+        var path = event.target.substr(event.target.indexOf("_")+1).split('/');
+        var id = path.join('/');
+        var user = path.shift();
+        var repo = path.shift();
+        var branch = path.shift();
+        var title = path[path.length-1];
+        path = path.join('/');
         startDoc({
-          title: path,
-          path: path
+          id: id,
+          user: user,
+          repo: repo,
+          branch: branch,
+          path: path,
+          title: title
         });
       });
       w2popup.close();
-      updateLayout();
       w2ui[location.layout].get(location.panel).tabs.click(id);
     }
   });
   
 }
 
-
-// json search helper fxn
-function getObjects(obj, key, val) {
-    var objects = [];
-    for (var i in obj) {
-        if (!obj.hasOwnProperty(i)) continue;
-        if (typeof obj[i] == 'object') {
-            objects = objects.concat(getObjects(obj[i], key, val));
-        } else if (i == key && obj[key] == val) {
-            objects.push(obj);
-        }
-    }
-    return objects;
-}
-
-
 // Create sidebar widget nodes from GitHub API tree
-function generateNodes(tree) {
+function generateNodes(tree, user, repo, branch) {
   
   // Sort files and directories
   var files = tree.sort(function(a,b){
@@ -992,7 +986,7 @@ function generateNodes(tree) {
   for (var index in files) {
     
     var file = files[index];
-    var id = uid + "_" + file.path;
+    var id = uid + "_" + user + '/' + repo + '/' + branch + '/' + file.path;
     var icon = (file.type === "tree") ? 'fa fa-folder' : 'fa fa-file-o';
     var paths = file.path.split('/');
     var filename = paths.pop();
@@ -1019,14 +1013,30 @@ function generateNodes(tree) {
         text: filename,
         icon: icon
       };
+      
+      // Locate the parent in file structure and insert the node
 
-      var location = getObjects(nodes, 'id', uid + "_" + path)[0];
+      var location = getObjects(nodes, 'id', uid + "_" + user + '/' + repo + '/' + branch + '/' + path)[0];
 
       if (file.type === "tree") {obj.nodes = []; location.nodes.push(obj);}
       else location.nodes.push(obj);
     }
   }
   return nodes;
+}
+
+// json search helper fxn
+function getObjects(obj, key, val) {
+    var objects = [];
+    for (var i in obj) {
+        if (!obj.hasOwnProperty(i)) continue;
+        if (typeof obj[i] == 'object') {
+            objects = objects.concat(getObjects(obj[i], key, val));
+        } else if (i == key && obj[key] == val) {
+            objects.push(obj);
+        }
+    }
+    return objects;
 }
 
 // Return best panel for new tabs
@@ -1047,24 +1057,26 @@ function pickPanel(identifier) {
 }
 
 function startDoc(settings) {
-  var title = settings.title || 'untitled';
-  var tabId = title;
+  var tabId = settings.id;
+  var user = settings.user;
+  var repository = settings.repo;
+  var branch = settings.branch;
   var path = settings.path;
-  var branch = settings.branch || "master";
+  var title = settings.title;
   var preserveContent = settings.preserveContent || false;
   var color = settings.color || "red";
-  var username = config.user;
-  var repository = config.repo;
-  var url = encodeURIComponent("/"+username+"/"+repository+"/"+branch+"/"+path);
+  var username = config.user || 'guest';
+  var url = encodeURIComponent("/"+user+"/"+repository+"/"+branch+"/"+path);
   var location = pickPanel();
   
   //console.log("opening " + url);
   
   // fetch file via github api
   
+  var repo = github.getRepo(user, repository);
   repo.read(branch, path, function(err, value) {
     if(err) {
-      alert ("unable to read file", err);
+      w2alert ("unable to read file", err);
     }
     
     else {
@@ -1123,8 +1135,8 @@ function startDoc(settings) {
           
         var editSession = ace.createEditSession('', '');
         var editorObj = editors[location.area].setSession(editSession);
-        tabList[title] = {
-          id: title,
+        tabList[tabId] = {
+          id: tabId,
           caption: title,
           panel: location.area,
           type: 'editor',
