@@ -334,7 +334,7 @@ var toolbars = {
   prefs: ['url', 'refresh', 'share'],
   files: ['url', 'refresh', 'share'],
   media: ['url', 'refresh', 'share'],
-  empty: [''],
+  empty: ['savebreak'],
   help: ['']
 };
 var buttons = {
@@ -441,7 +441,7 @@ var buttons = {
 
 function toolbarClick(obj, event) {
   var id = obj.name.split("_");
-  console.log(event.target);
+  //console.log(event.target);
   switch (event.target) {
     case 'split':
       w2ui[id[0]].toggle('preview', true);
@@ -495,7 +495,7 @@ function initialiseToolbar(layout, panel, toolbar) {
   // Then toggle which buttons to show
   switchToolbar(layout, panel, toolbar);
 }
-initialiseToolbar('leftsplit', 'main', 'project');
+initialiseToolbar('leftsplit', 'main', 'empty');
 initialiseToolbar('leftsplit', 'preview', 'empty');
 initialiseToolbar('middlesplit', 'main', 'editor');
 initialiseToolbar('middlesplit', 'preview', 'empty');
@@ -680,9 +680,10 @@ function tabClick(obj, event) {
   }
 }
 
+// Clean up tab content
 function tabClose(obj, event) {
-  console.log(obj);
-  console.log(event);
+  // w2ui destroy
+  // ace detach etc...
 }
 
 function updateLayout() {
@@ -1059,6 +1060,7 @@ function pickPanel(identifier) {
 }
 
 function startDoc(settings) {
+  w2popup.open().lock("Loading " + settings.path, true);
   var tabId = settings.id;
   var user = settings.user;
   var repository = settings.repo;
@@ -1071,19 +1073,18 @@ function startDoc(settings) {
   var url = encodeURIComponent("/"+user+"/"+repository+"/"+branch+"/"+path);
   var location = pickPanel();
   
-  //console.log("opening " + url);
-  
   // fetch file via github api
-  
   var repo = github.getRepo(user, repository);
   repo.read(branch, path, function(err, value) {
     if(err) {
+      w2popup.close();
       w2alert ("unable to read file", err);
     }
     
     else {
       connection.open(url, 'text', function(error, doc) {
         if(error) {
+          w2popup.close();
           alert ("Unable to initiate real-time document", error);
         }
         else {
@@ -1260,8 +1261,10 @@ function startDoc(settings) {
                   
           // alert ("running");
           refreshTabs();
-          w2ui[location.layout].get(location.panel).tabs.click(title);
-            
+          updateLayout(); // inserts overflow scrollbar
+          w2ui[location.layout].get(location.panel).tabs.click(tabId);
+          w2popup.close();
+
         }
         
       });
