@@ -580,29 +580,32 @@ function dropArea(elem, x, hide) {
   });
 }
 
-function handleDrop(source, destination, insertBefore) {
+function handleDrop(originalId, destination, insertBefore) {
+  // hide drop hints
   $(".w2ui-panel-tabs table").removeClass('drop-highlight');
   var tabArea = "#temporarytab";
   $(tabArea).remove();
-  var originalId = source;
-  // Exit if non-tab dropped
+  // Exit if non-tab object was dropped
   if (originalId.indexOf('tabs_') < 0) return;
+  // Exit if tab is dropped on itself.
+  if (originalId === destination.id) return;
+  // Split original and target id into their components.
+  // This works even if repo name and files contains _
   var origin = originalId.split("_");
-  var originalCaption = $("#" + originalId).text();
   var originalLayout = origin[1];
   var originalPanel = origin[2];
   var originalTab = origin[5];
-  var targetId = destination.id;
-  var target = targetId.split("_");
+  // jQuery doesn't handle slashes in id, so use native js function instead
+  var originalCaption = document.getElementById(originalId).textContent;
+  var target = destination.id.split("_");
   var targetLayout = target[1];
   var targetPanel = target[2];
   var targetTab = target[5];
+  // Test for existing adjacent tabs
   var tabExists = ($(tabArea).length > 0) ? true : false;
   var nextTabId = $(destination).next().attr('id');
   var nextTab = (nextTabId === undefined) ? false : nextTabId.split("_")[5];
-  // Exit if dropped on itself.
-  if (originalId == targetId) return;
-  // Otherwise work out where tab was dropped and shuffle tabs
+  // Work out on which tab bar the tab was dropped and reformat it
   tabList[originalTab].panel = panelAreas.indexOf("layout_" + targetLayout + "_panel_" + targetPanel);
   w2ui[originalLayout].get(originalPanel).tabs.remove(originalTab);
   // Insert before
@@ -655,7 +658,6 @@ function handleDrop(source, destination, insertBefore) {
 
 function tabClick(obj, event) {
   var item = tabList[event.target];
-  console.log(event);
 
   $("#editor" + item.panel).hide();
   $("#content" + item.panel).hide();
