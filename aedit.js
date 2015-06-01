@@ -138,7 +138,7 @@ $().w2layout({
     type: 'preview',
     size: '50%',
     resizable: true,
-    hidden: false,
+    hidden: true,
     content: '',
     tabs: {
       tabs: [],
@@ -692,6 +692,11 @@ function tabClick(obj, event) {
       elem.appendTo("#container" + item.panel).show();
       updateLayout();
       break;
+    case 'projectbrowser':
+      var elem = $("#container_" + item.id).detach();
+      elem.appendTo("#container" + item.panel).show();
+      updateLayout();
+      break;
     default:
       return;
       break;
@@ -809,6 +814,7 @@ function init() {
       i++;
     }
   });
+  showProjects();
   updateLayout();  
 }
 
@@ -822,6 +828,8 @@ function showProjects () {
     
     else {
       
+      var id = "projectbrowser" + Math.round(Math.random() * 10000000);
+      var location = pickPanel(0);
       var secret = {id: 'secret', text: 'Your private projects (', group: true, expanded: true, nodes: []};
       var open = {id: 'public', text: 'Your public projects (', group: true, expanded: true, nodes: []};
       var shared = {id: 'shared', text: 'Projects shared with you (', group: true, expanded: true, nodes: []};
@@ -869,11 +877,27 @@ function showProjects () {
       secret.text += secret.nodes.length + ')';
       forked.text += forked.nodes.length + ')';
       
-      if (w2ui.projectList) w2ui.projectList.destroy();
+
+      // 3. Show tab
+      tabList[id] = {
+        id: id,
+        caption: 'Project Manager',
+        type: 'projectbrowser',
+        panel: location.area
+      };
+      w2ui[location.layout].get(location.panel).tabs.add({
+        id: id,
+        caption: 'Project Manager'
+      });
       
-      $().w2sidebar({
+      refreshTabs();
+      
+      
+      // 4. render into temporary dom element once
+      $('<div id="container_' + id +'" class="panel-content" style="display:none"></div>').appendTo( "body" );
+      $("#container_"+id).w2sidebar({
         name: 'projectList',
-        topHTML: '<div style="background-color: #eee; text-align: center; padding: 10px 5px; border-bottom: 1px solid silver">YOUR PROJECTS</div>',
+        //topHTML: '<div style="background-color: #eee; text-align: center; padding: 10px 5px; border-bottom: 1px solid silver">YOUR PROJECTS</div>',
         showMax: true,
         nodes: [
           secret,
@@ -884,35 +908,21 @@ function showProjects () {
         onDblClick: function (event) {
           //console.log(event, this)
           var target = event.target.split('_')[0].split('/');
-          //w2alert ("Opening " + event.target);
+          w2popup.open({
+            title: 'Opening ' + event.target
+          });
           w2popup.lock('Loading ' + target[1], true);
           openProject(target[0],target[1]);
         }
       });
-      
-      $('#popup').w2render('popupLayout');
-      w2ui.popupLayout.content('left', w2ui.projectList);
-      w2ui.popupLayout.content('main', '<h1>Select project</h1>');
-      w2ui.layout.resize();
-      w2popup.unlock();
+
+      w2popup.close();
+      w2ui[location.layout].get(location.panel).tabs.click(id);
     }
   });
 
   w2popup.open({
-    title: 'Open an existing project',
-    width: 1200,
-    height: 1000,
-    body: '<div id="popup"></div>',
-    onOpen  : function (event) {
-      event.onComplete = function () {
-        $('#projectList').w2render('popupLayout');
-      };
-    },
-    onToggle: function (event) {
-      event.onComplete = function () {
-        w2ui.projectList.resize();
-      };
-    }
+    title: 'Opening existing projects'
   });
   w2popup.lock('Loading projects ...', true);
 
