@@ -11,6 +11,10 @@ body,
   background: #fff;
 }
 
+#layout {
+  padding:1px;
+}
+
 body, .panel-content {
   font-family: sans;
   font-size: 0.8em;
@@ -83,8 +87,23 @@ body, .panel-content {
 
 #layout_layout_panel_top .w2ui-toolbar {
   background: linear-gradient(0deg, #77a, #bce 20%,#fff) !important;
-  padding-top: 15px;
-  padding-bottom: 10px;
+  padding-top: 16px;
+  padding-bottom: 0px;
+}
+
+.small-button {
+  background: #ccc;
+  color: #555;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 0 2px 1px 2px;
+  border: 1px solid #888;
+  opacity: 0.8;
+}
+
+.small-button:hover {
+  background: #ddd;
+  opacity: 1;
 }
 
 .w2ui-panel-content {
@@ -99,7 +118,7 @@ body, .panel-content {
   overflow-x: auto !important;
 }
 .w2ui-panel-tabs {
-  background: linear-gradient(0deg, #aab, #558) !important;
+  background: linear-gradient(0deg, #08b 90%, #558) !important;
   padding-top: 2px !important;
 }
 
@@ -110,8 +129,9 @@ body, .panel-content {
 .w2ui-tabs .w2ui-tab {
   padding: 5px 15px 0 4px !important;
   margin: 1 !important;
-  height: 30px !important;
-  max-height: 30px !important;
+  height: 34px !important;
+  min-height: 34px !important;
+  max-height: 34px !important;
   text-align: left !important;
   width: 120px !important;
   white-space: nowrap !important;
@@ -119,10 +139,9 @@ body, .panel-content {
   text-overflow: ellipsis;
 }
 
-.w2ui-tab-close{
+.w2ui-tab-close {
   position:absolute;
   margin-left: 100px !important;
-  
 }
 
 #temporarytab {
@@ -131,44 +150,58 @@ body, .panel-content {
 }
 
 .w2ui-tabs table {
-  height: 30px !important;
-  max-height: 30px !important;
+  min-height: 35px !important;
+  height: 35px !important;
+  max-height: 35px !important;
+  padding: 0px !important;
 }
 
 .w2ui-tab:not(.active) {
-  height: 25px !important;
-  max-height: 25px !important;
   background: linear-gradient(0deg, #aaa 20%, #bbb 80%, #ccc) !important;
   box-shadow: 0px 0px 5px 0px black;
 }
 
 .w2ui-tabs .active {
   background: linear-gradient(0deg, #fff 20%, #ccc 80%, #fff) !important;
-  box-shadow: 0px 0px 5px 0px black;
+  box-shadow: 0 0 5px 0 black;
 }
 
 .drop-highlight {
   background: linear-gradient(0deg, #afa, #5a5) !important;
+  box-shadow: inset 0 0 10px 1px #fff;
 }
 
 .inactive-panel {
-  background: linear-gradient(0deg, #fff, #aac, #fff) !important;
-  text-shadow: 1px 1px white;
-  padding: 0 10px 0 10px;
+  background: linear-gradient(0deg, #fff, #aac) !important;
+  padding: 10px;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  color: #558;
+  text-shadow: 1px 1px #ccc;
+}
+
+.inactive-panel h1 {
+  margin: 0;
 }
 
 
 #layout_layout_panel_left .w2ui-panel,
 #layout_layout_panel_main .w2ui-panel,
 #layout_layout_panel_right .w2ui-panel,
-#layout_layout_panel_bottom .w2ui-panel,
+#layout_layout_panel_bottom .w2ui-panel {
+  
+  margin: 0 !important;
+  border: 1px solid black;
+}
+
 #layout_layout_panel_left,
 #layout_layout_panel_main,
 #layout_layout_panel_bottom,
 #layout_layout_panel_right
 {
-  margin: 0px !important;
-  box-shadow: 0px 0px 2px 2px #559 !important;
+  margin: 0 !important;
+  border: none;
 }
 
 #layout_leftsplit_resizer_preview, 
@@ -182,7 +215,7 @@ body, .panel-content {
     radial-gradient(#fff 30%, transparent 5%) 2px 2px;
   background-color:#ccc;
   background-size: 4px 4px;
-  opacity: 0.4;
+  opacity: 0;
 }
 
 #layout_layout_resizer_left, 
@@ -196,7 +229,7 @@ body, .panel-content {
     radial-gradient(#fff 30%, transparent 5%) 2px 2px;
   background-color:#ccc;
   background-size: 4px 4px;
-  opacity: 0.4;
+  opacity: 0;
 }
 
 body:not(.selectable) {
