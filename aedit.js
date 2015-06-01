@@ -138,7 +138,7 @@ $().w2layout({
     type: 'preview',
     size: '50%',
     resizable: true,
-    hidden: true,
+    hidden: false,
     content: '',
     tabs: {
       tabs: [],
@@ -251,7 +251,7 @@ $().w2layout({
     type: 'left',
     resizable: true,
     hidden: true,
-    size: '50%',
+    size: '33%',
     content: '',
     tabs: {
       tabs: [],
@@ -291,7 +291,7 @@ $().w2layout({
     type: 'right',
     resizable: true,
     hidden: true,
-    size: '50%',
+    size: '33 %',
     content: '',
     tabs: {
       tabs: [],
@@ -334,7 +334,8 @@ var toolbars = {
   prefs: ['url', 'refresh', 'share'],
   files: ['url', 'refresh', 'share'],
   media: ['url', 'refresh', 'share'],
-  empty: ['savebreak'],
+  empty: ['spacer','split'],
+  empty2: ['spacer','splitleft','splitright'],
   help: ['']
 };
 var buttons = {
@@ -416,6 +417,20 @@ var buttons = {
     html: '<div style="padding: 3px 10px;">Input: <input size="10" style="' +
     'padding: 3px; border-radius: 2px; border: 1px solid silver"/></div>'
   },
+  splitleft: {
+    id: 'splitleft',
+    type: 'button',
+    caption: '',
+    icon: 'fa fa-caret-left',
+    hint: 'Split view left'
+  },
+  splitright: {
+    id: 'splitright',
+    type: 'button',
+    caption: '',
+    icon: 'fa fa-caret-right',
+    hint: 'Split view right'
+  },
   split: {
     id: 'split',
     type: 'button',
@@ -443,6 +458,12 @@ function toolbarClick(obj, event) {
   var id = obj.name.split("_");
   //console.log(event.target);
   switch (event.target) {
+    case 'splitleft':
+      w2ui[id[0]].toggle('left', true);
+      break;
+    case 'splitright':
+      w2ui[id[0]].toggle('right', true);
+      break;
     case 'split':
       w2ui[id[0]].toggle('preview', true);
       break;
@@ -518,7 +539,8 @@ function refreshTabs() {
   $(tabSelector).off("dragstart").off("dragenter").off("dragleave").off("drag").off("dragend").off("drop");
   $(tabSelector).attr("draggable", "true");
   $(tabSelector).on("dragstart", function(event) {
-    //event.originalEvent.dataTransfer.setData('text', event.target.id);
+    //event.preventDefault();
+    event.originalEvent.dataTransfer.setData('text', '');
     draggedTabId = event.target.id;
     $(tabContainer).addClass('drop-highlight');
     //dropArea(this, 0);
@@ -637,23 +659,17 @@ function handleDrop(originalId, destination, insertBefore) {
   if (lastTab > 0 && w2ui[originalLayout].get(originalPanel).tabs.active === originalTab)
     w2ui[originalLayout].get(originalPanel).tabs.click(lastId);
 
-  // Clear original panel's content if empty
-  else if (lastTab === 0) {
-    var oldPanel = panelAreas.indexOf("layout_" + originalLayout + "_panel_" + originalPanel);
-    //console.log("hiding panel " + oldPanel);
-    $("#content" + oldPanel).html('<div class="inactive-panel">' +
-    '<h1>Panel empty</h1><h3>Drag a tab over to reactivate it.</h3></div>');
-    $("#content" + oldPanel).show();
-    $("#editor" + oldPanel).hide();
-    $("#container"+ oldPanel + " .w2ui-sidebar").hide();
-  }
-  
+  // Always activate dragged tab
+  w2ui[targetLayout].get(targetPanel).tabs.click(originalTab);
+
+  /*
   // activate tab if dragged to empty new panel
   if (tabLength === 1) w2ui[targetLayout].get(targetPanel).tabs.click(originalTab);
   else { // otherwise activate active tab in destination panel
     var activeTab = w2ui[targetLayout].get(targetPanel).tabs.active;
     w2ui[targetLayout].get(targetPanel).tabs.click(activeTab);
   }
+  */
   refreshTabs();
   updateLayout();
 }
@@ -693,10 +709,37 @@ function updateLayout() {
   resizeTimer = setTimeout(function() {
     w2ui.layout.resize();
     for (var i = 0; i < editors.length; i++) {
-    //  editors[i].resize();
+      editors[i].resize();
+      var location = panelAreas[i].split("_");
+
+      // Hide inactive tab areas
+      if (w2ui[location[1]].get(location[3]).tabs.tabs.length === 0) {
+        $("#editor" + i).hide();
+        $("#container"+ i + " .w2ui-sidebar").hide();
+        $("#content" + i).html('<div class="inactive-panel">' +
+        '<p><em>Panel empty.</em> Drag a tab over to reactivate it or '
+        +'<span class="small-button" onclick="togglePanel(' + i + ')">close it.</span></p></div>');
+        $("#content" + i).show();
+        if(i === 7 || i === 2) switchToolbar(location[1], location[3], 'empty2');
+        else switchToolbar(location[1], location[3], 'empty');
+      }
     }
+
   }, 50);
 }
+
+function togglePanel (id) {
+  var location = panelAreas[id].split("_");
+  if (location[3] === 'main') {
+    // todo: check if other panels exist in layout
+    // and close them first, swapping tabs with main.
+    w2ui[location[0]].toggle(location[1].substr(0,location[1].length-5), true);
+  }
+  else {
+    w2ui[location[1]].toggle(location[3], true);
+  }
+}
+
 
 /* Resize events */
 $(window).on("resize", updateLayout());
@@ -766,7 +809,7 @@ function init() {
       i++;
     }
   });
-  
+  updateLayout();  
 }
 
 // Show and generate project list dialogue
