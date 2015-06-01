@@ -507,6 +507,7 @@ initialiseToolbar('bottomsplit', 'right', 'empty');
 
 /* SETUP TABS */
 var tabList = {};
+var draggedTabId = '';
 
 function refreshTabs() {
   // Reset draggable events
@@ -517,7 +518,8 @@ function refreshTabs() {
   $(tabSelector).off("dragstart").off("dragenter").off("dragleave").off("drag").off("dragend").off("drop");
   $(tabSelector).attr("draggable", "true");
   $(tabSelector).on("dragstart", function(event) {
-    event.originalEvent.dataTransfer.setData('text', event.target.id);
+    //event.originalEvent.dataTransfer.setData('text', event.target.id);
+    draggedTabId = event.target.id;
     $(tabContainer).addClass('drop-highlight');
     //dropArea(this, 0);
   });
@@ -544,7 +546,7 @@ function refreshTabs() {
   });
   $(tabContainer).on("drop", function(event) {
     event.preventDefault();
-    var originalId = event.originalEvent.dataTransfer.getData("text");
+    var originalId = draggedTabId; //event.originalEvent.dataTransfer.getData("text");
     handleDrop (originalId, this);
   });
 }
@@ -575,7 +577,7 @@ function dropArea(elem, x, hide) {
   });
   $(tabArea).on("drop", function(event) {
     event.preventDefault();
-    var originalId = event.originalEvent.dataTransfer.getData("text");
+    var originalId = draggedTabId; //event.originalEvent.dataTransfer.getData("text");
     handleDrop (originalId, elem, insertBefore);
   });
 }
