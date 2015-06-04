@@ -574,7 +574,6 @@
                       var offset = $(panel.content.box).parent().position();
                       var str     = String(panel.size);
                       var ns, nd;
-                      console.log(offset);
                       switch (obj.tmp.resize.type) {
                           case 'top':
                               ns = parseInt(panel.sizeCalculated) + obj.tmp.resize.diff_y;
