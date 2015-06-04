@@ -571,7 +571,6 @@
                       var panel   = obj.get(obj.tmp.resize.type);
                       var height  = parseInt($(obj.box).height());
                       var width   = parseInt($(obj.box).width());
-                      var offset = $(panel.content.box).parent().position();
                       var str     = String(panel.size);
                       var ns, nd;
                       switch (obj.tmp.resize.type) {
@@ -588,9 +587,7 @@
                               ns = parseInt(panel.sizeCalculated) - obj.tmp.resize.diff_y;
                               nd = (ptop && !ptop.hidden ? ptop.sizeCalculated : 0) +
                                   (pbottom && !pbottom.hidden ? pbottom.sizeCalculated : 0);
-                              obj.tmp.resize.y = height-ns;
-
-                              //obj.tmp.resize.y = height-ns;
+                              obj.tmp.resize.y = height-ns+51;
                               break;
                           case 'left':
                               ns = parseInt(panel.sizeCalculated) + obj.tmp.resize.diff_x;
@@ -616,8 +613,6 @@
                   }
                   
                   if (obj.tmp.resize !== undefined) {
-                    //console.log(ns,nd)
-                    //obj.tmp.resize.y = ns;
                     obj.tmp.resize.diff_x = 0;
                     obj.tmp.resize.diff_y = 0;
                     obj.resize();
