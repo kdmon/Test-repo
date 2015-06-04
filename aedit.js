@@ -830,10 +830,10 @@ function showProjects () {
       
       var id = "projectbrowser" + Math.round(Math.random() * 10000000);
       var location = pickPanel(0);
-      var secret = {id: 'secret', text: 'Your private projects (', group: true, expanded: true, nodes: []};
-      var open = {id: 'public', text: 'Your public projects (', group: true, expanded: true, nodes: []};
+      var secret = {id: 'secret', text: 'Private projects (', group: true, expanded: true, nodes: []};
+      var open = {id: 'public', text: 'Public projects (', group: true, expanded: true, nodes: []};
       var shared = {id: 'shared', text: 'Projects shared with you (', group: true, expanded: true, nodes: []};
-      var forked =  {id: 'forked', text: 'Your forked projects (', group: true, expanded: true, nodes: []};
+      var forked =  {id: 'forked', text: 'Forks (', group: true, expanded: true, nodes: []};
       
       var obj = repos.sort(function(a,b){
         if(a.full_name.toLowerCase() > b.full_name.toLowerCase()) return 1;
