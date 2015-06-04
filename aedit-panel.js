@@ -535,13 +535,13 @@
                 tmp.diff_x = resize_x;
                 tmp.diff_y = resize_y;
                 
-                updateSize(evnt.screenX, evnt.screenY);
+                updateSize();
                 
                 // event after
                 obj.trigger($.extend(eventData, { phase: 'after' }));
             }
             
-            function updateSize(x,y) {
+            function updateSize() {
                 // set new size
                 clearTimeout(this._resize_timer);
                 this._resize_timer = setTimeout(function () {
@@ -580,19 +580,25 @@
                               break;
                           case 'bottom':
                               ns = parseInt(panel.sizeCalculated) - obj.tmp.resize.diff_y;
+                              obj.tmp.resize.y = height-ns+65;
                               nd = 0;
                               break;
                           case 'preview':
                               ns = parseInt(panel.sizeCalculated) - obj.tmp.resize.diff_y;
                               nd = (ptop && !ptop.hidden ? ptop.sizeCalculated : 0) +
                                   (pbottom && !pbottom.hidden ? pbottom.sizeCalculated : 0);
+                              obj.tmp.resize.y = height-ns+115;
+
+                              //obj.tmp.resize.y = height-ns;
                               break;
                           case 'left':
                               ns = parseInt(panel.sizeCalculated) + obj.tmp.resize.diff_x;
+                              obj.tmp.resize.x = ns;
                               nd = 0;
                               break;
                           case 'right':
                               ns = parseInt(panel.sizeCalculated) - obj.tmp.resize.diff_x;
+                              obj.tmp.resize.x = width-ns;
                               nd = 0;
                               break;
                       }
@@ -609,8 +615,8 @@
                   }
                   
                   if (obj.tmp.resize !== undefined) {
-                   obj.tmp.resize.x = x ? x : 0;
-                    obj.tmp.resize.y = y ? y : 0;
+                    //console.log(ns,nd)
+                    //obj.tmp.resize.y = ns;
                     obj.tmp.resize.diff_x = 0;
                     obj.tmp.resize.diff_y = 0;
                     obj.resize();
