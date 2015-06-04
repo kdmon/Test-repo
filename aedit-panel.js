@@ -449,6 +449,7 @@
                     value   : 0
                 };
                 // lock all panels
+                /*
                 for (var p1 = 0; p1 < w2panels.length; p1++) {
                     var $tmp = $(obj.el(w2panels[p1])).parent().find('.w2ui-lock');
                     if ($tmp.length > 0) {
@@ -457,75 +458,13 @@
                         obj.lock(w2panels[p1], { opacity: 0 });
                     }
                 }
+                */
                 if (type == 'left' || type == 'right') {
                     obj.tmp.resize.value = parseInt($('#layout_'+ obj.name +'_resizer_'+ type)[0].style.left);
                 }
                 if (type == 'top' || type == 'preview' || type == 'bottom') {
                     obj.tmp.resize.value = parseInt($('#layout_'+ obj.name +'_resizer_'+ type)[0].style.top);
                 }
-            }
-
-            function resizeStop(evnt) {
-                if (!obj.box) return;
-                if (!evnt) evnt = window.event;
-                $(document).off('mousemove', obj.tmp.events.mouseMove);
-                $(document).off('mouseup', obj.tmp.events.mouseUp);
-                if (typeof obj.tmp.resize == 'undefined') return;
-                // unlock all panels
-                for (var p1 = 0; p1 < w2panels.length; p1++) {
-                    var $tmp = $(obj.el(w2panels[p1])).parent().find('.w2ui-lock');
-                    if ($tmp.attr('locked') == 'previous') {
-                        $tmp.removeAttr('locked');
-                    } else {
-                        obj.unlock(w2panels[p1]);
-                    }
-                }
-                // set new size
-                if (obj.tmp.diff_x !== 0 || obj.tmp.resize.diff_y !== 0) { // only recalculate if changed
-                    var ptop    = obj.get('top');
-                    var pbottom = obj.get('bottom');
-                    var panel   = obj.get(obj.tmp.resize.type);
-                    var height  = parseInt($(obj.box).height());
-                    var width   = parseInt($(obj.box).width());
-                    var str     = String(panel.size);
-                    var ns, nd;
-                    switch (obj.tmp.resize.type) {
-                        case 'top':
-                            ns = parseInt(panel.sizeCalculated) + obj.tmp.resize.diff_y;
-                            nd = 0;
-                            break;
-                        case 'bottom':
-                            ns = parseInt(panel.sizeCalculated) - obj.tmp.resize.diff_y;
-                            nd = 0;
-                            break;
-                        case 'preview':
-                            ns = parseInt(panel.sizeCalculated) - obj.tmp.resize.diff_y;
-                            nd = (ptop && !ptop.hidden ? ptop.sizeCalculated : 0) +
-                                (pbottom && !pbottom.hidden ? pbottom.sizeCalculated : 0);
-                            break;
-                        case 'left':
-                            ns = parseInt(panel.sizeCalculated) + obj.tmp.resize.diff_x;
-                            nd = 0;
-                            break;
-                        case 'right':
-                            ns = parseInt(panel.sizeCalculated) - obj.tmp.resize.diff_x;
-                            nd = 0;
-                            break;
-                    }
-                    // set size
-                    if (str.substr(str.length-1) == '%') {
-                        panel.size = Math.floor(ns * 100 / (panel.type == 'left' || panel.type == 'right' ? width : height - nd) * 100) / 100 + '%';
-                    } else {
-                        if (String(panel.size).substr(0, 1) == '-') {
-                            panel.size = parseInt(panel.size) - panel.sizeCalculated + ns;
-                        } else {
-                            panel.size = ns;
-                        }
-                    }
-                    obj.resize();
-                }
-                $('#layout_'+ obj.name + '_resizer_'+ obj.tmp.resize.type).removeClass('active');
-                delete obj.tmp.resize;
             }
 
             function resizeMove(evnt) {
@@ -539,12 +478,9 @@
                     panel: tmp ? tmp.type : 'all', diff_x: tmp ? tmp.diff_x : 0, diff_y: tmp ? tmp.diff_y : 0 });
                 if (eventData.isCancelled === true) return;
 
-                var p         = $('#layout_'+ obj.name + '_resizer_'+ tmp.type);
                 var resize_x  = (evnt.screenX - tmp.x);
                 var resize_y  = (evnt.screenY - tmp.y);
                 var mainPanel = obj.get('main');
-
-                if (!p.hasClass('active')) p.addClass('active');
 
                 switch (tmp.type) {
                     case 'left':
@@ -598,23 +534,110 @@
                 }
                 tmp.diff_x = resize_x;
                 tmp.diff_y = resize_y;
-
-                switch (tmp.type) {
-                    case 'top':
-                    case 'preview':
-                    case 'bottom':
-                        tmp.diff_x = 0;
-                        if (p.length > 0) p[0].style.top = (tmp.value + tmp.diff_y) + 'px';
-                        break;
-
-                    case 'left':
-                    case 'right':
-                        tmp.diff_y = 0;
-                        if (p.length > 0) p[0].style.left = (tmp.value + tmp.diff_x) + 'px';
-                        break;
-                }
+                
+                updateSize(evnt.screenX, evnt.screenY);
+                
                 // event after
                 obj.trigger($.extend(eventData, { phase: 'after' }));
+            }
+            
+            function updateSize(x,y) {
+                // set new size
+                clearTimeout(this._resize_timer);
+                this._resize_timer = setTimeout(function () {
+                  
+                  if (obj.tmp.resize !== undefined) {
+                          
+                      var p = $('#layout_'+ obj.name + '_resizer_'+ obj.tmp.resize.type);
+                      if (!p.hasClass('active')) p.addClass('active');
+                      
+                      switch (obj.tmp.resize.type) {
+                          case 'top':
+                          case 'preview':
+                          case 'bottom':
+                              obj.tmp.resize.diff_x = 0;
+                              if (p.length > 0) p[0].style.top = (obj.tmp.resize.value + obj.tmp.resize.diff_y) + 'px';
+                              break;
+      
+                          case 'left':
+                          case 'right':
+                              obj.tmp.resize.diff_y = 0;
+                              if (p.length > 0) p[0].style.left = (obj.tmp.resize.value + obj.tmp.resize.diff_x) + 'px';
+                              break;
+                      }
+                      //if (obj.tmp.resize.diff_x !== 0 || obj.tmp.resize.diff_y !== 0) { // only recalculate if changed
+                      var ptop    = obj.get('top');
+                      var pbottom = obj.get('bottom');
+                      var panel   = obj.get(obj.tmp.resize.type);
+                      var height  = parseInt($(obj.box).height());
+                      var width   = parseInt($(obj.box).width());
+                      var str     = String(panel.size);
+                      var ns, nd;
+                      switch (obj.tmp.resize.type) {
+                          case 'top':
+                              ns = parseInt(panel.sizeCalculated) + obj.tmp.resize.diff_y;
+                              nd = 0;
+                              break;
+                          case 'bottom':
+                              ns = parseInt(panel.sizeCalculated) - obj.tmp.resize.diff_y;
+                              nd = 0;
+                              break;
+                          case 'preview':
+                              ns = parseInt(panel.sizeCalculated) - obj.tmp.resize.diff_y;
+                              nd = (ptop && !ptop.hidden ? ptop.sizeCalculated : 0) +
+                                  (pbottom && !pbottom.hidden ? pbottom.sizeCalculated : 0);
+                              break;
+                          case 'left':
+                              ns = parseInt(panel.sizeCalculated) + obj.tmp.resize.diff_x;
+                              nd = 0;
+                              break;
+                          case 'right':
+                              ns = parseInt(panel.sizeCalculated) - obj.tmp.resize.diff_x;
+                              nd = 0;
+                              break;
+                      }
+                      // set size
+                      if (str.substr(str.length-1) == '%') {
+                          panel.size = Math.floor(ns * 100 / (panel.type == 'left' || panel.type == 'right' ? width : height - nd) * 100) / 100 + '%';
+                      } else {
+                          if (String(panel.size).substr(0, 1) == '-') {
+                              panel.size = parseInt(panel.size) - panel.sizeCalculated + ns;
+                          } else {
+                              panel.size = ns;
+                          }
+                      }
+                  }
+                  
+                  if (obj.tmp.resize !== undefined) {
+                   obj.tmp.resize.x = x ? x : 0;
+                    obj.tmp.resize.y = y ? y : 0;
+                    obj.tmp.resize.diff_x = 0;
+                    obj.tmp.resize.diff_y = 0;
+                    obj.resize();
+                  }
+                }, 5);
+            }
+            
+            function resizeStop(evnt) {
+              updateSize();
+                if (!obj.box) return;
+                if (!evnt) evnt = window.event;
+                $(document).off('mousemove', obj.tmp.events.mouseMove);
+                $(document).off('mouseup', obj.tmp.events.mouseUp);
+                if (typeof obj.tmp.resize == 'undefined') return;
+                // unlock all panels
+                /*
+                for (var p1 = 0; p1 < w2panels.length; p1++) {
+                    var $tmp = $(obj.el(w2panels[p1])).parent().find('.w2ui-lock');
+                    if ($tmp.attr('locked') == 'previous') {
+                        $tmp.removeAttr('locked');
+                    } else {
+                        obj.unlock(w2panels[p1]);
+                    }
+                }*/
+                
+                $('#layout_'+ obj.name + '_resizer_'+ obj.tmp.resize.type).removeClass('active');
+                delete obj.tmp.resize;
             }
         },
 
@@ -1014,18 +1037,15 @@
                 $(tmp2 + 'content').css({ display: 'block' }).css({ top: tabHeight + 'px' });
             }
             // send resize to all objects
-            clearTimeout(this._resize_timer);
-            this._resize_timer = setTimeout(function () {
-                for (var e in w2ui) {
-                    if (typeof w2ui[e].resize == 'function') {
-                        // sent to all none-layouts
-                        if (w2ui[e].panels == 'undefined') w2ui[e].resize();
-                        // only send to nested layouts
-                        var parent = $(w2ui[e].box).parents('.w2ui-layout');
-                        if (parent.length > 0 && parent.attr('name') == obj.name) w2ui[e].resize();
-                    }
+            for (var e in w2ui) {
+                if (typeof w2ui[e].resize == 'function') {
+                    // sent to all none-layouts
+                    if (w2ui[e].panels == 'undefined') w2ui[e].resize();
+                    // only send to nested layouts
+                    var parent = $(w2ui[e].box).parents('.w2ui-layout');
+                    if (parent.length > 0 && parent.attr('name') == obj.name) w2ui[e].resize();
                 }
-            }, 100);
+            }
             this.trigger($.extend(eventData, { phase: 'after' }));
             return (new Date()).getTime() - time;
         },
