@@ -540,6 +540,7 @@ function refreshTabs() {
   $(tabSelector).attr("draggable", "true");
   $(tabSelector).on("dragstart", function(event) {
     //event.preventDefault();
+    //required for firefox to enable dropping
     event.originalEvent.dataTransfer.setData('text', '');
     draggedTabId = event.target.id;
     $(tabContainer).addClass('drop-highlight');
@@ -608,7 +609,6 @@ function handleDrop(originalId, destination, insertBefore) {
   // hide drop hints
   $(".w2ui-panel-tabs table").removeClass('drop-highlight');
   var tabArea = "#temporarytab";
-  $(tabArea).remove();
   // Exit if non-tab object was dropped
   if (originalId.indexOf('tabs_') < 0) return;
   // Exit if tab is dropped on itself.
@@ -620,13 +620,15 @@ function handleDrop(originalId, destination, insertBefore) {
   var originalPanel = origin[2];
   var originalTab = origin[5];
   // jQuery doesn't handle slashes in id, so use native js function instead
-  var originalCaption = document.getElementById(originalId).textContent;
+  var originalCaption = document.getElementById(originalId);
+  originalCaption = $(originalCaption).text();
   var target = destination.id.split("_");
   var targetLayout = target[1];
   var targetPanel = target[2];
   var targetTab = target[5];
   // Test for existing adjacent tabs
   var tabExists = ($(tabArea).length > 0) ? true : false;
+  $(tabArea).remove();
   var nextTabId = $(destination).next().attr('id');
   var nextTab = (nextTabId === undefined) ? false : nextTabId.split("_")[5];
   // Work out on which tab bar the tab was dropped and reformat it
@@ -935,7 +937,7 @@ function openProject (user, repository, branch, panel) {
   branch = (branch !== undefined) ? branch : 'master';
   // 1. Fetch repo files, recursively - should be allocated to a worker
   repo.getTree(branch + '?recursive=true', function (err, tree) {
-    var title = "File Browser " + repository;
+    var title = "File Browser<br/>" + repository;
     var id = "filebrowser" + Math.round(Math.random() * 10000000);
 
     if (err) {
