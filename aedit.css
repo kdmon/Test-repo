@@ -99,6 +99,7 @@ body, .panel-content {
   padding: 0 2px 1px 2px;
   border: 1px solid #888;
   opacity: 0.8;
+  white-space:nowrap;
 }
 
 .small-button:hover {
@@ -215,7 +216,7 @@ body, .panel-content {
     radial-gradient(#fff 30%, transparent 5%) 2px 2px;
   background-color:#ccc;
   background-size: 4px 4px;
-  opacity: 0;
+  opacity: 1;
 }
 
 #layout_layout_resizer_left, 
@@ -229,7 +230,7 @@ body, .panel-content {
     radial-gradient(#fff 30%, transparent 5%) 2px 2px;
   background-color:#ccc;
   background-size: 4px 4px;
-  opacity: 0;
+  opacity: 1;
 }
 
 body:not(.selectable) {
