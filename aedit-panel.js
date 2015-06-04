@@ -442,8 +442,8 @@
                 $(document).off('mouseup', obj.tmp.events.mouseUp).on('mouseup', obj.tmp.events.mouseUp);
                 obj.tmp.resize = {
                     type    : type,
-                    x       : evnt.screenX,
-                    y       : evnt.screenY,
+                    x       : evnt.clientX,
+                    y       : evnt.clientY,
                     diff_x  : 0,
                     diff_y  : 0,
                     value   : 0
@@ -478,8 +478,8 @@
                     panel: tmp ? tmp.type : 'all', diff_x: tmp ? tmp.diff_x : 0, diff_y: tmp ? tmp.diff_y : 0 });
                 if (eventData.isCancelled === true) return;
 
-                var resize_x  = (evnt.screenX - tmp.x);
-                var resize_y  = (evnt.screenY - tmp.y);
+                var resize_x  = (evnt.clientX - tmp.x);
+                var resize_y  = (evnt.clientY - tmp.y);
                 var mainPanel = obj.get('main');
 
                 switch (tmp.type) {
@@ -571,8 +571,10 @@
                       var panel   = obj.get(obj.tmp.resize.type);
                       var height  = parseInt($(obj.box).height());
                       var width   = parseInt($(obj.box).width());
+                      var offset = $(panel.content.box).parent().position();
                       var str     = String(panel.size);
                       var ns, nd;
+                      console.log(offset);
                       switch (obj.tmp.resize.type) {
                           case 'top':
                               ns = parseInt(panel.sizeCalculated) + obj.tmp.resize.diff_y;
@@ -580,14 +582,14 @@
                               break;
                           case 'bottom':
                               ns = parseInt(panel.sizeCalculated) - obj.tmp.resize.diff_y;
-                              obj.tmp.resize.y = height-ns+65;
+                              obj.tmp.resize.y = height-ns;
                               nd = 0;
                               break;
                           case 'preview':
                               ns = parseInt(panel.sizeCalculated) - obj.tmp.resize.diff_y;
                               nd = (ptop && !ptop.hidden ? ptop.sizeCalculated : 0) +
                                   (pbottom && !pbottom.hidden ? pbottom.sizeCalculated : 0);
-                              obj.tmp.resize.y = height-ns+115;
+                              obj.tmp.resize.y = height-ns;
 
                               //obj.tmp.resize.y = height-ns;
                               break;
