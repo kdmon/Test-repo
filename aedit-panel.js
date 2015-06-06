@@ -24,7 +24,7 @@
         this.panels  = [];
         this.tmp     = {};
 
-        this.padding = 1;        // panel padding
+        this.padding = 16;        // panel padding
         this.resizer = 4;        // resizer width or height
         this.style   = '';
 
@@ -960,13 +960,13 @@
                 $('#layout_'+ this.name +'_resizer_bottom').hide();
             }
             // main - always there
-            l = 0 + (sleft ? pleft.sizeCalculated + this.padding : 0);
-            t = 0 + (stop ? ptop.sizeCalculated + this.padding : 0);
-            w = width  - (sleft ? pleft.sizeCalculated + this.padding : 0) -
-                (sright ? pright.sizeCalculated + this.padding: 0);
-            h = height - (stop ? ptop.sizeCalculated + this.padding : 0) -
-                (sbottom ? pbottom.sizeCalculated + this.padding : 0) -
-                (sprev ? pprev.sizeCalculated + this.padding : 0);
+            l = 0 + (sleft ? pleft.sizeCalculated + this.padding : (pleft.resizable ? this.padding: 0));
+            t = 0 + (stop ? ptop.sizeCalculated + this.padding : (ptop.resizable ? this.padding: 0));
+            w = width  - (sleft ? pleft.sizeCalculated + this.padding : (pleft.resizable ? this.padding: 0)) -
+                (sright ? pright.sizeCalculated + this.padding : (pright.resizable ? this.padding: 0));
+            h = height - (stop ? ptop.sizeCalculated + this.padding : (ptop.resizable ? this.padding: 0)) -
+                (sbottom ? pbottom.sizeCalculated + this.padding : (pbottom.resizable ? this.padding: 0)) -
+                (sprev ? pprev.sizeCalculated + this.padding : (pprev.resizable ? this.padding: 0));
             e = $('#layout_'+ this.name +'_panel_main');
             if (window.navigator.userAgent.indexOf('MSIE') != -1 && e.length > 0 && e[0].clientHeight < e[0].scrollHeight) w += 17; // IE hack
             e.css({
@@ -1006,7 +1006,7 @@
                         'display': 'block',
                         'left': l + 'px',
                         'top': (pprev.hidden === false ? t + 'px' : 'auto'),
-                        'bottom': (pprev.hidden === true ? '5px' : 'auto'),
+                        'bottom': (pprev.hidden === true ? '3px' : 'auto'),
                         'width': w + 'px',
                         'height': h + 'px',
                         'cursor': 'ns-resize'
