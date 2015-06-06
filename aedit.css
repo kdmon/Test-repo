@@ -85,6 +85,10 @@ body, .panel-content {
   height: 22px !important;
 }
 
+.w2ui-node, .w2ui-node-sub {
+  min-width: 450px;
+}
+
 #layout_layout_panel_top .w2ui-toolbar {
   background: linear-gradient(0deg, #77a, #bce 20%,#fff) !important;
   padding-top: 16px;
@@ -216,7 +220,7 @@ body, .panel-content {
     radial-gradient(#fff 30%, transparent 5%) 2px 2px;
   background-color:#ccc;
   background-size: 4px 4px;
-  opacity: 1;
+  opacity: 0.5;
 }
 
 #layout_layout_resizer_left, 
@@ -230,7 +234,7 @@ body, .panel-content {
     radial-gradient(#fff 30%, transparent 5%) 2px 2px;
   background-color:#ccc;
   background-size: 4px 4px;
-  opacity: 1;
+  opacity: 0.5;
 }
 
 body:not(.selectable) {
