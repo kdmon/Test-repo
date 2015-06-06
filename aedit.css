@@ -247,7 +247,7 @@ body, .panel-content {
 #layout_leftsplit_resizer_main,
 #layout_middlesplit_resizer_main,
 #layout_rightsplit_resizer_main,
-#layout_bottom_resizer_main
+#layout_bottomsplit_resizer_main
 {
   display: none !important;
 }
