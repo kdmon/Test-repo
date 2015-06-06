@@ -5,7 +5,7 @@ $('#layout').w2layout({
   name: 'layout',
   panels: [{
     type: 'top',
-    size: 50,
+    size: 30,
     toolbar: {
       items: [{
         type: 'html',
@@ -109,7 +109,7 @@ $('#layout').w2layout({
     type: 'bottom',
     size: '25%',
     resizable: true,
-    hidden: false,
+    hidden: true,
     content: ''
   }]
 });
