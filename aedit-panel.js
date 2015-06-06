@@ -624,7 +624,8 @@
                              
                       // Show hidden panel!
                       setTimeout(function () {
-                          if (panel.hidden) obj.show(obj.tmp.resize.type, true);
+                          if (obj.tmp.resize !== undefined && panel.hidden)
+                          obj.show(obj.tmp.resize.type, true);
                       }, 200);
   
                   }
