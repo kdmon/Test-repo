@@ -588,7 +588,7 @@
                       switch (obj.tmp.resize.type) {
                           case 'top':
                               ns = parseInt(panel.sizeCalculated) + obj.tmp.resize.diff_y;
-                              obj.tmp.resize.y = height-ns+offset.top;
+                              obj.tmp.resize.y = ns+offset.top;
                               nd = 0;
                               break;
                           case 'bottom':
@@ -805,7 +805,7 @@
                 }
             }
             // top if any
-            if (ptop !== null && ptop.hidden !== true) {
+            if (ptop !== null) {
                 l = 0;
                 t = 0;
                 w = width;
@@ -826,7 +826,7 @@
                     $('#layout_'+ this.name +'_resizer_top').show().css({
                         'display': 'block',
                         'left': l + 'px',
-                        'top': t + 'px',
+                        'top': (ptop.hidden === true ? '0px' : t + 'px'),
                         'width': w + 'px',
                         'height': h + 'px',
                         'cursor': 'ns-resize'
@@ -841,12 +841,11 @@
                         return false;
                     });
                 }
-            } else {
-                $('#layout_'+ this.name +'_panel_top').hide();
-                $('#layout_'+ this.name +'_resizer_top').hide();
+                if (ptop.hidden) $('#layout_'+ this.name +'_panel_top').hide();
             }
+            
             // left if any
-            if (pleft !== null && pleft.hidden !== true) {
+            if (pleft !== null) {
                 l = 0;
                 t = 0 + (stop ? ptop.sizeCalculated + this.padding : 0);
                 w = pleft.sizeCalculated;
@@ -869,7 +868,7 @@
                     w = (this.resizer > this.padding ? this.resizer : this.padding);
                     $('#layout_'+ this.name +'_resizer_left').show().css({
                         'display': 'block',
-                        'left': l + 'px',
+                        'left': (pleft.hidden === false ? l + 'px' : '0px'),
                         'top': t + 'px',
                         'width': w + 'px',
                         'height': h + 'px',
@@ -885,12 +884,11 @@
                         return false;
                     });
                 }
-            } else {
-                $('#layout_'+ this.name +'_panel_left').hide();
-                $('#layout_'+ this.name +'_resizer_left').hide();
+                
+                if (pleft.hidden) $('#layout_'+ this.name +'_panel_left').hide();
             }
             // right if any
-            if (pright !== null && pright.hidden !== true) {
+            if (pright !== null) {
                 l = width - pright.sizeCalculated;
                 t = 0 + (stop ? ptop.sizeCalculated + this.padding : 0);
                 w = pright.sizeCalculated;
@@ -911,7 +909,8 @@
                     w = (this.resizer > this.padding ? this.resizer : this.padding);
                     $('#layout_'+ this.name +'_resizer_right').show().css({
                         'display': 'block',
-                        'left': l + 'px',
+                        'left': (pright.hidden === false ? l + 'px' : 'auto'),
+                        'right': (pright.hidden === true ? '3px' : 'auto'),
                         'top': t + 'px',
                         'width': w + 'px',
                         'height': h + 'px',
@@ -927,12 +926,11 @@
                         return false;
                     });
                 }
-            } else {
-                $('#layout_'+ this.name +'_panel_right').hide();
-                $('#layout_'+ this.name +'_resizer_right').hide();
+                
+                if (pright.hidden) $('#layout_'+ this.name +'_panel_right').hide();
             }
             // bottom if any
-            if (pbottom !== null && pbottom.hidden !== true) {
+            if (pbottom !== null) {
                 l = 0;
                 t = height - pbottom.sizeCalculated;
                 w = width;
@@ -953,7 +951,8 @@
                     $('#layout_'+ this.name +'_resizer_bottom').show().css({
                         'display': 'block',
                         'left': l + 'px',
-                        'top': t + 'px',
+                        'top': (pbottom.hidden === false ? t + 'px' : 'auto'),
+                        'bottom': (pbottom.hidden === true ? '3px' : 'auto'),
                         'width': w + 'px',
                         'height': h + 'px',
                         'cursor': 'ns-resize'
@@ -968,9 +967,9 @@
                         return false;
                     });
                 }
-            } else {
-                $('#layout_'+ this.name +'_panel_bottom').hide();
-                $('#layout_'+ this.name +'_resizer_bottom').hide();
+                if (pbottom.hidden === true) {
+                    $('#layout_'+ this.name +'_panel_bottom').hide();
+                }
             }
             // main - always there
             l = 0 + (sleft ? pleft.sizeCalculated + this.padding : (pleft.resizable ? this.padding: 0));
@@ -1035,9 +1034,8 @@
                     });
                 }
                 
-                if (pprev.hidden === true) {
-                    $('#layout_'+ this.name +'_panel_preview').hide();
-                }
+                if (pprev.hidden) $('#layout_'+ this.name +'_panel_preview').hide();
+
             }
 
             // display tabs and toolbar if needed
