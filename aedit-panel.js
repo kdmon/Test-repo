@@ -470,6 +470,7 @@
             function resizeMove(evnt) {
                 if (!obj.box) return;
                 if (!evnt) evnt = window.event;
+                console.log(window.event.clientX,window.event.clientY,evnt.clientX,evnt.clientY);
                 if (typeof obj.tmp.resize == 'undefined') return;
                 var panel = obj.get(obj.tmp.resize.type);
                 // event before
@@ -573,30 +574,32 @@
                       var width   = parseInt($(obj.box).width());
                       var str     = String(panel.size);
                       var ns, nd;
+                      var offset = $(obj.box).offset();
                       switch (obj.tmp.resize.type) {
                           case 'top':
                               ns = parseInt(panel.sizeCalculated) + obj.tmp.resize.diff_y;
+                              obj.tmp.resize.y = height-ns+offset.top;
                               nd = 0;
                               break;
                           case 'bottom':
                               ns = parseInt(panel.sizeCalculated) - obj.tmp.resize.diff_y;
-                              obj.tmp.resize.y = height-ns;
+                              obj.tmp.resize.y = height-ns+offset.top;
                               nd = 0;
                               break;
                           case 'preview':
                               ns = parseInt(panel.sizeCalculated) - obj.tmp.resize.diff_y;
                               nd = (ptop && !ptop.hidden ? ptop.sizeCalculated : 0) +
                                   (pbottom && !pbottom.hidden ? pbottom.sizeCalculated : 0);
-                              obj.tmp.resize.y = height-ns+51;
+                              obj.tmp.resize.y = height-ns+offset.top;
                               break;
                           case 'left':
                               ns = parseInt(panel.sizeCalculated) + obj.tmp.resize.diff_x;
-                              obj.tmp.resize.x = ns;
+                              obj.tmp.resize.x = ns+offset.left;
                               nd = 0;
                               break;
                           case 'right':
                               ns = parseInt(panel.sizeCalculated) - obj.tmp.resize.diff_x;
-                              obj.tmp.resize.x = width-ns;
+                              obj.tmp.resize.x = width-ns+offset.left;
                               nd = 0;
                               break;
                       }
