@@ -91,7 +91,7 @@ $('#layout').w2layout({
     content: ''
   }, {
     type: 'left',
-    size: '25%',
+    size: '250px',
     hidden: false,
     resizable: true,
     content: ''
@@ -822,7 +822,7 @@ function init() {
 
 // Show and generate project list dialogue
 
-function showProjects () {
+function showProjects (panelArea) {
   
   github.getUser().repos(function(err, repos) {
     
@@ -831,7 +831,7 @@ function showProjects () {
     else {
       
       var id = "projectbrowser" + Math.round(Math.random() * 10000000);
-      var location = pickPanel(0);
+      var location = pickPanel(panelArea || 'project');
       var secret = {id: 'secret', text: 'Private projects (', group: true, expanded: true, nodes: []};
       var open = {id: 'public', text: 'Public projects (', group: true, expanded: true, nodes: []};
       var shared = {id: 'shared', text: 'Projects shared with you (', group: true, expanded: true, nodes: []};
@@ -932,7 +932,7 @@ function showProjects () {
 
 
 // Create a sidebar for browsing repository files
-function openProject (user, repository, branch, panel) {
+function openProject (user, repository, branch, panelArea) {
   var repo = github.getRepo(user, repository);
   branch = (branch !== undefined) ? branch : 'master';
   // 1. Fetch repo files, recursively - should be allocated to a worker
@@ -945,7 +945,7 @@ function openProject (user, repository, branch, panel) {
     }
     // 2. Generate widget
     else {
-      var location = pickPanel(panel);
+      var location = pickPanel(panelArea || 'filebrowser');
       var fileNodes = generateNodes(tree, user, repository, branch);
 
       // 3. Show tab
@@ -999,6 +999,7 @@ function openProject (user, repository, branch, panel) {
       });
       w2popup.close();
       w2ui[location.layout].get(location.panel).tabs.click(id);
+      $(location.id).find(".w2ui-tabs").scrollLeft(99999);
     }
   });
   
@@ -1100,14 +1101,42 @@ function getObjects(obj, key, val) {
 }
 
 // Return best panel for new tabs
+// identifier can be a number (0-8) or description.
 function pickPanel(identifier) {
-  var obj = {
-    layout: 'middlesplit',
-    panel: 'main',
-    area: 2
-  };
-
-  if (identifier >=-1 && identifier < 9) obj = {
+  
+  var obj = {};
+  
+  switch (identifier) {
+    case 'project':
+      obj = {
+        id: "#" + panelAreas[0],
+        layout: panelAreas[0].split('_')[1],
+        panel: 'main',
+        area: 0
+      };
+    break;
+    
+    case 'filebrowser':
+      obj = {
+        id: "#" + panelAreas[0],
+        layout: panelAreas[0].split('_')[1],
+        panel: 'main',
+        area: 0
+      };
+    break;
+    
+    default:
+      obj = {
+        id: "#" + panelAreas[2],
+        layout: 'middlesplit',
+        panel: 'main',
+        area: 2
+      };
+    break;
+  }
+  
+  if (identifier >=-1 && identifier < 9 && !isNaN(identifier)) obj = {
+    id: "#" + panelAreas[identifier],
     layout: panelAreas[identifier].split('_')[1],
     panel: 'main',
     area: identifier
