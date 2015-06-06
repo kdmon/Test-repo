@@ -315,6 +315,8 @@ w2ui.layout.content('main', w2ui.middlesplit);
 w2ui.layout.content('right', w2ui.rightsplit);
 w2ui.layout.content('bottom', w2ui.bottomsplit);
 
+
+
 $().w2layout({
   name: 'popupLayout',
   panels: [
