@@ -211,42 +211,79 @@ body, .panel-content {
   border: none;
 }
 
-#layout_leftsplit_resizer_preview, 
-#layout_middlesplit_resizer_preview, 
-#layout_rightsplit_resizer_preview, 
-#layout_layout_resizer_bottom {
-  height: 8px !important;
-  margin-top: 4px;
-  background:
-    radial-gradient(#fff 30%, transparent 5%) 0 0,
-    radial-gradient(#fff 30%, transparent 5%) 2px 2px;
-  background-color:#ccc;
-  background-size: 4px 4px;
-  border: 1px solid #555;
-  opacity: 0.5;
+
+.w2ui-resizer {
+  background: radial-gradient(#aaf, transparent 50%) !important;
+  background-size: 3px 3px !important;
+  opacity: 1;
+}
+  
+.w2ui-horizontal-resizer {
+  height: 6px !important;
+  margin-top: 3px;
 }
 
-.inside-resizer {
-  width: 4px;
-  height: 4px;
-  background: red;
+.w2ui-vertical-resizer {
+  width: 6px !important;
+  margin-left: 3px;
+}
+.w2ui-vertical-resizer .w2ui-resize-toggle:after {
+  position: relative;
+  top: 20px;
+  left: 3px;
+  font-family: FontAwesome;
+  content: "\f142";
 }
 
-#layout_layout_resizer_left, 
-#layout_layout_resizer_right,
-#layout_bottomsplit_resizer_left, 
-#layout_bottomsplit_resizer_right {
-  text-align: center;
-  vertical-align: middle;
-  width: 8px !important;
-  margin-left: 4px;
-  background:
-    radial-gradient(#fff 30%, transparent 5%) 0 0,
-    radial-gradient(#fff 30%, transparent 5%) 2px 2px;
-  background-color:#ccc;
-  background-size: 4px 4px;
-  border: 1px solid #555;
-  opacity: 0.5;
+.w2ui-horizontal-resizer .w2ui-resize-toggle:after {
+  position: relative;
+  left: 20px;
+  top: -2px;
+  font-family: FontAwesome;
+  content: "\f141";
+}
+
+#layout_layout_resizer_main,
+#layout_leftsplit_resizer_main,
+#layout_middlesplit_resizer_main,
+#layout_rightsplit_resizer_main,
+#layout_bottom_resizer_main
+{
+  display: none !important;
+}
+
+.w2ui-resize-toggle {
+  border: 1px solid #aaf;
+  
+  color: #aaf;
+  background: linear-gradient(0deg, #ccf, white);
+  z-index: 250;
+  cursor: pointer;
+}
+
+.w2ui-horizontal-resizer .w2ui-resize-toggle {
+  margin-top: -2px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 55px;
+  height: 10px;
+}
+
+.w2ui-vertical-resizer .w2ui-resize-toggle {
+  margin: auto;
+  background: linear-gradient(90deg, #ccf, white);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -2px;
+  right: 0;
+  width: 10px;
+  height: 55px;
+}
+
+.w2ui-resize-toggle:hover{
+  background: #fff;
+  color: #aaf;
 }
 
 body:not(.selectable) {
