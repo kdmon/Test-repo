@@ -24,8 +24,8 @@
         this.panels  = [];
         this.tmp     = {};
 
-        this.padding = 16;        // panel padding
-        this.resizer = 4;        // resizer width or height
+        this.padding = 12;        // panel padding
+        this.resizer = 10;        // resizer width or height
         this.style   = '';
 
         this.onShow         = null;
