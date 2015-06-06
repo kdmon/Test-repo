@@ -980,7 +980,7 @@ function openProject (user, repository, branch, panelArea) {
       });
       // file open
       w2ui[id].on('dblClick', function(event) {
-        if(event.target.substr(0,5) === "folder") return;
+        if(event.target.substr(0,6) === "folder") return;
         var path = event.target.substr(event.target.indexOf("_")+1).split('/');
         var id = path.join('/');
         var user = path.shift();
@@ -1045,9 +1045,9 @@ function generateNodes(tree, user, repo, branch) {
   var uid = Math.round(Math.random() * 1000000000);
   
   for (var index in files) {
-    
     var file = files[index];
-    var id = uid + "_" + user + '/' + repo + '/' + branch + '/' + file.path;
+    var prefix = ((file.type === "tree") ? 'folder' : '');
+    var id = prefix + uid + "_" + user + '/' + repo + '/' + branch + '/' + file.path;
     var icon = (file.type === "tree") ? 'fa fa-folder' : 'fa fa-file-o';
     var paths = file.path.split('/');
     var filename = paths.pop();
@@ -1067,7 +1067,7 @@ function generateNodes(tree, user, repo, branch) {
       else nodes.push(obj);
     }
     
-    // nested files - harder - need recursive search.
+    // nested files - need recursive search.
     else {
       obj = {
         id: id,
@@ -1075,9 +1075,9 @@ function generateNodes(tree, user, repo, branch) {
         icon: icon
       };
       
-      // Locate the parent in file structure and insert the node
-
-      var location = getObjects(nodes, 'id', uid + "_" + user + '/' + repo + '/' + branch + '/' + path)[0];
+      // Locate the parent node in file structure object and insert the node
+      
+      var location = getObjects(nodes, 'id', 'folder'+uid + "_" + user + '/' + repo + '/' + branch + '/' + path)[0];
 
       if (file.type === "tree") {obj.nodes = []; location.nodes.push(obj);}
       else location.nodes.push(obj);
