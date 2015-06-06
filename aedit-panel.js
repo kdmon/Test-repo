@@ -470,7 +470,6 @@
             function resizeMove(evnt) {
                 if (!obj.box) return;
                 if (!evnt) evnt = window.event;
-                console.log(window.event.clientX,window.event.clientY,evnt.clientX,evnt.clientY);
                 if (typeof obj.tmp.resize == 'undefined') return;
                 var panel = obj.get(obj.tmp.resize.type);
                 // event before
