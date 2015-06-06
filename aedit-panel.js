@@ -400,14 +400,19 @@
             if ($(obj.box).length > 0) $(obj.box)[0].style.cssText += obj.style;
             // create all panels
             for (var p1 = 0; p1 < w2panels.length; p1++) {
-                var pan  = obj.get(w2panels[p1]);
+                var pan = obj.get(w2panels[p1]);
+                var aspect = (pan.type === 'top' || 
+                              pan.type === 'bottom' ||
+                              pan.type === 'preview') ? 'horizontal' : 'vertical';
                 var html =  '<div id="layout_'+ obj.name + '_panel_'+ w2panels[p1] +'" class="w2ui-panel">'+
                             '    <div class="w2ui-panel-title"></div>'+
                             '    <div class="w2ui-panel-tabs"></div>'+
                             '    <div class="w2ui-panel-toolbar"></div>'+
                             '    <div class="w2ui-panel-content"></div>'+
                             '</div>'+
-                            '<div id="layout_'+ obj.name + '_resizer_'+ w2panels[p1] +'" class="w2ui-resizer"></div>';
+                            '<div id="layout_'+ obj.name + '_resizer_'+ w2panels[p1] +
+                            '" class="w2ui-resizer w2ui-' + aspect +
+                            '-resizer"><div class="w2ui-resize-toggle"></div></div>';
                 $(obj.box).find(' > div').append(html);
                 // tabs are rendered in refresh()
             }
@@ -436,6 +441,9 @@
             }
 
             function resizeStart(type, evnt) {
+                if ($(evnt.target).attr('class') === "w2ui-resize-toggle") {
+                  obj.toggle(type, true); return;
+                }
                 if (!obj.box) return;
                 if (!evnt) evnt = window.event;
                 $(document).off('mousemove', obj.tmp.events.mouseMove).on('mousemove', obj.tmp.events.mouseMove);
