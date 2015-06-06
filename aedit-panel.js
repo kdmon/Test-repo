@@ -449,9 +449,6 @@
                     value   : 0
                 };
                 
-                // Show hidden panel!
-                obj.show(type, true);
-                
                 // lock all panels
                 /*
                 for (var p1 = 0; p1 < w2panels.length; p1++) {
@@ -472,12 +469,15 @@
             }
 
             function resizeMove(evnt) {
+              
                 if (!obj.box) return;
                 if (!evnt) evnt = window.event;
                 if (typeof obj.tmp.resize == 'undefined') return;
                 var panel = obj.get(obj.tmp.resize.type);
                 // event before
                 var tmp = obj.tmp.resize;
+                
+                
                 var eventData = obj.trigger({ phase: 'before', type: 'resizing', target: obj.name, object: panel, originalEvent: evnt,
                     panel: tmp ? tmp.type : 'all', diff_x: tmp ? tmp.diff_x : 0, diff_y: tmp ? tmp.diff_y : 0 });
                 if (eventData.isCancelled === true) return;
@@ -569,6 +569,7 @@
                               if (p.length > 0) p[0].style.left = (obj.tmp.resize.value + obj.tmp.resize.diff_x) + 'px';
                               break;
                       }
+                      console.log(obj.tmp.resize.diff_x,obj.tmp.resize.diff_y)
                       //if (obj.tmp.resize.diff_x !== 0 || obj.tmp.resize.diff_y !== 0) { // only recalculate if changed
                       var ptop    = obj.get('top');
                       var pbottom = obj.get('bottom');
@@ -616,13 +617,18 @@
                               panel.size = ns;
                           }
                       }
+                      
+                      obj.tmp.resize.diff_x = 0;
+                      obj.tmp.resize.diff_y = 0;
+                      obj.resize();
+                             
+                      // Show hidden panel!
+                      setTimeout(function () {
+                          if (panel.hidden) obj.show(obj.tmp.resize.type, true);
+                      }, 200);
+  
                   }
                   
-                  if (obj.tmp.resize !== undefined) {
-                    obj.tmp.resize.diff_x = 0;
-                    obj.tmp.resize.diff_y = 0;
-                    obj.resize();
-                  }
                 }, 5);
             }
             
