@@ -37,6 +37,8 @@ body, .panel-content {
 
 .panel-editor {
   border: 4px solid #fff;
+  height: calc(100% - 4px);
+  width: calc(100% - 4px);
 }
 
 .active-editor {
@@ -91,7 +93,7 @@ body, .panel-content {
 
 #layout_layout_panel_top .w2ui-toolbar {
   background: linear-gradient(0deg, #77a, #bce 20%,#fff) !important;
-  padding-top: 16px;
+  padding-top: 32px;
   padding-bottom: 0px;
 }
 
@@ -214,26 +216,36 @@ body, .panel-content {
 #layout_rightsplit_resizer_preview, 
 #layout_layout_resizer_bottom {
   height: 8px !important;
-  margin-top:-4px;
+  margin-top: 4px;
   background:
     radial-gradient(#fff 30%, transparent 5%) 0 0,
     radial-gradient(#fff 30%, transparent 5%) 2px 2px;
   background-color:#ccc;
   background-size: 4px 4px;
+  border: 1px solid #555;
   opacity: 0.5;
+}
+
+.inside-resizer {
+  width: 4px;
+  height: 4px;
+  background: red;
 }
 
 #layout_layout_resizer_left, 
 #layout_layout_resizer_right,
 #layout_bottomsplit_resizer_left, 
 #layout_bottomsplit_resizer_right {
+  text-align: center;
+  vertical-align: middle;
   width: 8px !important;
-  margin-left: -4px;
+  margin-left: 4px;
   background:
     radial-gradient(#fff 30%, transparent 5%) 0 0,
     radial-gradient(#fff 30%, transparent 5%) 2px 2px;
   background-color:#ccc;
   background-size: 4px 4px;
+  border: 1px solid #555;
   opacity: 0.5;
 }
 
