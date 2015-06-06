@@ -37,8 +37,8 @@ body, .panel-content {
 
 .panel-editor {
   border: 4px solid #fff;
-  height: calc(100% - 4px);
-  width: calc(100% - 4px);
+  height: calc(100%);
+  width: calc(100%);
 }
 
 .active-editor {
