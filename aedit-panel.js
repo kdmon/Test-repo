@@ -569,8 +569,6 @@
                               if (p.length > 0) p[0].style.left = (obj.tmp.resize.value + obj.tmp.resize.diff_x) + 'px';
                               break;
                       }
-                      console.log(obj.tmp.resize.diff_x,obj.tmp.resize.diff_y)
-                      //if (obj.tmp.resize.diff_x !== 0 || obj.tmp.resize.diff_y !== 0) { // only recalculate if changed
                       var ptop    = obj.get('top');
                       var pbottom = obj.get('bottom');
                       var panel   = obj.get(obj.tmp.resize.type);
