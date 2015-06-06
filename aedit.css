@@ -93,7 +93,7 @@ body, .panel-content {
 
 #layout_layout_panel_top .w2ui-toolbar {
   background: linear-gradient(0deg, #77a, #bce 20%,#fff) !important;
-  padding-top: 32px;
+  padding-top: 12px;
   padding-bottom: 0px;
 }
 
