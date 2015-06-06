@@ -448,6 +448,10 @@
                     diff_y  : 0,
                     value   : 0
                 };
+                
+                // Show hidden panel!
+                obj.show(type, true);
+                
                 // lock all panels
                 /*
                 for (var p1 = 0; p1 < w2panels.length; p1++) {
@@ -976,7 +980,8 @@
             pmain.height = h;
 
             // preview if any
-            if (pprev !== null && pprev.hidden !== true) {
+            if (pprev !== null) {
+                  
                 l = 0 + (sleft ? pleft.sizeCalculated + this.padding : 0);
                 t = height - (sbottom ? pbottom.sizeCalculated + this.padding : 0) - pprev.sizeCalculated;
                 w = width  - (sleft ? pleft.sizeCalculated + this.padding : 0) -
@@ -1000,7 +1005,8 @@
                     $('#layout_'+ this.name +'_resizer_preview').show().css({
                         'display': 'block',
                         'left': l + 'px',
-                        'top': t + 'px',
+                        'top': (pprev.hidden === false ? t + 'px' : 'auto'),
+                        'bottom': (pprev.hidden === true ? '5px' : 'auto'),
                         'width': w + 'px',
                         'height': h + 'px',
                         'cursor': 'ns-resize'
@@ -1015,9 +1021,10 @@
                         return false;
                     });
                 }
-            } else {
-                $('#layout_'+ this.name +'_panel_preview').hide();
-                $('#layout_'+ this.name +'_resizer_preview').hide();
+                
+                if (pprev.hidden === true) {
+                    $('#layout_'+ this.name +'_panel_preview').hide();
+                }
             }
 
             // display tabs and toolbar if needed
