@@ -5,7 +5,7 @@ $('#layout').w2layout({
   name: 'layout',
   panels: [{
     type: 'top',
-    size: 30,
+    size: '30px',
     toolbar: {
       items: [{
         type: 'html',
@@ -15,57 +15,22 @@ $('#layout').w2layout({
         + '<span class="fa fa-pencil logo" style="top: -5px; left: -5px"></span>'
         + '<span id="alpha">v.0.1</span>'
         + 'WebAppEditor.com</h1>'
+      }, {
+        id: 'topspace',
+        type: 'spacer'
       },{
-      type: 'menu',
-      id: 'projectmenu',
-      caption: 'Manage Projects',
-      icon: 'fa fa-sitemap',
-      items: [{
-        text: 'Start new project',
-        icon: 'fa fa-file'
+        id: 'onlinestatus',
+        type: 'html',
+        html: '<span class="fa fa-circle fa-x" style="color: #0a0 !important;"></span> You are online.'
       }, {
-        text: 'Open existing project',
-        icon: 'fa fa-folder-open'
-      }, {
-        text: 'Close current project',
-        icon: 'fa fa-close'
-      }]},{
+        id: 'topbreak1',
+        type: 'break'
+      },{
         id: 'collaborate',
         type: 'button',
         caption: 'Collaborate',
         icon: 'fa fa-comments-o',
         hint: 'Collaborate with friends via real-time text, audio and video chat.'
-      }, {
-        id: 'topspace',
-        type: 'spacer'
-      }, {
-        type: 'menu',
-        id: 'optionsmenu',
-        caption: '',
-        hint: 'Change layout.',
-        icon: 'fa fa-columns',
-        items: [{
-          text: 'Preferences',
-          icon: 'fa fa-wrench'
-        }, {
-          id: 'leftcolumn',
-          type: 'check',
-          caption: '',
-          icon: 'fa fa-caret-square-o-left',
-          hint: 'Toggle left column'
-        }, {
-          id: 'bottomrow',
-          type: 'check',
-          caption: '',
-          icon: 'fa fa-caret-square-o-down',
-          hint: 'Toggle bottom row'
-        }, {
-          id: 'rightcolumn',
-          type: 'check',
-          caption: '',
-          icon: 'fa fa-caret-square-o-right',
-          hint: 'Toggle right column'
-        }, ]
       }, {
         id: 'topbreak2',
         type: 'break'
@@ -88,6 +53,7 @@ $('#layout').w2layout({
       }
     },
     resizable: false,
+    hidden: false,
     content: ''
   }, {
     type: 'left',
@@ -108,7 +74,7 @@ $('#layout').w2layout({
   }, {
     type: 'bottom',
     size: '25%',
-    resizable: true,
+    resizable: false,
     hidden: true,
     content: ''
   }]
@@ -314,8 +280,6 @@ w2ui.layout.content('left', w2ui.leftsplit);
 w2ui.layout.content('main', w2ui.middlesplit);
 w2ui.layout.content('right', w2ui.rightsplit);
 w2ui.layout.content('bottom', w2ui.bottomsplit);
-
-
 
 $().w2layout({
   name: 'popupLayout',
