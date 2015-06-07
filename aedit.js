@@ -422,35 +422,13 @@ var buttons = {
 
 function toolbarClick(obj, event) {
   var id = obj.name.split("_");
+  var elem = 'layout_'+id[0]+'_panel_'+id[1];
+  var panel = pickPanel(elem);
   //console.log(event.target);
   switch (event.target) {
-    case 'splitleft':
-      w2ui[id[0]].toggle('left', true);
-      break;
-    case 'splitright':
-      w2ui[id[0]].toggle('right', true);
-      break;
-    case 'split':
-      w2ui[id[0]].toggle('preview', true);
-      break;
-    case 'projectmenu:Open existing project':
-      showProjects();
-      break;
-    case 'leftcolumn':
-      w2ui.layout.toggle('left', true);
-      break;
-    case 'bottomrow':
-      w2ui.layout.toggle('bottom', true);
-      break;
-    case 'rightcolumn':
-      w2ui.layout.toggle('right', true);
-      break;
-    case 'hide':
-      w2ui[id[0]].toggle(id[1], true);
-      break;
     case 'more:Search':
-      console.log(id, obj);
-      editors[2].execCommand("find");
+      console.log(id, obj,elem);
+      editors[panel.area].execCommand("find");
       break;
     default:
     //obj.owner.content('main', 'event' + event.target);
@@ -597,9 +575,12 @@ function handleDrop(originalId, destination, insertBefore) {
   // Split original and target id into their components.
   // This works even if repo name and files contains _
   var origin = originalId.split("_");
-  var originalLayout = origin[1];
-  var originalPanel = origin[2];
-  var originalTab = origin[5];
+  origin.shift();
+  var originalLayout = origin.shift();
+  var originalPanel = origin.shift();
+  origin.shift();
+  origin.shift();
+  var originalTab = origin.join("_");
   // jQuery doesn't handle slashes in id, so use native js function instead
   var originalCaption = document.getElementById(originalId);
   originalCaption = $(originalCaption).text();
@@ -695,10 +676,23 @@ function tabClose(obj, event) {
   // ace detach etc...
 }
 
-function updateLayout() {
+function updateLayout(editorOnly) {
+  if (editorOnly === undefined) {
+    w2ui.layout.resize();
+    w2ui.middlesplit.resize();
+    w2ui.leftsplit.resize();
+    w2ui.rightsplit.resize();
+    w2ui.bottomsplit.resize();
+  }
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(function() {
-    w2ui.layout.resize();
+    if (editorOnly === undefined) {
+      w2ui.layout.resize();
+      w2ui.middlesplit.resize();
+      w2ui.leftsplit.resize();
+      w2ui.rightsplit.resize();
+      w2ui.bottomsplit.resize();
+    }
     for (var i = 0; i < editors.length; i++) {
       editors[i].resize();
       var location = panelAreas[i].split("_");
@@ -719,7 +713,7 @@ function updateLayout() {
       }
     }
 
-  }, 50);
+  }, 100);
 }
 
 function togglePanel (id) {
@@ -737,7 +731,9 @@ function togglePanel (id) {
 
 /* Resize events */
 $(window).on("resize", updateLayout());
-w2ui.layout.onResize = updateLayout();
+w2ui.middlesplit.on('resize', function () {
+  updateLayout(true);
+});
 
 // Prevent toolbars from stealing focus from editor
 $(".w2ui-toolbar:not(.selectable)").on('mousedown', function(event) {
