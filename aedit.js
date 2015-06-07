@@ -254,7 +254,7 @@ var connection = new sharejs.Connection("http://it4se.com:8081/channel");
 /* SETUP TOOLBAR */
 var toolbars = {
   topmenu: ['logo', 'topspacer','connection','topbreak1','collaborate','topbreak2', 'account'],
-  editor: ['save', 'undo', 'redo', 'more', 'spacer', 'split'],
+  editor: ['save', 'undo', 'redo', 'more'],
   preview: ['pause', 'previewurl', 'refresh', 'share'],
   projectmanager: ['refresh','newproject', 'selectproject', 'closeproject'],
   chat: ['url', 'refresh', 'share'],
@@ -364,12 +364,6 @@ var buttons = {
       text: 'File history',
       icon: 'fa fa-history'
     }, {
-    }, {
-      text: 'Split panel horizontally',
-      icon: 'fa fa-arrow-right'
-    }, {
-      text: 'Split panel vertically',
-      icon: 'fa fa-arrow-down'
     }]
   },
   spacer: {
@@ -454,9 +448,13 @@ function toolbarClick(obj, event) {
     case 'hide':
       w2ui[id[0]].toggle(id[1], true);
       break;
-    default:
-      obj.owner.content('main', 'event' + event.target);
+    case 'more:Search':
+      console.log(id, obj);
+      editors[2].execCommand("find");
       break;
+    default:
+    //obj.owner.content('main', 'event' + event.target);
+    break;
   }
 }
 
@@ -1107,47 +1105,75 @@ function getObjects(obj, key, val) {
     return objects;
 }
 
-// Return best panel for new tabs
-// identifier can be a number (0-8) or description.
+// Return best panel for new tabs.
+// Identifier can be a number (0-8),
+// an element id, an area label or
+// blank to return a default value.
 function pickPanel(identifier) {
   
+  identifier = (identifier !== undefined) ? identifier : '';
+
   var obj = {};
-  
-  switch (identifier) {
-    case 'project':
-      obj = {
-        id: "#" + panelAreas[0],
-        layout: panelAreas[0].split('_')[1],
-        panel: 'main',
-        area: 0
-      };
-    break;
-    
-    case 'filebrowser':
-      obj = {
-        id: "#" + panelAreas[0],
-        layout: panelAreas[0].split('_')[1],
-        panel: 'main',
-        area: 0
-      };
-    break;
-    
-    default:
-      obj = {
-        id: "#" + panelAreas[2],
-        layout: 'middlesplit',
-        panel: 'main',
-        area: 2
-      };
-    break;
+
+  // Number
+  if (identifier >=-1 && identifier < 9 && $.isNumeric(identifier)) {
+    obj = {
+      id: "#" + panelAreas[identifier],
+      layout: panelAreas[identifier].split('_')[1],
+      panel: panelAreas[identifier].split('_')[3],
+      area: identifier
+    };
   }
   
-  if (identifier >=-1 && identifier < 9 && !isNaN(identifier)) obj = {
-    id: "#" + panelAreas[identifier],
-    layout: panelAreas[identifier].split('_')[1],
-    panel: 'main',
-    area: identifier
-  };
+  // element
+  else if (identifier.indexOf("_")>-1) {
+    for (var i = 0; i<panelAreas.length; i++) {
+      if (identifier == panelAreas[i]) {
+        obj = {
+          id: "#" + panelAreas[i],
+          layout: panelAreas[i].split('_')[1],
+          panel: panelAreas[i].split('_')[3],
+          area: i
+        };
+        break;
+    }
+    }
+    
+  }
+  
+  // Label + default
+  
+  else {
+    switch (identifier) {
+      case 'project':
+        obj = {
+          id: "#" + panelAreas[0],
+          layout: panelAreas[0].split('_')[1],
+          panel: 'main',
+          area: 0
+        };
+      break;
+      
+      case 'filebrowser':
+        obj = {
+          id: "#" + panelAreas[0],
+          layout: panelAreas[0].split('_')[1],
+          panel: 'main',
+          area: 0
+        };
+      break;
+      
+      default:
+        obj = {
+          id: "#" + panelAreas[2],
+          layout: 'middlesplit',
+          panel: 'main',
+          area: 2
+        };
+      break;
+    }
+    
+  }
 
   return obj;
 }
