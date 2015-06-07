@@ -20,6 +20,11 @@ body, .panel-content {
   font-size: 0.8em;
 }
 
+.account-icon {
+  position: relative;
+  height: 20px;
+}
+
 .custom-icon {
   position: relative;
   margin-left: -20px;
@@ -72,7 +77,7 @@ body, .panel-content {
 
 #alpha {
   position: absolute;
-  top: 10px;
+  top: 5px;
   left: 175px;
   font-size: 0.5em;
   font-style: italic;
@@ -93,8 +98,7 @@ body, .panel-content {
 
 #layout_layout_panel_top .w2ui-toolbar {
   background: linear-gradient(0deg, #77a, #bce 20%,#fff) !important;
-  padding-top: 12px;
-  padding-bottom: 0px;
+  
 }
 
 .small-button {
@@ -197,7 +201,7 @@ body, .panel-content {
 #layout_layout_panel_main .w2ui-panel,
 #layout_layout_panel_right .w2ui-panel,
 #layout_layout_panel_bottom .w2ui-panel {
-  
+  border-radius: 2px;
   margin: 0 !important;
   border: 1px solid black;
 }
