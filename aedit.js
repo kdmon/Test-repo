@@ -7,47 +7,7 @@ $('#layout').w2layout({
     type: 'top',
     size: '30px',
     toolbar: {
-      items: [{
-        type: 'html',
-        id: 'logo',
-        html: '<h1 id="logo" title="Edit Web Applications">'
-        + '<span class="fa fa-2x fa-mobile logo"></span>'
-        + '<span class="fa fa-pencil logo" style="top: -5px; left: -5px"></span>'
-        + '<span id="alpha">v.0.1</span>'
-        + 'WebAppEditor.com</h1>'
-      }, {
-        id: 'topspace',
-        type: 'spacer'
-      },{
-        id: 'onlinestatus',
-        type: 'html',
-        html: '<span class="fa fa-circle fa-x" style="color: #0a0 !important;"></span> You are online.'
-      }, {
-        id: 'topbreak1',
-        type: 'break'
-      },{
-        id: 'collaborate',
-        type: 'button',
-        caption: 'Collaborate',
-        icon: 'fa fa-comments-o',
-        hint: 'Collaborate with friends via real-time text, audio and video chat.'
-      }, {
-        id: 'topbreak2',
-        type: 'break'
-      }, {
-        type: 'menu',
-        id: 'accountmenu',
-        caption: 'Account',
-        title: 'Manage your account',
-        icon: 'fa fa-user',
-        items: [{
-          text: 'Preferences',
-          icon: 'fa fa-wrench'
-        }, {
-          text: 'Sign out',
-          icon: 'fa fa-power-off'
-        }]
-      }],
+      items: [],
       onClick: function(event) {
         toolbarClick(this, event);
       }
@@ -293,6 +253,7 @@ var connection = new sharejs.Connection("http://it4se.com:8081/channel");
 
 /* SETUP TOOLBAR */
 var toolbars = {
+  topmenu: ['logo', 'topspacer','connection','topbreak1','collaborate','topbreak2', 'account'],
   editor: ['save', 'undo', 'redo', 'more', 'spacer', 'split'],
   preview: ['pause', 'previewurl', 'refresh', 'share'],
   project: ['newproject', 'selectproject', 'closeproject'],
@@ -305,6 +266,53 @@ var toolbars = {
   help: ['']
 };
 var buttons = {
+  logo : {
+    type: 'html',
+    id: 'logo',
+    html: '<h1 id="logo" title="Edit Web Applications">'
+    + '<span class="fa fa-2x fa-mobile logo"></span>'
+    + '<span class="fa fa-pencil logo" style="top: -5px; left: -5px"></span>'
+    + '<span id="alpha">v.0.1</span>'
+    + 'WebAppEditor.com</h1>'
+  },
+  topspacer: {
+    id: 'topspacer',
+    type: 'spacer'
+  },
+  connection : {
+    id: 'connection',
+    type: 'html',
+    html: '<span class="fa fa-circle fa-x" style="color: #0a0 !important;"></span> Connected.'
+  }, 
+  topbreak1 :{
+    id: 'topbreak1',
+    type: 'break'
+  },
+  collaborate : {
+    id: 'collaborate',
+    type: 'button',
+    caption: 'Collaborate',
+    icon: 'fa fa-comments-o',
+    hint: 'Collaborate with friends via real-time text, audio and video chat.'
+  },
+  topbreak2: {
+    id: 'topbreak2',
+    type: 'break'
+  }, 
+  account: {
+    type: 'menu',
+    id: 'account',
+    caption: 'Account',
+    title: 'Manage your account',
+    icon: 'fa fa-user',
+    items: [{
+      text: 'Preferences',
+      icon: 'fa fa-wrench'
+    }, {
+      text: 'Sign out',
+      icon: 'fa fa-power-off'
+    }]
+  },
   save: {
     id: 'save',
     type: 'button',
@@ -470,18 +478,29 @@ function initialiseToolbar(layout, panel, toolbar) {
   // First add all buttons to toolbar
   for (var button in buttons) {
     var item = buttons[button];
+    if (item.html)
     w2ui[layout].get([panel]).toolbar.add({
       id: item.id,
       type: item.type,
+      html: item.html,
+      hint: item.hint,
+      items: item.items
+    });
+    else
+    w2ui[layout].get([panel]).toolbar.add({
+      id: item.id,
+      hint: item.hint,
+      type: item.type,
       caption: item.caption,
       icon: item.icon,
-      hint: item.hint,
       items: item.items
     });
   }
   // Then toggle which buttons to show
   switchToolbar(layout, panel, toolbar);
 }
+
+initialiseToolbar('layout', 'top', 'topmenu');
 initialiseToolbar('leftsplit', 'main', 'empty');
 initialiseToolbar('leftsplit', 'preview', 'empty');
 initialiseToolbar('middlesplit', 'main', 'editor');
@@ -744,16 +763,27 @@ var github = new Github({
   auth: "oauth"
 });
 
-var config = {
-  user: 'kdmon',
-  repo: 'phdthesis'
-};
 
+var config = {};
 
-// Wait until w2ui is ready, then initalise widgets
-setTimeout(function() {
+var user = github.getUser();
+
+// Get authenticated user details
+
+user.show('', function(err, user) {
+  console.log (user);
+  config.user = user.login;
+  config.avatar = user.avatar_url;
+  /*w2ui['toolbar'].set('item3', { caption: 'check 2' });
+  w2ui['toolbar'].refresh();
+  $()shared.nodes.push({
+            id: item.full_name + '_' + rnd,
+            text: '<img class="custom-icon" src="' + item.owner.avatar_url +'"/> ' + item.full_name
+          });
+          */
   init();
-}, 50);
+});
+
 
 
 
