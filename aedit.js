@@ -254,7 +254,7 @@ var connection = new sharejs.Connection("http://it4se.com:8081/channel");
 /* SETUP TOOLBAR */
 var toolbars = {
   topmenu: ['logo', 'topspacer','connection','topbreak1','collaborate','topbreak2', 'account'],
-  editor: ['save', 'undo', 'redo', 'more'],
+  editor: ['save', 'editmenu', 'more'],
   preview: ['pause', 'previewurl', 'refresh', 'share'],
   projectmanager: ['refresh','newproject', 'selectproject', 'closeproject'],
   chat: ['url', 'refresh', 'share'],
@@ -336,6 +336,37 @@ var buttons = {
     icon: 'fa fa-share',
     hint: 'Redo last edit'
   },
+  editmenu: {
+    id: 'editmenu',
+    type: 'menu',
+    caption: 'Edit',
+    icon: '',
+    arrow: false,
+    items: [{
+      text: 'Undo',
+      icon: 'fa fa-reply'
+    },{
+      text: 'Redo',
+      disabled: true,
+      icon: 'fa fa-share'
+    },{
+    },{
+      text: 'Search',
+      icon: 'fa fa-search',
+    },{
+      text: 'Replace',
+      icon: 'fa fa-edit'
+    },{
+      text: 'Go to line',
+      icon: 'fa fa-level-down'
+    },{},{
+      text: 'Revert changes',
+      icon: 'fa fa-history'
+    },{
+      text: 'Fix indentation',
+      icon: 'fa fa-magic'
+    }]
+  },
   redobreak: {
     id: 'redobreak',
     type: 'break'
@@ -343,27 +374,18 @@ var buttons = {
   menu: {
     id: 'more',
     type: 'menu',
-    caption: '',
-    icon: 'fa fa-bars',
+    caption: 'Tools',
+    icon: '',
     arrow: false,
     items: [{
-      text: 'Search',
-      icon: 'fa fa-search',
-    }, {
-      text: 'Replace',
-      value: 'Item Three',
-      icon: 'fa fa-edit'
-    }, {
-      text: 'Go to line',
-      icon: 'fa fa-level-down'
-    }, {
-      text: 'Clean up indentation',
-      value: 'Item Three',
-      icon: 'fa fa-magic'
-    }, {
-      text: 'File history',
-      icon: 'fa fa-history'
-    }, {
+      text: 'Invite collaborator',
+      icon: 'fa fa-user-plus'
+    },{
+      text: 'Quick share link',
+      icon: 'fa fa-share-alt'
+    },{
+      text: 'Preview in panel',
+      icon: 'fa fa-tablet'
     }]
   },
   spacer: {
