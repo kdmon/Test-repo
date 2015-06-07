@@ -20,6 +20,12 @@ body, .panel-content {
   font-size: 0.8em;
 }
 
+
+.ace_search {
+  width: 100% !important;
+  max-width: 300px !important;
+}
+
 .account-icon {
   position: relative;
   height: 20px;
