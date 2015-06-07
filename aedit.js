@@ -677,21 +677,10 @@ function tabClose(obj, event) {
 }
 
 function updateLayout(editorOnly) {
-  if (editorOnly === undefined) {
-    w2ui.layout.resize();
-    w2ui.middlesplit.resize();
-    w2ui.leftsplit.resize();
-    w2ui.rightsplit.resize();
-    w2ui.bottomsplit.resize();
-  }
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(function() {
     if (editorOnly === undefined) {
       w2ui.layout.resize();
-      w2ui.middlesplit.resize();
-      w2ui.leftsplit.resize();
-      w2ui.rightsplit.resize();
-      w2ui.bottomsplit.resize();
     }
     for (var i = 0; i < editors.length; i++) {
       editors[i].resize();
@@ -713,7 +702,7 @@ function updateLayout(editorOnly) {
       }
     }
 
-  }, 100);
+  }, 50);
 }
 
 function togglePanel (id) {
