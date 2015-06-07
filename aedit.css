@@ -183,7 +183,7 @@ body, .panel-content {
 }
 
 .inactive-panel {
-  background: linear-gradient(0deg, #fff, #aac) !important;
+  background: linear-gradient(0deg, #fff, #ddf) !important;
   padding: 10px;
   margin: 0;
   width: 100%;
