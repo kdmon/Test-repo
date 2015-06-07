@@ -304,7 +304,6 @@ var buttons = {
     id: 'account',
     caption: 'Account',
     title: 'Manage your account',
-    icon: 'fa fa-user',
     items: [{
       text: 'Preferences',
       icon: 'fa fa-wrench'
@@ -771,9 +770,16 @@ var user = github.getUser();
 // Get authenticated user details
 
 user.show('', function(err, user) {
-  console.log (user);
   config.user = user.login;
   config.avatar = user.avatar_url;
+  
+  w2ui["layout"].get(["top"]).toolbar.set('account', {
+    caption: config.user,
+    img: '"><img class="account-icon" src="' + config.avatar +'"/> <i id="'
+  });
+
+  w2ui["layout"].get(["top"]).toolbar.refresh();
+  
   /*w2ui['toolbar'].set('item3', { caption: 'check 2' });
   w2ui['toolbar'].refresh();
   $()shared.nodes.push({
