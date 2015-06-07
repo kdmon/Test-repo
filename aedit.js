@@ -256,14 +256,13 @@ var toolbars = {
   topmenu: ['logo', 'topspacer','connection','topbreak1','collaborate','topbreak2', 'account'],
   editor: ['save', 'undo', 'redo', 'more', 'spacer', 'split'],
   preview: ['pause', 'previewurl', 'refresh', 'share'],
-  project: ['newproject', 'selectproject', 'closeproject'],
+  projectmanager: ['refresh','newproject', 'selectproject', 'closeproject'],
   chat: ['url', 'refresh', 'share'],
   prefs: ['url', 'refresh', 'share'],
-  files: ['url', 'refresh', 'share'],
+  filebrowser: ['refresh', 'share'],
   media: ['url', 'refresh', 'share'],
-  empty: ['spacer','split'],
-  empty2: ['spacer','splitleft','splitright'],
-  help: ['']
+  empty: ['topbreak1'],
+  help: []
 };
 var buttons = {
   logo : {
@@ -662,6 +661,8 @@ function handleDrop(originalId, destination, insertBefore) {
 
 function tabClick(obj, event) {
   var item = tabList[event.target];
+  
+  var location = pickPanel(item.panel);
 
   $("#editor" + item.panel).hide();
   $("#content" + item.panel).hide();
@@ -669,6 +670,7 @@ function tabClick(obj, event) {
   
   switch (item.type) {
     case 'editor':
+      switchToolbar(location.layout, location.panel, 'editor');
       editors[item.panel].setSession(item.editSession);
       editors[item.panel].focus();
       $("#editor" + item.panel).show();
@@ -676,17 +678,17 @@ function tabClick(obj, event) {
     case 'filebrowser':
       var elem = $("#container_" + item.id).detach();
       elem.appendTo("#container" + item.panel).show();
-      updateLayout();
+      switchToolbar(location.layout, location.panel, 'filebrowser');
       break;
-    case 'projectbrowser':
+    case 'projectmanager':
+      switchToolbar(location.layout, location.panel, 'projectmanager');
       var elem = $("#container_" + item.id).detach();
       elem.appendTo("#container" + item.panel).show();
-      updateLayout();
       break;
     default:
-      return;
       break;
   }
+  updateLayout();
 }
 
 // Clean up tab content
@@ -708,11 +710,14 @@ function updateLayout() {
         $("#editor" + i).hide();
         $("#container"+ i + " .w2ui-sidebar").hide();
         $("#content" + i).html('<div class="inactive-panel">' +
-        '<p><em>Panel empty.</em> Drag a tab over to reactivate it or '
-        +'<span class="small-button" onclick="togglePanel(' + i + ')">close it.</span></p></div>');
+        '<p><em>Side panel empty.</em> Drag a tab over to activate it or ' +
+        '<span class="small-button" onclick="togglePanel(' + i + ')">close it.</span></p></div>');
+        if (location[1] === 'middlesplit' && location[3] === 'main')
+        $("#content" + i).html('<div class="inactive-panel">' +
+        '<p><em>Main panel empty.</em> Drag a tab over to activate it.' +
+        '</p></div>');
         $("#content" + i).show();
-        if(i === 7 || i === 2) switchToolbar(location[1], location[3], 'empty2');
-        else switchToolbar(location[1], location[3], 'empty');
+        switchToolbar(location[1], location[3], 'empty');
       }
     }
 
@@ -832,7 +837,7 @@ function showProjects (panelArea) {
     
     else {
       
-      var id = "projectbrowser" + Math.round(Math.random() * 10000000);
+      var id = "projectmanager" + Math.round(Math.random() * 10000000);
       var location = pickPanel(panelArea || 'project');
       var secret = {id: 'secret', text: 'Private projects (', group: true, expanded: true, nodes: []};
       var open = {id: 'public', text: 'Public projects (', group: true, expanded: true, nodes: []};
@@ -886,7 +891,7 @@ function showProjects (panelArea) {
       tabList[id] = {
         id: id,
         caption: 'Project Manager',
-        type: 'projectbrowser',
+        type: 'projectmanager',
         panel: location.area
       };
       w2ui[location.layout].get(location.panel).tabs.add({
