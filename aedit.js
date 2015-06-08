@@ -281,7 +281,7 @@ var buttons = {
   connection : {
     id: 'connection',
     type: 'html',
-    html: '<span class="fa fa-circle fa-x" style="color: #0a0 !important;"></span> Connected.'
+    html: '<span class="fa fa-circle fa-x" style="color: #0b0 !important;"></span> Connected.'
   }, 
   topbreak1 :{
     id: 'topbreak1',
@@ -359,12 +359,6 @@ var buttons = {
     },{
       text: 'Go to line',
       icon: 'fa fa-level-down'
-    },{},{
-      text: 'Revert changes',
-      icon: 'fa fa-history'
-    },{
-      text: 'Fix indentation',
-      icon: 'fa fa-magic'
     }]
   },
   redobreak: {
@@ -378,14 +372,21 @@ var buttons = {
     icon: '',
     arrow: false,
     items: [{
+      text: 'Open preview',
+      icon: 'fa fa-tablet'
+    },{
+      text: 'Share preview',
+      icon: 'fa fa-share-alt'
+    },{
+    },{
+      text: 'Fix indentation',
+      icon: 'fa fa-magic'
+    },{
       text: 'Invite collaborator',
       icon: 'fa fa-user-plus'
     },{
-      text: 'Quick share link',
-      icon: 'fa fa-share-alt'
-    },{
-      text: 'Preview in panel',
-      icon: 'fa fa-tablet'
+      text: 'Manage revisions',
+      icon: 'fa fa-history'
     }]
   },
   spacer: {
@@ -741,8 +742,21 @@ function togglePanel (id) {
 
 
 /* Resize events */
-$(window).on("resize", updateLayout());
+$(window).on("resize", function () {
+ //updateLayout();
+ setTimeout(function() {updateLayout()}, 1);
+});
+
+w2ui.leftsplit.on('resize', function () {
+  updateLayout(true);
+});
 w2ui.middlesplit.on('resize', function () {
+  updateLayout(true);
+});
+w2ui.rightsplit.on('resize', function () {
+  updateLayout(true);
+});
+w2ui.bottomsplit.on('resize', function () {
   updateLayout(true);
 });
 
