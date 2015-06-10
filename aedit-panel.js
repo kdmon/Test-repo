@@ -474,6 +474,7 @@
                 if (type == 'top' || type == 'preview' || type == 'bottom') {
                     obj.tmp.resize.value = parseInt($('#layout_'+ obj.name +'_resizer_'+ type)[0].style.top);
                 }
+                
             }
 
             function resizeMove(evnt) {
@@ -485,6 +486,8 @@
                 // event before
                 var tmp = obj.tmp.resize;
                 
+                // reset panel size if hidden to prevent jumping
+                if (panel.hidden) {tmp.y = 0; tmp.x = 0;}
                 
                 var eventData = obj.trigger({ phase: 'before', type: 'resizing', target: obj.name, object: panel, originalEvent: evnt,
                     panel: tmp ? tmp.type : 'all', diff_x: tmp ? tmp.diff_x : 0, diff_y: tmp ? tmp.diff_y : 0 });
@@ -505,6 +508,8 @@
                         if (mainPanel.minSize + resize_x > mainPanel.width) {
                             resize_x = mainPanel.width - mainPanel.minSize;
                         }
+                        // add padding
+                        resize_x -= (obj.padding/2);
                         break;
 
                     case 'right':
@@ -517,6 +522,8 @@
                         if (mainPanel.minSize - resize_x > mainPanel.width) {
                             resize_x = mainPanel.minSize - mainPanel.width;
                         }
+                        // remove padding
+                        resize_x += (obj.padding/2);
                         break;
 
                     case 'top':
@@ -529,6 +536,8 @@
                         if (mainPanel.minSize + resize_y > mainPanel.height) {
                             resize_y = mainPanel.height - mainPanel.minSize;
                         }
+                        // remove padding
+                        resize_y -= (obj.padding/2);
                         break;
 
                     case 'preview':
@@ -542,8 +551,11 @@
                         if (mainPanel.minSize - resize_y > mainPanel.height) {
                             resize_y = mainPanel.minSize - mainPanel.height;
                         }
+                        // add padding
+                        resize_y += (obj.padding/2);
                         break;
                 }
+                
                 tmp.diff_x = resize_x;
                 tmp.diff_y = resize_y;
                 
