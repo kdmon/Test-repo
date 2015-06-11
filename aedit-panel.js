@@ -458,7 +458,7 @@
                 };
                 
                 // lock all panels
-                /*
+                
                 for (var p1 = 0; p1 < w2panels.length; p1++) {
                     var $tmp = $(obj.el(w2panels[p1])).parent().find('.w2ui-lock');
                     if ($tmp.length > 0) {
@@ -467,13 +467,20 @@
                         obj.lock(w2panels[p1], { opacity: 0 });
                     }
                 }
-                */
+                
                 if (type == 'left' || type == 'right') {
                     obj.tmp.resize.value = parseInt($('#layout_'+ obj.name +'_resizer_'+ type)[0].style.left);
                 }
                 if (type == 'top' || type == 'preview' || type == 'bottom') {
                     obj.tmp.resize.value = parseInt($('#layout_'+ obj.name +'_resizer_'+ type)[0].style.top);
                 }
+                
+                
+                // add padding
+                if (type == 'left') obj.tmp.resize.x -= (obj.padding/2);
+                if (type == 'right') obj.tmp.resize.x += (obj.padding/2);
+                if (type == 'top') obj.tmp.resize.y -= (obj.padding/2);
+                if (type == 'bottom' || type == 'preview') obj.tmp.resize.y += (obj.padding/2);
                 
             }
 
@@ -647,7 +654,7 @@
                       }, 200);
   
                   }
-                  
+                  console.log("bla")
                 }, 5);
             }
             
@@ -659,7 +666,7 @@
                 $(document).off('mouseup', obj.tmp.events.mouseUp);
                 if (typeof obj.tmp.resize == 'undefined') return;
                 // unlock all panels
-                /*
+                
                 for (var p1 = 0; p1 < w2panels.length; p1++) {
                     var $tmp = $(obj.el(w2panels[p1])).parent().find('.w2ui-lock');
                     if ($tmp.attr('locked') == 'previous') {
@@ -667,7 +674,7 @@
                     } else {
                         obj.unlock(w2panels[p1]);
                     }
-                }*/
+                }
                 
                 $('#layout_'+ obj.name + '_resizer_'+ obj.tmp.resize.type).removeClass('active');
                 delete obj.tmp.resize;
