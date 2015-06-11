@@ -5,7 +5,7 @@ $('#layout').w2layout({
   name: 'layout',
   panels: [{
     type: 'top',
-    size: '20px',
+    size: '30px',
     toolbar: {
       items: [],
       onClick: function(event) {
