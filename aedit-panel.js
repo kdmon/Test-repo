@@ -448,10 +448,13 @@
                 if (!evnt) evnt = window.event;
                 $(document).off('mousemove', obj.tmp.events.mouseMove).on('mousemove', obj.tmp.events.mouseMove);
                 $(document).off('mouseup', obj.tmp.events.mouseUp).on('mouseup', obj.tmp.events.mouseUp);
+                $(document).off('touchmove', obj.tmp.events.mouseMove).on('touchmove', obj.tmp.events.mouseMove);
+                $(document).off('touchend', obj.tmp.events.mouseUp).on('touchend', obj.tmp.events.mouseUp);
+                console.log(evnt)
                 obj.tmp.resize = {
                     type    : type,
-                    x       : evnt.clientX,
-                    y       : evnt.clientY,
+                    x       : evnt.clientX||evnt.originalEvent.touches[0].clientX,
+                    y       : evnt.clientY||evnt.originalEvent.touches[0].clientY,
                     diff_x  : 0,
                     diff_y  : 0,
                     value   : 0
@@ -500,8 +503,8 @@
                     panel: tmp ? tmp.type : 'all', diff_x: tmp ? tmp.diff_x : 0, diff_y: tmp ? tmp.diff_y : 0 });
                 if (eventData.isCancelled === true) return;
 
-                var resize_x  = (evnt.clientX - tmp.x);
-                var resize_y  = (evnt.clientY - tmp.y);
+                var resize_x  = ((evnt.clientX||evnt.originalEvent.touches[0].clientX) - tmp.x);
+                var resize_y  = ((evnt.clientY||evnt.originalEvent.touches[0].clientY) - tmp.y);
                 var mainPanel = obj.get('main');
 
                 switch (tmp.type) {
@@ -858,6 +861,15 @@
                         // event after
                         obj.trigger($.extend(eventData, { phase: 'after' }));
                         return false;
+                    }).off('touchstart').on('touchstart', function (event) {
+                        // event before
+                        var eventData = obj.trigger({ phase: 'before', type: 'resizerClick', target: 'top', originalEvent: event });
+                        if (eventData.isCancelled === true) return;
+                        // default action
+                        w2ui[obj.name].tmp.events.resizeStart('top', event);
+                        // event after
+                        obj.trigger($.extend(eventData, { phase: 'after' }));
+                        return false;
                     });
                 }
                 if (ptop.hidden) $('#layout_'+ this.name +'_panel_top').hide();
@@ -893,6 +905,15 @@
                         'height': h + 'px',
                         'cursor': 'ew-resize'
                     }).off('mousedown').on('mousedown', function (event) {
+                        // event before
+                        var eventData = obj.trigger({ phase: 'before', type: 'resizerClick', target: 'left', originalEvent: event });
+                        if (eventData.isCancelled === true) return;
+                        // default action
+                        w2ui[obj.name].tmp.events.resizeStart('left', event);
+                        // event after
+                        obj.trigger($.extend(eventData, { phase: 'after' }));
+                        return false;
+                    }).off('touchstart').on('touchstart', function (event) {
                         // event before
                         var eventData = obj.trigger({ phase: 'before', type: 'resizerClick', target: 'left', originalEvent: event });
                         if (eventData.isCancelled === true) return;
@@ -943,6 +964,15 @@
                         // event after
                         obj.trigger($.extend(eventData, { phase: 'after' }));
                         return false;
+                    }).off('touchstart').on('touchstart', function (event) {
+                        // event before
+                        var eventData = obj.trigger({ phase: 'before', type: 'resizerClick', target: 'right', originalEvent: event });
+                        if (eventData.isCancelled === true) return;
+                        // default action
+                        w2ui[obj.name].tmp.events.resizeStart('right', event);
+                        // event after
+                        obj.trigger($.extend(eventData, { phase: 'after' }));
+                        return false;
                     });
                 }
                 
@@ -976,6 +1006,15 @@
                         'height': h + 'px',
                         'cursor': 'ns-resize'
                     }).off('mousedown').on('mousedown', function (event) {
+                        // event before
+                        var eventData = obj.trigger({ phase: 'before', type: 'resizerClick', target: 'bottom', originalEvent: event });
+                        if (eventData.isCancelled === true) return;
+                        // default action
+                        w2ui[obj.name].tmp.events.resizeStart('bottom', event);
+                        // event after
+                        obj.trigger($.extend(eventData, { phase: 'after' }));
+                        return false;
+                    }).off('touchstart').on('touchstart', function (event) {
                         // event before
                         var eventData = obj.trigger({ phase: 'before', type: 'resizerClick', target: 'bottom', originalEvent: event });
                         if (eventData.isCancelled === true) return;
@@ -1042,6 +1081,15 @@
                         'height': h + 'px',
                         'cursor': 'ns-resize'
                     }).off('mousedown').on('mousedown', function (event) {
+                        // event before
+                        var eventData = obj.trigger({ phase: 'before', type: 'resizerClick', target: 'preview', originalEvent: event });
+                        if (eventData.isCancelled === true) return;
+                        // default action
+                        w2ui[obj.name].tmp.events.resizeStart('preview', event);
+                        // event after
+                        obj.trigger($.extend(eventData, { phase: 'after' }));
+                        return false;
+                    }).off('touchstart').on('touchstart', function (event) {
                         // event before
                         var eventData = obj.trigger({ phase: 'before', type: 'resizerClick', target: 'preview', originalEvent: event });
                         if (eventData.isCancelled === true) return;
