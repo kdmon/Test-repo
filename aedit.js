@@ -5,7 +5,7 @@ $('#layout').w2layout({
   name: 'layout',
   panels: [{
     type: 'top',
-    size: '30px',
+    size: '20px',
     toolbar: {
       items: [],
       onClick: function(event) {
@@ -500,9 +500,9 @@ function initialiseToolbar(layout, panel, toolbar) {
 initialiseToolbar('layout', 'top', 'topmenu');
 initialiseToolbar('leftsplit', 'main', 'empty');
 initialiseToolbar('leftsplit', 'preview', 'empty');
-initialiseToolbar('middlesplit', 'main', 'editor');
+initialiseToolbar('middlesplit', 'main', 'empty');
 initialiseToolbar('middlesplit', 'preview', 'empty');
-initialiseToolbar('rightsplit', 'main', 'preview');
+initialiseToolbar('rightsplit', 'main', 'empty');
 initialiseToolbar('rightsplit', 'preview', 'empty');
 initialiseToolbar('bottomsplit', 'left', 'empty');
 initialiseToolbar('bottomsplit', 'main', 'empty');
@@ -699,6 +699,8 @@ function tabClose(obj, event) {
   // ace detach etc...
 }
 
+var resizeTimer = setTimeout(function() {}, 50);
+
 function updateLayout(editorOnly) {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(function() {
@@ -765,7 +767,6 @@ $(".w2ui-toolbar:not(.selectable)").on('mousedown', function(event) {
   if (event.target.className.indexOf('selectable') < 0) event.preventDefault();
 });
 
-var resizeTimer = setTimeout(function() {}, 50);
 
 /* SETUP EDITOR AND VIEWMODEL */
 var editors = [];
@@ -956,6 +957,9 @@ function showProjects (panelArea) {
 
 }
 
+function addTab (id, caption, type, panel, activate) {
+  
+}
 
 // Create a sidebar for browsing repository files
 function openProject (user, repository, branch, panelArea) {
