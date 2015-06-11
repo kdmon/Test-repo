@@ -63,8 +63,8 @@ body, .panel-content {
 
 #logo {
   cursor: pointer;
-  font-size: 1.5em;
-  font-family: sans;
+  font-size: 1.7em;
+  font-family: sans-serif;
   vertical-align: bottom;
   font-weight: normal;
   margin-top: -30px;
@@ -135,7 +135,7 @@ body, .panel-content {
   overflow-x: auto !important;
 }
 .w2ui-panel-tabs {
-  background: linear-gradient(0deg, #08b 90%, #558) !important;
+  background: linear-gradient(0deg, #08b 95%, #558) !important;
   padding-top: 2px !important;
 }
 
@@ -179,7 +179,7 @@ body, .panel-content {
 }
 
 .w2ui-tabs .active {
-  background: linear-gradient(0deg, #fff 20%, #ccc 80%, #fff) !important;
+  background: linear-gradient(0deg, #fff, #eee, #fff) !important;
   box-shadow: 0 0 5px 0 black;
 }
 
