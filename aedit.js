@@ -254,7 +254,7 @@ var connection = new sharejs.Connection("http://it4se.com:8081/channel");
 /* SETUP TOOLBAR */
 var toolbars = {
   topmenu: ['logo', 'topspacer','connection','topbreak1','collaborate','topbreak2', 'account'],
-  editor: ['save', 'editmenu', 'more'],
+  editor: ['save', 'editmenu', 'tools'],
   preview: ['pause', 'previewurl', 'refresh', 'share'],
   projectmanager: ['refresh','newproject', 'selectproject', 'closeproject'],
   chat: ['url', 'refresh', 'share'],
@@ -366,7 +366,7 @@ var buttons = {
     type: 'break'
   },
   menu: {
-    id: 'more',
+    id: 'tools',
     type: 'menu',
     caption: 'Tools',
     icon: '',
@@ -447,16 +447,48 @@ function toolbarClick(obj, event) {
   var id = obj.name.split("_");
   var elem = 'layout_'+id[0]+'_panel_'+id[1];
   var panel = pickPanel(elem);
-  //console.log(event.target);
+  var tab = w2ui[id[0]+'_'+id[1]+'_tabs'].active;
   switch (event.target) {
-    case 'more:Search':
-      console.log(id, obj,elem);
+    case 'editmenu:Search':
       editors[panel.area].execCommand("find");
+      break;
+    case 'tools:Open preview':
+      openPreview(tab);
       break;
     default:
     //obj.owner.content('main', 'event' + event.target);
     break;
   }
+}
+
+function openPreview (url, panel) {
+  var location = pickPanel (panel || 'preview');
+  var fullUrl = url.replace("--forward-slash--", "/");
+  if (fullUrl.substr(4) !== 'http') fullUrl = 'http://it4se.com:8080/' + fullUrl;
+  var tabId = "preview_" + url;
+  var file = tabId.split('--forward-slash--');
+  var title = "Preview: " + (file.length > 0) ? file[file.length-1] : file;
+  
+  tabList[tabId] = {
+    id: tabId,
+    caption: title,
+    panel: location.area,
+    type: 'preview'
+  };
+  
+  w2ui[location.layout].get(location.panel).tabs.add({
+    id: tabId,
+    caption: title
+  });
+      
+  refreshTabs();
+
+  // 4. render into temporary dom element once
+  $('<div id="container_' + tabId +'" class="panel-content" style="display:none"></div>').appendTo( "body" );
+  $("#container_"+tabId).html('<h1>Aha!</h1><iframe class="preview-iframe" src="' + fullUrl + '"></iframe>');
+
+  w2ui[location.layout].get(location.panel).tabs.click(tabId);
+  $(location.id).find(".w2ui-tabs").scrollLeft(99999);
 }
 
 function switchToolbar(layout, panel, toolbar) {
@@ -662,8 +694,8 @@ function handleDrop(originalId, destination, insertBefore) {
 }
 
 function tabClick(obj, event) {
+  var elem;
   var item = tabList[event.target];
-  
   var location = pickPanel(item.panel);
 
   $("#editor" + item.panel).hide();
@@ -677,14 +709,20 @@ function tabClick(obj, event) {
       editors[item.panel].focus();
       $("#editor" + item.panel).show();
       break;
+    case 'preview':
+      elem = $("#container_" + item.id).detach();
+      console.log(elem);
+      elem.appendTo("#container" + item.panel).show();
+      switchToolbar(location.layout, location.panel, 'preview');
+      break;
     case 'filebrowser':
-      var elem = $("#container_" + item.id).detach();
+      elem = $("#container_" + item.id).detach();
       elem.appendTo("#container" + item.panel).show();
       switchToolbar(location.layout, location.panel, 'filebrowser');
       break;
     case 'projectmanager':
       switchToolbar(location.layout, location.panel, 'projectmanager');
-      var elem = $("#container_" + item.id).detach();
+      elem = $("#container_" + item.id).detach();
       elem.appendTo("#container" + item.panel).show();
       break;
     default:
@@ -873,6 +911,7 @@ function showProjects (panelArea) {
       for (var i in obj) {
         var item = obj[i];
         var rnd = Math.round(Math.random()*1000000);
+        item.full_name = item.full_name.replace("/","--forward-slash--")
         
         if (item.fork)
           forked.nodes.push({
@@ -936,7 +975,7 @@ function showProjects (panelArea) {
         ],
         onDblClick: function (event) {
           //console.log(event, this)
-          var target = event.target.split('_')[0].split('/');
+          var target = event.target.split('_')[0].split('--forward-slash--');
           w2popup.open({
             title: 'Opening ' + event.target
           });
@@ -1011,13 +1050,13 @@ function openProject (user, repository, branch, panelArea) {
       // file open
       w2ui[id].on('dblClick', function(event) {
         if(event.target.substr(0,6) === "folder") return;
-        var path = event.target.substr(event.target.indexOf("_")+1).split('/');
-        var id = path.join('/');
+        var path = event.target.substr(event.target.indexOf("_")+1).split('--forward-slash--');
+        var id = path.join('--forward-slash--');
         var user = path.shift();
         var repo = path.shift();
         var branch = path.shift();
         var title = path[path.length-1];
-        path = path.join('/');
+        path = path.join('--forward-slash--');
         startDoc({
           id: id,
           user: user,
@@ -1076,13 +1115,14 @@ function generateNodes(tree, user, repo, branch) {
   
   for (var index in files) {
     var file = files[index];
+    file.path = file.path.replace("/","--forward-slash--");
     var prefix = ((file.type === "tree") ? 'folder' : '');
-    var id = prefix + uid + "_" + user + '/' + repo + '/' + branch + '/' + file.path;
+    var id = prefix + uid + "_" + user + '--forward-slash--' + repo + '--forward-slash--' + branch + '--forward-slash--' + file.path;
     var icon = (file.type === "tree") ? 'fa fa-folder' : 'fa fa-file-o';
-    var paths = file.path.split('/');
+    var paths = file.path.split('--forward-slash--');
     var filename = paths.pop();
     var depth = paths.length;
-    var path = paths.join ('/');
+    var path = paths.join ('--forward-slash--');
     var obj = {};
     
     // root files/folders 
@@ -1107,7 +1147,7 @@ function generateNodes(tree, user, repo, branch) {
       
       // Locate the parent node in file structure object and insert the node
       
-      var location = getObjects(nodes, 'id', 'folder'+uid + "_" + user + '/' + repo + '/' + branch + '/' + path)[0];
+      var location = getObjects(nodes, 'id', 'folder'+uid + "_" + user + '--forward-slash--' + repo + '--forward-slash--' + branch + '--forward-slash--' + path)[0];
 
       if (file.type === "tree") {obj.nodes = []; location.nodes.push(obj);}
       else location.nodes.push(obj);
