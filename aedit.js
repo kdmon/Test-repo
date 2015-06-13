@@ -1,3 +1,14 @@
+String.prototype.hashCode = function() {
+  var hash = 0, i, chr, len;
+  if (this.length === 0) return hash;
+  for (i = 0, len = this.length; i < len; i++) {
+    chr   = this.charCodeAt(i);
+    hash  = ((hash << 5) - hash) + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return hash;
+};
+
 /* SETUP PANELS */
 if (localStorage["token"] === undefined) localStorage["token"] = prompt("Github token required:");
 var token = localStorage["token"];
@@ -461,31 +472,30 @@ function toolbarClick(obj, event) {
   }
 }
 
-function openPreview (url, panel) {
+function openPreview (tabId, panel) {
   var location = pickPanel (panel || 'preview');
-  var fullUrl = url.replace("--forward-slash--", "/");
-  if (fullUrl.substr(4) !== 'http') fullUrl = 'http://it4se.com:8080/' + fullUrl;
-  var tabId = "preview_" + url;
-  var file = tabId.split('--forward-slash--');
-  var title = "Preview: " + (file.length > 0) ? file[file.length-1] : file;
-  
-  tabList[tabId] = {
-    id: tabId,
+  var file = tabId.split('/');
+  var title = (file.length > 0) ? file[file.length-1] : file;
+  var previewId = "preview_" + tabId.hashCode();
+  var fullUrl = (tabId.substr(4) === 'http') ? tabId : 'http://it4se.com:8080/' + tabId;
+  tabList[previewId] = {
+    id: previewId,
+    fullUrl: fullUrl,
     caption: title,
     panel: location.area,
     type: 'preview'
   };
   
   w2ui[location.layout].get(location.panel).tabs.add({
-    id: tabId,
+    id: previewId,
     caption: title
   });
       
   refreshTabs();
 
   // 4. render into temporary dom element once
-  $('<div id="container_' + tabId +'" class="panel-content" style="display:none"></div>').appendTo( "body" );
-  $("#container_"+tabId).html('<h1>Aha!</h1><iframe class="preview-iframe" src="' + fullUrl + '"></iframe>');
+  $('<div id="container_' + previewId +'" class="panel-content" style="display:none"></div>').appendTo( "body" );
+  $("#container_"+previewId).html('<iframe class="preview" src="' + fullUrl + '"></iframe>');
 
   w2ui[location.layout].get(location.panel).tabs.click(tabId);
   $(location.id).find(".w2ui-tabs").scrollLeft(99999);
@@ -711,7 +721,6 @@ function tabClick(obj, event) {
       break;
     case 'preview':
       elem = $("#container_" + item.id).detach();
-      console.log(elem);
       elem.appendTo("#container" + item.panel).show();
       switchToolbar(location.layout, location.panel, 'preview');
       break;
@@ -911,7 +920,6 @@ function showProjects (panelArea) {
       for (var i in obj) {
         var item = obj[i];
         var rnd = Math.round(Math.random()*1000000);
-        item.full_name = item.full_name.replace("/","--forward-slash--")
         
         if (item.fork)
           forked.nodes.push({
@@ -975,7 +983,7 @@ function showProjects (panelArea) {
         ],
         onDblClick: function (event) {
           //console.log(event, this)
-          var target = event.target.split('_')[0].split('--forward-slash--');
+          var target = event.target.split('_')[0].split('/');
           w2popup.open({
             title: 'Opening ' + event.target
           });
@@ -1050,13 +1058,13 @@ function openProject (user, repository, branch, panelArea) {
       // file open
       w2ui[id].on('dblClick', function(event) {
         if(event.target.substr(0,6) === "folder") return;
-        var path = event.target.substr(event.target.indexOf("_")+1).split('--forward-slash--');
-        var id = path.join('--forward-slash--');
+        var path = event.target.substr(event.target.indexOf("_")+1).split('/');
+        var id = path.join('/');
         var user = path.shift();
         var repo = path.shift();
         var branch = path.shift();
         var title = path[path.length-1];
-        path = path.join('--forward-slash--');
+        path = path.join('/');
         startDoc({
           id: id,
           user: user,
@@ -1115,14 +1123,13 @@ function generateNodes(tree, user, repo, branch) {
   
   for (var index in files) {
     var file = files[index];
-    file.path = file.path.replace("/","--forward-slash--");
     var prefix = ((file.type === "tree") ? 'folder' : '');
-    var id = prefix + uid + "_" + user + '--forward-slash--' + repo + '--forward-slash--' + branch + '--forward-slash--' + file.path;
+    var id = prefix + uid + "_" + user + '/' + repo + '/' + branch + '/' + file.path;
     var icon = (file.type === "tree") ? 'fa fa-folder' : 'fa fa-file-o';
-    var paths = file.path.split('--forward-slash--');
+    var paths = file.path.split('/');
     var filename = paths.pop();
     var depth = paths.length;
-    var path = paths.join ('--forward-slash--');
+    var path = paths.join ('/');
     var obj = {};
     
     // root files/folders 
@@ -1147,7 +1154,7 @@ function generateNodes(tree, user, repo, branch) {
       
       // Locate the parent node in file structure object and insert the node
       
-      var location = getObjects(nodes, 'id', 'folder'+uid + "_" + user + '--forward-slash--' + repo + '--forward-slash--' + branch + '--forward-slash--' + path)[0];
+      var location = getObjects(nodes, 'id', 'folder'+uid + "_" + user + '/' + repo + '/' + branch + '/' + path)[0];
 
       if (file.type === "tree") {obj.nodes = []; location.nodes.push(obj);}
       else location.nodes.push(obj);
