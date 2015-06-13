@@ -495,7 +495,7 @@ function openPreview (tabId, panel) {
 
   // 4. render into temporary dom element once
   $('<div id="container_' + previewId +'" class="panel-content" style="display:none"></div>').appendTo( "body" );
-  $("#container_"+previewId).html('<iframe class="preview" src="' + fullUrl + '"></iframe>');
+  $("#container_"+previewId).html('<iframe class="preview-iframe" src="' + fullUrl + '"></iframe>');
 
   w2ui[location.layout].get(location.panel).tabs.click(tabId);
   $(location.id).find(".w2ui-tabs").scrollLeft(99999);
