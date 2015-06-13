@@ -707,7 +707,8 @@ function tabClick(obj, event) {
   var elem;
   var item = tabList[event.target];
   var location = pickPanel(item.panel);
-
+  if (w2ui[location.layout].get(location.panel).tabs.active === item.id) return;
+  
   $("#editor" + item.panel).hide();
   $("#content" + item.panel).hide();
   $("#container" + item.panel + " .w2ui-sidebar").hide();
