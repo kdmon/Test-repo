@@ -16,7 +16,7 @@ $('#layout').w2layout({
   name: 'layout',
   panels: [{
     type: 'top',
-    size: '30px',
+    size: '40px',
     toolbar: {
       items: [],
       onClick: function(event) {
@@ -1023,13 +1023,13 @@ function showProjects (panelArea) {
       // 3. Show tab
       tabList[id] = {
         id: id,
-        caption: 'Project Manager',
+        caption: 'My Projects',
         type: 'projectmanager',
         panel: location.area
       };
       w2ui[location.layout].get(location.panel).tabs.add({
         id: id,
-        caption: 'Project Manager'
+        caption: 'My Projects'
       });
       
       refreshTabs();
