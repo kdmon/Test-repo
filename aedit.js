@@ -710,6 +710,7 @@ function tabClick(obj, event) {
   var location = pickPanel(item.panel);
   
   // Don't re-render active preview iframes unless they are being moved!
+  // Consider simplifying by adding dirty flag to item.
   var moved = true;
   if (item.type == 'preview') {
     var parentId = '#' + $("#container_"+item.id).parent().parent().parent().attr('id');
