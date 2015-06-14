@@ -114,8 +114,8 @@ body, .panel-content {
   min-height: 60px;  
 }
 
-.w2ui-reset table {
-  font-size: 14px;
+.w2ui-reset table, .w2ui-node-caption {
+  font-size: 14px !important;
 }
 
 
