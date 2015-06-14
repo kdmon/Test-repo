@@ -473,12 +473,22 @@ function toolbarClick(obj, event) {
   }
 }
 
+function randomString(length) {
+  length = length ? length : 5;
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  for (var i = 0; i < length; i++) text += possible.charAt(Math.floor(Math.random() * possible.length));
+  return text;
+}
+
 function openPreview (tabId, panel) {
   var location = pickPanel (panel || 'preview');
   var file = tabId.split('/');
   var title = (file.length > 0) ? file[file.length-1] : file;
   var previewId = "preview_" + tabId.hashCode();
-  var fullUrl = (tabId.substr(4) === 'http') ? tabId : 'http://it4se.com:8080/' + tabId;
+  var fullUrl = (tabId.substr(4) === 'http') ? tabId : 'http://it4se.com:3000/' + tabId;
+  if (tabId.substr(tabId.length-3).toLowerCase() == '.md')
+    fullUrl = 'http://it4se.com:3000/markdown.html?r=' + randomString(100) + "&url=" + fullUrl;
   tabList[previewId] = {
     id: previewId,
     fullUrl: fullUrl,
@@ -495,8 +505,7 @@ function openPreview (tabId, panel) {
   refreshTabs();
 
   // 4. render into temporary dom element once
-  $('<div id="container_' + previewId +'" class="panel-content preview-area" style="display:none"></div>').appendTo( "body" );
-  $("#container_"+previewId).html('<iframe class="preview-iframe" src="' + fullUrl + '"></iframe>');
+  $('<iframe id="' + previewId +'" class="preview-iframe" src="' + fullUrl + '"></iframe>').appendTo("#layout");
 
   w2ui[location.layout].get(location.panel).tabs.click(previewId);
   $(location.id).find(".w2ui-tabs").scrollLeft(99999);
@@ -553,6 +562,7 @@ initialiseToolbar('bottomsplit', 'right', 'empty');
 
 /* SETUP TABS */
 var tabList = {};
+
 var draggedTabId = '';
 
 function refreshTabs() {
@@ -711,17 +721,28 @@ function tabClick(obj, event) {
   
   // Don't re-render active preview iframes unless they are being moved!
   // Consider simplifying by adding dirty flag to item.
-  var moved = true;
+/*  var moved = true;
   if (item.type == 'preview') {
     var parentId = '#' + $("#container_"+item.id).parent().parent().parent().attr('id');
     moved = (parentId !== location.id || w2ui[location.layout].get(location.panel).tabs.active !== item.id) ? true : false;
   }
   if (!moved) return;
+  */
   
   $("#editor" + item.panel).hide();
   $("#content" + item.panel).hide();
   $("#container" + item.panel + " .w2ui-sidebar").hide();
-  $("#container" + item.panel + " .preview-area").hide();
+  
+  // hide preview iframes in current panel
+  for (var index in tabList) {
+    var tabItem = tabList[index];
+    if (tabItem.type === 'preview' && tabItem.panel === item.panel) {
+      tabList[tabItem.id].visible = false;
+    }
+  }
+  
+  // $("#container" + item.panel + " .preview-area").hide();
+  //$("#" + item.id).hide();
   
   switch (item.type) {
     case 'editor':
@@ -731,8 +752,8 @@ function tabClick(obj, event) {
       $("#editor" + item.panel).show();
       break;
     case 'preview':
-      elem = $("#container_" + item.id).detach();
-      elem.appendTo("#container" + item.panel).show();
+      // show
+      tabList[item.id].visible = true;
       switchToolbar(location.layout, location.panel, 'preview');
       break;
     case 'filebrowser':
@@ -759,33 +780,68 @@ function tabClose(obj, event) {
 
 var resizeTimer = setTimeout(function() {}, 50);
 
+window.requestAnimFrame = (function(){
+  return  window.requestAnimationFrame       ||
+          window.webkitRequestAnimationFrame ||
+          window.mozRequestAnimationFrame    ||
+          function( callback ){
+            window.setTimeout(callback, 1000 / 60);
+          };
+})();
+
+
 function updateLayout(editorOnly) {
+  
+  // iframes interfer with resizer function, so hide them - causes flicker
+  $(".preview-iframe").hide();
+  
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(function() {
-    if (editorOnly === undefined) {
-      w2ui.layout.resize();
-    }
-    for (var i = 0; i < editors.length; i++) {
-      editors[i].resize();
-      var location = panelAreas[i].split("_");
+    
+    requestAnimFrame(function () {
 
-      // Hide inactive tab areas
-      if (w2ui[location[1]].get(location[3]).tabs.tabs.length === 0) {
-        $("#editor" + i).hide();
-        $("#container"+ i + " .w2ui-sidebar").hide();
-        $("#content" + i).html('<div class="inactive-panel">' +
-        '<p><em>Side panel empty.</em> Drag a tab over to activate it or ' +
-        '<span class="small-button" onclick="togglePanel(' + i + ')">close it.</span></p></div>');
-        if (location[1] === 'middlesplit' && location[3] === 'main')
-        $("#content" + i).html('<div class="inactive-panel">' +
-        '<p><em>Main panel empty.</em> Drag a tab over to activate it.' +
-        '</p></div>');
-        $("#content" + i).show();
-        switchToolbar(location[1], location[3], 'empty');
+      if (editorOnly === undefined) {
+        w2ui.layout.resize();
       }
-    }
-
-  }, 50);
+      for (var i = 0; i < editors.length; i++) {
+        editors[i].resize();
+        var location = panelAreas[i].split("_");
+  
+        // Hide inactive tab areas
+        if (w2ui[location[1]].get(location[3]).tabs.tabs.length === 0) {
+          $("#editor" + i).hide();
+          $("#container"+ i + " .w2ui-sidebar").hide();
+          $("#content" + i).html('<div class="inactive-panel">' +
+          '<p><em>Side panel empty.</em> Drag a tab over to activate it or ' +
+          '<span class="small-button" onclick="togglePanel(' + i + ')">close it.</span></p></div>');
+          if (location[1] === 'middlesplit' && location[3] === 'main')
+          $("#content" + i).html('<div class="inactive-panel">' +
+          '<p><em>Main panel empty.</em> Drag a tab over to activate it.' +
+          '</p></div>');
+          $("#content" + i).show();
+          switchToolbar(location[1], location[3], 'empty');
+        }
+      }
+      // update absolute position, size and visibility of preview iframes
+      for (var index in tabList) {
+        var item = tabList[index];
+        if (item.type === 'preview') {
+          var top = $("#container" + item.panel).offset().top;
+          var left = $("#container" + item.panel).offset().left;
+          var height = $("#container" + item.panel).innerHeight();
+          var width = $("#container" + item.panel).innerWidth();
+          console.log(height, width);
+          $("#" + item.id).css({
+            top: top + 'px',
+            left: left + 'px',
+            width: width + 'px',
+            height: height + 'px'
+          });
+          if (item.visible) $("#" + item.id).show();
+        }
+      }
+    });
+  }, 100);
 }
 
 function togglePanel (id) {
