@@ -458,7 +458,8 @@ function toolbarClick(obj, event) {
   var id = obj.name.split("_");
   var elem = 'layout_'+id[0]+'_panel_'+id[1];
   var panel = pickPanel(elem);
-  var tab = w2ui[id[0]+'_'+id[1]+'_tabs'].active;
+  var tab = (w2ui[id[0]+'_'+id[1]+'_tabs'] !== undefined) ?
+    w2ui[id[0]+'_'+id[1]+'_tabs'].active : '';
   switch (event.target) {
     case 'editmenu:Search':
       editors[panel.area].execCommand("find");
