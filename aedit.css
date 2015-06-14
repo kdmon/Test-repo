@@ -21,13 +21,11 @@ body, .panel-content {
 }
 
 .preview-iframe {
-  width: 100%;
-  height: 100%;
   border: 0;
   padding: 0;
   margin: 0;
   position: absolute;
-  z-index: 19999;
+  z-index: 250;
 }
 
 .ace_search {
@@ -241,7 +239,7 @@ body, .panel-content {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-
+  z-index: 300;
 }
   
 .w2ui-horizontal-resizer {
@@ -283,7 +281,7 @@ body, .panel-content {
   
   color: #aaf;
   background: linear-gradient(0deg, #ccf, white);
-  z-index: 250;
+  z-index: 301;
   cursor: pointer;
 }
 
