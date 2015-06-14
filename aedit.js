@@ -495,7 +495,7 @@ function openPreview (tabId, panel) {
   refreshTabs();
 
   // 4. render into temporary dom element once
-  $('<div id="container_' + previewId +'" class="panel-content" style="display:none"></div>').appendTo( "body" );
+  $('<div id="container_' + previewId +'" class="panel-content preview-area" style="display:none"></div>').appendTo( "body" );
   $("#container_"+previewId).html('<iframe class="preview-iframe" src="' + fullUrl + '"></iframe>');
 
   w2ui[location.layout].get(location.panel).tabs.click(previewId);
@@ -687,10 +687,10 @@ function handleDrop(originalId, destination, insertBefore) {
   
   // Activate last tab in original pane if it exists and the active tab is moved
   if (lastTab > 0 && w2ui[originalLayout].get(originalPanel).tabs.active === originalTab)
-    w2ui[originalLayout].get(originalPanel).tabs.click(lastId);
+    w2ui[originalLayout].get(originalPanel).tabs.click(lastId, true);
 
   // Always activate dragged tab
-  w2ui[targetLayout].get(targetPanel).tabs.click(originalTab);
+  w2ui[targetLayout].get(targetPanel).tabs.click(originalTab, true);
 
   /*
   // activate tab if dragged to empty new panel
@@ -708,11 +708,19 @@ function tabClick(obj, event) {
   var elem;
   var item = tabList[event.target];
   var location = pickPanel(item.panel);
-  if (w2ui[location.layout].get(location.panel).tabs.active === item.id) return;
+  
+  // Don't re-render active preview iframes unless they are being moved!
+  var moved = true;
+  if (item.type == 'preview') {
+    var parentId = '#' + $("#container_"+item.id).parent().parent().parent().attr('id');
+    moved = (parentId !== location.id || w2ui[location.layout].get(location.panel).tabs.active !== item.id) ? true : false;
+  }
+  if (!moved) return;
   
   $("#editor" + item.panel).hide();
   $("#content" + item.panel).hide();
   $("#container" + item.panel + " .w2ui-sidebar").hide();
+  $("#container" + item.panel + " .preview-area").hide();
   
   switch (item.type) {
     case 'editor':
@@ -984,7 +992,6 @@ function showProjects (panelArea) {
           forked
         ],
         onDblClick: function (event) {
-          //console.log(event, this)
           var target = event.target.split('/');
           var user = target[0];
           target = target[1].split('_');
@@ -1223,6 +1230,15 @@ function pickPanel(identifier) {
   
   else {
     switch (identifier) {
+      case 'preview':
+        obj = {
+          id: "#" + panelAreas[4],
+          layout: panelAreas[4].split('_')[1],
+          panel: 'main',
+          area: 4
+        };
+      break;
+      
       case 'project':
         obj = {
           id: "#" + panelAreas[0],
