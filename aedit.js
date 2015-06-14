@@ -866,7 +866,7 @@ user.show('', function(err, user) {
 
 
 
-// var dirtyFileTimer = setTimeout(function (){}, 50);
+var dirtyFileTimer = setTimeout(function (){}, 50);
 
 
 function init() {
@@ -1277,7 +1277,7 @@ function startDoc(settings) {
       connection.open(url, 'text', function(error, doc) {
         if(error) {
           w2popup.close();
-          alert ("Unable to initiate real-time document", error);
+          console.log ("Unable to initiate real-time document", error);
         }
         else {
           var editSession = ace.createEditSession('', '');
@@ -1336,87 +1336,85 @@ function startDoc(settings) {
               row2: position.end.row
             });
           });
-          
-        var modelist = ace.require('ace/ext/modelist');
-        var UndoManager = ace.require("ace/undomanager").UndoManager;
-        ace.require("ace/ext/emmet");
-        editors[location.area] = ace.edit("editor" + location.area);
-        editors[location.area].setBehavioursEnabled(true);
-        
-        //if (localStorage.fontSize) {$(".editor").css("font-size", localStorage.fontSize + "px");}
-        
-        
-        editors[location.area].setOptions({
-          enableBasicAutocompletion: true
-        });
-        editors[location.area].focus();
-        var mode = modelist.getModeForPath(path).mode;
-        editors[location.area].getSession().setMode(mode);
-        editors[location.area].setOption("enableEmmet", true);
-        editors[location.area].getSession().setTabSize(2);
-        
-        if (localStorage.lineWrap > 0) editors[location.area].getSession().setUseWrapMode(true);
-        else editors[location.area].getSession().setUseWrapMode(false);
-        
-        //editors[location.area].session.setValue(value);
-        editors[location.area].setValue(value, -1);
-        editors[location.area].getSession().setUndoManager(new UndoManager());
-        
-        /*
-        // Hover over text in editor to trigger guides
-        editors[location.area].on('mousemove', function(e) {
-          var position = e.getDocumentPosition();
-          var token = editors[location.area].session.getTokenAt(position.row, position.column);
-          if (token.type == 'support.type' || token.type == 'support.function') {
-            switch (token.value) {
-  	      case '': break;
-            }
-          //console.log(token);
-          }
-        });
-        */
-
-/*
-        editors[location.area].getSession().on('change', function(e) {
-          clearTimeout(dirtyFileTimer);
-          dirtyFileTimer = setTimeout(function () {
-
-            // force browsersync update
-            $.get("http://it4se.com:3000/__browser_sync__?method=reload&args=" +url, function (data) {});
-
-            if (editors[location.area].getSession().getUndoManager().isClean()) w2ui[location.layout].get(location.panel).set(tabId, { caption: path });
-            else w2ui[location.layout].get(location.panel).set(tabId, { caption: ' * ' + path});
-
-            if (editors[currentFile].getSession().getUndoManager().hasUndo()) console.log("enable undo button");
-            else console.log("disable undo button");
-
-            if (editors[currentFile].getSession().getUndoManager().hasRedo()) console.log("enable redo button");
-            else console.log("disable redo button");
-
-            //checkUnsaved();
-
-          }, 500);
-          
-          // alert ("livecoding: " + liveCoding + "\nDelay:" + liveCodingDelay + "\nrunning?" + editors[currentFile].running);
-          if (liveCodingDelay > 0 && editors[currentFile].running) {
-            clearTimeout(liveCodingTimer);
-            liveCodingTimer = setTimeout(function() {
-              runCode();
-            }, liveCodingDelay);
-          }
-        });
-        
-        */
-        
-        if (localStorage.editorTheme) {editors[location.area].setTheme(localStorage.editorTheme);}
-        else {
             
-          if (localStorage.uitheme == "dark") {
-            editors[location.area].setTheme("ace/theme/vibrant_ink");
-          } else {
-            editors[location.area].setTheme("ace/theme/chrome");
+          var modelist = ace.require('ace/ext/modelist');
+          var UndoManager = ace.require("ace/undomanager").UndoManager;
+          ace.require("ace/ext/emmet");
+          editors[location.area] = ace.edit("editor" + location.area);
+          editors[location.area].setBehavioursEnabled(true);
+          
+          if (localStorage.fontSize) {$(".editor").css("font-size", localStorage.fontSize + "px");}
+          
+          editors[location.area].setOptions({
+            enableBasicAutocompletion: true
+          });
+          editors[location.area].focus();
+          var mode = modelist.getModeForPath(path).mode;
+          editors[location.area].getSession().setMode(mode);
+          editors[location.area].setOption("enableEmmet", true);
+          editors[location.area].getSession().setTabSize(2);
+          
+          if (localStorage.lineWrap > 0) editors[location.area].getSession().setUseWrapMode(true);
+          else editors[location.area].getSession().setUseWrapMode(false);
+          
+          //editors[location.area].session.setValue(value);
+          editors[location.area].setValue(value, -1);
+          editors[location.area].getSession().setUndoManager(new UndoManager());
+          
+          /*
+          // Hover over text in editor to trigger guides
+          editors[location.area].on('mousemove', function(e) {
+            var position = e.getDocumentPosition();
+            var token = editors[location.area].session.getTokenAt(position.row, position.column);
+            if (token.type == 'support.type' || token.type == 'support.function') {
+              switch (token.value) {
+    	      case '': break;
+              }
+            //console.log(token);
+            }
+          });
+          */
+  
+          editors[location.area].getSession().on('change', function(e) {
+            clearTimeout(dirtyFileTimer);
+            dirtyFileTimer = setTimeout(function () {
+  
+              // force browsersync update
+              $.get("http://it4se.com:3000/__browser_sync__?method=reload&args=" + url, function (data) {});
+  
+              if (editors[location.area].getSession().getUndoManager().isClean()) w2ui[location.layout].get(location.panel).set(tabId, { caption: path });
+              else w2ui[location.layout].get(location.panel).set(tabId, { caption: ' * ' + path});
+  
+              if (editors[currentFile].getSession().getUndoManager().hasUndo()) console.log("enable undo button");
+              else console.log("disable undo button");
+  
+              if (editors[currentFile].getSession().getUndoManager().hasRedo()) console.log("enable redo button");
+              else console.log("disable redo button");
+  
+              checkUnsaved();
+  
+            }, 500);
+            
+            /*
+            // alert ("livecoding: " + liveCoding + "\nDelay:" + liveCodingDelay + "\nrunning?" + editors[currentFile].running);
+            if (liveCodingDelay > 0 && editors[currentFile].running) {
+              clearTimeout(liveCodingTimer);
+              liveCodingTimer = setTimeout(function() {
+                runCode();
+              }, liveCodingDelay);
+            }
+            */
+          });
+          
+          if (localStorage.editorTheme) {editors[location.area].setTheme(localStorage.editorTheme);}
+          else {
+              
+            if (localStorage.uitheme == "dark") {
+              editors[location.area].setTheme("ace/theme/vibrant_ink");
+            } else {
+              editors[location.area].setTheme("ace/theme/chrome");
+            }
           }
-        }
           
           // add tab and listen for tab close clicks
           w2ui[location.layout].get(location.panel).tabs.add({
@@ -1464,6 +1462,45 @@ function startDoc(settings) {
     }
   });
 }
+
+
+var cursors = {};
+var selections = {};
+var cursorHash = [];
+var cursorKey = 'Guest';
+
+function updateCursor(key, index, remove) {
+  // remove existing cursor, if they exist
+  if (cursorHash[key]) {
+    editors[index].session.removeMarker(cursorHash[key]);
+  }
+  // redraw cursor
+  if (!remove) {
+    var pointAnchor = editors[index].getSelectionRange();
+    pointAnchor.start = editors[index].session.doc.createAnchor({
+      row: cursors[key].row,
+      column: cursors[key].column
+    });
+    pointAnchor.end = editors[index].session.doc.createAnchor({
+      row: cursors[key].row + 1,
+      column: cursors[key].column
+    });
+    cursorKey = key;
+    cursorHash[key] = editors[index].session.addMarker(pointAnchor, "ace_step", drawMarker, true);
+  }
+}
+
+function drawMarker(returnArray, range, left, top, config) {
+  var color = "blue";
+  var opacity = 1;
+  //hat
+  returnArray.push("<div class='ace_selection' style='", "opacity:", opacity, ";", "left:", left - 2, "px;", "top:", top - 3, "px;", "height:", 5, "px;", "width:", 6, "px; background: ", color || "", "'></div>");
+  //stem
+  returnArray.push("<div class='ace_selection' style='", "opacity:", opacity, ";", "left:", left, "px;", "top:", top, "px;", "height: 1em;", "width:", 2, "px; background: ", color || "", "'></div>");
+  //eventlistener circle 
+  returnArray.push("<div data-user='popup' class='ace_selection' style='", "border-radius: 30px; background: ", color, "; opacity:0.2;", "left:", left - 16, "px;", "top:", top - 11, "px;", "height:", 35, "px;", "width:", 35, "px; pointer-events: auto; cursor: help;' onmouseover='javascript: showAuthor(this, 1);' onmouseout='javascript: showAuthor(this);'></div><div id='popup' style='position:absolute; ", "top:", top - 25, "px;", "left:", left - 2, "px;", "background: white; border-radius: 10px; border: 1px solid ", color, "; padding: 2px; display: none;'><b>" + cursorKey + "</b></div>");
+}
+
 
 
 // KNOCKOUT MODEL - not implemented
