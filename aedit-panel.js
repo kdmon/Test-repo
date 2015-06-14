@@ -492,11 +492,13 @@
                 if (!evnt) evnt = window.event;
                 if (typeof obj.tmp.resize == 'undefined') return;
                 var panel = obj.get(obj.tmp.resize.type);
+                
+                // reset panel size if hidden to prevent jumping
+                if (panel.hidden) {obj.tmp.y = 0; obj.tmp.x = 0;}
+                
                 // event before
                 var tmp = obj.tmp.resize;
                 
-                // reset panel size if hidden to prevent jumping
-                if (panel.hidden) {tmp.y = 0; tmp.x = 0;}
                 
                 var eventData = obj.trigger({ phase: 'before', type: 'resizing', target: obj.name, object: panel, originalEvent: evnt,
                     panel: tmp ? tmp.type : 'all', diff_x: tmp ? tmp.diff_x : 0, diff_y: tmp ? tmp.diff_y : 0 });
