@@ -467,6 +467,9 @@ function toolbarClick(obj, event) {
     case 'tools:Open preview':
       openPreview(tab);
       break;
+    case 'share':
+      window.open(tabList[tab].fullUrl, "_blank");
+      break;
     default:
     //obj.owner.content('main', 'event' + event.target);
     break;
@@ -505,7 +508,7 @@ function openPreview (tabId, panel) {
   refreshTabs();
 
   // 4. render into temporary dom element once
-  $('<iframe id="' + previewId +'" class="preview-iframe" src="' + fullUrl + '"></iframe>').appendTo("#layout");
+  $('<iframe id="' + previewId +'" class="preview-iframe" src="' + fullUrl + '"></iframe>').appendTo("body");
 
   w2ui[location.layout].get(location.panel).tabs.click(previewId);
   $(location.id).find(".w2ui-tabs").scrollLeft(99999);
@@ -792,7 +795,7 @@ window.requestAnimFrame = (function(){
 
 function updateLayout(editorOnly) {
   
-  // iframes interfer with resizer function, so hide them - causes flicker
+  // iframes interfer with resizer function, so hide them - but causes flicker
   $(".preview-iframe").hide();
   
   clearTimeout(resizeTimer);
@@ -840,7 +843,7 @@ function updateLayout(editorOnly) {
         }
       }
     });
-  }, 750);
+  }, 500);
 }
 
 function togglePanel (id) {
