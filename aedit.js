@@ -985,12 +985,16 @@ function showProjects (panelArea) {
         ],
         onDblClick: function (event) {
           //console.log(event, this)
-          var target = event.target.split('_')[0].split('/');
+          var target = event.target.split('/');
+          var user = target[0];
+          target = target[1].split('_');
+          target.pop();
+          var repo = target.join('_');
           w2popup.open({
-            title: 'Opening ' + event.target
+            title: 'Opening ' + repo
           });
-          w2popup.lock('Loading ' + target[1], true);
-          openProject(target[0],target[1]);
+          w2popup.lock('Loading ' + repo, true);
+          openProject(user,repo);
         }
       });
 
