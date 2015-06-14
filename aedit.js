@@ -830,18 +830,17 @@ function updateLayout(editorOnly) {
           var left = $("#container" + item.panel).offset().left;
           var height = $("#container" + item.panel).innerHeight();
           var width = $("#container" + item.panel).innerWidth();
-          console.log(height, width);
           $("#" + item.id).css({
             top: top + 'px',
             left: left + 'px',
             width: width + 'px',
             height: height + 'px'
           });
-          if (item.visible) $("#" + item.id).show();
+          if (item.visible && (top !== 0 && left !== 0)) $("#" + item.id).show();
         }
       }
     });
-  }, 100);
+  }, 750);
 }
 
 function togglePanel (id) {
