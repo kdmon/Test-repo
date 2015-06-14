@@ -450,7 +450,6 @@
                 $(document).off('mouseup', obj.tmp.events.mouseUp).on('mouseup', obj.tmp.events.mouseUp);
                 $(document).off('touchmove', obj.tmp.events.mouseMove).on('touchmove', obj.tmp.events.mouseMove);
                 $(document).off('touchend', obj.tmp.events.mouseUp).on('touchend', obj.tmp.events.mouseUp);
-                console.log(evnt)
                 obj.tmp.resize = {
                     type    : type,
                     x       : evnt.clientX||evnt.originalEvent.touches[0].clientX,
@@ -657,8 +656,7 @@
                       }, 200);
   
                   }
-                  console.log("bla")
-                }, 5);
+                }, 10);
             }
             
             function resizeStop(evnt) {
