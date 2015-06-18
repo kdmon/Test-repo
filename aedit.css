@@ -121,8 +121,6 @@ body, .panel-content {
 
 .w2ui-toolbar {
   min-height: 35px;
-  height: 35px;
-  max-height: 35px;
 }
 
 .small-button {
@@ -186,8 +184,6 @@ body, .panel-content {
 
 .w2ui-tabs table {
   min-height: 35px !important;
-  height: 35px !important;
-  max-height: 35px !important;
   padding: 0px !important;
 }
 
