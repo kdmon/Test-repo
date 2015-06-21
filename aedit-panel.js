@@ -452,8 +452,8 @@
                 
               		obj.iframeBlocks = $(document).find( 'iframe' ).map(function() {
               			var iframe = $( this );
-              
-              			return $( "<div>" )
+                    var id = $(this).attr("id");
+              			return $( '<div id="#block' + id + '">' )
               				.css( "position", "absolute" )
               				.css( "z-index", "500" )
               				.appendTo( iframe.parent() )
