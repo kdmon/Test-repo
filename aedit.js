@@ -1461,7 +1461,7 @@ function startDoc(settings) {
   
               // force browsersync update
               $.get("http://it4se.com:3000/__browser_sync__?method=reload&args=" + url, function (data) {});
-  
+/*   
               if (editors[location.area].getSession().getUndoManager().isClean()) w2ui[location.layout].get(location.panel).set(tabId, { caption: path });
               else w2ui[location.layout].get(location.panel).set(tabId, { caption: ' * ' + path});
   
@@ -1472,6 +1472,7 @@ function startDoc(settings) {
               else console.log("disable redo button");
   
               checkUnsaved();
+*/
   
             }, 500);
             
