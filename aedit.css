@@ -15,9 +15,9 @@ body,
   padding:1px;
 }
 
-body, .panel-content {
-  font-family: sans;
-  font-size: 0.8em;
+.w2ui-reset table, body, .panel-content {
+  font-family: 'raleway', sans !important;
+  
 }
 
 .preview-iframe {
