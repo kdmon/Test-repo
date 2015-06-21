@@ -70,18 +70,22 @@ body,
 
 #logo {
   cursor: pointer;
-  font-size: 1.6em;
+  font-size: 1.7em;
   font-family: 'Raleway', sans-serif;
   vertical-align: bottom;
   font-weight: normal;
   margin-top: -30px;
-  padding: 20px 10px 10px 10px;
+  padding: 20px 30px 10px 5px;
   text-shadow: 1px 1px #eee;
-  background: linear-gradient(90deg, rgba(255,255,255,0.9) 20% , rgba(255,255,255,0.0));
+  border-radius: 0 0 60px 0;
+  background: linear-gradient(165deg, rgba(255,255,255,1) 20%, rgba(155,155,255,0.3));
+  box-shadow: -3px -1px 6px 2px #008;
 }
 
 #logo:hover {
-  background: linear-gradient(45deg, rgba(255,255,255,0.9) 20% , rgba(250,250,250,0.3)) !important;
+  margin-top: -30px;
+  padding: 20px 30px 10px 5px;
+  background: linear-gradient(45deg, rgba(255,255,205,0.8) 20%, rgba(250,250,250,0.3)) !important;
 }
 .logo {
   top: 5px;
@@ -111,7 +115,7 @@ body,
 
 #layout_layout_panel_top .w2ui-toolbar {
   background: linear-gradient(0deg, #77a, #bce 20%,#fff) !important;
-  height: 55px;
+  height: 56px;
   border: 0;
 }
 
