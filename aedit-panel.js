@@ -25,7 +25,7 @@
         this.tmp     = {};
 
         this.padding = 8;        // panel padding
-        this.resizer = 6;        // resizer width or height
+        this.resizer = 8;        // resizer width or height
         this.style   = '';
 
         this.onShow         = null;
@@ -992,7 +992,7 @@
                     $('#layout_'+ this.name +'_resizer_right').show().css({
                         'display': 'block',
                         'left': (pright.hidden === false ? l + 'px' : 'auto'),
-                        'right': (pright.hidden === true ? '3px' : 'auto'),
+                        'right': (pright.hidden === true ? '0px' : 'auto'),
                         'top': t + 'px',
                         'width': w + 'px',
                         'height': h + 'px',
@@ -1043,7 +1043,7 @@
                         'display': 'block',
                         'left': l + 'px',
                         'top': (pbottom.hidden === false ? t + 'px' : 'auto'),
-                        'bottom': (pbottom.hidden === true ? '3px' : 'auto'),
+                        'bottom': (pbottom.hidden === true ? '0px' : 'auto'),
                         'width': w + 'px',
                         'height': h + 'px',
                         'cursor': 'ns-resize'
@@ -1118,7 +1118,7 @@
                         'display': 'block',
                         'left': l + 'px',
                         'top': (pprev.hidden === false ? t + 'px' : 'auto'),
-                        'bottom': (pprev.hidden === true ? '3px' : 'auto'),
+                        'bottom': (pprev.hidden === true ? '0px' : 'auto'),
                         'width': w + 'px',
                         'height': h + 'px',
                         'cursor': 'ns-resize'
