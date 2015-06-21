@@ -449,18 +449,17 @@
                 // Block all iframes from capturing mouse events by
                 // temporarily overlaying an empty div element.
                 // Solution adapted from jquery UI library.
-                
-              		obj.iframeBlocks = $(document).find( 'iframe' ).map(function() {
-              			var iframe = $( this );
-                    var id = $(this).attr("id");
-              			return $( '<div id="#block' + id + '">' )
-              				.css( "position", "absolute" )
-              				.css( "z-index", "500" )
-              				.appendTo( iframe.parent() )
-              				.outerWidth( iframe.outerWidth() )
-              				.outerHeight( iframe.outerHeight() )
-              				.offset( iframe.offset() )[ 0 ];
-              		});
+              
+            		obj.iframeBlocks = $(document).find( 'iframe' ).map(function() {
+            			var iframe = $( this );
+            			return $( '<div>' )
+            				.css( "position", "absolute" )
+            				.css( "z-index", "200" )
+            				.appendTo( iframe.parent() )
+            				.outerWidth( iframe.outerWidth() )
+            				.outerHeight( iframe.outerHeight() )
+            				.offset( iframe.offset() )[ 0 ];
+            		});
 
                 if (!evnt) evnt = window.event;
                 $(document).off('mousemove', obj.tmp.events.mouseMove).on('mousemove', obj.tmp.events.mouseMove);
@@ -593,10 +592,9 @@
             }
             
             function updateSize() {
-                // set new size
-                clearTimeout(this._resize_timer);
-                this._resize_timer = setTimeout(function () {
-                  
+                if (this._resize_timer === undefined) {
+                  this._resize_timer = setTimeout(function () {
+                  this._resize_timer = undefined;
                   if (obj.tmp.resize !== undefined) {
                           
                       var p = $('#layout_'+ obj.name + '_resizer_'+ obj.tmp.resize.type);
@@ -666,6 +664,23 @@
                       obj.tmp.resize.diff_x = 0;
                       obj.tmp.resize.diff_y = 0;
                       obj.resize();
+                      
+                      // Recreate iframe blockers with new dimensions
+                      
+                      if ( obj.iframeBlocks ) {
+                  			obj.iframeBlocks.remove();
+                  			delete obj.iframeBlocks;
+                  		}
+                  		obj.iframeBlocks = $(document).find( 'iframe' ).map(function() {
+                  			var iframe = $( this );
+                  			return $( '<div>' )
+                  				.css( "position", "absolute" )
+                  				.css( "z-index", "200" )
+                  				.appendTo( iframe.parent() )
+                  				.outerWidth( iframe.outerWidth() )
+                  				.outerHeight( iframe.outerHeight() )
+                  				.offset( iframe.offset() )[ 0 ];
+                  		});
                              
                       // Show hidden panel!
                       setTimeout(function () {
@@ -674,7 +689,9 @@
                       }, 200);
   
                   }
-                }, 10);
+                }, 50);
+                
+              }
             }
             
             function resizeStop(evnt) {
