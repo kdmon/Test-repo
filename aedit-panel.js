@@ -445,6 +445,23 @@
                   obj.toggle(type, true); return;
                 }
                 if (!obj.box) return;
+                
+                // Block all iframes from capturing mouse events by
+                // temporarily overlaying an empty div element.
+                // Solution adapted from jquery UI library.
+                
+              		obj.iframeBlocks = $(document).find( 'iframe' ).map(function() {
+              			var iframe = $( this );
+              
+              			return $( "<div>" )
+              				.css( "position", "absolute" )
+              				.css( "z-index", "500" )
+              				.appendTo( iframe.parent() )
+              				.outerWidth( iframe.outerWidth() )
+              				.outerHeight( iframe.outerHeight() )
+              				.offset( iframe.offset() )[ 0 ];
+              		});
+
                 if (!evnt) evnt = window.event;
                 $(document).off('mousemove', obj.tmp.events.mouseMove).on('mousemove', obj.tmp.events.mouseMove);
                 $(document).off('mouseup', obj.tmp.events.mouseUp).on('mouseup', obj.tmp.events.mouseUp);
@@ -487,7 +504,6 @@
             }
 
             function resizeMove(evnt) {
-              
                 if (!obj.box) return;
                 if (!evnt) evnt = window.event;
                 if (typeof obj.tmp.resize == 'undefined') return;
@@ -662,7 +678,7 @@
             }
             
             function resizeStop(evnt) {
-              updateSize();
+                updateSize();
                 if (!obj.box) return;
                 if (!evnt) evnt = window.event;
                 $(document).off('mousemove', obj.tmp.events.mouseMove);
@@ -678,6 +694,15 @@
                         obj.unlock(w2panels[p1]);
                     }
                 }
+                
+                // Unblock all iframes from capturing mouse events by
+                // removing temporary overlaying empty div elements.
+                // Solution adapted from jquery UI library.
+                
+                if ( obj.iframeBlocks ) {
+            			obj.iframeBlocks.remove();
+            			delete obj.iframeBlocks;
+            		}
                 
                 $('#layout_'+ obj.name + '_resizer_'+ obj.tmp.resize.type).removeClass('active');
                 delete obj.tmp.resize;
