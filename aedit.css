@@ -118,11 +118,6 @@ body, .panel-content {
   font-size: 14px !important;
 }
 
-
-.w2ui-toolbar {
-  min-height: 35px;
-}
-
 .small-button {
   background: #ccc;
   color: #555;
@@ -144,6 +139,7 @@ body, .panel-content {
 }
 
 .w2ui-toolbar {
+  min-height: 35px;
   background: linear-gradient(0deg, #ccc,#fff);
 }
 
@@ -184,6 +180,8 @@ body, .panel-content {
 
 .w2ui-tabs table {
   min-height: 35px !important;
+  height: 35px !important;
+  max-height: 35px !important;
   padding: 0px !important;
 }
 
