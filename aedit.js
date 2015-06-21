@@ -796,7 +796,7 @@ window.requestAnimFrame = (function(){
 function updateLayout(editorOnly) {
   
   // iframes interfer with resizer function, so hide them - but causes flicker
-  $(".preview-iframe").hide();
+  //$(".preview-iframe").hide();
   
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(function() {
@@ -833,6 +833,12 @@ function updateLayout(editorOnly) {
           var left = $("#container" + item.panel).offset().left;
           var height = $("#container" + item.panel).innerHeight();
           var width = $("#container" + item.panel).innerWidth();
+          $("#block_" + item.id).css({
+            top: top + 'px',
+            left: left + 'px',
+            width: width + 'px',
+            height: height + 'px'
+          });
           $("#" + item.id).css({
             top: top + 'px',
             left: left + 'px',
@@ -840,10 +846,11 @@ function updateLayout(editorOnly) {
             height: height + 'px'
           });
           if (item.visible && (top !== 0 && left !== 0)) $("#" + item.id).show();
+          else $("#" + item.id).hide();
         }
       }
     });
-  }, 500);
+  }, 10);
 }
 
 function togglePanel (id) {
