@@ -781,7 +781,7 @@ function tabClose(obj, event) {
   // ace detach etc...
 }
 
-var resizeTimer = setTimeout(function() {}, 50);
+var resizeTimer;
 
 window.requestAnimFrame = (function(){
   return  window.requestAnimationFrame       ||
@@ -795,62 +795,55 @@ window.requestAnimFrame = (function(){
 
 function updateLayout(editorOnly) {
   
-  // iframes interfer with resizer function, so hide them - but causes flicker
-  //$(".preview-iframe").hide();
-  
-  clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(function() {
+  if (resizeTimer === undefined) {
     
-    requestAnimFrame(function () {
-
-      if (editorOnly === undefined) {
-        w2ui.layout.resize();
-      }
-      for (var i = 0; i < editors.length; i++) {
-        editors[i].resize();
-        var location = panelAreas[i].split("_");
+    resizeTimer = setTimeout(function() {
+      resizeTimer = undefined;
+      requestAnimFrame(function () {
   
-        // Hide inactive tab areas
-        if (w2ui[location[1]].get(location[3]).tabs.tabs.length === 0) {
-          $("#editor" + i).hide();
-          $("#container"+ i + " .w2ui-sidebar").hide();
-          $("#content" + i).html('<div class="inactive-panel">' +
-          '<p><em>Side panel empty.</em> Drag a tab over to activate it or ' +
-          '<span class="small-button" onclick="togglePanel(' + i + ')">close it.</span></p></div>');
-          if (location[1] === 'middlesplit' && location[3] === 'main')
-          $("#content" + i).html('<div class="inactive-panel">' +
-          '<p><em>Main panel empty.</em> Drag a tab over to activate it.' +
-          '</p></div>');
-          $("#content" + i).show();
-          switchToolbar(location[1], location[3], 'empty');
+        if (editorOnly === undefined) {
+          w2ui.layout.resize();
         }
-      }
-      // update absolute position, size and visibility of preview iframes
-      for (var index in tabList) {
-        var item = tabList[index];
-        if (item.type === 'preview') {
-          var top = $("#container" + item.panel).offset().top;
-          var left = $("#container" + item.panel).offset().left;
-          var height = $("#container" + item.panel).innerHeight();
-          var width = $("#container" + item.panel).innerWidth();
-          $("#block_" + item.id).css({
-            top: top + 'px',
-            left: left + 'px',
-            width: width + 'px',
-            height: height + 'px'
-          });
-          $("#" + item.id).css({
-            top: top + 'px',
-            left: left + 'px',
-            width: width + 'px',
-            height: height + 'px'
-          });
-          if (item.visible && (top !== 0 && left !== 0)) $("#" + item.id).show();
-          else $("#" + item.id).hide();
+        for (var i = 0; i < editors.length; i++) {
+          editors[i].resize();
+          var location = panelAreas[i].split("_");
+    
+          // Hide inactive tab areas
+          if (w2ui[location[1]].get(location[3]).tabs.tabs.length === 0) {
+            $("#editor" + i).hide();
+            $("#container"+ i + " .w2ui-sidebar").hide();
+            $("#content" + i).html('<div class="inactive-panel">' +
+            '<p><em>Side panel empty.</em> Drag a tab over to activate it or ' +
+            '<span class="small-button" onclick="togglePanel(' + i + ')">close it.</span></p></div>');
+            if (location[1] === 'middlesplit' && location[3] === 'main')
+            $("#content" + i).html('<div class="inactive-panel">' +
+            '<p><em>Main panel empty.</em> Drag a tab over to activate it.' +
+            '</p></div>');
+            $("#content" + i).show();
+            switchToolbar(location[1], location[3], 'empty');
+          }
         }
-      }
-    });
-  }, 10);
+        // update absolute position, size and visibility of preview iframes
+        for (var index in tabList) {
+          var item = tabList[index];
+          if (item.type === 'preview') {
+            var top = $("#container" + item.panel).offset().top;
+            var left = $("#container" + item.panel).offset().left;
+            var height = $("#container" + item.panel).innerHeight();
+            var width = $("#container" + item.panel).innerWidth();
+            $("#" + item.id).css({
+              top: top + 'px',
+              left: left + 'px',
+              width: width + 'px',
+              height: height + 'px'
+            });
+            if (item.visible && (top !== 0 && left !== 0)) $("#" + item.id).show();
+            else $("#" + item.id).hide();
+          }
+        }
+      });
+    }, 10);
+  }
 }
 
 function togglePanel (id) {
