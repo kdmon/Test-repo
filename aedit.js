@@ -400,10 +400,6 @@ var buttons = {
       icon: 'fa fa-history'
     }]
   },
-  spacer: {
-    id: 'spacer',
-    type: 'spacer'
-  },
   pause: {
     id: 'pause',
     type: 'button',
@@ -416,6 +412,10 @@ var buttons = {
     id: 'previewurl',
     html: '<div style="padding: 3px 10px;">Input: <input size="10" style="' +
     'padding: 3px; border-radius: 2px; border: 1px solid silver"/></div>'
+  },
+  spacer: {
+    id: 'spacer',
+    type: 'spacer'
   },
   splitleft: {
     id: 'splitleft',
@@ -470,6 +470,9 @@ function toolbarClick(obj, event) {
     case 'share':
       window.open(tabList[tab].fullUrl, "_blank");
       break;
+    case 'refresh':
+      $("#" + tabList[tab].id).attr("src", tabList[tab].fullUrl);
+      break;
     default:
     //obj.owner.content('main', 'event' + event.target);
     break;
@@ -489,9 +492,9 @@ function openPreview (tabId, panel) {
   var file = tabId.split('/');
   var title = (file.length > 0) ? file[file.length-1] : file;
   var previewId = "preview_" + tabId.hashCode();
-  var fullUrl = (tabId.substr(4) === 'http') ? tabId : 'http://it4se.com:3000/' + tabId;
+  var fullUrl = (tabId.substr(4) === 'http') ? tabId : 'http://it4se.com:8080/' + tabId;
   if (tabId.substr(tabId.length-3).toLowerCase() == '.md')
-    fullUrl = 'http://it4se.com:3000/markdown.html?r=' + randomString(100) + "&url=" + fullUrl;
+    fullUrl = 'http://it4se.com:8080/markdown.html?r=' + randomString(100) + "&url=" + fullUrl;
   tabList[previewId] = {
     id: previewId,
     fullUrl: fullUrl,
