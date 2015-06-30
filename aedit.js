@@ -262,6 +262,86 @@ $().w2layout({
 
 var connection = new sharejs.Connection("http://it4se.com:8081/channel");
 
+function toUTF8Array(str) {
+    var utf8 = [];
+    for (var i=0; i < str.length; i++) {
+        var charcode = str.charCodeAt(i);
+        if (charcode < 0x80) utf8.push(charcode);
+        else if (charcode < 0x800) {
+            utf8.push(0xc0 | (charcode >> 6), 
+                      0x80 | (charcode & 0x3f));
+        }
+        else if (charcode < 0xd800 || charcode >= 0xe000) {
+            utf8.push(0xe0 | (charcode >> 12), 
+                      0x80 | ((charcode>>6) & 0x3f), 
+                      0x80 | (charcode & 0x3f));
+        }
+        // surrogate pair
+        else {
+            i++;
+            // UTF-16 encodes 0x10000-0x10FFFF by
+            // subtracting 0x10000 and splitting the
+            // 20 bits of 0x0-0xFFFFF into two halves
+            charcode = 0x10000 + (((charcode & 0x3ff)<<10)
+                      | (str.charCodeAt(i) & 0x3ff));
+            utf8.push(0xf0 | (charcode >>18), 
+                      0x80 | ((charcode>>12) & 0x3f), 
+                      0x80 | ((charcode>>6) & 0x3f), 
+                      0x80 | (charcode & 0x3f));
+        }
+    }
+    return utf8;
+}
+
+// Binary check from https://github.com/gjtorikian/isBinaryFile/
+function isBinaryFile(bytes, size) {
+  var max_bytes = 512;
+  if (size === 0) return false;
+
+  var suspicious_bytes = 0;
+  var total_bytes = Math.min(size, max_bytes);
+
+  if (size >= 3 && bytes[0] == 0xEF && bytes[1] == 0xBB && bytes[2] == 0xBF) {
+    // UTF-8 BOM. This isn't binary.
+    return false;
+  }
+
+  for (var i = 0; i < total_bytes; i++) {
+    if (bytes[i] === 0) { // NULL byte--it's binary!
+      return true;
+    }
+    else if ((bytes[i] < 7 || bytes[i] > 14) && (bytes[i] < 32 || bytes[i] > 127)) {
+      // UTF-8 detection
+      if (bytes[i] > 193 && bytes[i] < 224 && i + 1 < total_bytes) {
+          i++;
+          if (bytes[i] > 127 && bytes[i] < 192) {
+              continue;
+          }
+      }
+      else if (bytes[i] > 223 && bytes[i] < 240 && i + 2 < total_bytes) {
+          i++;
+          if (bytes[i] > 127 && bytes[i] < 192 && bytes[i + 1] > 127 && bytes[i + 1] < 192) {
+              i++;
+              continue;
+          }
+      }
+      suspicious_bytes++;
+      // Read at least 32 bytes before making a decision
+      if (i > 32 && (suspicious_bytes * 100) / total_bytes > 10) {
+          return true;
+      }
+    }
+  }
+
+  if ((suspicious_bytes * 100) / total_bytes > 10) {
+    console.log("Suspecious bytes")
+    return true;
+  }
+
+  return false;
+}
+
+
 /* SETUP TOOLBAR */
 var toolbars = {
   topmenu: ['logo', 'topspacer','connection','topbreak1','collaborate','topbreak2', 'account'],
@@ -487,13 +567,15 @@ function randomString(length) {
   return text;
 }
 
-function openPreview (tabId, panel) {
+function openPreview (url, caption, panel) {
   var location = pickPanel (panel || 'preview');
-  var file = tabId.split('/');
-  var title = (file.length > 0) ? file[file.length-1] : file;
-  var previewId = "preview_" + tabId.hashCode();
-  var fullUrl = (tabId.substr(4) === 'http') ? tabId : 'http://it4se.com:8080/' + tabId;
-  if (tabId.substr(tabId.length-3).toLowerCase() == '.md')
+  var file = url.split('/');
+  var title = caption || (file.length > 0) ? file[file.length-1] : file;
+  var previewId = "preview_" + url.hashCode();
+  // strip leading slash in pathname
+  url = (url.substr(0,1) === "/") ? url.substr(1, url.length) : url;
+  var fullUrl = (url.substr(4) === 'http') ? url : 'http://it4se.com:8080/' + url;
+  if (url.substr(url.length-3).toLowerCase() == '.md')
     fullUrl = 'http://it4se.com:8080/markdown.html?r=' + randomString(100) + "&url=" + fullUrl;
   tabList[previewId] = {
     id: previewId,
@@ -1095,6 +1177,7 @@ function openProject (user, repository, branch, panelArea) {
     if (err) {
       console.log("Error retrieving files", err);
     }
+
     // 2. Generate widget
     else {
       var location = pickPanel(panelArea || 'filebrowser');
@@ -1345,7 +1428,8 @@ function startDoc(settings) {
   var preserveContent = settings.preserveContent || false;
   var color = settings.color || "red";
   var username = config.user || 'guest';
-  var url = encodeURIComponent("/"+user+"/"+repository+"/"+branch+"/"+path);
+  var url = "/"+user+"/"+repository+"/"+branch+"/"+path;
+  var encodedUrl = encodeURIComponent(url);
   var location = pickPanel();
   
   // fetch file via github api
@@ -1357,7 +1441,21 @@ function startDoc(settings) {
     }
     
     else {
-      connection.open(url, 'text', function(error, doc) {
+      
+      // Don't attempt to open binaries in editor!
+      
+      var bytes = toUTF8Array(value);
+      
+      if (isBinaryFile(bytes, bytes.length)) {
+        openPreview (url, title);
+        refreshTabs();
+        updateLayout(); // inserts overflow scrollbar
+        w2ui[location.layout].get(location.panel).tabs.click(tabId);
+        w2popup.close();
+        return;
+      }
+      
+      connection.open(encodedUrl, 'text', function(error, doc) {
         if(error) {
           w2popup.close();
           console.log ("Unable to initiate real-time document", error);
@@ -1463,7 +1561,7 @@ function startDoc(settings) {
             dirtyFileTimer = setTimeout(function () {
   
               // force browsersync update
-              $.get("http://it4se.com:3000/__browser_sync__?method=reload&args=" + url, function (data) {});
+              $.get("http://it4se.com:3000/__browser_sync__?method=reload&args=" + encodedUrl, function (data) {});
 /*   
               if (editors[location.area].getSession().getUndoManager().isClean()) w2ui[location.layout].get(location.panel).set(tabId, { caption: path });
               else w2ui[location.layout].get(location.panel).set(tabId, { caption: ' * ' + path});
