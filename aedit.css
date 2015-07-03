@@ -154,16 +154,17 @@ body,
 
 .w2ui-toolbar {
   min-height: 35px;
-  background: linear-gradient(0deg, #ccc,#fff);
+  border-top: 1px #fff solid !important;
+  border-bottom: 1px #ccc solid !important;
+  background: white !important;
 }
 
 .w2ui-tabs, .w2ui-toolbar {
   overflow-x: auto !important;
 }
 .w2ui-panel-tabs {
-  background: linear-gradient(0deg,  #cdf, #8ad 90%, #acf) !important;
-  background: linear-gradient(0deg,  #cdf, #8ad 90%, #acf) !important;
-  padding-top: 2px !important;
+  background: linear-gradient(0deg,  #cdf, #8ad 80%, #acf) !important;
+  padding: 3px 3px 0 3px !important;
 }
 
 .w2ui-panel-toolbar {
@@ -198,20 +199,19 @@ body,
 }
 
 .w2ui-tab:not(.active) {
-  background: linear-gradient(0deg, #aaa 20%, #bbb 80%, #ccc) !important;
-  box-shadow: 0px 0px 5px 0px black;
+  background: linear-gradient(0deg, #ccc, #ddd) !important;
+  border: 1px solid #656;
+  border-bottom: none;
+  opacity: 0.9;
 }
 
 .w2ui-tabs .active {
-  background: linear-gradient(0deg, #fff, #eee, #fff) !important;
-  box-shadow: 0 0 5px 0 black;
+  background: #fff !important;
+
 }
-
-
 
 #temporarytab, .drop-highlight {
   min-width: 120px !important;
-  
   box-shadow: inset 0 0 10px 1px #fff;
   cursor: -webkit-grabbing !important;
   -webkit-animation: pulse 1.2s infinite;
