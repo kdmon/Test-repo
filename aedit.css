@@ -189,17 +189,6 @@ body,
   margin-left: 100px !important;
 }
 
-#temporarytab {
-  background: linear-gradient(0deg, #afa, #5a5) !important;
-  min-width: 120px !important;
-	animation: pulse 1s infinite;
-}
-
-@keyframes pulse {
-	from { transform: none; }
-	50% { transform: scale(1.4); }
-	to { transform: none; }
-}
 
 .w2ui-tabs table {
   min-height: 35px !important;
@@ -218,10 +207,30 @@ body,
   box-shadow: 0 0 5px 0 black;
 }
 
-.drop-highlight {
-  background: linear-gradient(0deg, #aff, #5a5) !important;
+
+
+#temporarytab, .drop-highlight {
+  min-width: 120px !important;
+  
   box-shadow: inset 0 0 10px 1px #fff;
-  cursor: -webkit-grabbing;
+  cursor: -webkit-grabbing !important;
+  -webkit-animation: pulse 1.2s infinite;
+  -moz-animation: pulse 1.2s infinite;
+  -o-animation: pulse 1.2s infinite;
+  animation: pulse 1.2s infinite;
+}
+
+@-webkit-keyframes pulse {
+  50% {box-shadow: inset 0 0 10px 5px #fff;}
+}
+@-moz-keyframes pulse {
+  50% {box-shadow: inset 0 0 10px 5px #fff;}
+}
+@-o-keyframes pulse {
+  50% {box-shadow: inset 0 0 10px 5px #fff;}
+}
+@keyframes pulse {
+  50% {box-shadow: inset 0 0 10px 5px #fff;}
 }
 
 .inactive-panel {
