@@ -541,35 +541,15 @@ var buttons = {
 };
 
 function filter (elem) {
-  console.log($(elem).parent(5));
+  var targetPanel = $(elem)
+  .parent().parent().parent()
+  .parent().parent().parent()
+  .parent().parent().parent()
+  .parent().parent().attr('id');
+  console.log(targetPanel);
 }
 
 function toolbarClick(obj, event) {
-  var id = obj.name.split("_");
-  var elem = 'layout_'+id[0]+'_panel_'+id[1];
-  var panel = pickPanel(elem);
-  var tab = (w2ui[id[0]+'_'+id[1]+'_tabs'] !== undefined) ?
-    w2ui[id[0]+'_'+id[1]+'_tabs'].active : '';
-  switch (event.target) {
-    case 'editmenu:Search':
-      editors[panel.area].execCommand("find");
-      break;
-    case 'tools:Open preview':
-      openPreview(tab);
-      break;
-    case 'share':
-      window.open(tabList[tab].fullUrl, "_blank");
-      break;
-    case 'refresh':
-      $("#" + tabList[tab].id).attr("src", tabList[tab].fullUrl);
-      break;
-    default:
-    //obj.owner.content('main', 'event' + event.target);
-    break;
-  }
-}
-
-function toolbarType(obj, event) {
   var id = obj.name.split("_");
   var elem = 'layout_'+id[0]+'_panel_'+id[1];
   var panel = pickPanel(elem);
