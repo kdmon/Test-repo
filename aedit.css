@@ -16,7 +16,7 @@ body,
 }
 
 .w2ui-reset table, body, .panel-content {
-  font-family: 'raleway', sans !important;
+  font-family: raleway, sans !important;
   
 }
 
@@ -35,10 +35,11 @@ body,
 }
 
 .toolbar-input {
-  font-family: FontAwesome;
-  padding: 3px;
+  font-family: FontAwesome, raleway;
+  font-size: 12px;
+  margin: 0 0 0 5px !important;
   border-radius: 2px;
-  border: 1px solid silver;
+  border: 1px solid silver !important;
 }
 
 .account-icon {
@@ -183,6 +184,11 @@ body,
   overflow: hidden;
   text-overflow: ellipsis;
   cursor: -webkit-grab;
+  cursor: grab;
+}
+
+.w2ui-tabs .w2ui-tab:hover {
+  box-shadow: 0 0 5px 1px rgba(0,0,0,0.5);
 }
 
 .w2ui-tab-close {
@@ -207,7 +213,8 @@ body,
 
 .w2ui-tabs .active {
   background: #fff !important;
-
+  border: 1px solid #fff !important;
+  border-bottom: none !important;
 }
 
 #temporarytab, .drop-highlight {
