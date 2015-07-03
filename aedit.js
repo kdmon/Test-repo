@@ -490,8 +490,8 @@ var buttons = {
   sidebarsearch: {
     type: 'html',
     id: 'sidebarsearch',
-    html: '<div style="padding: 3px 10px;"><input size="8" onkeyup="filter(this)" '+
-    'class="toolbar-input" placeholder="&#xF002; Filter"/></div>'
+    html: '<input size="8" onkeyup="filter(this)" '+
+    'class="toolbar-input" placeholder="&#xF002; Filter"/>'
   },
   previewurl: {
     type: 'html',
