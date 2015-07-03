@@ -347,10 +347,10 @@ var toolbars = {
   topmenu: ['logo', 'topspacer','connection','topbreak1','collaborate','topbreak2', 'account'],
   editor: ['save', 'editmenu', 'tools'],
   preview: ['pause', 'previewurl', 'refresh', 'share'],
-  projectmanager: ['refresh','newproject', 'selectproject', 'closeproject'],
+  projectmanager: ['sidebarsearch', 'refresh','newproject', 'selectproject', 'closeproject'],
   chat: ['url', 'refresh', 'share'],
   prefs: ['url', 'refresh', 'share'],
-  filebrowser: ['refresh', 'share'],
+  filebrowser: ['sidebarsearch','refresh'],
   media: ['url', 'refresh', 'share'],
   empty: ['topbreak1'],
   help: []
@@ -381,9 +381,9 @@ var buttons = {
   collaborate : {
     id: 'collaborate',
     type: 'button',
-    caption: 'Collaborate',
+    caption: 'Co-Edit',
     icon: 'fa fa-comments-o',
-    hint: 'Collaborate with friends via real-time text, audio and video chat.'
+    hint: 'Edit with friends through real-time text, audio and video chat.'
   },
   topbreak2: {
     id: 'topbreak2',
@@ -487,6 +487,12 @@ var buttons = {
     icon: 'fa fa-pause',
     hint: 'Pause'
   },
+  sidebarsearch: {
+    type: 'html',
+    id: 'sidebarsearch',
+    html: '<div style="padding: 3px 10px;"><input size="8" onkeyup="filter(this)" '+
+    'class="toolbar-input" placeholder="&#xF002; Filter"/></div>'
+  },
   previewurl: {
     type: 'html',
     id: 'previewurl',
@@ -534,7 +540,36 @@ var buttons = {
   }
 };
 
+function filter (elem) {
+  console.log($(elem).parent(5));
+}
+
 function toolbarClick(obj, event) {
+  var id = obj.name.split("_");
+  var elem = 'layout_'+id[0]+'_panel_'+id[1];
+  var panel = pickPanel(elem);
+  var tab = (w2ui[id[0]+'_'+id[1]+'_tabs'] !== undefined) ?
+    w2ui[id[0]+'_'+id[1]+'_tabs'].active : '';
+  switch (event.target) {
+    case 'editmenu:Search':
+      editors[panel.area].execCommand("find");
+      break;
+    case 'tools:Open preview':
+      openPreview(tab);
+      break;
+    case 'share':
+      window.open(tabList[tab].fullUrl, "_blank");
+      break;
+    case 'refresh':
+      $("#" + tabList[tab].id).attr("src", tabList[tab].fullUrl);
+      break;
+    default:
+    //obj.owner.content('main', 'event' + event.target);
+    break;
+  }
+}
+
+function toolbarType(obj, event) {
   var id = obj.name.split("_");
   var elem = 'layout_'+id[0]+'_panel_'+id[1];
   var panel = pickPanel(elem);
@@ -1121,7 +1156,6 @@ function showProjects (panelArea) {
       });
       
       refreshTabs();
-      
       
       // 4. render into temporary dom element once
       $('<div id="container_' + id +'" class="panel-content" style="display:none"></div>').appendTo( "body" );
