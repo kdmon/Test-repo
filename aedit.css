@@ -34,6 +34,13 @@ body,
   max-width: 300px !important;
 }
 
+.toolbar-input {
+  font-family: FontAwesome;
+  padding: 3px;
+  border-radius: 2px;
+  border: 1px solid silver;
+}
+
 .account-icon {
   position: relative;
   height: 20px;
@@ -174,6 +181,7 @@ body,
   white-space: nowrap !important;
   overflow: hidden;
   text-overflow: ellipsis;
+  cursor: -webkit-grab;
 }
 
 .w2ui-tab-close {
@@ -184,6 +192,13 @@ body,
 #temporarytab {
   background: linear-gradient(0deg, #afa, #5a5) !important;
   min-width: 120px !important;
+	animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+	from { transform: none; }
+	50% { transform: scale(1.4); }
+	to { transform: none; }
 }
 
 .w2ui-tabs table {
@@ -206,6 +221,7 @@ body,
 .drop-highlight {
   background: linear-gradient(0deg, #aff, #5a5) !important;
   box-shadow: inset 0 0 10px 1px #fff;
+  cursor: -webkit-grabbing;
 }
 
 .inactive-panel {
@@ -333,5 +349,5 @@ body:not(.selectable) {
   /* Required to make elements draggable in old WebKit */
   -khtml-user-drag: element;
   -webkit-user-drag: element;
-  user-drag: none; 
+  user-drag: none;
 }
