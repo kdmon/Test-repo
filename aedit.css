@@ -188,14 +188,13 @@ body,
 }
 
 .w2ui-tabs .w2ui-tab:hover {
-  box-shadow: 0 0 5px 1px rgba(0,0,0,0.5);
+  box-shadow: 0 0 5px 1px rgba(0,0,0,0.4);
 }
 
 .w2ui-tab-close {
   position:absolute;
   margin-left: 100px !important;
 }
-
 
 .w2ui-tabs table {
   min-height: 35px !important;
@@ -219,12 +218,13 @@ body,
 
 #temporarytab, .drop-highlight {
   min-width: 120px !important;
-  box-shadow: inset 0 0 10px 1px #fff;
+  box-shadow: inset 0 0 0px 0px #fff;
   cursor: -webkit-grabbing !important;
-  -webkit-animation: pulse 1.2s infinite;
-  -moz-animation: pulse 1.2s infinite;
-  -o-animation: pulse 1.2s infinite;
-  animation: pulse 1.2s infinite;
+  -webkit-animation: pulse 2s infinite;
+  -moz-animation: pulse 2s infinite;
+  -o-animation: pulse 2s infinite;
+  animation: pulse 2s infinite;
+  border-radius: 5px;
 }
 
 @-webkit-keyframes pulse {
