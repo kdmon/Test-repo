@@ -461,7 +461,6 @@ var buttons = {
       text: 'View changelog',
       icon: 'fa fa-bars'
     },{
-    },{
       text: 'Close file',
       icon: 'fa fa-times-circle'
     }]
