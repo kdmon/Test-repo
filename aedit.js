@@ -345,7 +345,7 @@ function isBinaryFile(bytes, size) {
 /* SETUP TOOLBAR */
 var toolbars = {
   topmenu: ['logo', 'topspacer','connection','topbreak1','collaborate','topbreak2', 'account'],
-  editor: ['save', 'editmenu', 'tools'],
+  editor: ['usermenu','filemenu', 'editmenu', 'tools'],
   preview: ['pause', 'previewurl', 'refresh', 'share'],
   projectmanager: ['sidebarsearch', 'refresh','newproject', 'selectproject', 'closeproject'],
   chat: ['url', 'refresh', 'share'],
@@ -427,6 +427,45 @@ var buttons = {
     icon: 'fa fa-share',
     hint: 'Redo last edit'
   },
+  usermenu: {
+    id: 'usermenu',
+    type: 'menu',
+    disabled: true,
+    caption: '1',
+    icon: 'fa fa-users',
+    arrow: false,
+    items: [{
+      text: 'kdmon',
+      icon: 'fa fa-user'
+    },{
+    },{text: 'Add collaborator',
+      icon: 'fa fa-user-plus'
+    }]
+  },
+  filemenu: {
+    id: 'filemenu',
+    type: 'menu',
+    caption: 'File',
+    icon: '',
+    arrow: false,
+    items: [{
+      text: 'New file',
+      icon: 'fa fa-file-o'
+    },{
+      text: 'Save file',
+      icon: 'fa fa-save'
+    },{
+      text: 'Revert to last save',
+      icon: 'fa fa-history',
+    },{
+      text: 'View changelog',
+      icon: 'fa fa-bars'
+    },{
+    },{
+      text: 'Close file',
+      icon: 'fa fa-times-circle'
+    }]
+  },
   editmenu: {
     id: 'editmenu',
     type: 'menu',
@@ -450,6 +489,9 @@ var buttons = {
     },{
       text: 'Go to line',
       icon: 'fa fa-level-down'
+    },{
+      text: 'Fix indentation',
+      icon: 'fa fa-magic'
     }]
   },
   redobreak: {
@@ -468,16 +510,6 @@ var buttons = {
     },{
       text: 'Share preview',
       icon: 'fa fa-share-alt'
-    },{
-    },{
-      text: 'Fix indentation',
-      icon: 'fa fa-magic'
-    },{
-      text: 'Invite collaborator',
-      icon: 'fa fa-user-plus'
-    },{
-      text: 'Manage revisions',
-      icon: 'fa fa-history'
     }]
   },
   pause: {
