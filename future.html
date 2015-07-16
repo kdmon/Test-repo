@@ -7,7 +7,7 @@ function refreshPDF () {
 }
 function load () {
   pad = location.search.substr(1) ? location.search.substr(1) : "welcome";
-  document.getElementById('editor').src = "http://piratepad.net/p/"+pad+"?showControls=false";
+  document.getElementById('editor').src = "https://beta.etherpad.org/p/"+pad+"?showControls=false";
   $("#pageselect").val(pad);
 }
 
@@ -56,7 +56,8 @@ function goto () {
 }
 
 function openimages () {
-  window.open("http://it4se.com/upload/latex/images/", '_blank', "toolbar=yes, scrollbars=yes, resizable=yes, left=500, width=400, height=400");
+  alert ("feature disabled");
+  //window.open("http://it4se.com/upload/latex/images/", '_blank', "toolbar=yes, scrollbars=yes, resizable=yes, left=500, width=400, height=400");
 }
 
 </script>
@@ -86,9 +87,9 @@ Editing:
 <a class="button large black" href="javascript: insertrandom();">Fetch text</a>
 <input type="text" class="large" size=30 id="randomtext" value="">
 <a class="button large green" href="javascript: refreshPDF();">Update preview</a>
-<a class="button large blue" href="pdf.php">Download</a>
+<a class="button large blue" href="http://fields.ace.ed.ac.uk/fields/wp-content/uploads/2015/02/PuBliCDay1.pdf">Download</a>
 <br/>
 <iframe name='embed_readwrite' id="editor" width=50% height=600></iframe>
-<iframe name='pdf-preview' id='pdf' src='pdf.php?padid=latex' width=48% height=600></iframe>
+<iframe name='pdf-preview' id='pdf' src='http://fields.ace.ed.ac.uk/fields/wp-content/uploads/2015/02/PuBliCDay1.pdf' width=48% height=600></iframe>
 </body>
 </html>
