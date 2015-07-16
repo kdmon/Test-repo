@@ -7,7 +7,7 @@ function refreshPDF () {
 }
 function load () {
   pad = location.search.substr(1) ? location.search.substr(1) : "welcome";
-  document.getElementById('editor').src = "http://it4se.com:9001/p/"+pad+"?showControls=false";
+  document.getElementById('editor').src = "http://piratepad.net/p/"+pad+"?showControls=false";
   $("#pageselect").val(pad);
 }
 
@@ -52,7 +52,7 @@ function insertrandom() {
 }
 
 function goto () {
-  if ($("#pageselect").val()) window.location.href = "./?" +$("#pageselect").val()
+  if ($("#pageselect").val()) window.location.href = "./future.html?" + $("#pageselect").val()
 }
 
 function openimages () {
