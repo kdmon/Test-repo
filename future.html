@@ -1,0 +1,94 @@
+<html>
+<head>
+<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script>
+function refreshPDF () {
+  document.getElementById('pdf').src = document.getElementById('pdf').src
+}
+function load () {
+  pad = location.search.substr(1) ? location.search.substr(1) : "welcome";
+  document.getElementById('editor').src = "http://it4se.com:9001/p/"+pad+"?showControls=false";
+  $("#pageselect").val(pad);
+}
+
+var hash = {
+  'abstract'         :'5',
+  'keywords'         :'5',
+  'introduction'     :'5',
+  'methods'          :'5',
+  'background'       :'5',
+  'rationale'        :'5',
+
+  'findings1'        :'1',
+  'findings2'        :'2',
+  'findings3'        :'3',
+  'discussion'       :'4',
+
+  'rationale'        :'5',
+  'acknowledgements' :'5',
+  'references'       :'5'
+};
+
+function insertrandom() {
+
+  if (hash[location.search.substr(1)]) {
+    url = "http://fields.ace.ed.ac.uk/hadi/fe/getdata.php?q="+hash[location.search.substr(1)];
+
+    $.get(url).always(function( data ) {
+      $("#randomtext").val(data.responseText);
+    });
+
+/*   $.get(url, function( data ) {
+      alert ("got data");
+      $("#randomtext").val(data.responseText);
+   });
+*/
+
+  }
+
+  else {
+    alert ("Generated text not available for this document.");
+  }
+}
+
+function goto () {
+  if ($("#pageselect").val()) window.location.href = "./?" +$("#pageselect").val()
+}
+
+function openimages () {
+  window.open("http://it4se.com/upload/latex/images/", '_blank', "toolbar=yes, scrollbars=yes, resizable=yes, left=500, width=400, height=400");
+}
+
+</script>
+<style>
+ .button {padding: 4px; font-weight: bold; border-radius: 2px; color: white; text-decoration: none; margin-right: 8px;}
+ .large {font-size: 0.9em; font-family: sans;}
+ .red {background: #900;}
+ .blue {background: #00A;}
+ .green {background: #0A0;}
+ .black {background: #555;}
+ body {background: #eee;}
+</style>
+</head>
+<body onload="load()">
+<span>
+
+Editing:
+<select class="button red large" onchange="goto()" id="pageselect">
+<option>welcome</option>
+<option>findings1</option>
+<option>findings2</option>
+<option>findings3</option>
+<option>discussion</option>
+</select>
+</span>
+<a class="button large black" href="javascript: openimages();">Images</a>
+<a class="button large black" href="javascript: insertrandom();">Fetch text</a>
+<input type="text" class="large" size=30 id="randomtext" value="">
+<a class="button large green" href="javascript: refreshPDF();">Update preview</a>
+<a class="button large blue" href="pdf.php">Download</a>
+<br/>
+<iframe name='embed_readwrite' id="editor" width=50% height=600></iframe>
+<iframe name='pdf-preview' id='pdf' src='pdf.php?padid=latex' width=48% height=600></iframe>
+</body>
+</html>
