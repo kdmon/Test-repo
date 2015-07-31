@@ -8,6 +8,18 @@
 [f]: https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Aperture_diagram.svg/640px-Aperture_diagram.svg.png
 [f2]: https://upload.wikimedia.org/wikipedia/commons/d/d7/Apertures.jpg
 
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script>
+  $(".fade").click(function() {
+    var obj = $(this);
+    for (var i=0; i <100; i++) {
+      obj = obj.next();
+      if (obj[0].tagName == "HR") return;
+      else obj.slideToggle();
+    }
+  });
+</script>
+
 ![camera]
 
 # Photography Fun Day at the Pennypit
@@ -21,7 +33,7 @@
 
 ---
 
-# Welcome
+<h1 class="fade">Welcome</h1>
 
 ![karl]
 
@@ -35,6 +47,7 @@ a personal interest in photography:
 - I'm keen to build on ideas from you, and be flexible with topics and structure.
 
 If you have any questions, just ask!
+
 
 ---
 
