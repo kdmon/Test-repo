@@ -380,7 +380,7 @@ It can also have:
 
 ---
 
-## Exercise 1
+### Exercise 1
 
 * Take out your camera, and go through all its buttons and any menu items.
 * Are there any items which you are unfamiliar with?
@@ -529,13 +529,13 @@ There is an infinite number of ways in which to shoot interesting images, some p
 
 ---
 
-# Part 3 - Group discussion of images captured
+## Part 3 - Group discussion of images captured
 
 To be completed separately.
 
 ---
 
-# Part 4 - Photographic technique and concepts
+## Part 4 - Photographic technique and concepts
 
 
 Recap from last morning session:
