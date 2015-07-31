@@ -10,7 +10,7 @@
 
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 <script>
-  $(".fade").click(function() {
+  $("h1, h2, h3, h4, h5, h6").click(function() {
     var obj = $(this);
     for (var i=0; i <100; i++) {
       obj = obj.next();
@@ -33,7 +33,7 @@
 
 ---
 
-<h1 class="fade">Welcome</h1>
+# Welcome
 
 ![karl]
 
