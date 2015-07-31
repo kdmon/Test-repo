@@ -67,21 +67,19 @@ http://www.edinphoto.org.uk/talks/talk_eps_dig_2008_11_10_page_03.htm
 
 The aim of today is to explore your camera and experiment with taking pictures.
 
--Select photographs and describe the strengths and weaknesses of them using recognised terminology.
--Make suggestions for improvements to photographs.
--Present images to peer groups for critique.
--Participate in critiquing the work of others in their peer group.
+- Describe the strengths and weaknesses of photographs using recognised terminology.
+- Make suggestions for improvements to photographs.
+- Present images to peer groups for critique.
 
-    
 The rough plan for today looks like this:
 
   - 9.15am – Welcome tea & coffee.
-  - 9.30am – Morning session: outline of the day, discussion of ideas and the creative brief, photographic technique basics (composition).
+  - 9.30am – Morning session: outline of the day, discussion of ideas and the creative brief, photography.
   - 10.30am – Equipment checks over tea & coffee.
   - 11am – Travel to location.
   - 12.45pm – Return to Pennypit Centre for lunch.
   - 2pm – Afternoon session: presentations of images; peer critique;
-  - 3pm – Advanced photographic techniques; exposure; aperture, shutter speed and ISO; Q&A; resources.
+  - 3pm – Advanced photographic techniques; Q&A;
   - 4pm – Close
 
 ---
