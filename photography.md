@@ -8,17 +8,6 @@
 [f]: https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Aperture_diagram.svg/640px-Aperture_diagram.svg.png
 [f2]: https://upload.wikimedia.org/wikipedia/commons/d/d7/Apertures.jpg
 
-<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-<script>
-  $("h1, h2, h3, h4, h5, h6").click(function() {
-    var obj = $(this);
-    for (var i=0; i <100; i++) {
-      obj = obj.next();
-      if (obj[0].tagName == "HR") return;
-      else obj.slideToggle();
-    }
-  });
-</script>
 
 ![camera]
 
@@ -368,3 +357,38 @@ This is an example of constrait-based photography. This is where you change the 
 ### Brief 3. Abstract art - Can you find and capture interesting patterns or fields of colour in your environment, perhaps from something that otherwise goes unnoticed?
 
 Photographs can be visual art pieces that don't necessarily have to tell a story. This brief can give you a good opportunity to practice macro (close-up) photography, but you could also use non-macro techniques. Some suggestions include experimenting with the framing of the shot, arranging the subject matters and manual focusing (or use the pre-focus function of your camera by holding the shutter down half-way and then reframing before taking the picture). Scan your environment for textures (bark, dried ground, etc), fields of contrasting colour (sky/horizon; treelines; painted structures), interesting shapes, both organic and man-made. 
+
+
+<style>
+  h1, h2, h3, h4, h5, h6 {cursor: pointer};
+  .collapsed:before {
+    content: " - ";
+  }
+  .expanded:before {
+    content: " + ";
+  }
+</style>
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script>
+
+  function toggle (e) {
+    $(e).toggleClass("expanded");
+    var obj = $(e);
+    for (var i=0; i <400; i++) {
+      obj = obj.next();
+      if (obj[0].tagName == "HR") return;
+      else obj.toggle();
+    }
+  }
+
+  $("h1, h2, h3, h4, h5, h6").click(function() {
+    toggle(this);
+  });
+  
+  $("h1, h2, h3, h4, h5, h6").each(function(){
+    $(this).toggleClass("collapsed");
+    toggle(this);
+  });
+  
+</script>
