@@ -34,8 +34,10 @@ a personal interest in photography:
 - I've been teaching courses at Pennypit for three years now.
 - This is the first time we're doing a photography fun day.
 - I'm keen to build on ideas from you, and be flexible with topics and structure.
+- If you have any questions, just ask!
 
-If you have any questions, just ask!
+
+Could we go round the room and introduce everyone?
 
 
 ---
@@ -65,64 +67,26 @@ http://www.edinphoto.org.uk/talks/talk_eps_dig_2008_11_10_page_03.htm
 
 ## Schedule
 
-The aim of today is to explore your camera and experiment with taking pictures.
-
-- Describe the strengths and weaknesses of photographs using recognised terminology.
-- Make suggestions for improvements to photographs.
-- Present images to peer groups for critique.
-
-The rough plan for today looks like this:
+The aim of today is to explore your cameras, experiment with taking pictures and
+answer your questions. The rough plan looks like this:
 
   - 9.15am – Welcome tea & coffee.
-  - 9.30am – Morning session: outline of the day, discussion of ideas and the creative brief, photography.
-  - 10.30am – Equipment checks over tea & coffee.
+  - 9.30am – Part 1 Morning session: discussion of ideas and camera vocabulary.
+  - 10.30am – Part 2 Assignment brief and equipment checks over tea & coffee.
   - 11am – Travel to location.
   - 12.45pm – Return to Pennypit Centre for lunch.
-  - 2pm – Afternoon session: presentations of images; peer critique;
-  - 3pm – Advanced photographic techniques; Q&A;
+  - 2pm – Part 3 Afternoon session: presentations of images; peer critique;
+  - 3pm – Part 4 Advanced photographic techniques; Q&A;
   - 4pm – Close
 
 ---
 
-## Assignment
-
-The purpose of the briefs is to give you a question, theme or goal to encourage you
-to think about how you take pictures. There are three briefs, but you can also suggest
-your own. You are encouraged to work with others!
-
-Be prepared to present some of your pictures in class and discuss which 
-ones you liked the most? Why? How did you create them? What did you learn by 
-taking the pictures, and from the work of others in class? Remember, there often
-isn't a right and wrong answer.
-
----
-
-### Brief 1. Experimental portraiture - Can you take an unusual picture of someone?
-
-People photography is popular, but very hard to do in an interesting way. Recruit a friend as model. Alternate between sitting model and taking pictures. Try out different ways of framing the shot, positioning the sitter, adjusting the way your model is lit and the range of emotions or gestures they can convey. Try both black and white, and colour. Instruct your model how to pose.
-
----
-
-### Brief 2. Vertical landscapes - Most landscapes are shot horizontally, what happens when you shot vertically?
-
-This is an example of constrait-based photography. This is where you change the way you normally shoot by imposing a rule on how you can take your picture. In this case, you have to work creatively with the new aspect ratio that vertical framing brings. By constraining some of your choices, you must think more critically about how you normally go about taking photos. If you want a additional challenge, you could try always shooting in backlit scenes (although this may not work summer at noon).
-
----
-
-### Brief 3. Abstract art - Can you find and capture interesting patterns or fields of colour in your environment, perhaps from something that otherwise goes unnoticed?
-
-Photographs can be visual art pieces that don't necessarily have to tell a story. This brief can give you a good opportunity to practice macro (close-up) photography, but you could also use non-macro techniques. Some suggestions include experimenting with the framing of the shot, arranging the subject matters and manual focusing (or use the pre-focus function of your camera by holding the shutter down half-way and then reframing before taking the picture). Scan your environment for textures (bark, dried ground, etc), fields of contrasting colour (sky/horizon; treelines; painted structures), interesting shapes, both organic and man-made. 
-
----
-
-
-## Part1 - understanding your tools
+## Part 1 - understanding your camera
 
 During the morning session we will:
 
 * Go over the main kinds of cameras, their parts and some terminology.
-* Answer questions you may have about your own cameras and jargon.
-
+* Do an exercise where you can ask any questions about your camera's features.
 ---
 
 ### What is a camera?
@@ -164,6 +128,19 @@ Modern cameras are complex and contain many components, as you can see in this p
 
 ![cut]
 
+Some of the components are:
+
+* CCD/CMOS Sensor
+* Camera lens/objective
+* Image engine
+* Storage system
+* Display and view-finder
+* Flash
+* Camera body and buttons
+* Battery
+
+There is also a wide range of accessory equipment.
+
 ---
 
 #### CCD/CMOS Sensor (film)
@@ -188,9 +165,9 @@ Here an attempt at a basic explanation:
 
 CCDs are complex, so if you are interested in self-study here are some further reading/watching:
 
-* [http://en.wikipedia.org/wiki/Charge-coupled_device CCD article on Wikipedia]
-* [http://www.youtube.com/watch?v=51Za3FY1axI CCD inventors explain working principle] (Youtube)
-* [http://www.youtube.com/watch?v=bqJksXwrx7U Video of the making of a CCD] (Youtube)
+* http://en.wikipedia.org/wiki/Charge-coupled_device - CCD article on Wikipedia
+* http://www.youtube.com/watch?v=51Za3FY1axI - CCD inventors explain working principle (Youtube)
+* http://www.youtube.com/watch?v=bqJksXwrx7U - Video of the making of a CCD (Youtube)
 
 
 ---
@@ -403,173 +380,176 @@ It can also have:
 
 ---
 
-# Part 2 - photographic technique
+# Exercise 1
+
+* Take out your camera, and go through all its buttons and any menu items.
+* Are there any items which you are unfamiliar with?
+
+I will try to answer any questions you may have about your own cameras and jargon.
+
+---
 
 
-Recap from last morning session
+---
 
-* What is a camera and its main components? 
+## Part 2 - Assignment/creative briefs
+
+The purpose of the briefs is to give you a question, theme or goal to encourage you
+to think about how you take pictures. There are three briefs, but you can also suggest
+your own. You are encouraged to work with others!
+
+Be prepared to present some of your pictures in class and discuss which 
+ones you liked the most? Why? How did you create them? What did you learn by 
+taking the pictures, and from the work of others in class? Remember, there often
+isn't a right and wrong answer.
+
+---
+
+### Brief 1. Experimental portraiture - Can you take an unusual picture of someone?
+
+People photography is popular, but very hard to do in an interesting way. Recruit a friend as model. Alternate between sitting model and taking pictures. Try out different ways of framing the shot, positioning the sitter, adjusting the way your model is lit and the range of emotions or gestures they can convey. Try both black and white, and colour. Instruct your model how to pose.
+
+---
+
+### Brief 2. Vertical landscapes - Most landscapes are shot horizontally, what happens when you shot vertically?
+
+This is an example of constrait-based photography. This is where you change the way you normally shoot by imposing a rule on how you can take your picture. In this case, you have to work creatively with the new aspect ratio that vertical framing brings. By constraining some of your choices, you must think more critically about how you normally go about taking photos. If you want a additional challenge, you could try always shooting in backlit scenes (although this may not work summer at noon).
+
+---
+
+### Brief 3. Abstract art - Can you find and capture interesting patterns or fields of colour in your environment, perhaps from something that otherwise goes unnoticed?
+
+Photographs can be visual art pieces that don't necessarily have to tell a story. This brief can give you a good opportunity to practice macro (close-up) photography, but you could also use non-macro techniques. Some suggestions include experimenting with the framing of the shot, arranging the subject matters and manual focusing (or use the pre-focus function of your camera by holding the shutter down half-way and then reframing before taking the picture). Scan your environment for textures (bark, dried ground, etc), fields of contrasting colour (sky/horizon; treelines; painted structures), interesting shapes, both organic and man-made. 
+
+---
+
+### Open brief - Suggest an idea of your own!
+
+Start thinking about what you could do ...
+
+---
+
+### Health and safety
+
+Please be very careful. 
+
+* It is easy to trip over things when you're looking at your camera.
+* Don't take any risks or put anyone in danger.
+* We will be going to an area with uneven ground.
+
+Please speak to me and Ang if you have any concerns, or health related questions!
+
+---
+
+### What makes a good photograph?
+
+When taking pictures, think about what makes good pictures.
+
+* Have a look at the criteria that Wikipedia uses to nominate Featured Pictures.
+
+http://en.wikipedia.org/wiki/Wikipedia:Featured_picture_criteria 
+
+* Also, see this discussion of features pictures candidates
+
+http://en.wikipedia.org/wiki/Wikipedia:Featured_picture_candidates
+
+---
+
+### Composition
+
+Refers to how you frame the subject in the photography.
+
+* How to position the camera?
+  * Looking up, down, diagonally or straight on the subject?
+* How to position the subject relative to the surrounding.
+  * Center the picture on the the subject or use rule of thirds?
+* What focal length, aperture and depth of field to use?
+  * Getting close and personal, or use a wide angle to show surrounding?
+* The perfect moment when to take the picture? (examples by Gregory Crewdson)
+  * http://4.bp.blogspot.com/_sEWmp48ncj8/TLciQ5tZ7jI/AAAAAAAACWo/9IkqEsg_Ndg/s1600/gregory_crewdson2_small.jpg
+  * http://boxandline.files.wordpress.com/2010/06/gregory-crewdson_006.jpg
+
+---
+
+### Rule of thirds
+
+* Simply placing the main subject in the center is predictable and uninteresting.
+* Instead the rule of thirds suggests that the subject should off center.
+* Many cameras has a grid overlay with nine rectangles.
+* The idea is that you can use this to compose your images.
+* Position the subject on one of the intersections of the lines.
+* Remember the rule of thirds is only a guideline.
+
+---
+
+### Depth of field
+
+* Depth of field is the amount of an image that is in focus (see image example).
+* Use depth of field to isolate the subject from the (often distracting) background.
+* It depends on sensor size, aperture, focal length and distance to the subject:
+: A larger sensor gives narrow depth of field (this is why many photographers like full frame DSLRs)
+: A wide aperture gives a narrow depth of field (one reason for why large aperture lenses are desirable).
+: A long focal length will narrow the depth of field (e.g. bird photography usually have only the bird in focus)
+: A short distance to the subject will narrow the depth of field (e.g. macro photography).
+* Lets use the [http://camerasim.com/camera-simulator/ camera simulator] to experiment with these settings.
+* If you have access to a real camera, try isolating an object from the background.
+
+---
+
+### Other compositional techniques
+
+There is an infinite number of ways in which to shoot interesting images, some possible ways include:
+
+* Colour/light contrast.
+* Perspective and lines.
+* Juxaposition (capturing objects that don't fit together).
+* Repetition (creating patterns).
+* Size (e.g. objects of various sizes).
+* Symmetry/asymmetry (e.g. reflections or mirror images).
+
+---
+
+### Some other things to bear in mind
+
+* Composition is an active choice, and as important as getting the exposure right.
+
+* Composition is as much about what we leave in the picture, as what we leave outside.
+
+* Of course the photograph will be judge by others only based on what is in the picture.
+
+* Think about what you want the photograph to say, and how to achieve this using composition.
+
+* There is no right and wrong, sometimes it can be hard to decide between different compositions.
+
+* The answer is that you have to experiment, and critically analyse images you like.
+
+* These are not absolute rules, just suggestions.
+
+
+
+---
+
+# Part 3 - Group discussion of images captured
+
+To be completed separately.
+
+---
+
+# Part 4 - Photographic technique and concepts
+
+
+Recap from last morning session:
+
+* What is a camera and its main components?
 * What other equipment do photographers use?
+* What are the features of the cameras?
+* Composition and image quality
 
----
+The aim of this afternoon session is to go over:
 
-### Photographic genres: Portrait
-
-What is it?
-* Capture of a person's face (and often shoulders).
-
-How to do it?
-* Use a portrait lens (100mm focal length).
-* Soft focus lens can be used to render a more 'flattering' image.
-* Pose the subject, head slightly to one side.
-* Interviews often light the subject from three sides (both sides and from behind).
-* Set camera tripod at same height as the head, and focus on the eyes.
-
-Learn more:
-* [http://en.wikipedia.org/wiki/Three-point_lighting Three point lighting] (wikipedia)
-* [http://en.wikipedia.org/wiki/Soft_focus Soft focus] (wikipedia)
-
----
-
-### Press
-
-What is it?
-* Images that appear in newspapers.
-* Document something about current affairs.
-
-How to do it?
-* Be at the right time, right place.
-* Journalist's pass.
-* Technique to get a good image quickly.
-* Typically fast zoom lens, high ISO and DSLR.
-
-Learn more:
-* [http://www.guardian.co.uk/media/gallery/2012/feb/10/news-photography-photography Press photography awards] (The Guardian)
-* [http://en.wikipedia.org/wiki/Photojournalism Photojournalism] (wikipedia)
-
----
-
-### Sports
-
-
-What is it?
-* Capturing fast moving action sports, e.g. football.
-
-How to do it?
-* Similar to wild life photography.
-* Key is to freeze the motion.
-* Fast telelens (300mm and over, f/4 or better).
-* Tripod for stabilisation.
-* High ISO.
-* Good light.
-
-Learn more
-* [http://en.wikipedia.org/wiki/Sports_photography Sport photography] (wikipedia article)
-
----
-
-### Street photography
-
-
-What is it?
-* Photographing people in a city
-* Aim is to get unposed, [http://en.wikipedia.org/wiki/Candid_photography candid shots].
-
-How to do it?
-* Use a medium telelens (100mm and over) to avoid being intrusive.
-* Consider ethics and subject permission
-
----
-
-### Astrophotography
-[[File:星の軌跡十津川・上湯にてImg042.jpg|thumb|Star trails]]
-
-What is it?
-* Imaging the sky, stars, planets, nebulas and so on
-
-How to do it?
-* Find a dark place (increasingly difficult due to "light pollution").
-* Can use wide angle lens and long exposure to see star trails.
-* Equatorial mount will compensate for the earth's movement (no trails).
-* Telelens to take pictures of the moon.
-* Telescope coupled with camera to take pictures of e.g. Saturn or nebulas.
-* Image stacking using specialist software can result in amazing images.
-
-Learn more:
-* [http://en.wikipedia.org/wiki/Astrophotography Astrophotography article] (wikipedia)
-* [http://www.astropix.com/HTML/I_ASTROP/QUICK.HTM Astrophotography quick start]
-
----
-
-### Landscape
-
-What is it?
-* Capture the beauty of the wild
-* Popular genre
-
-How to do it?
-* Range of lenses, from wide (28mm and under) to telelens
-* Get out at the right time of day (e.g. early morning or dawn)
-* Can use filters to accentuate colours
-* A polarising filter will reduce reflections in leaves and make skies blue.
-
-Learn more:
-* [http://en.wikipedia.org/wiki/Landscape_photography Landscape photography] (wikipedia article)
-*[http://en.wikipedia.org/wiki/Polarizing_filter_%28photography%29 polarising filter] 
-
----
-
-### Macro
-
-What is it?
-* Typicall images of insects and flowers.
-* But could be other small things, not necessarily only nature subjects.
-
-How to do it?
-* Macrolens with close focusing distance.
-* Alternatively, lens bellows, extension tubes or magnification filters.
-* Good light and critical focusing.
-
-Learn more:
-* [http://www.flickr.com/photos/fotoopa_hs/sets/72157611107153997/ Bee in flight apparatus]
-* [http://photo.tutsplus.com/articles/hardware/a-poor-mans-guide-to-budget-macro-photography/ Macrophotography on a budget]
-
----
-
-### Wild life
-[[File:Bos grunniens at Letdar on Annapurna Circuit.jpg|thumb|Yak on Annapurna Circuit]]
-
-What is it?
-* Animals in their natural habitats. 
-
-How to do it?
-* One of the most challenging forms of photography.
-* Bright telelens (300mm up, f/4), high ISO, camouflage and patience.
-* Different animals require different approaches.
-* Small, quick and nocturnal animals are harder due to low light, high magnification and fast motion.
-* Flying birds require special gimbal tripod.
-* If shooting from car, e.g. safari, need extra fast shutter speed.
-
-Learn more:
-* [http://www.bwpawards.org/ British Wildlife Photography Awards]
-* [http://en.wikipedia.org/wiki/Wildlife_photography Wildlife photography] (wikipedia)
-
----
-
-### Abstract
-[[File:Cruz-Diez2.jpg|thumb|Abstract photo]]
-
-What is it?
-* Opinions diverge.
-* "A process of using colours and patterns combined to create an image, with no true meaning or no clear subject involved"
-
-How to do it?
-* Be inventive. 
-* Bend the rules.
-
-Learn more
-* [http://www.flickr.com/groups/abstractphotos/ Abstract photos group] (flickr)
-* [http://wiki.answers.com/Q/What_is_abstract_photography What is abstract photography?] (answers.com)
+* Exposure.
+* Photographic genres.
+* Digital darkroom
 
 ---
 
@@ -668,7 +648,9 @@ In this case, you may want to:
 * decrease exposure to only get the black outline of the person, but get the outside scene properly exposed.
 * alternatively you may want to change to spot metering.
 
-* To learn more, see the [http://www.cambridgeincolour.com/tutorials/camera-metering.htm metering tutorial].
+* To learn more, see the metering tutorial:
+
+http://www.cambridgeincolour.com/tutorials/camera-metering.htm
 
 ---
 
@@ -700,101 +682,161 @@ This is called exposure bracketing.
 ---
 
 
-# What makes a good photograph?
+### Photographic genres: Portrait
 
-* Have a look at the criteria that Wikipedia uses to nominate Featured pictures.
+What is it?
+* Capture of a person's face (and often shoulders).
 
-http://en.wikipedia.org/wiki/Wikipedia:Featured_picture_criteria 
+How to do it?
+* Use a portrait lens (100mm focal length).
+* Soft focus lens can be used to render a more 'flattering' image.
+* Pose the subject, head slightly to one side.
+* Interviews often light the subject from three sides (both sides and from behind).
+* Set camera tripod at same height as the head, and focus on the eyes.
 
-* Also, see this discussion of features pictures candidates
-
-http://en.wikipedia.org/wiki/Wikipedia:Featured_picture_candidates
-
-
-Take 15 minutes looking at the criteria and discussion around some of the nominated images, noting down the following:
-
-* What kind of aspects are important in supporting the nomination of an image to become featured?
-* How have the images been manipulated? Compare the before and after versions.
-* When can image manipulation make an image worse? 
-* 
- 
-See this page for examples:
-
-* http://en.wikipedia.org/wiki/Wikipedia:WIAFP/Examples_of_technical_problems
+Learn more:
+* [http://en.wikipedia.org/wiki/Three-point_lighting Three point lighting] (wikipedia)
+* [http://en.wikipedia.org/wiki/Soft_focus Soft focus] (wikipedia)
 
 ---
 
-### Composition
+### Press
 
-Refers to how you frame the subject in the photography.
+What is it?
+* Images that appear in newspapers.
+* Document something about current affairs.
 
-* How to position the camera?
-  * Looking up, down, diagonally or straight on the subject?
-* How to position the subject relative to the surrounding.
-  * Center the picture on the the subject or use rule of thirds?
-* What focal length, aperture and depth of field to use?
-  * Getting close and personal, or use a wide angle to show surrounding?
-* The perfect moment when to take the picture? (examples by Gregory Crewdson)
-  * http://4.bp.blogspot.com/_sEWmp48ncj8/TLciQ5tZ7jI/AAAAAAAACWo/9IkqEsg_Ndg/s1600/gregory_crewdson2_small.jpg
-  * http://boxandline.files.wordpress.com/2010/06/gregory-crewdson_006.jpg
-  * http://3.bp.blogspot.com/_ZUj0CDz9viM/TScgO-myKjI/AAAAAAAAIm4/TF0-klxMVws/s1600/04.BeneathTheRoses300dpi.jpg
+How to do it?
+* Be at the right time, right place.
+* Journalist's pass.
+* Technique to get a good image quickly.
+* Typically fast zoom lens, high ISO and DSLR.
 
----
-
-### Rule of thirds
-
-* Simply placing the main subject in the center is predictable and uninteresting.
-* Instead the rule of thirds suggests that the subject should off center.
-* Many cameras has a grid overlay with nine rectangles.
-* The idea is that you can use this to compose your images.
-* Position the subject on one of the intersections of the lines.
-* Remember the rule of thirds is only a guideline.
+Learn more:
+* [http://www.guardian.co.uk/media/gallery/2012/feb/10/news-photography-photography Press photography awards] (The Guardian)
+* [http://en.wikipedia.org/wiki/Photojournalism Photojournalism] (wikipedia)
 
 ---
 
-### Depth of field
+### Sports
 
-* Depth of field is the amount of an image that is in focus (see image example).
-* Use depth of field to isolate the subject from the (often distracting) background.
-* It depends on sensor size, aperture, focal length and distance to the subject:
-: A larger sensor gives narrow depth of field (this is why many photographers like full frame DSLRs)
-: A wide aperture gives a narrow depth of field (one reason for why large aperture lenses are desirable).
-: A long focal length will narrow the depth of field (e.g. bird photography usually have only the bird in focus)
-: A short distance to the subject will narrow the depth of field (e.g. macro photography).
-* Lets use the [http://camerasim.com/camera-simulator/ camera simulator] to experiment with these settings.
-* If you have access to a real camera, try isolating an object from the background.
 
----
+What is it?
+* Capturing fast moving action sports, e.g. football.
 
-### Other compositional techniques
+How to do it?
+* Similar to wild life photography.
+* Key is to freeze the motion.
+* Fast telelens (300mm and over, f/4 or better).
+* Tripod for stabilisation.
+* High ISO.
+* Good light.
 
-There is an infinite number of ways in which to shoot interesting images, some possible ways include:
-
-:* Colour/light contrast.
-:* Perspective and lines.
-:* Juxaposition (capturing objects that don't fit together).
-:* Repetition (creating patterns).
-:* Size (e.g. objects of various sizes).
-:* Symmetry/asymmetry (e.g. reflections or mirror images).
+Learn more
+* [http://en.wikipedia.org/wiki/Sports_photography Sport photography] (wikipedia article)
 
 ---
 
-### Some other things to bear in mind
+### Street photography
 
-* Composition is an active choice, and as important as getting the exposure right.
 
-* Composition is as much about what we leave in the picture, as what we leave outside.
+What is it?
+* Photographing people in a city
+* Aim is to get unposed, [http://en.wikipedia.org/wiki/Candid_photography candid shots].
 
-* Of course the photograph will be judge by others only based on what is in the picture.
+How to do it?
+* Use a medium telelens (100mm and over) to avoid being intrusive.
+* Consider ethics and subject permission
 
-* Think about what you want the photograph to say, and how to achieve this using composition.
-: Going back to Gregory Crewdson, what does he want to say and how does he achieve it?
+---
 
-* There is no right and wrong, sometimes it can be hard to decide between different compositions.
+### Astrophotography
 
-* The answer is that you have to experiment, and critically analyse images you like.
+What is it?
+* Imaging the sky, stars, planets, nebulas and so on
 
-* These are not absolute rules, just suggestions.
+How to do it?
+* Find a dark place (increasingly difficult due to "light pollution").
+* Can use wide angle lens and long exposure to see star trails.
+* Equatorial mount will compensate for the earth's movement (no trails).
+* Telelens to take pictures of the moon.
+* Telescope coupled with camera to take pictures of e.g. Saturn or nebulas.
+* Image stacking using specialist software can result in amazing images.
+
+Learn more:
+* [http://en.wikipedia.org/wiki/Astrophotography Astrophotography article] (wikipedia)
+* [http://www.astropix.com/HTML/I_ASTROP/QUICK.HTM Astrophotography quick start]
+
+---
+
+### Landscape
+
+What is it?
+* Capture the beauty of the wild
+* Popular genre
+
+How to do it?
+* Range of lenses, from wide (28mm and under) to telelens
+* Get out at the right time of day (e.g. early morning or dawn)
+* Can use filters to accentuate colours
+* A polarising filter will reduce reflections in leaves and make skies blue.
+
+Learn more:
+* [http://en.wikipedia.org/wiki/Landscape_photography Landscape photography] (wikipedia article)
+*[http://en.wikipedia.org/wiki/Polarizing_filter_%28photography%29 polarising filter] 
+
+---
+
+### Macro
+
+What is it?
+* Typicall images of insects and flowers.
+* But could be other small things, not necessarily only nature subjects.
+
+How to do it?
+* Macrolens with close focusing distance.
+* Alternatively, lens bellows, extension tubes or magnification filters.
+* Good light and critical focusing.
+
+Learn more:
+* [http://www.flickr.com/photos/fotoopa_hs/sets/72157611107153997/ Bee in flight apparatus]
+* [http://photo.tutsplus.com/articles/hardware/a-poor-mans-guide-to-budget-macro-photography/ Macrophotography on a budget]
+
+---
+
+### Wild life
+[[File:Bos grunniens at Letdar on Annapurna Circuit.jpg|thumb|Yak on Annapurna Circuit]]
+
+What is it?
+* Animals in their natural habitats. 
+
+How to do it?
+* One of the most challenging forms of photography.
+* Bright telelens (300mm up, f/4), high ISO, camouflage and patience.
+* Different animals require different approaches.
+* Small, quick and nocturnal animals are harder due to low light, high magnification and fast motion.
+* Flying birds require special gimbal tripod.
+* If shooting from car, e.g. safari, need extra fast shutter speed.
+
+Learn more:
+* [http://www.bwpawards.org/ British Wildlife Photography Awards]
+* [http://en.wikipedia.org/wiki/Wildlife_photography Wildlife photography] (wikipedia)
+
+---
+
+### Abstract
+
+What is it?
+* Opinions diverge.
+* "A process of using colours and patterns combined to create an image, with no true meaning or no clear subject involved"
+
+How to do it?
+* Be inventive. 
+* Bend the rules.
+
+Learn more
+* [http://www.flickr.com/groups/abstractphotos/ Abstract photos group] (flickr)
+* [http://wiki.answers.com/Q/What_is_abstract_photography What is abstract photography?] (answers.com)
 
 ---
 
@@ -860,29 +902,24 @@ Here is a selection of further resources on composition:
 * http://en.wikipedia.org/wiki/Composition_%28visual_arts%29
 
 
-Professional photographers
-
-= Portfolios of professional photographers =
-
+# Portfolios of professional photographers
 
 
 Here are some online galleries of photographers that I would like to suggest:
 
-* [http://www.manuelcafini.it/ Manuel Cafini] (specialises in long exposures using strobe light)
+* http://www.michaeladamek.de/ Michael Adamek (urban, nature, landscape, HDR photography)
 
-* [http://www.michaeladamek.de/ Michael Adamek] (urban, nature, landscape, HDR photography)
+* http://www.flickr.com/photos/shmileblik/sets/72157628813229209/with/7003230236 Shmileblik] (narrative self-portraits with digital overlays)
 
-* [http://www.flickr.com/photos/shmileblik/sets/72157628813229209/with/7003230236/ Shmileblik] (narrative self-portraits with digital overlays)
+* http://inspirationfeed.com/inspiration/artists/30-pictures-of-invisible-man-by-liu-bolin/ Liu Bolin (Chinese artist)
 
-* [http://inspirationfeed.com/inspiration/artists/30-pictures-of-invisible-man-by-liu-bolin/ Liu Bolin] (Chinese artist)
+* http://www.tumblr.com/tagged/andreas-gursky Andreas Gursky (subtle digital manipulation, worlds most expensive photograph $4M)
 
-* [http://www.tumblr.com/tagged/andreas-gursky Andreas Gursky] (subtle digital manipulation, worlds most expensive photograph $4M)
+* http://linaalriksson.com/galleri/reportage/ Lina Alriksson (freelance press photographer, covering current affairs in Sweden)
 
-* [http://linaalriksson.com/galleri/reportage/ Lina Alriksson] (freelance press photographer, covering current affairs in Sweden)
+* http://karlwilliamsphotography.co.uk/galleries Karl William (Scottish nature, vibrant {over?}saturated images)
 
-* [http://karlwilliamsphotography.co.uk/galleries Karl William] (Scottish nature, vibrant {over?}saturated images)
-
-* [http://www.felicefrankel.com/felice-frankel-limited-edition/home-page-images/ Felice Frankel] (macro, science oriented)
+* http://www.felicefrankel.com/felice-frankel-limited-edition/home-page-images/ Felice Frankel (macro, science oriented)
 
 
 
