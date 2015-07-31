@@ -415,9 +415,7 @@ Recap from last morning session
 
 ---
 
-### Photographic genres 
-
-### Portrait
+### Photographic genres: Portrait
 
 What is it?
 * Capture of a person's face (and often shoulders).
@@ -433,6 +431,7 @@ Learn more:
 * [http://en.wikipedia.org/wiki/Three-point_lighting Three point lighting] (wikipedia)
 * [http://en.wikipedia.org/wiki/Soft_focus Soft focus] (wikipedia)
 
+---
 
 ### Press
 
@@ -449,6 +448,8 @@ How to do it?
 Learn more:
 * [http://www.guardian.co.uk/media/gallery/2012/feb/10/news-photography-photography Press photography awards] (The Guardian)
 * [http://en.wikipedia.org/wiki/Photojournalism Photojournalism] (wikipedia)
+
+---
 
 ### Sports
 
@@ -467,6 +468,7 @@ How to do it?
 Learn more
 * [http://en.wikipedia.org/wiki/Sports_photography Sport photography] (wikipedia article)
 
+---
 
 ### Street photography
 
@@ -479,6 +481,7 @@ How to do it?
 * Use a medium telelens (100mm and over) to avoid being intrusive.
 * Consider ethics and subject permission
 
+---
 
 ### Astrophotography
 [[File:星の軌跡十津川・上湯にてImg042.jpg|thumb|Star trails]]
@@ -498,6 +501,7 @@ Learn more:
 * [http://en.wikipedia.org/wiki/Astrophotography Astrophotography article] (wikipedia)
 * [http://www.astropix.com/HTML/I_ASTROP/QUICK.HTM Astrophotography quick start]
 
+---
 
 ### Landscape
 
@@ -515,6 +519,7 @@ Learn more:
 * [http://en.wikipedia.org/wiki/Landscape_photography Landscape photography] (wikipedia article)
 *[http://en.wikipedia.org/wiki/Polarizing_filter_%28photography%29 polarising filter] 
 
+---
 
 ### Macro
 
@@ -531,6 +536,7 @@ Learn more:
 * [http://www.flickr.com/photos/fotoopa_hs/sets/72157611107153997/ Bee in flight apparatus]
 * [http://photo.tutsplus.com/articles/hardware/a-poor-mans-guide-to-budget-macro-photography/ Macrophotography on a budget]
 
+---
 
 ### Wild life
 [[File:Bos grunniens at Letdar on Annapurna Circuit.jpg|thumb|Yak on Annapurna Circuit]]
@@ -549,6 +555,8 @@ How to do it?
 Learn more:
 * [http://www.bwpawards.org/ British Wildlife Photography Awards]
 * [http://en.wikipedia.org/wiki/Wildlife_photography Wildlife photography] (wikipedia)
+
+---
 
 ### Abstract
 [[File:Cruz-Diez2.jpg|thumb|Abstract photo]]
