@@ -380,7 +380,7 @@ It can also have:
 
 ---
 
-# Exercise 1
+## Exercise 1
 
 * Take out your camera, and go through all its buttons and any menu items.
 * Are there any items which you are unfamiliar with?
