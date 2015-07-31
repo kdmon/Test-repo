@@ -860,6 +860,30 @@ Here is a selection of further resources on composition:
 * http://en.wikipedia.org/wiki/Composition_%28visual_arts%29
 
 
+Professional photographers
+
+= Portfolios of professional photographers =
+
+
+
+Here are some online galleries of photographers that I would like to suggest:
+
+* [http://www.manuelcafini.it/ Manuel Cafini] (specialises in long exposures using strobe light)
+
+* [http://www.michaeladamek.de/ Michael Adamek] (urban, nature, landscape, HDR photography)
+
+* [http://www.flickr.com/photos/shmileblik/sets/72157628813229209/with/7003230236/ Shmileblik] (narrative self-portraits with digital overlays)
+
+* [http://inspirationfeed.com/inspiration/artists/30-pictures-of-invisible-man-by-liu-bolin/ Liu Bolin] (Chinese artist)
+
+* [http://www.tumblr.com/tagged/andreas-gursky Andreas Gursky] (subtle digital manipulation, worlds most expensive photograph $4M)
+
+* [http://linaalriksson.com/galleri/reportage/ Lina Alriksson] (freelance press photographer, covering current affairs in Sweden)
+
+* [http://karlwilliamsphotography.co.uk/galleries Karl William] (Scottish nature, vibrant {over?}saturated images)
+
+* [http://www.felicefrankel.com/felice-frankel-limited-edition/home-page-images/ Felice Frankel] (macro, science oriented)
+
 
 
 <style>
