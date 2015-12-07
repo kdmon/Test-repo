@@ -593,6 +593,18 @@ function toolbarClick(obj, event) {
     case 'tools:Open preview':
       openPreview(tab);
       break;
+    case 'filemenu:Save file':
+      var content = editors[tabList[tab].panel].getSession().getValue();
+      var path =  tabList[tab].path;
+      var reponame = tabList[tab].id.split('/')[1];
+      var message = prompt("Please describe your changes to the file", "Update file.");
+
+      var repo = github.getRepo(config.user, reponame);
+      repo.write('master', path, content, message, function(err) {
+        console.log ("committing ");
+        console.log (err)
+      });
+      break;
     case 'share':
       window.open(tabList[tab].fullUrl, "_blank");
       break;
@@ -1511,6 +1523,7 @@ function startDoc(settings) {
           tabList[tabId] = {
             id: tabId,
             caption: title,
+            path: path,
             panel: location.area,
             type: 'editor',
             editSession: editSession
