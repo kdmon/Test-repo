@@ -1582,7 +1582,7 @@ function startDoc(settings) {
           editors[location.area] = ace.edit("editor" + location.area);
           editors[location.area].setBehavioursEnabled(true);
           
-          if (localStorage.fontSize) {$(".editor").css("font-size", localStorage.fontSize + "px");}
+          if (localStorage.fontSize) {$(".panel-editor").css("font-size", localStorage.fontSize + "px");}
           
           editors[location.area].setOptions({
             enableBasicAutocompletion: true
