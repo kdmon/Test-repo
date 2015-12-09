@@ -11,6 +11,11 @@ body,
   background: #6869A7;
 }
 
+#layoutContainer {
+  margin-right: 60px;
+  height: 100%;
+}
+
 .w2ui-reset table, body, .panel-content {
   font-family: raleway, sans !important;
   
