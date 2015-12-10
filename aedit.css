@@ -133,8 +133,8 @@ body {
   border: 0;
 }
 
-.w2ui-reset table, .w2ui-node-caption {
-  font-size: 14px !important;
+.w2ui-reset table tr td, .w2ui-node-caption {
+  font-size: 16px !important;
 }
 
 .small-button {
