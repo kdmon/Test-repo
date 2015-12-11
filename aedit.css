@@ -19,6 +19,16 @@ body {
   height: 100%;
 }
 
+.ace_search_field, .ace_replacebtn, .ace_button {
+  font-size: 18px;
+}
+
+.ace_search {
+  width: 100% !important;
+  max-width: 400px !important;
+  margin-right: 18px !important;
+}
+
 .w2ui-reset table, body, .panel-content {
   font-family: raleway, sans !important;
   
@@ -33,10 +43,6 @@ body {
   z-index: 120;
 }
 
-.ace_search {
-  width: 100% !important;
-  max-width: 300px !important;
-}
 
 .toolbar-input {
   font-family: FontAwesome, raleway;
