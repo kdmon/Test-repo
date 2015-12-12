@@ -30,7 +30,11 @@ body {
 .ace_search {
   width: 100% !important;
   max-width: 400px !important;
-  margin-right: 18px !important;
+  padding: 10px;
+}
+
+.ace_search.right {
+  right: 18px !important;
 }
 
 .w2ui-reset table, body, .panel-content {
