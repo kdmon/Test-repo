@@ -23,14 +23,29 @@ body {
   content: none !important;
 }
 
-.ace_search_field, .ace_replacebtn, .ace_button {
+.ace_search_field {
   font-size: 18px;
+  width: 135px !important;
+}
+
+.ace_button, .ace_replacebtn, .ace_searchbtn{
+  background-color: #f5f5f5 !important;
+}
+
+.ace_replacebtn, .ace_searchbtn {
+  margin-left: 2px !important;
+  padding: 4px !important;
+}
+
+.ace_search_options {
+  margin-top: 2px;
 }
 
 .ace_search {
-  width: 100% !important;
-  max-width: 400px !important;
-  padding: 10px;
+  min-width: 300px;
+  border: 1px solid #ccc !important;
+  border-bottom-right-radius: 5px !important;
+  background-color: #fff !important;
 }
 
 .ace_search.right {
