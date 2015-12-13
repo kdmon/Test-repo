@@ -13,7 +13,7 @@ body,
 
 body {
   overflow: hidden;
-  background: #eee url("http://subtlepatterns2015.subtlepatterns.netdna-cdn.com/patterns/squared_metal.png");
+  background: #ddd;
 }
 
 
@@ -246,7 +246,7 @@ body {
 
 .w2ui-tabs .active {
   background: #fff !important;
-  border: 1px solid #fff !important;
+  border: 1px solid #999 !important;
   border-bottom: none !important;
 }
 
