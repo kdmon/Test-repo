@@ -1270,6 +1270,12 @@ function openProject (user, repository, branch, panelArea) {
       $('<div id="container_' + id +'" class="panel-content" style="display:none"></div>').appendTo( "body" );
       $("#container_"+id).w2sidebar({
         name: id,
+        menu : [
+            { id: 1, text: 'Edit', img: 'icon-page' },
+            { id: 2, text: 'Preview', img: 'icon-page' },
+            { id: 3, text: 'Rename', img: 'icon-page' },
+            { id: 4, text: 'Delete', img: 'icon-page' }
+        ],
         nodes: fileNodes
       });
       
