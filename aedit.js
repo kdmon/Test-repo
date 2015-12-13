@@ -488,9 +488,6 @@ var buttons = {
     },{
       text: 'Go to line',
       icon: 'fa fa-level-down'
-    },{
-      text: 'Fix indentation',
-      icon: 'fa fa-magic'
     }]
   },
   redobreak: {
@@ -504,6 +501,10 @@ var buttons = {
     icon: '',
     arrow: false,
     items: [{
+      text: 'Fix indentation',
+      icon: 'fa fa-magic'
+    },{
+    },{
       text: 'Open preview',
       icon: 'fa fa-tablet'
     },{
@@ -592,6 +593,9 @@ function toolbarClick(obj, event) {
       break;
     case 'editmenu:Replace':
       editors[panel.area].execCommand("replace");
+      break;
+    case 'editmenu:Go to line':
+      editors[panel.area].execCommand("gotoline");
       break;
     case 'tools:Open preview':
       openPreview(tab);
