@@ -372,7 +372,7 @@ var buttons = {
   connection : {
     id: 'connection',
     type: 'html',
-    html: '<span class="fa fa-circle fa-x" style="color: #0b0 !important;"></span> Connected.'
+    html: '<span class="fa fa-circle fa-x" style="color: #0b0 !important;"></span> Connected'
   }, 
   topbreak1 :{
     id: 'topbreak1',
@@ -381,7 +381,7 @@ var buttons = {
   collaborate : {
     id: 'collaborate',
     type: 'button',
-    caption: 'Co-Edit',
+    caption: 'Collab',
     icon: 'fa fa-comments-o',
     hint: 'Edit with friends through real-time text, audio and video chat.'
   },
@@ -395,7 +395,7 @@ var buttons = {
     caption: 'Account',
     title: 'Manage your account',
     items: [{
-      text: 'Preferences',
+      text: 'Options',
       icon: 'fa fa-wrench'
     }, {
       text: 'Sign out',
