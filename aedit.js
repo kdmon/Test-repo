@@ -601,8 +601,8 @@ function toolbarClick(obj, event) {
 
       var repo = github.getRepo(config.user, reponame);
       repo.write('master', path, content, message, function(err) {
-        console.log ("committing ");
-        console.log (err)
+        if (err) alert ("Failed to save changes! " + err)
+        else alert ("Changes saved successfully!");
       });
       break;
     case 'share':
