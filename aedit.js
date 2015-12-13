@@ -656,6 +656,7 @@ function openPreview (url, caption, panel) {
   
   w2ui[location.layout].get(location.panel).tabs.add({
     id: previewId,
+    closable: true,
     caption: '<i class="fa fa-eye"></i> ' + title
   });
       
@@ -816,7 +817,7 @@ function handleDrop(originalId, destination, insertBefore) {
   var originalTab = origin.join("_");
   // jQuery doesn't handle slashes in id, so use native js function instead
   var originalCaption = document.getElementById(originalId);
-  originalCaption = $(originalCaption).find( "div" ).html();
+  originalCaption = $(originalCaption).children().last().html();
   var target = destination.id.split("_");
   var targetLayout = target[1];
   var targetPanel = target[2];
@@ -833,19 +834,19 @@ function handleDrop(originalId, destination, insertBefore) {
   if (targetTab && (insertBefore || !tabExists)) w2ui[targetLayout].get(targetPanel).tabs.insert(targetTab, {
     id: originalTab,
     caption: originalCaption,
-    closable: false
+    closable: true
   });
   // Insert after
   else if (targetTab) w2ui[targetLayout].get(targetPanel).tabs.insert(nextTab, {
     id: originalTab,
     caption: originalCaption,
-    closable: false
+    closable: true
   });
   // Empty tab bar
   else w2ui[targetLayout].get(targetPanel).tabs.add({
     id: originalTab,
     caption: originalCaption,
-    closable: false
+    closable: true
   });
   
   var tabLength = w2ui[targetLayout].get(targetPanel).tabs.tabs.length;
@@ -1260,6 +1261,7 @@ function openProject (user, repository, branch, panelArea) {
       };
       w2ui[location.layout].get(location.panel).tabs.add({
         id: id,
+        closable: true,
         caption: title
       });
       
@@ -1301,6 +1303,11 @@ function openProject (user, repository, branch, panelArea) {
             id: 'newfile',
             text: 'New file...',
             icon: 'fa fa-file-o'
+          },
+                    {
+            id: 'newdirectory',
+            text: 'Upload...',
+            icon: 'fa fa-upload'
           }
         ],
         nodes: fileNodes
@@ -1703,6 +1710,7 @@ function startDoc(settings) {
           // add tab and listen for tab close clicks
           w2ui[location.layout].get(location.panel).tabs.add({
             id: tabId,
+            closable: true,
             caption: '<i class="fa fa-file-text-o"></i> ' + title
           });
           
