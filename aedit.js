@@ -590,6 +590,9 @@ function toolbarClick(obj, event) {
     case 'editmenu:Search':
       editors[panel.area].execCommand("find");
       break;
+    case 'editmenu:Replace':
+      editors[panel.area].execCommand("replace");
+      break;
     case 'tools:Open preview':
       openPreview(tab);
       break;
