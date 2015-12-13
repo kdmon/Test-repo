@@ -123,16 +123,12 @@ body {
   font-family: 'Raleway', sans-serif;
   vertical-align: bottom;
   font-weight: normal;
-  margin-top: -30px;
-  padding: 20px 40px 10px 5px;
+  margin-top: -26px;
+  padding: 20px 20px 10px 5px;
   text-shadow: 1px 1px #eee;
-  border-radius: 0 0 70px 0;
-  box-shadow: -3px -1px 70px 0 #008;
 }
 
 #logo:hover {
-  margin-top: -30px;
-  padding: 20px 40px 10px 5px;
   background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.3));
   background: linear-gradient(45deg, rgba(255,255,205,0.8) 20%, rgba(250,250,250,0.3)) !important;
 }
@@ -166,6 +162,7 @@ body {
   background: linear-gradient(0deg, #77a, #bce 20%,#fff) !important;
   height: 58px;
   border: 0;
+  padding-top: 0;
 }
 
 .w2ui-reset table tr td, .w2ui-node-caption {
@@ -194,8 +191,6 @@ body {
 
 .w2ui-toolbar {
   min-height: 35px;
-  border-top: 1px #fff solid !important;
-  border-bottom: 1px #ccc solid !important;
   background: white !important;
 }
 
@@ -362,7 +357,7 @@ body {
 
 .w2ui-resize-toggle {
   background: #eee;
-  border: 1px solid #b4b4b4;
+  border: 1px solid #fff;
   color: #aaa;
   z-index: 301;
   cursor: pointer;
@@ -371,9 +366,9 @@ body {
 }
 
 .w2ui-resize-toggle:hover{
-  background: #fff;
+  background: #aaa;
   border: 1px solid #aaa;
-  color: #999;
+  color: #eee;
 }
 
 .w2ui-horizontal-resizer .w2ui-resize-toggle {
