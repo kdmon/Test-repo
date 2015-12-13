@@ -729,7 +729,7 @@ function refreshTabs() {
   var tabContainer = ".w2ui-panel-tabs td:last-child";
   var tabArea = "#temporarytab";
   $(tabContainer).removeClass('drop-highlight');
-  $(tabSelector).off("dragstart").off("dragenter").off("dragleave").off("drag").off("dragend").off("drop");
+  $(tabSelector).off("dragstart").off("dragenter").off("dragleave").off("drag").off("dragend").off("drop").off("close");
   $(tabSelector).attr("draggable", "true");
   $(tabSelector).on("dragstart", function(event) {
     //event.preventDefault();
@@ -754,8 +754,12 @@ function refreshTabs() {
     $(tabContainer).removeClass('drop-highlight');
     $(this).show();
   });
+  $(tabSelector).on("close", function(event) {
+    console.log(event);
+    event.preventDefault();
+  });
   // remove existing events on tabcontainer
-  $(tabContainer).off("dragstart").off("dragenter").off("dragleave").off("drag").off("dragend").off("drop");
+  $(tabContainer).off("dragstart").off("dragenter").off("dragleave").off("drag").off("dragend").off("drop").off("close");
   // Allow dropping by preventing default event!
   $(tabContainer).on("dragover", function(event) {
     event.preventDefault();
@@ -765,6 +769,32 @@ function refreshTabs() {
     var originalId = draggedTabId; //event.originalEvent.dataTransfer.getData("text");
     handleDrop (originalId, this);
   });
+  /*
+  w2ui[location.layout].get(location.panel).tabs.on('close', function(event) {
+    console.log(event);
+    return;
+    
+    var proceed = false;
+    
+    var editorIndex = tabList[tabId].panel;
+    var saved = editors[editorIndex].getSession().getUndoManager().isClean();
+  
+    if (!saved) proceed = confirm ("Are you sure you want to close this unsaved file?")
+  
+    if (saved || proceed) {
+      doc.close();
+      doc.detach_ace();
+      // Remove editsession from editor object ???
+      // editors[editorIndex].destroy();
+      delete tabList[tabId];
+    }
+  
+    // Don't close it
+    else event.preventDefault();
+    
+  });
+*/
+  
 }
 
 // Insert tab drop area and bind events to it
@@ -932,6 +962,10 @@ function tabClick(obj, event) {
 
 // Clean up tab content
 function tabClose(obj, event) {
+  
+  console.log (obj);
+  console.log (event);
+  setTimeout(updateLayout, 250);
   // w2ui destroy
   // ace detach etc...
 }
@@ -1715,30 +1749,6 @@ function startDoc(settings) {
           });
           
           // needs to be handled elsewhere for all tabs at once!
-          /*
-          w2ui.tabs.on('close', function(event) {
-            
-            var proceed = false;
-            
-            var editorIndex = tabList[tabId].panel;
-            var saved = editors[editorIndex].getSession().getUndoManager().isClean();
-
-            if (!saved) proceed = confirm ("Are you sure you want to close this unsaved file?")
-
-            if (saved || proceed) {
-              doc.close();
-              doc.detach_ace();
-              // Remove editsession from editor object ???
-              // editors[editorIndex].destroy();
-              delete tabList[tabId];
-            }
-
-            // Don't close it
-            else event.preventDefault();
-            
-          });
-          */
-          
           
                   
           // alert ("running");
@@ -1755,7 +1765,8 @@ function startDoc(settings) {
   });
 }
 
-
+          
+          
 var cursors = {};
 var selections = {};
 var cursorHash = [];
