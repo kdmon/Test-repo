@@ -817,7 +817,6 @@ function handleDrop(originalId, destination, insertBefore) {
   // jQuery doesn't handle slashes in id, so use native js function instead
   var originalCaption = document.getElementById(originalId);
   originalCaption = $(originalCaption).find( "div" ).html();
-  alert(originalCaption);
   var target = destination.id.split("_");
   var targetLayout = target[1];
   var targetPanel = target[2];
