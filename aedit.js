@@ -649,14 +649,14 @@ function openPreview (url, caption, panel) {
   tabList[previewId] = {
     id: previewId,
     fullUrl: fullUrl,
-    caption: title,
+    caption: '<i class="fa fa-eye"></i> ' + title,
     panel: location.area,
     type: 'preview'
   };
   
   w2ui[location.layout].get(location.panel).tabs.add({
     id: previewId,
-    caption: title
+    caption: '<i class="fa fa-eye"></i> ' + title
   });
       
   refreshTabs();
@@ -816,7 +816,8 @@ function handleDrop(originalId, destination, insertBefore) {
   var originalTab = origin.join("_");
   // jQuery doesn't handle slashes in id, so use native js function instead
   var originalCaption = document.getElementById(originalId);
-  originalCaption = $(originalCaption).text();
+  originalCaption = $(originalCaption).find( "div" ).html();
+  alert(originalCaption);
   var target = destination.id.split("_");
   var targetLayout = target[1];
   var targetPanel = target[2];
@@ -833,19 +834,19 @@ function handleDrop(originalId, destination, insertBefore) {
   if (targetTab && (insertBefore || !tabExists)) w2ui[targetLayout].get(targetPanel).tabs.insert(targetTab, {
     id: originalTab,
     caption: originalCaption,
-    closable: 'true'
+    closable: false
   });
   // Insert after
   else if (targetTab) w2ui[targetLayout].get(targetPanel).tabs.insert(nextTab, {
     id: originalTab,
     caption: originalCaption,
-    closable: 'true'
+    closable: false
   });
   // Empty tab bar
   else w2ui[targetLayout].get(targetPanel).tabs.add({
     id: originalTab,
     caption: originalCaption,
-    closable: 'true'
+    closable: false
   });
   
   var tabLength = w2ui[targetLayout].get(targetPanel).tabs.tabs.length;
@@ -1180,13 +1181,13 @@ function showProjects (panelArea) {
       // 3. Show tab
       tabList[id] = {
         id: id,
-        caption: 'My Projects',
+        caption: '<i class="fa fa-hdd-o"></i> Projects',
         type: 'projectmanager',
         panel: location.area
       };
       w2ui[location.layout].get(location.panel).tabs.add({
         id: id,
-        caption: 'My Projects'
+        caption: '<i class="fa fa-hdd-o"></i> Projects'
       });
       
       refreshTabs();
@@ -1239,7 +1240,7 @@ function openProject (user, repository, branch, panelArea) {
   branch = (branch !== undefined) ? branch : 'master';
   // 1. Fetch repo files, recursively - should be allocated to a worker
   repo.getTree(branch + '?recursive=true', function (err, tree) {
-    var title = "File Browser<br/>" + repository;
+    var title = '<i class="fa fa-folder-open-o"></i> ' + repository;
     var id = "filebrowser" + Math.round(Math.random() * 10000000);
 
     if (err) {
@@ -1271,10 +1272,37 @@ function openProject (user, repository, branch, panelArea) {
       $("#container_"+id).w2sidebar({
         name: id,
         menu : [
-            { id: 1, text: 'Edit', img: 'icon-page' },
-            { id: 2, text: 'Preview', img: 'icon-page' },
-            { id: 3, text: 'Rename', img: 'icon-page' },
-            { id: 4, text: 'Delete', img: 'icon-page' }
+          {
+            id: 'editfile',
+            text: 'Edit',
+            icon: 'fa fa-pencil'
+          },
+          {
+            id: 'previewfile',
+            text: 'Preview',
+            icon: 'fa fa-eye'
+          },
+          {
+            id: 'renamefile',
+            text: 'Rename',
+            icon: 'fa fa-edit'
+          },
+          {
+            id: 'deletefile',
+            text: 'Delete',
+            icon: 'fa fa-trash'
+          },
+          {},
+          {
+            id: 'newdirectory',
+            text: 'Create directory',
+            icon: 'fa fa-folder-o'
+          },
+          {
+            id: 'newfile',
+            text: 'New file...',
+            icon: 'fa fa-file-o'
+          }
         ],
         nodes: fileNodes
       });
@@ -1539,7 +1567,7 @@ function startDoc(settings) {
           var editorObj = editors[location.area].setSession(editSession);
           tabList[tabId] = {
             id: tabId,
-            caption: title,
+            caption: '<i class="fa fa-file-text-o"></i> ' + title,
             path: path,
             panel: location.area,
             type: 'editor',
@@ -1676,7 +1704,7 @@ function startDoc(settings) {
           // add tab and listen for tab close clicks
           w2ui[location.layout].get(location.panel).tabs.add({
             id: tabId,
-            caption: title
+            caption: '<i class="fa fa-file-text-o"></i> ' + title
           });
           
           // needs to be handled elsewhere for all tabs at once!
