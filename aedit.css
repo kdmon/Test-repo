@@ -43,9 +43,9 @@ body {
 
 .ace_search {
   min-width: 300px;
-  border: 1px solid #ccc !important;
   border-bottom-right-radius: 5px !important;
-  background-color: #ccc !important;
+  background-color: #eee !important;
+  box-shadow: 0 4px 12px 0 rgba(0,0,0,0.3);
 }
 
 .ace_search.right {
