@@ -13,7 +13,7 @@ body,
 
 body {
   overflow: hidden;
-  background:url("http://subtlepatterns2015.subtlepatterns.netdna-cdn.com/patterns/squared_metal.png");
+  background: #eee url("http://subtlepatterns2015.subtlepatterns.netdna-cdn.com/patterns/squared_metal.png");
 }
 
 
@@ -301,7 +301,7 @@ body {
   border-radius: 2px;
   margin: 0 !important;
   border: 1px solid #aaa;
-  box-shadow: 0 0 4px 0 #aaa;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.5);
 }
 
 #layout_layout_panel_left,
@@ -334,6 +334,7 @@ body {
 .w2ui-vertical-resizer {
   width: 8px !important;
   margin-left: 0px;
+  box-shadow: inset 1px 0 1px 0 rgba(0,0,0,0.5);
 }
 .w2ui-vertical-resizer .w2ui-resize-toggle:after {
   position: relative;
@@ -371,7 +372,7 @@ body {
 
 .w2ui-resize-toggle:hover{
   background: #fff;
-  border: 1px solid #fff;
+  border: 1px solid #aaa;
   color: #999;
 }
 
