@@ -330,20 +330,20 @@ body {
   margin-left: 0px;
 }
 
-.w2ui-vertical-resizer .w2ui-resize-toggle:after {
+.w2ui-vertical-resizer .w2ui-resize-toggle:hover:after {
   position: relative;
-  top: 20px;
-  left: 6px;
+  top: 18px;
+  left: 4px;
   font-family: FontAwesome;
-  /*content: "\f142";*/
+  content: "\f065";
 }
 
-.w2ui-horizontal-resizer .w2ui-resize-toggle:after {
+.w2ui-horizontal-resizer .w2ui-resize-toggle:hover:after {
   position: relative;
   left: 20px;
-  top: 0;
+  top: 2px;
   font-family: FontAwesome;
-  /*content: "\f141";*/
+  content: "\f065";
 }
 
 #layout_layout_resizer_main,
