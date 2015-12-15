@@ -1308,9 +1308,9 @@ function openProject (user, repository, branch, panelArea) {
         name: id,
         menu : [
           {
-            id: 'editfile',
-            text: 'Edit',
-            icon: 'fa fa-pencil'
+            id: 'openfile',
+            text: 'Open',
+            icon: 'fa fa-folder-open-o' 
           },
           {
             id: 'previewfile',
@@ -1321,6 +1321,11 @@ function openProject (user, repository, branch, panelArea) {
             id: 'renamefile',
             text: 'Rename',
             icon: 'fa fa-edit'
+          },
+          {
+            id: 'duplicatefile',
+            text: 'Duplicate',
+            icon: 'fa fa-copy'
           },
           {
             id: 'deletefile',
@@ -1339,7 +1344,7 @@ function openProject (user, repository, branch, panelArea) {
             icon: 'fa fa-file-o'
           },
                     {
-            id: 'newdirectory',
+            id: 'uploadfile',
             text: 'Upload...',
             icon: 'fa fa-upload'
           }
