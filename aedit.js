@@ -1629,11 +1629,11 @@ function startDoc(settings) {
                   column: data.column,
                   color: data.color
                 };
-                updateCursor(data.user, index);
+                updateCursor(data.user, location.area);
               break;
               case "selection":
                 selections[data.user] = [data.row, data.column, data.row2, data.column2, data.color];
-                //updateSelections(data.user, index);
+                //updateSelections(data.user, location.area);
               break;
             }
           });
