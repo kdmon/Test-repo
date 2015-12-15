@@ -39,7 +39,7 @@ $('#layout').w2layout({
   }, {
     type: 'right',
     size: '25%',
-    hidden: false,
+    hidden: true,
     resizable: true,
     content: ''
   }, {
