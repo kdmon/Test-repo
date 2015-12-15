@@ -1704,8 +1704,9 @@ function startDoc(settings) {
             dirtyFileTimer = setTimeout(function () {
   
               // force browsersync update
+/*  
               $.get("http://it4se.com:3000/__browser_sync__?method=reload&args=" + encodedUrl, function (data) {});
-/*   
+ 
               if (editors[location.area].getSession().getUndoManager().isClean()) w2ui[location.layout].get(location.panel).set(tabId, { caption: path });
               else w2ui[location.layout].get(location.panel).set(tabId, { caption: ' * ' + path});
   
