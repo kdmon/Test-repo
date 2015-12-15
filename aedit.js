@@ -1345,7 +1345,7 @@ function openProject (user, repository, branch, panelArea) {
           {
             id: 'uploadfile',
             text: 'Upload file',
-            icon: 'fa fa-upload'
+            icon: 'fa fa-hdd-o'
           }
         ],
         nodes: fileNodes
