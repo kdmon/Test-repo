@@ -1337,15 +1337,14 @@ function openProject (user, repository, branch, panelArea) {
             id: 'newfile',
             text: 'New file...',
             icon: 'fa fa-file-o'
-          },
-          {
-            id: 'uploadfile',
-            text: 'Upload...',
-            icon: 'fa fa-hdd-o'
           },{
             id: 'newdirectory',
             text: 'New folder...',
             icon: 'fa fa-folder-o'
+          },{
+            id: 'uploadfile',
+            text: 'Upload...',
+            icon: 'fa fa-hdd-o'
           }
         ],
         nodes: fileNodes
