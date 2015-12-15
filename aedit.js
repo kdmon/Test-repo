@@ -1335,17 +1335,17 @@ function openProject (user, repository, branch, panelArea) {
           {},
           {
             id: 'newfile',
-            text: 'New file',
+            text: 'New file...',
             icon: 'fa fa-file-o'
-          },{
-            id: 'newdirectory',
-            text: 'New directory',
-            icon: 'fa fa-folder-o'
           },
           {
             id: 'uploadfile',
-            text: 'Upload file',
+            text: 'Upload...',
             icon: 'fa fa-hdd-o'
+          },{
+            id: 'newdirectory',
+            text: 'New folder...',
+            icon: 'fa fa-folder-o'
           }
         ],
         nodes: fileNodes
