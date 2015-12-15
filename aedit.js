@@ -725,8 +725,8 @@ var draggedTabId = '';
 
 function refreshTabs() {
   // Reset draggable events
-  var tabSelector = ".w2ui-panel-tabs td:not(:last-child)";
-  var tabContainer = ".w2ui-panel-tabs td:last-child";
+  var tabSelector = ".w2ui-panel-tabs td:not(:last-child), .w2ui-node";
+  var tabContainer = ".w2ui-panel-tabs td:last-child, .w2ui-sidebar-div";
   var tabArea = "#temporarytab";
   $(tabContainer).removeClass('drop-highlight');
   $(tabSelector).off("dragstart").off("dragenter").off("dragleave").off("drag").off("dragend").off("drop").off("close");
