@@ -154,10 +154,6 @@ body {
   height: 22px !important;
 }
 
-.w2ui-node, .w2ui-node-sub {
-  min-width: 450px;
-}
-
 #layout_layout_panel_top .w2ui-toolbar {
   background: linear-gradient(0deg, #77a, #bce 20%,#fff) !important;
   height: 58px;
