@@ -1330,7 +1330,7 @@ function openProject (user, repository, branch, panelArea) {
           {
             id: 'deletefile',
             text: 'Delete',
-            icon: 'fa fa-trash'
+            icon: 'fa fa-trash-o'
           },
           {},
           {
