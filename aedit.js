@@ -1005,14 +1005,15 @@ function updateLayout(editorOnly) {
             $("#editor" + i).hide();
             $("#container"+ i + " .w2ui-sidebar").hide();
             $("#content" + i).html('<div class="inactive-panel">' +
-            '<p><b>This <em>auxillary</em> panel is empty.</b></p><p>To use it, drag a tab over.</p>' +
-            '<p>Or you can <span class="small-button" onclick="togglePanel(' + i +
-            ')"><i class="fa fa-expand"></i> hide it</span></p></div>');
+            '<p><b>This subpanel is empty.</b></p>' +
+            '<ul><li>To use it, drag a tab over.' +
+            '</li><li>Or you can <span class="small-button" onclick="togglePanel(' + i +
+            ')"><i class="fa fa-expand"></i> hide it</span></li></ul></div>');
             if (location[1] === 'middlesplit' && location[3] === 'main')
             $("#content" + i).html('<div class="inactive-panel">' +
-            '<p><b>This core panel is empty.</b></p>' +
-            '<p>To use it, drag a tab over.' +
-            '</p></div>');
+            '<p><b>This <em>main</em> panel is empty.</b></p>' +
+            '<ul><li>To use it, drag a tab over.' +
+            '</li></ul></div>');
             $("#content" + i).show();
             switchToolbar(location[1], location[3], 'empty');
           }
