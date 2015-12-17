@@ -344,7 +344,7 @@ function isBinaryFile(bytes, size) {
 
 /* SETUP TOOLBAR */
 var toolbars = {
-  topmenu: ['logo', 'topspacer','collaborate','topbreak1', 'account', 'topbreak2', 'connection'],
+  topmenu: ['logo', 'topspacer','collaborate','topbreak1', 'account', 'connection'],
   editor: ['usermenu','filemenu', 'editmenu', 'tools'],
   preview: ['pause', 'previewurl', 'refresh', 'share'],
   projectmanager: ['sidebarsearch', 'refresh','newproject', 'selectproject', 'closeproject'],
@@ -352,7 +352,7 @@ var toolbars = {
   prefs: ['url', 'refresh', 'share'],
   filebrowser: ['sidebarsearch','refresh'],
   media: ['url', 'refresh', 'share'],
-  empty: ['topbreak1'],
+  empty: [],
   help: []
 };
 var buttons = {
@@ -393,14 +393,10 @@ var buttons = {
       icon: 'fa fa-power-off'
     }]
   },
-  topbreak2: {
-    id: 'topbreak2',
-    type: 'break'
-  }, 
   connection : {
     id: 'connection',
     type: 'html',
-    html: '<span class="fa fa-circle fa-x" style="color: #0b0 !important;"></span> Connected'
+    html: '<div style="opacity: 0.5">Online <span class="fa fa-circle fa-x" style="color: #0b0 !important;"></span></div>'
   }, 
   save: {
     id: 'save',
@@ -1098,13 +1094,12 @@ var user = github.getUser();
 user.show('', function(err, user) {
   config.user = user.login;
   config.avatar = user.avatar_url;
-  
+
   w2ui["layout"].get(["top"]).toolbar.set('account', {
-    caption: config.user,
+    text: config.user,
     img: '"><img class="account-icon" src="' + config.avatar +'"/> <i id="'
   });
 
-  w2ui["layout"].get(["top"]).toolbar.refresh();
   
   /*w2ui['toolbar'].set('item3', { caption: 'check 2' });
   w2ui['toolbar'].refresh();
