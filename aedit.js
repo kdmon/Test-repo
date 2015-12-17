@@ -344,7 +344,7 @@ function isBinaryFile(bytes, size) {
 
 /* SETUP TOOLBAR */
 var toolbars = {
-  topmenu: ['logo', 'topspacer','account', 'connection'],
+  topmenu: ['logo', 'topspacer','account', 'topbreak2', 'connection'],
   editor: ['usermenu','filemenu', 'editmenu', 'tools'],
   preview: ['pause', 'previewurl', 'refresh', 'share'],
   projectmanager: ['sidebarsearch', 'refresh','newproject', 'selectproject', 'closeproject'],
@@ -399,11 +399,15 @@ var buttons = {
       text: 'Sign out',
       icon: 'fa fa-power-off'
     }]
+  },  topbreak2 :{
+    id: 'topbreak2',
+    type: 'break'
   },
   connection : {
     id: 'connection',
     type: 'html',
-    html: '<div style="opacity: 0.8; background:">On-line <span class="fa fa-circle" style="color: #0b0 !important;"></span></div>'
+    html: '<div style="opacity: 0.8; background:">' +
+    '<span class="fa fa-circle" style="color: #0b0 !important;"></span> On-line </div>'
   }, 
   save: {
     id: 'save',
