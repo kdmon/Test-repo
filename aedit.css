@@ -13,7 +13,7 @@ body,
 
 body {
   overflow: hidden;
-  background: #ddd;
+  background: #cdf;
 }
 
 
@@ -155,7 +155,7 @@ body {
 }
 
 #layout_layout_panel_top .w2ui-toolbar {
-  background: linear-gradient(0deg, #77a, #bce 20%,#fff) !important;
+  background: linear-gradient(0deg, #cdf, #bce 20%,#fff) !important;
   height: 58px;
   border: 0;
   padding-top: 0;
