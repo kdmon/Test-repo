@@ -407,7 +407,7 @@ var buttons = {
     id: 'connection',
     type: 'html',
     html: '<div style="opacity: 0.8; background:">' +
-    '<span class="fa fa-circle" style="color: #0b0 !important;"></span> On-line </div>'
+    '<span class="fa fa-circle" style="color: #0b0 !important;"></span> Online </div>'
   }, 
   save: {
     id: 'save',
@@ -1006,12 +1006,15 @@ function updateLayout(editorOnly) {
             $("#container"+ i + " .w2ui-sidebar").hide();
             $("#content" + i).html('<div class="inactive-panel">' +
             '<p><b>This subpanel is empty.</b></p>' +
-            '<ul><li>To use it, drag a tab over.' +
-            '</li><li>Or you can <span class="small-button" onclick="togglePanel(' + i +
-            ')"><i class="fa fa-expand"></i> hide it</span></li></ul></div>');
+            '<ul><li>To use it, drag a tab over.</li>' +
+            /*
+            '<li>Or you can <span class="small-button" onclick="togglePanel(' +
+            i + ')"><i class="fa fa-expand"></i> hide it</span></li>' +
+            */
+            '</ul></div>');
             if (location[1] === 'middlesplit' && location[3] === 'main')
             $("#content" + i).html('<div class="inactive-panel">' +
-            '<p><b>This <em>main</em> panel is empty.</b></p>' +
+            '<p><b>This panel is empty.</b></p>' +
             '<ul><li>To use it, drag a tab over.' +
             '</li></ul></div>');
             $("#content" + i).show();
