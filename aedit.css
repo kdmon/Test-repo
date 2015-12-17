@@ -271,12 +271,12 @@ body {
 }
 
 .inactive-panel {
-  background: linear-gradient(0deg, #fff, #ddf) !important;
+  background: #bce !important;
   padding: 10px;
   margin: 0;
   width: 100%;
   height: 100%;
-  color: #558;
+  color: #000;
   text-shadow: 1px 1px #ccc;
 }
 
