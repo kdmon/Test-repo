@@ -369,15 +369,6 @@ var buttons = {
     id: 'topspacer',
     type: 'spacer'
   },
-  connection : {
-    id: 'connection',
-    type: 'html',
-    html: '<span class="fa fa-circle fa-x" style="color: #0b0 !important;"></span> Connected'
-  }, 
-  topbreak1 :{
-    id: 'topbreak1',
-    type: 'break'
-  },
   collaborate : {
     id: 'collaborate',
     type: 'button',
@@ -385,10 +376,10 @@ var buttons = {
     icon: 'fa fa-comments-o',
     hint: 'Edit with friends through real-time text, audio and video chat.'
   },
-  topbreak2: {
-    id: 'topbreak2',
+  topbreak1 :{
+    id: 'topbreak1',
     type: 'break'
-  }, 
+  },
   account: {
     type: 'menu',
     id: 'account',
@@ -402,6 +393,15 @@ var buttons = {
       icon: 'fa fa-power-off'
     }]
   },
+  topbreak2: {
+    id: 'topbreak2',
+    type: 'break'
+  }, 
+  connection : {
+    id: 'connection',
+    type: 'html',
+    html: '<span class="fa fa-circle fa-x" style="color: #0b0 !important;"></span> Connected'
+  }, 
   save: {
     id: 'save',
     type: 'button',
