@@ -396,7 +396,7 @@ var buttons = {
   connection : {
     id: 'connection',
     type: 'html',
-    html: '<div style="opacity: 0.5">Online <span class="fa fa-circle fa-x" style="color: #0b0 !important;"></span></div>'
+    html: '<div style="opacity: 0.5">Online <span class="fa fa-circle" style="color: #0b0 !important;"></span></div>'
   }, 
   save: {
     id: 'save',
