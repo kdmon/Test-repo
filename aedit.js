@@ -9,9 +9,60 @@ String.prototype.hashCode = function() {
   return hash;
 };
 
-// Authentication
-if (localStorage.token === undefined || localStorage.token ===  '') localStorage.token = prompt("Github token required:");
-var token = localStorage.token;
+var github, user;
+
+// Attempt to get authenticated user details
+
+function authenticate () {
+    
+  github = new Github({
+    token: localStorage.token,
+    auth: "oauth"
+  });
+  
+  user = github.getUser();
+    
+  user.show('', function(err, user) {
+    if (user === undefined) {
+      checkUser();
+      return;
+    }
+    config.user = user.login;
+    config.avatar = user.avatar_url;
+  
+    w2ui["layout"].get(["top"]).toolbar.hide('signin');
+    w2ui["layout"].get(["top"]).toolbar.show('account');
+    w2ui["layout"].get(["top"]).toolbar.set('account', {
+      text: config.user,
+      img: '"><img class="account-icon" src="' + config.avatar +'"/> <i id="'
+    });
+  
+    init();
+  });
+
+}
+
+authenticate();
+
+
+function checkUser() {
+  var start = window.location.search.indexOf('code=') + 5;
+  var tempKey = window.location.search.substr(start,start+20);
+  $.ajax({
+    type: "GET",
+    url: "http://it4se.com:8080/waecallback?code=" + tempKey
+  }).done (function (result) {
+    // extract token
+    var token = result.split('&');
+    token = token[0].split('=');
+    token = token[1];
+    localStorage.token = token;
+    // Reload not really necessary - just re-run authentication method!
+    setTimeout (function () {authenticate();}, 500);
+  });
+}
+
+
 
 /* SETUP PANELS */
 $('#layout').w2layout({
@@ -346,7 +397,7 @@ function isBinaryFile(bytes, size) {
 
 /* SETUP TOOLBAR */
 var toolbars = {
-  topmenu: ['logo', 'topspacer','account', 'topbreak2', 'connection'],
+  topmenu: ['logo', 'topspacer','signin', 'topbreak1', 'connection'],
   editor: ['usermenu','filemenu', 'editmenu', 'tools'],
   preview: ['pause', 'previewurl', 'refresh', 'share'],
   projectmanager: ['sidebarsearch', 'refresh','newproject', 'selectproject', 'closeproject'],
@@ -378,9 +429,12 @@ var buttons = {
     icon: 'fa fa-comments-o',
     hint: 'Edit with friends through real-time text, audio and video chat.'
   },
-  topbreak1 :{
-    id: 'topbreak1',
-    type: 'break'
+  signin : {
+    id: 'signin',
+    type: 'button',
+    caption: 'Sign-in',
+    icon: 'fa fa-user',
+    hint: 'Sign in to access your projects.'
   },
   account: {
     type: 'menu',
@@ -401,8 +455,8 @@ var buttons = {
       text: 'Sign out',
       icon: 'fa fa-power-off'
     }]
-  },  topbreak2 :{
-    id: 'topbreak2',
+  },  topbreak1 :{
+    id: 'topbreak1',
     type: 'break'
   },
   connection : {
@@ -597,6 +651,9 @@ function toolbarClick(obj, event) {
   var tab = (w2ui[id[0]+'_'+id[1]+'_tabs'] !== undefined) ?
     w2ui[id[0]+'_'+id[1]+'_tabs'].active : '';
   switch (event.target) {
+    case 'signin':
+      window.location.href="https://github.com/login/oauth/authorize?client_id=3420cd58602c446289f9&scope=user,public_repo";
+      break;
     case 'editmenu:Search':
       editors[panel.area].execCommand("find");
       break;
@@ -1098,38 +1155,8 @@ var panelAreas = [
   'layout_bottomsplit_panel_right'
 ];
 
-var github = new Github({
-  token: localStorage.token,
-  auth: "oauth"
-});
-
 
 var config = {};
-
-var user = github.getUser();
-
-// Get authenticated user details
-
-user.show('', function(err, user) {
-  config.user = user.login;
-  config.avatar = user.avatar_url;
-
-  w2ui["layout"].get(["top"]).toolbar.set('account', {
-    text: config.user,
-    img: '"><img class="account-icon" src="' + config.avatar +'"/> <i id="'
-  });
-
-  
-  /*w2ui['toolbar'].set('item3', { caption: 'check 2' });
-  w2ui['toolbar'].refresh();
-  $()shared.nodes.push({
-            id: item.full_name + '_' + rnd,
-            text: '<img class="custom-icon" src="' + item.owner.avatar_url +'"/> ' + item.full_name
-          });
-          */
-  init();
-});
-
 
 
 
