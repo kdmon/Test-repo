@@ -9,40 +9,41 @@ String.prototype.hashCode = function() {
   return hash;
 };
 
-var github, user;
+var github, user, once = 0;
+
 
 // Attempt to get authenticated user details
 
 function authenticate () {
-    
+
+  once ++;
+  if (once > 2) {w2alert ("Please sign-in to access your projects."); return;}
+
   github = new Github({
     token: localStorage.token,
     auth: "oauth"
   });
   
   user = github.getUser();
-    
+
   user.show('', function(err, user) {
-    if (user === undefined) {
-      checkUser();
-      return;
+    if (user === undefined) checkUser();
+    else {
+      config.user = user.login;
+      config.avatar = user.avatar_url;
+  
+      w2ui["layout"].get(["top"]).toolbar.hide('signin');
+      w2ui["layout"].get(["top"]).toolbar.show('account');
+      w2ui["layout"].get(["top"]).toolbar.set('account', {
+        text: config.user,
+        img: '"><img class="account-icon" src="' + config.avatar +'"/> <i id="'
+      });
+      init();
     }
-    config.user = user.login;
-    config.avatar = user.avatar_url;
-  
-    w2ui["layout"].get(["top"]).toolbar.hide('signin');
-    w2ui["layout"].get(["top"]).toolbar.show('account');
-    w2ui["layout"].get(["top"]).toolbar.set('account', {
-      text: config.user,
-      img: '"><img class="account-icon" src="' + config.avatar +'"/> <i id="'
-    });
-  
-    init();
   });
 
-}
 
-authenticate();
+}
 
 
 function checkUser() {
@@ -50,17 +51,20 @@ function checkUser() {
   var tempKey = window.location.search.substr(start,start+20);
   $.ajax({
     type: "GET",
-    url: "http://it4se.com:8080/waecallback?code=" + tempKey
+    url: "http://webappeditor.com/waecallback?code=" + tempKey
   }).done (function (result) {
     // extract token
     var token = result.split('&');
     token = token[0].split('=');
     token = token[1];
     localStorage.token = token;
-    // Reload not really necessary - just re-run authentication method!
-    setTimeout (function () {authenticate();}, 500);
+    authenticate();
+  }).fail(function (result) {
+    w2alert ("Please sign-in to access your projects.");
   });
 }
+
+authenticate();
 
 
 
@@ -681,6 +685,11 @@ function toolbarClick(obj, event) {
     case 'share':
       window.open(tabList[tab].fullUrl, "_blank");
       break;
+    case 'account:Sign out':
+      var token = localStorage.token;
+      localStorage.removeItem('token');
+      window.location = 'waelogout?token=' + token;
+      break;
     case 'refresh':
       $("#" + tabList[tab].id).attr("src", tabList[tab].fullUrl);
       break;
@@ -1164,6 +1173,7 @@ var dirtyFileTimer = setTimeout(function (){}, 50);
 
 
 function init() {
+
   var i = 0;
   $(".w2ui-panel-content").each(function() {
     var panelId = $(this).parent().attr('id');
