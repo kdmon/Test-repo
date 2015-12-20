@@ -34,6 +34,8 @@ function authenticate () {
   
       w2ui["layout"].get(["top"]).toolbar.hide('signin');
       w2ui["layout"].get(["top"]).toolbar.show('account');
+      w2ui["layout"].get(["top"]).toolbar.show('topbreak1');
+      w2ui["layout"].get(["top"]).toolbar.show('connection');
       w2ui["layout"].get(["top"]).toolbar.set('account', {
         text: config.user,
         img: '"><img class="account-icon" src="' + config.avatar +'"/> <i id="'
@@ -401,7 +403,7 @@ function isBinaryFile(bytes, size) {
 
 /* SETUP TOOLBAR */
 var toolbars = {
-  topmenu: ['logo', 'topspacer','signin', 'topbreak1', 'connection'],
+  topmenu: ['logo', 'topspacer','signin'],
   editor: ['usermenu','filemenu', 'editmenu', 'tools'],
   preview: ['pause', 'previewurl', 'refresh', 'share'],
   projectmanager: ['sidebarsearch', 'refresh','newproject', 'selectproject', 'closeproject'],
