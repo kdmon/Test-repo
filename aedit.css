@@ -192,6 +192,7 @@ body {
 .w2ui-panel-tabs {
   background: linear-gradient(0deg,  #cdf, #8ad 80%, #acf) !important;
   padding: 3px 3px 0 3px !important;
+  border-radius: 10px 10px 2px 2px !important;
 }
 
 .w2ui-panel-toolbar {
@@ -288,7 +289,7 @@ body {
 #layout_layout_panel_main .w2ui-panel,
 #layout_layout_panel_right .w2ui-panel,
 #layout_layout_panel_bottom .w2ui-panel {
-  border-radius: 2px;
+  border-radius: 10px 10px 2px 2px !important;
   margin: 0 !important;
   border: 1px solid #aaa;
 }
