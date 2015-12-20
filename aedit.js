@@ -9,9 +9,11 @@ String.prototype.hashCode = function() {
   return hash;
 };
 
+// Authentication
+if (localStorage.token === undefined || localStorage.token ===  '') localStorage.token = prompt("Github token required:");
+var token = localStorage.token;
+
 /* SETUP PANELS */
-if (localStorage["token"] === undefined) localStorage["token"] = prompt("Github token required:");
-var token = localStorage["token"];
 $('#layout').w2layout({
   name: 'layout',
   panels: [{
