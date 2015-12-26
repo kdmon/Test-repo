@@ -735,7 +735,7 @@ function openPreview (url, caption, panel) {
       
   refreshTabs();
   // 4. render into temporary dom element once
-  $('<iframe id="' + previewId +'" class="preview-iframe" src="' + fullUrl + '"></iframe>').appendTo("#container" + location.area);
+  $('<iframe id="' + previewId +'" class="preview-iframe" src="' + fullUrl + '"></iframe>').appendTo("#body");
 
   w2ui[location.layout].get(location.panel).tabs.click(previewId);
   $(location.id).find(".w2ui-tabs").scrollLeft(99999);
@@ -1099,8 +1099,8 @@ function updateLayout(editorOnly) {
             var height = $("#container" + item.panel).innerHeight();
             var width = $("#container" + item.panel).innerWidth();
             $("#" + item.id).css({
-//              top: top + 'px',
-//              left: left + 'px',
+              top: top + 'px',
+              left: left + 'px',
               width: width + 'px',
               height: height + 'px'
             });
