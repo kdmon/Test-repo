@@ -190,9 +190,6 @@ body {
   background: white !important;
 }
 
-.w2ui-tabs, .w2ui-toolbar {
-  overflow-x: auto !important;
-}
 .w2ui-panel-tabs {
   background: linear-gradient(0deg,  #cdf, #8ad 80%, #acf) !important;
   padding: 3px 3px 0 3px !important;
