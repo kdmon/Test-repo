@@ -1109,7 +1109,7 @@ function updateLayout(editorOnly) {
           }
         }
       });
-    }, 100);
+    }, 500);
   }
 }
 
