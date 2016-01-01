@@ -658,7 +658,7 @@ function toolbarClick(obj, event) {
     w2ui[id[0]+'_'+id[1]+'_tabs'].active : '';
   switch (event.target) {
     case 'signin':
-      window.location.href="https://github.com/login/oauth/authorize?client_id=3420cd58602c446289f9&scope=user,public_repo";
+      window.location.href="https://github.com/login/oauth/authorize?client_id=3420cd58602c446289f9&scope=user,repo";
       break;
     case 'editmenu:Search':
       editors[panel.area].execCommand("find");
