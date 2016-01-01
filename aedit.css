@@ -73,9 +73,12 @@ body {
   padding: 0;
   margin: 0;
   position: absolute;
-  z-index: 121;
+  z-index: 119;
 }
 
+.preview-iframe:hover {
+  z-index: 121;
+}
 
 .toolbar-input {
   font-family: FontAwesome, raleway;
