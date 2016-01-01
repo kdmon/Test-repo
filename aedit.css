@@ -208,7 +208,6 @@ body {
   max-height: 34px !important;
   text-align: left !important;
   white-space: nowrap !important;
-  overflow: hidden;
   text-overflow: ellipsis;
   cursor: -webkit-grab;
   cursor: grab;
