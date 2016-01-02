@@ -9,6 +9,8 @@ String.prototype.hashCode = function() {
   return hash;
 };
 
+var sortWorker = new Worker("worker.js");
+
 var github, user, once = 0;
 
 
@@ -1333,104 +1335,116 @@ function openProject (user, repository, branch, panelArea) {
     else {
       var location = pickPanel(panelArea || 'filebrowser');
       var fileNodes = generateNodes(tree, user, repository, branch);
-
-      // 3. Show tab
-      tabList[id] = {
-        id: id,
-        caption: title,
-        type: 'filebrowser',
-        panel: location.area
-      };
-      w2ui[location.layout].get(location.panel).tabs.add({
-        id: id,
-        closable: true,
-        caption: title
+      
+      // Sort nodes
+      sortWorker.postMessage({
+        tree: tree,
+        user: user,
+        repo: repository,
+        branch: branch
       });
       
-      refreshTabs();
-      
-      
-      // 4. render into temporary dom element once
-      $('<div id="container_' + id +'" class="panel-content" style="display:none"></div>').appendTo( "body" );
-      $("#container_"+id).w2sidebar({
-        name: id,
-        menu : [
-          {
-            id: 'openfile',
-            text: 'Open',
-            icon: 'fa fa-folder-open-o' 
-          },
-          {
-            id: 'previewfile',
-            text: 'Preview',
-            icon: 'fa fa-eye'
-          },
-          {
-            id: 'renamefile',
-            text: 'Rename',
-            icon: 'fa fa-edit'
-          },
-          {
-            id: 'duplicatefile',
-            text: 'Duplicate',
-            icon: 'fa fa-copy'
-          },
-          {
-            id: 'deletefile',
-            text: 'Delete',
-            icon: 'fa fa-trash-o'
-          },
-          {},
-          {
-            id: 'newfile',
-            text: 'New file...',
-            icon: 'fa fa-file-o'
-          },{
-            id: 'newdirectory',
-            text: 'New folder...',
-            icon: 'fa fa-folder-o'
-          },{
-            id: 'uploadfile',
-            text: 'Upload...',
-            icon: 'fa fa-hdd-o'
-          }
-        ],
-        nodes: fileNodes
-      });
-      
-      // 5. Handle events
-      // directory opened
-      w2ui[id].on('collapse', function(event) {
-        event.object.icon = 'fa fa-folder';
-      });
-      w2ui[id].on('expand', function(event) {
-        event.object.icon = 'fa fa-folder-open';
-      });
-      // file open
-      w2ui[id].on('dblClick', function(event) {
-        if(event.target.substr(0,6) === "folder") return;
-        var path = event.target.substr(event.target.indexOf("_")+1).split('/');
-        var id = path.join('/');
-        var user = path.shift();
-        var repo = path.shift();
-        var branch = path.shift();
-        var title = path[path.length-1];
-        path = path.join('/');
-        startDoc({
+      sortWorker.onmessage = function(e) {
+        
+        var fileNodes = e.data;
+        
+        // 3. Show tab
+        tabList[id] = {
           id: id,
-          user: user,
-          repo: repo,
-          branch: branch,
-          path: path,
-          title: title
+          caption: title,
+          type: 'filebrowser',
+          panel: location.area
+        };
+        w2ui[location.layout].get(location.panel).tabs.add({
+          id: id,
+          closable: true,
+          caption: title
         });
-      });
-      w2popup.close();
-      w2ui[location.layout].get(location.panel).tabs.click(id);
-      $(location.id).find(".w2ui-tabs").scrollLeft(99999);
+        
+        refreshTabs();
+        
+        // 4. render into temporary dom element once
+        $('<div id="container_' + id +'" class="panel-content" style="display:none"></div>').appendTo( "body" );
+        $("#container_"+id).w2sidebar({
+          name: id,
+          menu : [
+            {
+              id: 'openfile',
+              text: 'Open',
+              icon: 'fa fa-folder-open-o' 
+            },
+            {
+              id: 'previewfile',
+              text: 'Preview',
+              icon: 'fa fa-eye'
+            },
+            {
+              id: 'renamefile',
+              text: 'Rename',
+              icon: 'fa fa-edit'
+            },
+            {
+              id: 'duplicatefile',
+              text: 'Duplicate',
+              icon: 'fa fa-copy'
+            },
+            {
+              id: 'deletefile',
+              text: 'Delete',
+              icon: 'fa fa-trash-o'
+            },
+            {},
+            {
+              id: 'newfile',
+              text: 'New file...',
+              icon: 'fa fa-file-o'
+            },{
+              id: 'newdirectory',
+              text: 'New folder...',
+              icon: 'fa fa-folder-o'
+            },{
+              id: 'uploadfile',
+              text: 'Upload...',
+              icon: 'fa fa-hdd-o'
+            }
+          ],
+          nodes: fileNodes
+        });
+        
+        // 5. Handle events
+        // directory opened
+        w2ui[id].on('collapse', function(event) {
+          event.object.icon = 'fa fa-folder';
+        });
+        w2ui[id].on('expand', function(event) {
+          event.object.icon = 'fa fa-folder-open';
+        });
+        // file open
+        w2ui[id].on('dblClick', function(event) {
+          if(event.target.substr(0,6) === "folder") return;
+          var path = event.target.substr(event.target.indexOf("_")+1).split('/');
+          var id = path.join('/');
+          var user = path.shift();
+          var repo = path.shift();
+          var branch = path.shift();
+          var title = path[path.length-1];
+          path = path.join('/');
+          startDoc({
+            id: id,
+            user: user,
+            repo: repo,
+            branch: branch,
+            path: path,
+            title: title
+          });
+        });
+        w2popup.close();
+        w2ui[location.layout].get(location.panel).tabs.click(id);
+        //$(location.id).find(".w2ui-tabs").scrollLeft(99999);
+        
+      };
     }
   });
-  
 }
 
 // Create sidebar widget nodes from GitHub API tree
