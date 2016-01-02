@@ -1037,22 +1037,12 @@ function tabClose(obj, event) {
   
   console.log (obj);
   console.log (event);
-  setTimeout(updateLayout, 250);
+  updateLayout();
   // w2ui destroy
   // ace detach etc...
 }
 
 var resizeTimer;
-
-window.requestAnimFrame = (function(){
-  return  window.requestAnimationFrame       ||
-          window.webkitRequestAnimationFrame ||
-          window.mozRequestAnimationFrame    ||
-          function( callback ){
-            window.setTimeout(callback, 1000 / 60);
-          };
-})();
-
 
 function updateLayout(editorOnly) {
   
@@ -1107,7 +1097,7 @@ function updateLayout(editorOnly) {
             else $("#" + item.id).hide();
           }
         }
-    }, 50);
+    }, 250);
   }
 }
 
@@ -1127,6 +1117,19 @@ function togglePanel (id) {
 /* Resize events */
 $(window).on("resize", function () {
  updateLayout();
+});
+
+w2ui.leftsplit.on('resize', function () {
+  updateLayout(true);
+});
+w2ui.middlesplit.on('resize', function () {
+  updateLayout(true);
+});
+w2ui.rightsplit.on('resize', function () {
+  updateLayout(true);
+});
+w2ui.bottomsplit.on('resize', function () {
+  updateLayout(true);
 });
 
 
@@ -1287,7 +1290,7 @@ function showProjects (panelArea) {
 
       w2popup.close();
       w2ui[location.layout].get(location.panel).tabs.click(id);
-      setTimeout(updateLayout, 50);
+      updateLayout();
     }
   });
 
@@ -1546,7 +1549,6 @@ function startDoc(settings) {
       if (isBinaryFile(bytes, bytes.length)) {
         openPreview (url, title);
         refreshTabs();
-        updateLayout(); // inserts overflow scrollbar
         w2ui[location.layout].get(location.panel).tabs.click(tabId);
         w2popup.close();
         return;
@@ -1709,7 +1711,6 @@ function startDoc(settings) {
                   
           // alert ("running");
           refreshTabs();
-          updateLayout(); // inserts overflow scrollbar
           w2ui[location.layout].get(location.panel).tabs.click(tabId);
           w2popup.close();
 
