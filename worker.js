@@ -1,18 +1,18 @@
-
 var nodes = [];
   
-// json search helper fxn
+// slow recursive json search helper fxn
+
 function getObjects(obj, key, val) {
-    var objects = [];
-    for (var i in obj) {
-        if (!obj.hasOwnProperty(i)) continue;
-        if (typeof obj[i] == 'object') {
-            objects = objects.concat(getObjects(obj[i], key, val));
-        } else if (i == key && obj[key] == val) {
-            objects.push(obj);
-        }
-    }
-    return objects;
+  var objects = [];
+  for (var i in obj) {
+      if (!obj.hasOwnProperty(i)) continue;
+      if (typeof obj[i] == 'object') {
+          objects = objects.concat(getObjects(obj[i], key, val));
+      } else if (i == key && obj[key] == val) {
+          objects.push(obj);
+      }
+  }
+  return objects;
 }
 
 function parseFile(files,index,repo,branch,user,uid) {
@@ -57,9 +57,6 @@ function parseFile(files,index,repo,branch,user,uid) {
 
 onmessage = function(e) {
   
-  console.log('Message received from main script');
-  console.log (e);
-  
   var tree = e.data.tree;
   var repo = e.data.repo;
   var branch = e.data.branch;
@@ -97,11 +94,10 @@ onmessage = function(e) {
     
   });
   
-  
   var uid = Math.round(Math.random() * 1000000000);
   
   for (var index in files) {
-    setTimeout(parseFile(files,index,repo,branch,user,uid), 8);
+    parseFile(files,index,repo,branch,user,uid);
   }
   // return result to main script and exit
   postMessage(nodes);
