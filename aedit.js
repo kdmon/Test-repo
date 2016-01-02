@@ -738,6 +738,7 @@ function openPreview (url, caption, panel) {
   $('<iframe id="' + previewId +'" class="preview-iframe" src="' + fullUrl + '"></iframe>').prependTo("body");
 
   w2ui[location.layout].get(location.panel).tabs.click(previewId);
+  // Does not work
   $(location.id).find(".w2ui-tabs").scrollLeft(99999);
 }
 
@@ -1115,6 +1116,13 @@ function togglePanel (id) {
 
 
 /* Resize events */
+
+w2ui.layout.on('refresh', function(event) {
+    event.onComplete = function () {
+        updateLayout();
+    };
+});
+
 $(window).on("resize", function () {
  updateLayout();
 });
@@ -1428,7 +1436,7 @@ function openProject (user, repository, branch, panelArea) {
         });
         w2popup.close();
         w2ui[location.layout].get(location.panel).tabs.click(id);
-        //$(location.id).find(".w2ui-tabs").scrollLeft(99999);
+        setTimeout(function () {$(location.id).find(".w2ui-tabs").scrollLeft(99999);},200);
         
       };
     }
