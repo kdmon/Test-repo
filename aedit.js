@@ -9,8 +9,6 @@ String.prototype.hashCode = function() {
   return hash;
 };
 
-var sortWorker = new Worker("worker.js");
-
 var github, user, once = 0;
 
 
@@ -1062,7 +1060,6 @@ function updateLayout(editorOnly) {
     
     resizeTimer = setTimeout(function() {
       resizeTimer = undefined;
-      requestAnimFrame(function () {
   
         if (editorOnly === undefined) {
           w2ui.layout.resize();
@@ -1110,8 +1107,7 @@ function updateLayout(editorOnly) {
             else $("#" + item.id).hide();
           }
         }
-      });
-    }, 500);
+    }, 20);
   }
 }
 
@@ -1334,9 +1330,10 @@ function openProject (user, repository, branch, panelArea) {
     // 2. Generate widget
     else {
       var location = pickPanel(panelArea || 'filebrowser');
-      var fileNodes = generateNodes(tree, user, repository, branch);
       
-      // Sort nodes
+      // Sort nodes in new thread
+      var sortWorker = new Worker("worker.js");
+      
       sortWorker.postMessage({
         tree: tree,
         user: user,
