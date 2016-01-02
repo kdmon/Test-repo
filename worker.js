@@ -97,6 +97,7 @@ onmessage = function(e) {
       else location.nodes.push(obj);
     }
   }
-  // return result to main script
+  // return result to main script and exit
   postMessage(nodes);
+  self.close();
 };
