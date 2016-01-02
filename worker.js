@@ -1,3 +1,6 @@
+
+var nodes = [];
+  
 // json search helper fxn
 function getObjects(obj, key, val) {
     var objects = [];
@@ -10,6 +13,46 @@ function getObjects(obj, key, val) {
         }
     }
     return objects;
+}
+
+function parseFile(files,index,repo,branch,user,uid) {
+  var file = files[index];
+  var prefix = ((file.type === "tree") ? 'folder' : '');
+  var id = prefix + uid + "_" + user + '/' + repo + '/' + branch + '/' + file.path;
+  var icon = (file.type === "tree") ? 'fa fa-folder' : 'fa fa-file-o';
+  var paths = file.path.split('/');
+  var filename = paths.pop();
+  var depth = paths.length;
+  var path = paths.join ('/');
+  var obj = {};
+  
+  // root files/folders 
+  if (depth === 0) {
+    obj = {
+      id: id,
+      text: filename,
+      icon: icon
+    };
+    
+    if (file.type === "tree") {obj.nodes = []; nodes.push(obj);}
+    else nodes.push(obj);
+  }
+  
+  // nested files - need recursive search.
+  else {
+    obj = {
+      id: id,
+      text: filename,
+      icon: icon
+    };
+    
+    // Locate the parent node in file structure object and insert the node
+    
+    var location = getObjects(nodes, 'id', 'folder'+uid + "_" + user + '/' + repo + '/' + branch + '/' + path)[0];
+
+    if (file.type === "tree") {obj.nodes = []; location.nodes.push(obj);}
+    else location.nodes.push(obj);
+  }
 }
 
 onmessage = function(e) {
@@ -54,48 +97,11 @@ onmessage = function(e) {
     
   });
   
-  var nodes = [];
   
   var uid = Math.round(Math.random() * 1000000000);
   
   for (var index in files) {
-    var file = files[index];
-    var prefix = ((file.type === "tree") ? 'folder' : '');
-    var id = prefix + uid + "_" + user + '/' + repo + '/' + branch + '/' + file.path;
-    var icon = (file.type === "tree") ? 'fa fa-folder' : 'fa fa-file-o';
-    var paths = file.path.split('/');
-    var filename = paths.pop();
-    var depth = paths.length;
-    var path = paths.join ('/');
-    var obj = {};
-    
-    // root files/folders 
-    if (depth === 0) {
-      obj = {
-        id: id,
-        text: filename,
-        icon: icon
-      };
-      
-      if (file.type === "tree") {obj.nodes = []; nodes.push(obj);}
-      else nodes.push(obj);
-    }
-    
-    // nested files - need recursive search.
-    else {
-      obj = {
-        id: id,
-        text: filename,
-        icon: icon
-      };
-      
-      // Locate the parent node in file structure object and insert the node
-      
-      var location = getObjects(nodes, 'id', 'folder'+uid + "_" + user + '/' + repo + '/' + branch + '/' + path)[0];
-
-      if (file.type === "tree") {obj.nodes = []; location.nodes.push(obj);}
-      else location.nodes.push(obj);
-    }
+    setTimeout(parseFile(files,index,repo,branch,user,uid), 8);
   }
   // return result to main script and exit
   postMessage(nodes);
