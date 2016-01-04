@@ -9,6 +9,9 @@ String.prototype.hashCode = function() {
   return hash;
 };
 
+// on w2ui-resizer: mouseover add lower z-index class to iframe class
+// on mouse out remove lower zindex class
+
 var github, user, once = 0;
 
 
