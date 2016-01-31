@@ -647,9 +647,9 @@ function openPreview (url, caption, panel) {
   var previewId = "preview_" + url.hashCode();
   // strip leading slash in pathname
   url = (url.substr(0,1) === "/") ? url.substr(1, url.length) : url;
-  var fullUrl = (url.substr(4) === 'http') ? url : 'http://webappeditor.com:8080/' + url;
+  var fullUrl = (url.substr(4) === 'http') ? url : 'http://webappeditor.com/' + url;
   if (url.substr(url.length-3).toLowerCase() == '.md')
-    fullUrl = 'http://webappeditor.com:8080/markdown.html?r=' + randomString(100) + "&url=" + fullUrl;
+    fullUrl = 'http://webappeditor.com/markdown.html?r=' + randomString(100) + "&url=" + fullUrl;
   tabList[previewId] = {
     id: previewId,
     fullUrl: fullUrl,
@@ -666,7 +666,13 @@ function openPreview (url, caption, panel) {
       
   refreshTabs();
   // 4. render into temporary dom element once
-  $('<iframe id="' + previewId +'" class="preview-iframe" src="' + fullUrl + '"></iframe>').prependTo("body");
+  $('<iframe id="' + previewId +'" class="preview-iframe"></iframe>').appendTo("body");
+  
+  var iframe = document.getElementById(previewId);
+  iframe.contentWindow.onerror = function(message, xurl, lineno) {
+    alert ("JS error: " + message + ", on line " + lineno);
+  };
+  iframe.src = fullUrl;
 
   w2ui[location.layout].get(location.panel).tabs.click(previewId);
   // Does not work
