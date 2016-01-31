@@ -433,73 +433,11 @@
                     resize : function (event) {
                         w2ui[obj.name].resize();
                     },
-                    resizeStart : resizeStart,
                     mouseMove   : resizeMove,
-                    mouseUp     : resizeStop
+                    mouseUp     : resizeStop,
+                    resizeStart : resizeStart
                 };
                 $(window).on('resize', obj.tmp.events.resize);
-            }
-
-            function resizeStart(type, evnt) {
-                if ($(evnt.target).attr('class') === "w2ui-resize-toggle") {
-                  obj.toggle(type, true); return;
-                }
-                if (!obj.box) return;
-                
-                // Block all iframes from capturing mouse events by
-                // temporarily overlaying an empty div element.
-                // Solution adapted from jquery UI library.
-              
-            		obj.iframeBlocks = $(document).find( 'iframe' ).map(function() {
-            			var iframe = $( this );
-            			return $( '<div>' )
-            				.css( "position", "absolute" )
-            				.css( "z-index", "200" )
-            				.appendTo( iframe.parent() )
-            				.outerWidth( iframe.outerWidth() )
-            				.outerHeight( iframe.outerHeight() )
-            				.offset( iframe.offset() )[ 0 ];
-            		});
-
-                if (!evnt) evnt = window.event;
-                $(document).off('mousemove', obj.tmp.events.mouseMove).on('mousemove', obj.tmp.events.mouseMove);
-                $(document).off('mouseup', obj.tmp.events.mouseUp).on('mouseup', obj.tmp.events.mouseUp);
-                $(document).off('touchmove', obj.tmp.events.mouseMove).on('touchmove', obj.tmp.events.mouseMove);
-                $(document).off('touchend', obj.tmp.events.mouseUp).on('touchend', obj.tmp.events.mouseUp);
-                obj.tmp.resize = {
-                    type    : type,
-                    x       : evnt.clientX||evnt.originalEvent.touches[0].clientX,
-                    y       : evnt.clientY||evnt.originalEvent.touches[0].clientY,
-                    diff_x  : 0,
-                    diff_y  : 0,
-                    value   : 0
-                };
-                
-                // lock all panels
-                
-                for (var p1 = 0; p1 < w2panels.length; p1++) {
-                    var $tmp = $(obj.el(w2panels[p1])).parent().find('.w2ui-lock');
-                    if ($tmp.length > 0) {
-                        $tmp.attr('locked', 'previous');
-                    } else {
-                        obj.lock(w2panels[p1], { opacity: 0 });
-                    }
-                }
-                
-                if (type == 'left' || type == 'right') {
-                    obj.tmp.resize.value = parseInt($('#layout_'+ obj.name +'_resizer_'+ type)[0].style.left);
-                }
-                if (type == 'top' || type == 'preview' || type == 'bottom') {
-                    obj.tmp.resize.value = parseInt($('#layout_'+ obj.name +'_resizer_'+ type)[0].style.top);
-                }
-                
-                
-                // add padding
-                if (type == 'left') obj.tmp.resize.x -= (obj.padding/2);
-                if (type == 'right') obj.tmp.resize.x += (obj.padding/2);
-                if (type == 'top') obj.tmp.resize.y -= (obj.padding/2);
-                if (type == 'bottom' || type == 'preview') obj.tmp.resize.y += (obj.padding/2);
-                
             }
 
             function resizeMove(evnt) {
@@ -513,7 +451,6 @@
                 
                 // event before
                 var tmp = obj.tmp.resize;
-                
                 
                 var eventData = obj.trigger({ phase: 'before', type: 'resizing', target: obj.name, object: panel, originalEvent: evnt,
                     panel: tmp ? tmp.type : 'all', diff_x: tmp ? tmp.diff_x : 0, diff_y: tmp ? tmp.diff_y : 0 });
@@ -585,113 +522,172 @@
                 tmp.diff_x = resize_x;
                 tmp.diff_y = resize_y;
                 
-                updateSize();
+                window.requestAnimationFrame(updateSize);
+
+                clearTimeout(resizeTimer);
+                var resizeTimer = setTimeout(updateSize, 200);
                 
                 // event after
                 obj.trigger($.extend(eventData, { phase: 'after' }));
             }
             
             function updateSize() {
-                if (this._resize_timer === undefined) {
-                  this._resize_timer = setTimeout(function () {
-                  this._resize_timer = undefined;
-                  if (obj.tmp.resize !== undefined) {
-                          
-                      var p = $('#layout_'+ obj.name + '_resizer_'+ obj.tmp.resize.type);
-                      if (!p.hasClass('active')) p.addClass('active');
-                      
-                      switch (obj.tmp.resize.type) {
-                          case 'top':
-                          case 'preview':
-                          case 'bottom':
-                              obj.tmp.resize.diff_x = 0;
-                              if (p.length > 0) p[0].style.top = (obj.tmp.resize.value + obj.tmp.resize.diff_y) + 'px';
-                              break;
-      
-                          case 'left':
-                          case 'right':
-                              obj.tmp.resize.diff_y = 0;
-                              if (p.length > 0) p[0].style.left = (obj.tmp.resize.value + obj.tmp.resize.diff_x) + 'px';
-                              break;
-                      }
-                      var ptop    = obj.get('top');
-                      var pbottom = obj.get('bottom');
-                      var panel   = obj.get(obj.tmp.resize.type);
-                      var height  = parseInt($(obj.box).height());
-                      var width   = parseInt($(obj.box).width());
-                      var str     = String(panel.size);
-                      var ns, nd;
-                      var offset = $(obj.box).offset();
-                      switch (obj.tmp.resize.type) {
-                          case 'top':
-                              ns = parseInt(panel.sizeCalculated) + obj.tmp.resize.diff_y;
-                              obj.tmp.resize.y = ns+offset.top;
-                              nd = 0;
-                              break;
-                          case 'bottom':
-                              ns = parseInt(panel.sizeCalculated) - obj.tmp.resize.diff_y;
-                              obj.tmp.resize.y = height-ns+offset.top;
-                              nd = 0;
-                              break;
-                          case 'preview':
-                              ns = parseInt(panel.sizeCalculated) - obj.tmp.resize.diff_y;
-                              nd = (ptop && !ptop.hidden ? ptop.sizeCalculated : 0) +
-                                  (pbottom && !pbottom.hidden ? pbottom.sizeCalculated : 0);
-                              obj.tmp.resize.y = height-ns+offset.top;
-                              break;
-                          case 'left':
-                              ns = parseInt(panel.sizeCalculated) + obj.tmp.resize.diff_x;
-                              obj.tmp.resize.x = ns+offset.left;
-                              nd = 0;
-                              break;
-                          case 'right':
-                              ns = parseInt(panel.sizeCalculated) - obj.tmp.resize.diff_x;
-                              obj.tmp.resize.x = width-ns+offset.left;
-                              nd = 0;
-                              break;
-                      }
-                      // set size
-                      if (str.substr(str.length-1) == '%') {
-                          panel.size = Math.floor(ns * 100 / (panel.type == 'left' || panel.type == 'right' ? width : height - nd) * 100) / 100 + '%';
-                      } else {
-                          if (String(panel.size).substr(0, 1) == '-') {
-                              panel.size = parseInt(panel.size) - panel.sizeCalculated + ns;
-                          } else {
-                              panel.size = ns;
-                          }
-                      }
-                      
-                      obj.tmp.resize.diff_x = 0;
-                      obj.tmp.resize.diff_y = 0;
-                      obj.resize();
-                      
-                      // Recreate iframe blockers with new dimensions
-                      
-                      if ( obj.iframeBlocks ) {
-                  			obj.iframeBlocks.remove();
-                  			delete obj.iframeBlocks;
-                  		}
-                  		obj.iframeBlocks = $(document).find( 'iframe' ).map(function() {
-                  			var iframe = $( this );
-                  			return $( '<div>' )
-                  				.css( "position", "absolute" )
-                  				.css( "z-index", "200" )
-                  				.appendTo( iframe.parent() )
-                  				.outerWidth( iframe.outerWidth() )
-                  				.outerHeight( iframe.outerHeight() )
-                  				.offset( iframe.offset() )[ 0 ];
-                  		});
-                             
-                      // Show hidden panel!
-                      setTimeout(function () {
-                          if (obj.tmp.resize !== undefined && panel.hidden)
-                          obj.show(obj.tmp.resize.type, true);
-                      }, 200);
-  
-                  }
-                }, 50);
+                //if (Math.random() > 0.2) return;
+                if (obj.tmp.resize !== undefined) {
+                        
+                    var p = $('#layout_'+ obj.name + '_resizer_'+ obj.tmp.resize.type);
+                    if (!p.hasClass('active')) p.addClass('active');
+                    
+                    switch (obj.tmp.resize.type) {
+                        case 'top':
+                        case 'preview':
+                        case 'bottom':
+                            obj.tmp.resize.diff_x = 0;
+                            if (p.length > 0) p[0].style.top = (obj.tmp.resize.value + obj.tmp.resize.diff_y) + 'px';
+                            break;
+    
+                        case 'left':
+                        case 'right':
+                            obj.tmp.resize.diff_y = 0;
+                            if (p.length > 0) p[0].style.left = (obj.tmp.resize.value + obj.tmp.resize.diff_x) + 'px';
+                            break;
+                    }
+                    var ptop    = obj.get('top');
+                    var pbottom = obj.get('bottom');
+                    var panel   = obj.get(obj.tmp.resize.type);
+                    var height  = parseInt($(obj.box).height());
+                    var width   = parseInt($(obj.box).width());
+                    var str     = String(panel.size);
+                    var ns, nd;
+                    var offset = $(obj.box).offset();
+                    switch (obj.tmp.resize.type) {
+                        case 'top':
+                            ns = parseInt(panel.sizeCalculated) + obj.tmp.resize.diff_y;
+                            obj.tmp.resize.y = ns+offset.top;
+                            nd = 0;
+                            break;
+                        case 'bottom':
+                            ns = parseInt(panel.sizeCalculated) - obj.tmp.resize.diff_y;
+                            obj.tmp.resize.y = height-ns+offset.top;
+                            nd = 0;
+                            break;
+                        case 'preview':
+                            ns = parseInt(panel.sizeCalculated) - obj.tmp.resize.diff_y;
+                            nd = (ptop && !ptop.hidden ? ptop.sizeCalculated : 0) +
+                                (pbottom && !pbottom.hidden ? pbottom.sizeCalculated : 0);
+                            obj.tmp.resize.y = height-ns+offset.top;
+                            break;
+                        case 'left':
+                            ns = parseInt(panel.sizeCalculated) + obj.tmp.resize.diff_x;
+                            obj.tmp.resize.x = ns+offset.left;
+                            nd = 0;
+                            break;
+                        case 'right':
+                            ns = parseInt(panel.sizeCalculated) - obj.tmp.resize.diff_x;
+                            obj.tmp.resize.x = width-ns+offset.left;
+                            nd = 0;
+                            break;
+                    }
+                    // set size
+                    if (str.substr(str.length-1) == '%') {
+                        panel.size = Math.floor(ns * 100 / (panel.type == 'left' || panel.type == 'right' ? width : height - nd) * 100) / 100 + '%';
+                    } else {
+                        if (String(panel.size).substr(0, 1) == '-') {
+                            panel.size = parseInt(panel.size) - panel.sizeCalculated + ns;
+                        } else {
+                            panel.size = ns;
+                        }
+                    }
+                    
+                    obj.tmp.resize.diff_x = 0;
+                    obj.tmp.resize.diff_y = 0;
+                    obj.resize();
+                    
+                    // Recreate iframe blockers with new dimensions
+                    
+                    if ( obj.iframeBlocks ) {
+                			obj.iframeBlocks.remove();
+                			delete obj.iframeBlocks;
+                		}
+                		obj.iframeBlocks = $(document).find( 'iframe' ).map(function() {
+                			var iframe = $( this );
+                			return $( '<div>' )
+                				.css( "position", "absolute" )
+                				.css( "z-index", "200" )
+                				.appendTo( iframe.parent() )
+                				.outerWidth( iframe.outerWidth() )
+                				.outerHeight( iframe.outerHeight() )
+                				.offset( iframe.offset() )[ 0 ];
+                		});
+                           
+                    // Show hidden panel!
+                    setTimeout(function () {
+                        if (obj.tmp.resize !== undefined && panel.hidden)
+                        obj.show(obj.tmp.resize.type, true);
+                    }, 200);
+                }
+            }
+            
+            function resizeStart(type, evnt) {
+                if ($(evnt.target).attr('class') === "w2ui-resize-toggle") {
+                  obj.toggle(type, true); return;
+                }
+                if (!obj.box) return;
                 
-              }
+                // Block all iframes from capturing mouse events by
+                // temporarily overlaying an empty div element.
+                // Solution adapted from jquery UI library.
+              
+            		obj.iframeBlocks = $(document).find( 'iframe' ).map(function() {
+            			var iframe = $( this );
+            			return $( '<div>' )
+            				.css( "position", "absolute" )
+            				.css( "z-index", "200" )
+            				.appendTo( iframe.parent() )
+            				.outerWidth( iframe.outerWidth() )
+            				.outerHeight( iframe.outerHeight() )
+            				.offset( iframe.offset() )[ 0 ];
+            		});
+
+                if (!evnt) evnt = window.event;
+                $(document).off('mousemove', obj.tmp.events.mouseMove).on('mousemove', obj.tmp.events.mouseMove);
+                $(document).off('mouseup', obj.tmp.events.mouseUp).on('mouseup', obj.tmp.events.mouseUp);
+                $(document).off('touchmove', obj.tmp.events.mouseMove).on('touchmove', obj.tmp.events.mouseMove);
+                $(document).off('touchend', obj.tmp.events.mouseUp).on('touchend', obj.tmp.events.mouseUp);
+                obj.tmp.resize = {
+                    type    : type,
+                    x       : evnt.clientX||evnt.originalEvent.touches[0].clientX,
+                    y       : evnt.clientY||evnt.originalEvent.touches[0].clientY,
+                    diff_x  : 0,
+                    diff_y  : 0,
+                    value   : 0
+                };
+                
+                // lock all panels
+                
+                for (var p1 = 0; p1 < w2panels.length; p1++) {
+                    var $tmp = $(obj.el(w2panels[p1])).parent().find('.w2ui-lock');
+                    if ($tmp.length > 0) {
+                        $tmp.attr('locked', 'previous');
+                    } else {
+                        obj.lock(w2panels[p1], { opacity: 0 });
+                    }
+                }
+                
+                if (type == 'left' || type == 'right') {
+                    obj.tmp.resize.value = parseInt($('#layout_'+ obj.name +'_resizer_'+ type)[0].style.left);
+                }
+                if (type == 'top' || type == 'preview' || type == 'bottom') {
+                    obj.tmp.resize.value = parseInt($('#layout_'+ obj.name +'_resizer_'+ type)[0].style.top);
+                }
+                
+                
+                // add padding
+                if (type == 'left') obj.tmp.resize.x -= (obj.padding/2);
+                if (type == 'right') obj.tmp.resize.x += (obj.padding/2);
+                if (type == 'top') obj.tmp.resize.y -= (obj.padding/2);
+                if (type == 'bottom' || type == 'preview') obj.tmp.resize.y += (obj.padding/2);
+                
             }
             
             function resizeStop(evnt) {
@@ -1171,13 +1167,14 @@
             for (var e in w2ui) {
                 if (typeof w2ui[e].resize == 'function') {
                     // sent to all none-layouts
-                    if (w2ui[e].panels == 'undefined') w2ui[e].resize();
+                    // if (w2ui[e].panels == 'undefined') w2ui[e].resize();
                     // only send to nested layouts
                     var parent = $(w2ui[e].box).parents('.w2ui-layout');
                     if (parent.length > 0 && parent.attr('name') == obj.name) w2ui[e].resize();
                 }
             }
             this.trigger($.extend(eventData, { phase: 'after' }));
+            console.log(obj.name, new Date().getTime() - time);
             return (new Date()).getTime() - time;
         },
 
