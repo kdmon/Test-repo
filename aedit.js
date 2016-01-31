@@ -1772,7 +1772,16 @@ function drawMarker(returnArray, range, left, top, config) {
   returnArray.push("<div data-user='popup' class='ace_selection' style='", "border-radius: 30px; background: ", color, "; opacity:0.2;", "left:", left - 16, "px;", "top:", top - 11, "px;", "height:", 35, "px;", "width:", 35, "px; pointer-events: auto; cursor: help;' onmouseover='javascript: showAuthor(this, 1);' onmouseout='javascript: showAuthor(this);'></div><div id='popup' style='position:absolute; ", "top:", top - 25, "px;", "left:", left - 2, "px;", "background: white; border-radius: 10px; border: 1px solid ", color, "; padding: 2px; display: none;'><b>" + cursorKey + "</b></div>");
 }
 
+// Fix iframe overlapping resize toggles bug
+// Todo: should be done at render finish, not arbitrary timeout
 
+setTimeout(function () {
+  $( ".w2ui-resize-toggle" ).hover(function() {
+    $(".preview-iframe").css("z-index", 120);
+  }).mouseout(function() {
+    $(".preview-iframe").css("z-index", 121);
+  });
+}, 500);
 
 // KNOCKOUT MODEL - not implemented
 
