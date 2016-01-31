@@ -666,13 +666,16 @@ function openPreview (url, caption, panel) {
       
   refreshTabs();
   // 4. render into temporary dom element once
-  $('<iframe id="' + previewId +'" class="preview-iframe"></iframe>').prependTo("body");
-  
-  var iframe = document.getElementById(previewId);
-  iframe.contentWindow.onerror = function(message, xurl, lineno) {
-    alert ("JS error: " + message + ", on line " + lineno);
-  };
-  iframe.src = fullUrl;
+  $('<iframe id="' + previewId +'" class="preview-iframe"></iframe>')
+    .prependTo("body")
+    .attr("src", fullUrl)
+    .on('load', function () {
+      console.log('iframe loaded');
+      var iframe = document.getElementById(previewId);
+      iframe.contentWindow.onerror = function(message, xurl, lineno) {
+        alert ("JS error: " + message + ", on line " + lineno);
+      };
+    });
 
   w2ui[location.layout].get(location.panel).tabs.click(previewId);
   // Does not work
