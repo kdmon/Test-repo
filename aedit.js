@@ -666,7 +666,7 @@ function openPreview (url, caption, panel) {
       
   refreshTabs();
   // 4. render into temporary dom element once
-  $('<iframe id="' + previewId +'" class="preview-iframe"></iframe>').appendTo("body");
+  $('<iframe id="' + previewId +'" class="preview-iframe"></iframe>').prependTo("body");
   
   var iframe = document.getElementById(previewId);
   iframe.contentWindow.onerror = function(message, xurl, lineno) {
