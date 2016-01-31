@@ -250,7 +250,7 @@ w2ui.layout.content('main', w2ui.middlesplit);
 w2ui.layout.content('right', w2ui.rightsplit);
 
 
-var connection = new sharejs.Connection("http://it4se.com:8081/channel");
+var connection = new sharejs.Connection("http://webappeditor.com:8081/channel");
 
 function toUTF8Array(str) {
     var utf8 = [];
@@ -647,9 +647,9 @@ function openPreview (url, caption, panel) {
   var previewId = "preview_" + url.hashCode();
   // strip leading slash in pathname
   url = (url.substr(0,1) === "/") ? url.substr(1, url.length) : url;
-  var fullUrl = (url.substr(4) === 'http') ? url : 'http://it4se.com:8080/' + url;
+  var fullUrl = (url.substr(4) === 'http') ? url : 'http://webappeditor.com:8080/' + url;
   if (url.substr(url.length-3).toLowerCase() == '.md')
-    fullUrl = 'http://it4se.com:8080/markdown.html?r=' + randomString(100) + "&url=" + fullUrl;
+    fullUrl = 'http://webappeditor.com:8080/markdown.html?r=' + randomString(100) + "&url=" + fullUrl;
   tabList[previewId] = {
     id: previewId,
     fullUrl: fullUrl,
@@ -1591,7 +1591,7 @@ function startDoc(settings) {
   
               // force browsersync update
 /*  
-              $.get("http://it4se.com:3000/__browser_sync__?method=reload&args=" + encodedUrl, function (data) {});
+              $.get("http://webappeditor.com:3000/__browser_sync__?method=reload&args=" + encodedUrl, function (data) {});
  
               if (editors[location.area].getSession().getUndoManager().isClean()) w2ui[location.layout].get(location.panel).set(tabId, { caption: path });
               else w2ui[location.layout].get(location.panel).set(tabId, { caption: ' * ' + path});
