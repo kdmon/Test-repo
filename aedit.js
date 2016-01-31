@@ -244,83 +244,11 @@ $().w2layout({
     }
   }]
 });
-$().w2layout({
-  name: 'bottomsplit',
-  panels: [{
-    type: 'left',
-    resizable: true,
-    hidden: true,
-    size: '33%',
-    content: '',
-    tabs: {
-      tabs: [],
-      onClose: function(event) {
-        tabClose(this, event);
-      },
-      onClick: function(event) {
-        tabClick(this, event);
-      }
-    },
-    toolbar: {
-      items: [],
-      onClick: function(event) {
-        toolbarClick(this, event);
-      }
-    }
-  }, {
-    type: 'main',
-    resizable: true,
-    content: '',
-    tabs: {
-      tabs: [],
-      onClose: function(event) {
-        tabClose(this, event);
-      },
-      onClick: function(event) {
-        tabClick(this, event);
-      }
-    },
-    toolbar: {
-      items: [],
-      onClick: function(event) {
-        toolbarClick(this, event);
-      }
-    }
-  }, {
-    type: 'right',
-    resizable: true,
-    hidden: true,
-    size: '33 %',
-    content: '',
-    tabs: {
-      tabs: [],
-      onClose: function(event) {
-        tabClose(this, event);
-      },
-      onClick: function(event) {
-        tabClick(this, event);
-      }
-    },
-    toolbar: {
-      items: [],
-      onClick: function(event) {
-        toolbarClick(this, event);
-      }
-    }
-  }]
-});
+
 w2ui.layout.content('left', w2ui.leftsplit);
 w2ui.layout.content('main', w2ui.middlesplit);
 w2ui.layout.content('right', w2ui.rightsplit);
-w2ui.layout.content('bottom', w2ui.bottomsplit);
 
-$().w2layout({
-  name: 'popupLayout',
-  panels: [
-    { type: 'left', size: 250, resizable: true, minSize: 200 },
-    { type: 'main', minSize: 350, overflow: 'hidden' }
-  ]
-});
 
 var connection = new sharejs.Connection("http://it4se.com:8081/channel");
 
@@ -790,10 +718,6 @@ initialiseToolbar('middlesplit', 'main', 'empty');
 initialiseToolbar('middlesplit', 'preview', 'empty');
 initialiseToolbar('rightsplit', 'main', 'empty');
 initialiseToolbar('rightsplit', 'preview', 'empty');
-initialiseToolbar('bottomsplit', 'left', 'empty');
-initialiseToolbar('bottomsplit', 'main', 'empty');
-initialiseToolbar('bottomsplit', 'right', 'empty');
-
 /* SETUP TABS */
 var tabList = {};
 
@@ -1139,9 +1063,6 @@ w2ui.middlesplit.on('resize', function () {
 w2ui.rightsplit.on('resize', function () {
   updateLayout(true);
 });
-w2ui.bottomsplit.on('resize', function () {
-  updateLayout(true);
-});
 
 
 // Prevent toolbars from stealing focus from editor
@@ -1158,10 +1079,7 @@ var panelAreas = [
   'layout_middlesplit_panel_main',
   'layout_middlesplit_panel_preview',
   'layout_rightsplit_panel_main',
-  'layout_rightsplit_panel_preview',
-  'layout_bottomsplit_panel_left',
-  'layout_bottomsplit_panel_main',
-  'layout_bottomsplit_panel_right'
+  'layout_rightsplit_panel_preview'
 ];
 
 
