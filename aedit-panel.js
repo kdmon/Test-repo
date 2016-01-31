@@ -523,15 +523,15 @@
                 tmp.diff_y = resize_y;
                 
                 window.requestAnimationFrame(updateSize);
-
-                clearTimeout(resizeTimer);
-                var resizeTimer = setTimeout(updateSize, 200);
                 
                 // event after
                 obj.trigger($.extend(eventData, { phase: 'after' }));
             }
             
             function updateSize() {
+                this.fps ++;
+                if (this.fps < 3) return
+                this.fps = 0;
                 //if (Math.random() > 0.2) return;
                 if (obj.tmp.resize !== undefined) {
                         
@@ -1164,17 +1164,18 @@
                 $(tmp2 + 'content').css({ display: 'block' }).css({ top: tabHeight + 'px' });
             }
             // send resize to all objects
+            // THIS CODE RUNS SLOW IN NESTED LAYOUTS, about 100ms on chrome
             for (var e in w2ui) {
                 if (typeof w2ui[e].resize == 'function') {
                     // sent to all none-layouts
-                    // if (w2ui[e].panels == 'undefined') w2ui[e].resize();
+                    if (w2ui[e].panels == 'undefined') w2ui[e].resize();
                     // only send to nested layouts
                     var parent = $(w2ui[e].box).parents('.w2ui-layout');
                     if (parent.length > 0 && parent.attr('name') == obj.name) w2ui[e].resize();
                 }
             }
             this.trigger($.extend(eventData, { phase: 'after' }));
-            console.log(obj.name, new Date().getTime() - time);
+            // console.log(obj.name, new Date().getTime() - time);
             return (new Date()).getTime() - time;
         },
 
