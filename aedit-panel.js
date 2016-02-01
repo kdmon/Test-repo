@@ -718,7 +718,6 @@
                 }
                 
                 
-                $(".preview-iframe").css("z-index", "121");
                 /*
                 // Unblock all iframes from capturing mouse events by
                 // removing temporary overlaying empty div elements.
@@ -732,6 +731,10 @@
                 
                 $('#layout_'+ obj.name + '_resizer_'+ obj.tmp.resize.type).removeClass('active');
                 delete obj.tmp.resize;
+                
+                setTimeout(function () {
+                  $(".preview-iframe").css("z-index", "121");
+                }, 50);
             }
         },
 
