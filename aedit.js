@@ -1034,7 +1034,7 @@ function updateLayout(editorOnly) {
             else $("#" + item.id).hide();
           }
         }
-    }, 200);
+    }, 100);
   }
 }
 
