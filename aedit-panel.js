@@ -603,6 +603,8 @@
                     obj.tmp.resize.diff_y = 0;
                     obj.resize();
                     
+                    
+                    /* 
                     // Recreate iframe blockers with new dimensions
                     
                     if ( obj.iframeBlocks ) {
@@ -619,7 +621,10 @@
                 				.outerHeight( iframe.outerHeight() )
                 				.offset( iframe.offset() )[ 0 ];
                 		});
-                           
+                    */
+                    
+                    $(".preview-iframe").css("z-index", "120");
+                    
                     // Show hidden panel!
                     setTimeout(function () {
                         if (obj.tmp.resize !== undefined && panel.hidden)
@@ -634,10 +639,13 @@
                 }
                 if (!obj.box) return;
                 
+              
+                $(".preview-iframe").css("z-index", "120");
+                
+                /*
                 // Block all iframes from capturing mouse events by
                 // temporarily overlaying an empty div element.
                 // Solution adapted from jquery UI library.
-              
             		obj.iframeBlocks = $(document).find( 'iframe' ).map(function() {
             			var iframe = $( this );
             			return $( '<div>' )
@@ -648,7 +656,8 @@
             				.outerHeight( iframe.outerHeight() )
             				.offset( iframe.offset() )[ 0 ];
             		});
-
+                */
+                
                 if (!evnt) evnt = window.event;
                 $(document).off('mousemove', obj.tmp.events.mouseMove).on('mousemove', obj.tmp.events.mouseMove);
                 $(document).off('mouseup', obj.tmp.events.mouseUp).on('mouseup', obj.tmp.events.mouseUp);
@@ -708,6 +717,9 @@
                     }
                 }
                 
+                
+                $(".preview-iframe").css("z-index", "121");
+                /*
                 // Unblock all iframes from capturing mouse events by
                 // removing temporary overlaying empty div elements.
                 // Solution adapted from jquery UI library.
@@ -716,6 +728,7 @@
             			obj.iframeBlocks.remove();
             			delete obj.iframeBlocks;
             		}
+                */
                 
                 $('#layout_'+ obj.name + '_resizer_'+ obj.tmp.resize.type).removeClass('active');
                 delete obj.tmp.resize;
