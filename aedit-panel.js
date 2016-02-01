@@ -734,7 +734,7 @@
                 
                 setTimeout(function () {
                   $(".preview-iframe").css("z-index", "121");
-                }, 50);
+                }, 250);
             }
         },
 
