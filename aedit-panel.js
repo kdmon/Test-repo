@@ -731,10 +731,10 @@
                 
                 $('#layout_'+ obj.name + '_resizer_'+ obj.tmp.resize.type).removeClass('active');
                 delete obj.tmp.resize;
-                
-                setTimeout(function () {
+                clearTimeout(this.shiftIframe);
+                this.shiftIframe = setTimeout(function () {
                   $(".preview-iframe").css("z-index", "121");
-                }, 250);
+                }, 100);
             }
         },
 
