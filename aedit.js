@@ -983,6 +983,36 @@ var resizeTimer;
 
 function updateLayout(editorOnly) {
   
+  /* There are two main operations going on here:
+  
+    1. keep the w2ui layout (panels) updated.
+    2. keep widgets unrelated to layout (ace editor, sidebar, iframes) updated.
+    
+    W2ui library probably handles majority of cases for 1, but not for 2.
+    
+    Redrawing is expensive, particularly when dealing with nested panels,
+    and therefore needs to be optimised for a smooth UI. It should be triggered
+    as rarely as possible but still provide smoothness (max 100ms delay).
+    
+    Interactions triggering redrawing are:
+    
+    1. Toggling panels (w2ui handles panels, but not widgets, need to trigger
+       widget redraws manually after w2ui redraw finishes).
+    2. Resizing window (w2ui again handles this for panels, but not widgets).
+    3. Resizing panels (modified w2ui code, aedit-panel.js, handles this).
+    4. Tab interactions (clicks, drags, closes)
+    5. Programmatic refreshs (should be kept at minimum).
+    
+    It can be difficult to know which widgets are affected by every
+    interaction. An easy way is to redraw all widgets after w2ui
+    resize oncomplete event is received, but could be slow if many widget.
+    
+    Another option is to use an array of widgets that need to be redrawn
+    and periodically poll/pop the list (e.g. at 60fps).
+    
+  */
+  
+  
   if (resizeTimer === undefined) {
     
     resizeTimer = setTimeout(function() {
