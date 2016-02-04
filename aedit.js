@@ -340,7 +340,7 @@ var toolbars = {
   projectmanager: ['sidebarsearch', 'refresh','newproject', 'selectproject', 'closeproject'],
   chat: ['url', 'refresh', 'share'],
   prefs: ['url', 'refresh', 'share'],
-  filebrowser: ['sidebarsearch','refresh'],
+  filebrowser: ['newfile','sidebarsearch','refresh'],
   media: ['url', 'refresh', 'share'],
   empty: [],
   help: []
@@ -519,6 +519,13 @@ var buttons = {
     icon: 'fa fa-pause',
     hint: 'Pause'
   },
+  newfile: {
+    id: 'newfile',
+    type: 'button',
+    caption: '',
+    icon: 'fa fa-file-o',
+    hint: 'New file'
+  },
   sidebarsearch: {
     type: 'html',
     id: 'sidebarsearch',
@@ -582,6 +589,7 @@ function filter (elem) {
 }
 
 function toolbarClick(obj, event) {
+  console.log(obj,event);
   var id = obj.name.split("_");
   var elem = 'layout_'+id[0]+'_panel_'+id[1];
   var panel = pickPanel(elem);
@@ -625,6 +633,17 @@ function toolbarClick(obj, event) {
       break;
     case 'refresh':
       $("#" + tabList[tab].id).attr("src", tabList[tab].fullUrl);
+      break;
+    case 'newfile':
+      var reponame = tabList[tab].id.split('_')[1];
+      var filename = prompt ("Please enter new file name and path");
+      var repo = github.getRepo(config.user, reponame);
+      repo.write('master', filename, '', 'New file', function(err) {
+        if (err) {console.log(err); alert ("Failed to create file! " + err);}
+        else {
+          alert ("File created successfully!");
+        }
+      });
       break;
     default:
     //obj.owner.content('main', 'event' + event.target);
@@ -1277,10 +1296,10 @@ function addTab (id, caption, type, panel, activate) {
 function openProject (user, repository, branch, panelArea) {
   var repo = github.getRepo(user, repository);
   branch = (branch !== undefined) ? branch : 'master';
-  // 1. Fetch repo files, recursively - should be allocated to a worker
+  // 1. Fetch repo files, recursively - allocated to a web worker
   repo.getTree(branch + '?recursive=true', function (err, tree) {
     var title = '<i class="fa fa-folder-open-o"></i> ' + repository;
-    var id = "filebrowser" + Math.round(Math.random() * 10000000);
+    var id = "filebrowser_" + repository + "_" + Math.round(Math.random() * 10000000);
 
     if (err) {
       console.log("Error retrieving files", err);
