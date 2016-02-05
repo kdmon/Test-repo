@@ -14,7 +14,7 @@ require.config({
 });
 
 
-define(["knockout", "jquery", "w2ui", "w2uigithack", "w2uirawgit", "w2uirawgitcdn"], function (ko,$) {
+define(["knockout", "jquery", "w2ui"], function (ko,$) {
   
   ko.components.register("testcomponent", {require: "testcomponent"});
   
