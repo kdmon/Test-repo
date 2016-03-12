@@ -503,7 +503,6 @@
                         resize_y -= (obj.padding/2);
                         break;
 
-                    case 'preview':
                     case 'bottom':
                         if (panel.minSize + resize_y > panel.height) {
                             resize_y = panel.height - panel.minSize;
@@ -522,16 +521,21 @@
                 tmp.diff_x = resize_x;
                 tmp.diff_y = resize_y;
                 
-                window.requestAnimationFrame(updateSize);
+                window.requestAnimationFrame(function() {updateSize()});
                 
                 // event after
                 obj.trigger($.extend(eventData, { phase: 'after' }));
             }
             
-            function updateSize() {
-                this.fps ++;
-                if (this.fps < 3) return
-                this.fps = 0;
+            function updateSize(force) {
+                // refresh layout every 10 frames or 350ms since last mousemove
+                obj.fps ++;
+                if (obj.fps < 10 && force === undefined) {
+                  clearTimeout(obj.resizeTimer);
+                  obj.resizeTimer = setTimeout(function(){updateSize(true)}, 350);
+                  return;
+                }
+                obj.fps = 0;
                 //if (Math.random() > 0.2) return;
                 if (obj.tmp.resize !== undefined) {
                         
@@ -700,7 +704,7 @@
             }
             
             function resizeStop(evnt) {
-                updateSize();
+                updateSize(true);
                 if (!obj.box) return;
                 if (!evnt) evnt = window.event;
                 $(document).off('mousemove', obj.tmp.events.mouseMove);
