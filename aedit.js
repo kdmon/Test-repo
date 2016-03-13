@@ -39,6 +39,8 @@ function authenticate () {
       w2ui["layout"].get(["top"]).toolbar.show('account');
       w2ui["layout"].get(["top"]).toolbar.show('topbreak1');
       w2ui["layout"].get(["top"]).toolbar.show('connection');
+      w2ui["layout"].get(["top"]).toolbar.show('topbreak2');
+      w2ui["layout"].get(["top"]).toolbar.show('fullscreen');
       w2ui["layout"].get(["top"]).toolbar.set('account', {
         text: config.user,
         img: '"><img class="account-icon" src="' + config.avatar +'"/> <i id="'
@@ -401,6 +403,18 @@ var buttons = {
     type: 'html',
     html: '<div style="opacity: 0.8; background:">' +
     '<span class="fa fa-circle" style="color: #0b0 !important;"></span> Online </div>'
+  },
+  topbreak2 :{
+    id: 'topbreak2',
+    type: 'break'
+  },
+  fullscreen : {
+    id: 'fullscreen',
+    type: 'html',
+    html: '<div style="opacity: 0.8; background:">' +
+    '<img id="fullscreenbutton" title="Toggle fullscreen" onclick="toggleFullscreen()" ' +
+    'style="padding: 5px; width: 32px; opacity: 0.8;" ' + 
+    'src="http://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Octicons-screen-full.svg/210px-Octicons-screen-full.svg.png"/></div>'
   }, 
   save: {
     id: 'save',
@@ -578,6 +592,45 @@ var buttons = {
     hint: 'Open preview externally'
   }
 };
+
+var fullscreen = false;
+
+function toggleFullscreen () {
+  
+  // todo : listen to full screen exit event and update toggle setting
+  
+  if (fullscreen) {
+    if(document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if(document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    } else if(document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    }
+    
+    $("#fullscreenbutton").css({"opacity": 0.8});
+    fullscreen = false;
+    
+  }
+
+  else {
+    
+    var element = document.body;
+   
+    if(element.requestFullscreen) {
+      element.requestFullscreen();
+    } else if(element.mozRequestFullScreen) {
+      element.mozRequestFullScreen();
+    } else if(element.webkitRequestFullscreen) {
+      element.webkitRequestFullscreen();
+    } else if(element.msRequestFullscreen) {
+      element.msRequestFullscreen();
+    }
+
+    $("#fullscreenbutton").css({"opacity": 0.4});
+    fullscreen = true;
+  }
+}
 
 function filter (elem) {
   var targetPanel = $(elem)
