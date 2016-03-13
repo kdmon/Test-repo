@@ -529,13 +529,15 @@
             
             function updateSize(force) {
                 // refresh layout every n frames or x ms after last cursor move
+                // for smoothest perf on low cpus, keep n high and x low
                 obj.fps ++;
-                if (obj.fps < 3 && force === undefined) {
+                if (obj.fps < 40 && force === undefined) {
                   clearTimeout(obj.resizeTimer);
-                  obj.resizeTimer = setTimeout(function(){updateSize(true)}, 50);
+                  obj.resizeTimer = setTimeout(function(){updateSize(true)}, 10);
                   return;
                 }
-                if (force === undefined) obj.fps = 0;
+                //if (force === undefined)
+                obj.fps = 0;
                 //if (Math.random() > 0.2) return;
                 if (obj.tmp.resize !== undefined) {
                         
