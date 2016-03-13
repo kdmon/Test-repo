@@ -80,7 +80,7 @@ $('#layout').w2layout({
   name: 'layout',
   panels: [{
     type: 'top',
-    size: '50px',
+    size: '40px',
     toolbar: {
       items: [],
       onClick: function(event) {
@@ -117,6 +117,27 @@ $('#layout').w2layout({
 $().w2layout({
   name: 'leftsplit',
   panels: [{
+    type: 'top',
+    size: '50%',
+    resizable: true,
+    hidden: true,
+    content: '',
+    tabs: {
+      tabs: [],
+      onClose: function(event) {
+        tabClose(this, event);
+      },
+      onClick: function(event) {
+        tabClick(this, event);
+      }
+    },
+    toolbar: {
+      items: [],
+      onClick: function(event) {
+        toolbarClick(this, event);
+      }
+    }
+  },{
     type: 'main',
     resizable: true,
     content: '',
@@ -161,6 +182,27 @@ $().w2layout({
 $().w2layout({
   name: 'middlesplit',
   panels: [{
+    type: 'top',
+    size: '50%',
+    resizable: true,
+    hidden: true,
+    content: '',
+    tabs: {
+      tabs: [],
+      onClose: function(event) {
+        tabClose(this, event);
+      },
+      onClick: function(event) {
+        tabClick(this, event);
+      }
+    },
+    toolbar: {
+      items: [],
+      onClick: function(event) {
+        toolbarClick(this, event);
+      }
+    }
+  },{
     type: 'main',
     resizable: true,
     content: '',
@@ -205,6 +247,27 @@ $().w2layout({
 $().w2layout({
   name: 'rightsplit',
   panels: [{
+    type: 'top',
+    size: '50%',
+    resizable: true,
+    hidden: true,
+    content: '',
+    tabs: {
+      tabs: [],
+      onClose: function(event) {
+        tabClose(this, event);
+      },
+      onClick: function(event) {
+        tabClick(this, event);
+      }
+    },
+    toolbar: {
+      items: [],
+      onClick: function(event) {
+        toolbarClick(this, event);
+      }
+    }
+  },{
     type: 'main',
     resizable: true,
     content: '',
@@ -793,10 +856,13 @@ function initialiseToolbar(layout, panel, toolbar) {
 }
 
 initialiseToolbar('layout', 'top', 'topmenu');
+initialiseToolbar('leftsplit', 'top', 'empty');
 initialiseToolbar('leftsplit', 'main', 'empty');
 initialiseToolbar('leftsplit', 'preview', 'empty');
+initialiseToolbar('middlesplit', 'top', 'empty');
 initialiseToolbar('middlesplit', 'main', 'empty');
 initialiseToolbar('middlesplit', 'preview', 'empty');
+initialiseToolbar('rightsplit', 'top', 'empty');
 initialiseToolbar('rightsplit', 'main', 'empty');
 initialiseToolbar('rightsplit', 'preview', 'empty');
 /* SETUP TABS */
@@ -1204,10 +1270,13 @@ $(".w2ui-toolbar:not(.selectable)").on('mousedown', function(event) {
 /* SETUP EDITOR AND VIEWMODEL */
 var editors = [];
 var panelAreas = [
+  'layout_leftsplit_panel_top',
   'layout_leftsplit_panel_main',
   'layout_leftsplit_panel_preview',
+  'layout_middlesplit_panel_top',
   'layout_middlesplit_panel_main',
   'layout_middlesplit_panel_preview',
+  'layout_rightsplit_panel_top',
   'layout_rightsplit_panel_main',
   'layout_rightsplit_panel_preview'
 ];
