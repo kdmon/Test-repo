@@ -1073,6 +1073,7 @@ function handleDrop(originalId, destination, insertBefore) {
   }
   */
   refreshTabs();
+  w2ui.layout.resize();
   updateLayout();
 }
 
