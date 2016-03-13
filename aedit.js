@@ -752,6 +752,33 @@ var tabList = {};
 var draggedTabId = '';
 
 function refreshTabs() {
+  
+  
+  for (var i = 0; i < editors.length; i++) {
+    
+    /* SLOW CODE! - ONLY RUN WHEN NEEDED! */
+  
+    // Hide inactive tab areas
+    var location = panelAreas[i].split("_");
+    if (w2ui[location[1]].get(location[3]).tabs.tabs.length === 0) {
+      console.log("expensive fx");
+      $("#editor" + i).hide();
+      $("#container"+ i + " .w2ui-sidebar").hide();
+      $("#content" + i).html('<div class="inactive-panel">' +
+      '<p><b>This subpanel is empty.</b></p>' +
+      '<ul><li>To use it, drag a tab over.</li>' +
+      
+      '</ul></div>');
+      if (location[1] === 'middlesplit' && location[3] === 'main')
+      $("#content" + i).html('<div class="inactive-panel">' +
+      '<p><b>This panel is empty.</b></p>' +
+      '<ul><li>To use it, drag a tab over.' +
+      '</li></ul></div>');
+      $("#content" + i).show();
+      switchToolbar(location[1], location[3], 'empty');
+    }
+  }
+  
   // Reset draggable events
   var tabSelector = ".w2ui-panel-tabs td:not(:last-child), .w2ui-node";
   var tabContainer = ".w2ui-panel-tabs td:last-child, .w2ui-sidebar-div";
@@ -1000,7 +1027,7 @@ function tabClose(obj, event) {
 
 var resizeTimer;
 
-function updateLayout(editorOnly) {
+function updateLayout(force) {
   
   /* There are two main operations going on here:
   
@@ -1031,59 +1058,51 @@ function updateLayout(editorOnly) {
     
   */
   
+  window.requestAnimationFrame(function() {calcLayout(force)});
+}
+var fps = 0;
+function calcLayout (force) {
+  // refresh layout every n frames or x ms after last cursor move
+  fps ++;
+  if (fps < 10 && force === undefined) {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function(){calcLayout(true)}, 50);
+    return;
+  }
+  if (force === undefined) fps = 0;
   
-  if (resizeTimer === undefined) {
+  console.log("calc layout fx");
+/*
+  if (editorOnly === undefined) {
+    //w2ui.layout.resize();
+  }
+*/
+
+//w2ui.layout.resize(); //SLOW
+//return;
+// optimise!!
+// code below is only for tab/panel/iframe management - should run rarely!
+  for (var i = 0; i < editors.length; i++) {
+    editors[i].resize();
     
-    resizeTimer = setTimeout(function() {
-      resizeTimer = undefined;
-  
-        if (editorOnly === undefined) {
-          w2ui.layout.resize();
-        }
-        for (var i = 0; i < editors.length; i++) {
-          editors[i].resize();
-          var location = panelAreas[i].split("_");
-    
-          // Hide inactive tab areas
-          if (w2ui[location[1]].get(location[3]).tabs.tabs.length === 0) {
-            $("#editor" + i).hide();
-            $("#container"+ i + " .w2ui-sidebar").hide();
-            $("#content" + i).html('<div class="inactive-panel">' +
-            '<p><b>This subpanel is empty.</b></p>' +
-            '<ul><li>To use it, drag a tab over.</li>' +
-            /*
-            '<li>Or you can <span class="small-button" onclick="togglePanel(' +
-            i + ')"><i class="fa fa-expand"></i> hide it</span></li>' +
-            */
-            '</ul></div>');
-            if (location[1] === 'middlesplit' && location[3] === 'main')
-            $("#content" + i).html('<div class="inactive-panel">' +
-            '<p><b>This panel is empty.</b></p>' +
-            '<ul><li>To use it, drag a tab over.' +
-            '</li></ul></div>');
-            $("#content" + i).show();
-            switchToolbar(location[1], location[3], 'empty');
-          }
-        }
-        // update absolute position, size and visibility of preview iframes
-        for (var index in tabList) {
-          var item = tabList[index];
-          if (item.type === 'preview') {
-            var top = $("#container" + item.panel).offset().top;
-            var left = $("#container" + item.panel).offset().left;
-            var height = $("#container" + item.panel).innerHeight();
-            var width = $("#container" + item.panel).innerWidth();
-            $("#" + item.id).css({
-              top: top + 'px',
-              left: left + 'px',
-              width: width + 'px',
-              height: height + 'px'
-            });
-            if (item.visible && (top !== 0 && left !== 0)) $("#" + item.id).show();
-            else $("#" + item.id).hide();
-          }
-        }
-    }, 100);
+  }
+  // update absolute position, size and visibility of preview iframes
+  for (var index in tabList) {
+    var item = tabList[index];
+    if (item.type === 'preview') {
+      var top = $("#container" + item.panel).offset().top;
+      var left = $("#container" + item.panel).offset().left;
+      var height = $("#container" + item.panel).innerHeight();
+      var width = $("#container" + item.panel).innerWidth();
+      $("#" + item.id).css({
+        top: top + 'px',
+        left: left + 'px',
+        width: width + 'px',
+        height: height + 'px'
+      });
+      if (item.visible && (top !== 0 && left !== 0)) $("#" + item.id).show();
+      else $("#" + item.id).hide();
+    }
   }
 }
 
@@ -1109,17 +1128,17 @@ w2ui.layout.on('refresh', function(event) {
 });
 
 $(window).on("resize", function () {
- updateLayout();
+ updateLayout(true);
 });
 
 w2ui.leftsplit.on('resize', function () {
-  updateLayout(true);
+  updateLayout();
 });
 w2ui.middlesplit.on('resize', function () {
-  updateLayout(true);
+  updateLayout();
 });
 w2ui.rightsplit.on('resize', function () {
-  updateLayout(true);
+  updateLayout();
 });
 
 
