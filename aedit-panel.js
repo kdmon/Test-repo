@@ -530,9 +530,9 @@
             function updateSize(force) {
                 // refresh layout every n frames or x ms after last cursor move
                 obj.fps ++;
-                if (obj.fps < 10 && force === undefined) {
+                if (obj.fps < 3 && force === undefined) {
                   clearTimeout(obj.resizeTimer);
-                  obj.resizeTimer = setTimeout(function(){updateSize(true)}, 100);
+                  obj.resizeTimer = setTimeout(function(){updateSize(true)}, 50);
                   return;
                 }
                 if (force === undefined) obj.fps = 0;
@@ -689,9 +689,11 @@
                 
                 if (type == 'left' || type == 'right') {
                     obj.tmp.resize.value = parseInt($('#layout_'+ obj.name +'_resizer_'+ type)[0].style.left);
+                    $("body").css ('cursor','ew-resize');
                 }
                 if (type == 'top' || type == 'preview' || type == 'bottom') {
                     obj.tmp.resize.value = parseInt($('#layout_'+ obj.name +'_resizer_'+ type)[0].style.top);
+                    $("body").css ('cursor','ns-resize');
                 }
                 
                 
@@ -704,6 +706,7 @@
             }
             
             function resizeStop(evnt) {
+                $("body").css ('cursor','');
                 updateSize(true);
                 if (!obj.box) return;
                 if (!evnt) evnt = window.event;
