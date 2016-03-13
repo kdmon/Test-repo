@@ -528,14 +528,14 @@
             }
             
             function updateSize(force) {
-                // refresh layout every 10 frames or 350ms since last mousemove
+                // refresh layout every n frames or x ms after last cursor move
                 obj.fps ++;
                 if (obj.fps < 10 && force === undefined) {
                   clearTimeout(obj.resizeTimer);
-                  obj.resizeTimer = setTimeout(function(){updateSize(true)}, 350);
+                  obj.resizeTimer = setTimeout(function(){updateSize(true)}, 100);
                   return;
                 }
-                obj.fps = 0;
+                if (force === undefined) obj.fps = 0;
                 //if (Math.random() > 0.2) return;
                 if (obj.tmp.resize !== undefined) {
                         
@@ -1185,13 +1185,13 @@
             }
             // send resize to all objects
             // THIS CODE RUNS SLOW IN NESTED LAYOUTS, about 100ms on chrome
-            for (var e in w2ui) {
-                if (typeof w2ui[e].resize == 'function') {
+            for (var o in w2ui) {
+                if (typeof w2ui[o].resize == 'function') {
                     // sent to all none-layouts
-                    if (w2ui[e].panels == 'undefined') w2ui[e].resize();
+                    if (w2ui[o].panels == 'undefined') w2ui[o].resize();
                     // only send to nested layouts
-                    var parent = $(w2ui[e].box).parents('.w2ui-layout');
-                    if (parent.length > 0 && parent.attr('name') == obj.name) w2ui[e].resize();
+                    var parent = $(w2ui[o].box).parents('.w2ui-layout');
+                    if (parent.length > 0 && parent.attr('name') == obj.name) w2ui[o].resize();
                 }
             }
             this.trigger($.extend(eventData, { phase: 'after' }));
