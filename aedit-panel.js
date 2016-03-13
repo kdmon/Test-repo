@@ -24,8 +24,8 @@
         this.panels  = [];
         this.tmp     = {};
 
-        this.padding = 8;        // panel padding
-        this.resizer = 8;        // resizer width or height
+        this.padding = 14;        // panel padding
+        this.resizer = 14;        // resizer width or height
         this.style   = '';
 
         this.onShow         = null;
@@ -300,6 +300,7 @@
         },
 
         toggle: function (panel, immediate) {
+            console.log(this);
             var p = this.get(panel);
             if (p === null) return false;
             if (p.hidden) return this.show(panel, immediate); else return this.hide(panel, immediate);
@@ -404,15 +405,15 @@
                 var aspect = (pan.type === 'top' || 
                               pan.type === 'bottom' ||
                               pan.type === 'preview') ? 'horizontal' : 'vertical';
-                var html =  '<div id="layout_'+ obj.name + '_panel_'+ w2panels[p1] +'" class="w2ui-panel">'+
+                var html =  '<div id="layout_'+ obj.name + '_resizer_'+ w2panels[p1] +
+                            '" class="w2ui-resizer w2ui-' + aspect +
+                            '-resizer"><div class="w2ui-resize-toggle"></div></div>'+
+                            '<div id="layout_'+ obj.name + '_panel_'+ w2panels[p1] +'" class="w2ui-panel">'+
                             '    <div class="w2ui-panel-title"></div>'+
                             '    <div class="w2ui-panel-tabs"></div>'+
                             '    <div class="w2ui-panel-toolbar"></div>'+
                             '    <div class="w2ui-panel-content"></div>'+
-                            '</div>'+
-                            '<div id="layout_'+ obj.name + '_resizer_'+ w2panels[p1] +
-                            '" class="w2ui-resizer w2ui-' + aspect +
-                            '-resizer"><div class="w2ui-resize-toggle"></div></div>';
+                            '</div>';
                 $(obj.box).find(' > div').append(html);
                 // tabs are rendered in refresh()
             }
@@ -500,7 +501,7 @@
                             resize_y = mainPanel.height - mainPanel.minSize;
                         }
                         // remove padding
-                        resize_y -= (obj.padding/2);
+                        //resize_y -= (obj.padding/2);
                         break;
 
                     case 'bottom':
@@ -640,7 +641,8 @@
             }
             
             function resizeStart(type, evnt) {
-                if ($(evnt.target).attr('class') === "w2ui-resize-toggle") {
+                if ($(evnt.target).hasClass("w2ui-resize-toggle")) {
+                  $(evnt.target).toggleClass("panel-open");
                   obj.toggle(type, true); return;
                 }
                 if (!obj.box) return;
