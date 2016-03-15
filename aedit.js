@@ -1606,37 +1606,37 @@ function pickPanel(identifier) {
     switch (identifier) {
       case 'preview':
         obj = {
-          id: "#" + panelAreas[4],
-          layout: panelAreas[4].split('_')[1],
+          id: "#" + panelAreas[7],
+          layout: panelAreas[7].split('_')[1],
           panel: 'main',
-          area: 4
+          area: 7
         };
       break;
       
       case 'project':
         obj = {
-          id: "#" + panelAreas[0],
-          layout: panelAreas[0].split('_')[1],
+          id: "#" + panelAreas[1],
+          layout: panelAreas[1].split('_')[1],
           panel: 'main',
-          area: 0
+          area: 1
         };
       break;
       
       case 'filebrowser':
         obj = {
-          id: "#" + panelAreas[0],
-          layout: panelAreas[0].split('_')[1],
+          id: "#" + panelAreas[1],
+          layout: panelAreas[1].split('_')[1],
           panel: 'main',
-          area: 0
+          area: 1
         };
       break;
       
       default:
         obj = {
-          id: "#" + panelAreas[2],
+          id: "#" + panelAreas[4],
           layout: 'middlesplit',
           panel: 'main',
-          area: 2
+          area: 4
         };
       break;
     }
