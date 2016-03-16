@@ -418,10 +418,10 @@
                     icon2 = ' <span class="fa fa-arrow-up"></span> ';
                   break;
                   case "left":
-                    label += " left panel";
+                    label += " left panel(s)";
                   break;
                   case "right":
-                    label += "right panel";
+                    label += "right panel(s)";
                   break;
                   default:
                     label = "";
