@@ -412,7 +412,7 @@
                     label += " top panel";
                     arrow ="up";
                   break;
-                  case "preview":
+                  case "bottom":
                     label += " bottom panel";
                     arrow="down";
                   break;
