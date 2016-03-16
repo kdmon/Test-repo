@@ -405,27 +405,28 @@
                 var aspect = (pan.type === 'top' || 
                               pan.type === 'bottom' ||
                               pan.type === 'preview') ? 'horizontal' : 'vertical';
-                var arrow = "arrow-";
+                var label = "Toggle ";
                 switch (pan.type) {
                   case "top":
-                    arrow += "down";
+                    label += " top panel";
                   break;
                   case "preview":
-                    arrow += "up";
+                    label += " bottom panel";
                   break;
                   case "left":
-                    arrow += "right";
+                    label += " left panel";
                   break;
                   case "right":
-                    arrow += "left";
+                    label += "right panel";
                   break;
                   default:
-                    arrow += "none";
+                    label = "";
                   break;
                 }
                 var html =  '<div id="layout_'+ obj.name + '_resizer_'+ w2panels[p1] +
                             '" class="w2ui-resizer w2ui-' + aspect + 
-                            '-resizer"><div class="w2ui-resize-toggle ' + arrow + '"></div></div>'+
+                            '-resizer"><span class="w2ui-resize-toggle w2ui-resize-toggle-' + 
+                            pan.type + '">' + label + '</span></div>' +
                             '<div id="layout_'+ obj.name + '_panel_'+ w2panels[p1] +'" class="w2ui-panel">'+
                             '    <div class="w2ui-panel-title"></div>'+
                             '    <div class="w2ui-panel-tabs"></div>'+
