@@ -80,7 +80,7 @@ $('#layout').w2layout({
   name: 'layout',
   panels: [{
     type: 'top',
-    size: '40px',
+    size: 60,
     toolbar: {
       items: [],
       onClick: function(event) {
@@ -92,33 +92,38 @@ $('#layout').w2layout({
     content: ''
   }, {
     type: 'left',
-    size: '250px',
+    size: 250,
+    minSize: 150,
     hidden: false,
     resizable: true,
     content: ''
   }, {
     type: 'main',
     resizable: true,
+    minSize: 150,
     content: ''
   }, {
     type: 'right',
-    size: '25%',
+    size: 250,
+    minSize: 150,
     hidden: true,
     resizable: true,
     content: ''
   }, {
     type: 'bottom',
-    size: '25%',
+    size: 250,
     resizable: false,
     hidden: true,
     content: ''
   }]
 });
+
 $().w2layout({
   name: 'leftsplit',
   panels: [{
     type: 'top',
-    size: '50%',
+    size: 250,
+    minSize: 100,
     resizable: true,
     hidden: true,
     content: '',
@@ -140,6 +145,7 @@ $().w2layout({
   },{
     type: 'main',
     resizable: true,
+    minSize: 150,
     content: '',
     tabs: {
       tabs: [],
@@ -157,8 +163,9 @@ $().w2layout({
       }
     }
   }, {
-    type: 'preview',
-    size: '50%',
+    type: 'bottom',
+    size: 250,
+    minSize: 150,
     resizable: true,
     hidden: true,
     content: '',
@@ -179,11 +186,13 @@ $().w2layout({
     }
   }]
 });
+
 $().w2layout({
   name: 'middlesplit',
   panels: [{
     type: 'top',
-    size: '50%',
+    size: 250,
+    minSize: 150,
     resizable: true,
     hidden: true,
     content: '',
@@ -204,6 +213,7 @@ $().w2layout({
     }
   },{
     type: 'main',
+    minSize: 150,
     resizable: true,
     content: '',
     tabs: {
@@ -222,8 +232,9 @@ $().w2layout({
       }
     }
   }, {
-    type: 'preview',
-    size: '50%',
+    type: 'bottom',
+    size: 250,
+    minSize: 150,
     resizable: true,
     hidden: true,
     content: '',
@@ -244,11 +255,13 @@ $().w2layout({
     }
   }]
 });
+
 $().w2layout({
   name: 'rightsplit',
   panels: [{
     type: 'top',
-    size: '50%',
+    size: 250,
+    minSize: 150,
     resizable: true,
     hidden: true,
     content: '',
@@ -269,6 +282,7 @@ $().w2layout({
     }
   },{
     type: 'main',
+    minSize: 150,
     resizable: true,
     content: '',
     tabs: {
@@ -287,10 +301,11 @@ $().w2layout({
       }
     }
   }, {
-    type: 'preview',
+    type: 'bottom',
+    size: 250,
+    minSize: 150,
     resizable: true,
     hidden: true,
-    size: '50%',
     content: '',
     tabs: {
       tabs: [],
@@ -858,13 +873,13 @@ function initialiseToolbar(layout, panel, toolbar) {
 initialiseToolbar('layout', 'top', 'topmenu');
 initialiseToolbar('leftsplit', 'top', 'empty');
 initialiseToolbar('leftsplit', 'main', 'empty');
-initialiseToolbar('leftsplit', 'preview', 'empty');
+initialiseToolbar('leftsplit', 'bottom', 'empty');
 initialiseToolbar('middlesplit', 'top', 'empty');
 initialiseToolbar('middlesplit', 'main', 'empty');
-initialiseToolbar('middlesplit', 'preview', 'empty');
+initialiseToolbar('middlesplit', 'bottom', 'empty');
 initialiseToolbar('rightsplit', 'top', 'empty');
 initialiseToolbar('rightsplit', 'main', 'empty');
-initialiseToolbar('rightsplit', 'preview', 'empty');
+initialiseToolbar('rightsplit', 'bottom', 'empty');
 /* SETUP TABS */
 var tabList = {};
 
@@ -1273,13 +1288,13 @@ var editors = [];
 var panelAreas = [
   'layout_leftsplit_panel_top',
   'layout_leftsplit_panel_main',
-  'layout_leftsplit_panel_preview',
+  'layout_leftsplit_panel_bottom',
   'layout_middlesplit_panel_top',
   'layout_middlesplit_panel_main',
-  'layout_middlesplit_panel_preview',
+  'layout_middlesplit_panel_bottom',
   'layout_rightsplit_panel_top',
   'layout_rightsplit_panel_main',
-  'layout_rightsplit_panel_preview'
+  'layout_rightsplit_panel_bottom'
 ];
 
 
