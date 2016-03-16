@@ -325,11 +325,6 @@ body {
 }
 
 
-.w2ui-horizontal-resizer {
-  height: 14px !important;
-  margin-top: 0px;
-}
-
 .w2ui-resizer {
   background: none !important;
   opacity: 1;
@@ -345,96 +340,53 @@ body {
 .w2ui-resize-toggle {
   z-index: 301;
   cursor: pointer;
+  background: rgba(255,255,255,0);
+  display: block;
+  text-align: center;
+  margin: auto;
+  width: 150px;
+  height: 14px;
+  font-size:0.8em;
+  text-shadow:1px 1px rgba(255,255,255,0.7);
+  margin-top: -2px;
+  opacity: 0.5;
+  border-radius: 10px;
+}
+
+.w2ui-resize-toggle:hover {
   opacity: 1;
 }
 
-.w2ui-resize-toggle:hover{
-  background: #fff;
-}
+.w2ui-resize-toggle-up:hover,
+.w2ui-resize-toggle-down:hover {
+  margin-top: -1px;
+  }
 
-.w2ui-horizontal-resizer .w2ui-resize-toggle {
-  margin-left: auto;
-  margin-right: auto;
-  width: 20px;
-  height: 14px;
-}
-
-.w2ui-vertical-resizer .w2ui-resize-toggle {
-  margin: auto;
-  position: absolute;
+.w2ui-resize-toggle-left,
+.w2ui-resize-toggle-right {
+  transform: rotate(-90deg);
+  margin-left: -71px;
+  margin-top: auto;
+  margin-bottom: auto;
   top: 0;
   bottom: 0;
-  width: 14px;
-  height: 20px;
+  position: absolute;
+}
+
+.w2ui-resize-toggle-left:hover {
+  margin-left: -70px;
+}
+
+.w2ui-resize-toggle-right {
+  margin-left: -64px;
+  transform: rotate(90deg);
+}
+
+.w2ui-resize-toggle-right:hover {
+  margin-left: -65px;
 }
 
 
-.tr-right{
-    width: 30px;
-    height: 200px;
-    position:relative;
-    overflow:hidden;
-}
-
-.tr-right:before{
-    content:'';
-    position:absolute;
-    top:0; left:0;
-    width:100%; height:100%;
-    background-color : #0079C6;    
-    transform-origin:0 100%;
-    transform: rotate(-45deg);
-}
-
-
-.tr-left{
-    width: 30px;
-    height: 200px;
-    position:relative;
-    overflow:hidden;
-}
-
-.tr-left:before{
-    content:'';
-    position:absolute;
-    top:0; left:0;
-    width:100%; height:100%;
-    background-color : #0079C6;    
-    transform-origin: 100% 0;
-    transform: rotate(-45deg);
-}
-
-.tr-down{
-    width: 200px;
-    height: 30px;
-    position:relative;
-    overflow:hidden;
-}
-.tr-down:before{
-    content:'';
-    position:absolute;
-    top:0; left:0;
-    width:100%; height:100%;
-    background-color : #0079C6;    
-    transform-origin: 100% 0;
-    transform: rotate(45deg);
-}
-
-.tr-up{
-    width: 200px;
-    height: 30px;
-    position:relative;
-    overflow:hidden;
-}
-.tr-up:before{
-    content:'';
-    position:absolute;
-    top:0; left:0;
-    width:100%; height:100%;
-    background-color : #0079C6;    
-    transform-origin: 0 100%;
-    transform: rotate(45deg);
-}
 
 
 body:not(.selectable) {
