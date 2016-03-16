@@ -300,7 +300,7 @@
         },
 
         toggle: function (panel, immediate) {
-            console.log(this);
+            //console.log(this);
             var p = this.get(panel);
             if (p === null) return false;
             if (p.hidden) return this.show(panel, immediate); else return this.hide(panel, immediate);
@@ -406,18 +406,23 @@
                               pan.type === 'bottom' ||
                               pan.type === 'preview') ? 'horizontal' : 'vertical';
                 var label = "Toggle ";
+                var arrow = "";
                 switch (pan.type) {
                   case "top":
                     label += " top panel";
+                    arrow ="up";
                   break;
                   case "preview":
                     label += " bottom panel";
+                    arrow="down";
                   break;
                   case "left":
                     label += " left panel";
+                    arrow="up";
                   break;
                   case "right":
                     label += "right panel";
+                    arrow="up";
                   break;
                   default:
                     label = "";
@@ -426,7 +431,8 @@
                 var html =  '<div id="layout_'+ obj.name + '_resizer_'+ w2panels[p1] +
                             '" class="w2ui-resizer w2ui-' + aspect + 
                             '-resizer"><span class="w2ui-resize-toggle w2ui-resize-toggle-' + 
-                            pan.type + '">' + label + '</span></div>' +
+                            pan.type + '"><span class="fa fa-arrow-' + arrow + 
+                            '"></span> ' + label + '</span></div>' +
                             '<div id="layout_'+ obj.name + '_panel_'+ w2panels[p1] +'" class="w2ui-panel">'+
                             '    <div class="w2ui-panel-title"></div>'+
                             '    <div class="w2ui-panel-tabs"></div>'+
@@ -661,7 +667,6 @@
             
             function resizeStart(type, evnt) {
                 if ($(evnt.target).hasClass("w2ui-resize-toggle")) {
-                  $(evnt.target).toggleClass("panel-open");
                   obj.toggle(type, true); return;
                 }
                 if (!obj.box) return;
