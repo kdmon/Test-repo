@@ -432,7 +432,7 @@ var buttons = {
     html: '<h1 id="logo" title="Edit Web Applications">'
     + '<span class="fa fa-2x fa-mobile logo"></span>'
     + '<span class="fa fa-pencil logo" style="top: -7px; left: -7px"></span>'
-    + '<span id="alpha">alpha</span>'
+    + '<span id="alpha">v.0.3-alpha</span>'
     + 'WebAppEditor.com</h1>'
   },
   topspacer: {
