@@ -918,9 +918,9 @@
             // top if any
             if (ptop !== null) {
                 l = 0;
-                t = 0;
+                t = 0 + this.padding;
                 w = width;
-                h = ptop.sizeCalculated;
+                h = ptop.sizeCalculated - this.padding;
                 $('#layout_'+ this.name +'_panel_top').css({
                     'display': 'block',
                     'left': l + 'px',
@@ -966,9 +966,9 @@
             
             // left if any
             if (pleft !== null) {
-                l = 0;
+                l = this.padding;
                 t = 0 + (stop ? ptop.sizeCalculated + this.padding : 0);
-                w = pleft.sizeCalculated;
+                w = pleft.sizeCalculated - this.padding;
                 h = height - (stop ? ptop.sizeCalculated + this.padding : 0) -
                         (sbottom ? pbottom.sizeCalculated + this.padding : 0);
                 e = $('#layout_'+ this.name +'_panel_left');
@@ -1020,7 +1020,7 @@
             if (pright !== null) {
                 l = width - pright.sizeCalculated;
                 t = 0 + (stop ? ptop.sizeCalculated + this.padding : 0);
-                w = pright.sizeCalculated;
+                w = pright.sizeCalculated - this.padding;
                 h = height - (stop ? ptop.sizeCalculated + this.padding : 0) -
                     (sbottom ? pbottom.sizeCalculated + this.padding : 0);
                 $('#layout_'+ this.name +'_panel_right').css({
@@ -1072,7 +1072,7 @@
                 l = 0;
                 t = height - pbottom.sizeCalculated;
                 w = width;
-                h = pbottom.sizeCalculated;
+                h = pbottom.sizeCalculated - this.padding;
                 $('#layout_'+ this.name +'_panel_bottom').css({
                     'display': 'block',
                     'left': l + 'px',
@@ -1145,7 +1145,7 @@
                 t = height - (sbottom ? pbottom.sizeCalculated + this.padding : 0) - pprev.sizeCalculated;
                 w = width  - (sleft ? pleft.sizeCalculated + this.padding : 0) -
                     (sright ? pright.sizeCalculated + this.padding : 0);
-                h = pprev.sizeCalculated;
+                h = pprev.sizeCalculated - this.padding;
                 e = $('#layout_'+ this.name +'_panel_preview');
                 if (window.navigator.userAgent.indexOf('MSIE') != -1 && e.length > 0 && e[0].clientHeight < e[0].scrollHeight) w += 17; // IE hack
                 e.css({
