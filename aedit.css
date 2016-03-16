@@ -357,15 +357,15 @@ body {
   opacity: 1;
 }
 
-.w2ui-resize-toggle-up:hover,
-.w2ui-resize-toggle-down:hover {
+.w2ui-resize-toggle-top:hover,
+.w2ui-resize-toggle-preview:hover {
   margin-top: -1px;
   }
 
 .w2ui-resize-toggle-left,
 .w2ui-resize-toggle-right {
   transform: rotate(-90deg);
-  margin-left: -71px;
+  margin-left: -70px;
   margin-top: auto;
   margin-bottom: auto;
   top: 0;
@@ -374,16 +374,16 @@ body {
 }
 
 .w2ui-resize-toggle-left:hover {
-  margin-left: -70px;
+  margin-left: -69px;
 }
 
 .w2ui-resize-toggle-right {
-  margin-left: -64px;
+  margin-left: -65px;
   transform: rotate(90deg);
 }
 
 .w2ui-resize-toggle-right:hover {
-  margin-left: -65px;
+  margin-left: -66px;
 }
 
 
