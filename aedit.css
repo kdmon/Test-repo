@@ -25,13 +25,14 @@ body {
   background: none;
 }
 
-.panel-open {
+.w2ui-panel-open {
+  background: black;
 }
 
 #layoutContainer {
   background: linear-gradient(0deg, #cdf 90%, #fff 100%) !important;
-  height: calc(100% - 2px);
-  padding: 0 2px 2px 2px;
+  height: calc(100% - 4px);
+  padding: 0 4px 4px 4px;
 }
 
 .w2ui-sidebar .w2ui-sidebar-div .w2ui-selected:before {
@@ -133,8 +134,8 @@ body {
   font-family: 'Raleway', sans-serif;
   vertical-align: bottom;
   font-weight: normal;
-  margin-top: -26px;
-  padding: 20px 20px 10px 5px;
+  margin-top: -16px;
+  padding: 20px 20px 10px 15px;
   text-shadow: 1px 1px #eee;
 }
 
@@ -346,9 +347,9 @@ body {
   margin: auto;
   width: 150px;
   height: 14px;
-  font-size:0.8em;
+  font-size:0.7em;
   text-shadow:1px 1px rgba(255,255,255,0.7);
-  margin-top: -2px;
+  margin-top: 0;
   opacity: 0.5;
   border-radius: 10px;
 }
@@ -357,33 +358,45 @@ body {
   opacity: 1;
 }
 
-.w2ui-resize-toggle-top:hover,
-.w2ui-resize-toggle-preview:hover {
-  margin-top: -1px;
-  }
+.w2ui-resize-toggle-top:hover {
+  margin-top: 1px;
+}
+  
+  
+.w2ui-resize-toggle-bottom {
+  margin-top: 0px;
+}
+
+.w2ui-resize-toggle-bottom:hover {
+  margin-top: 1px;
+}
 
 .w2ui-resize-toggle-left,
 .w2ui-resize-toggle-right {
-  transform: rotate(-90deg);
-  margin-left: -70px;
+  position: fixed;
   margin-top: auto;
   margin-bottom: auto;
   top: 0;
   bottom: 0;
-  position: absolute;
 }
 
+.w2ui-resize-toggle-left {
+  transform: rotate(-90deg);
+  margin-left: -70px;
+  left: 3px;
+}
 .w2ui-resize-toggle-left:hover {
-  margin-left: -69px;
+  left: 4px;
 }
 
 .w2ui-resize-toggle-right {
-  margin-left: -65px;
   transform: rotate(90deg);
+  margin-right: -70px;
+  right: 3px;
 }
 
 .w2ui-resize-toggle-right:hover {
-  margin-left: -66px;
+ right: 4px;
 }
 
 
