@@ -303,7 +303,7 @@
             //console.log(this);
             var p = this.get(panel);
             if (p === null) return false;
-            if (p.hidden) return this.show(panel, immediate); else return this.hide(panel, immediate);
+            if (p.hidden) return this.show(panel, immediate); else return this.hide(panel, immediate != "DISABLE HIDE ANIMATION");
         },
 
         set: function (panel, options) {
@@ -665,7 +665,7 @@
             
             function resizeStart(type, evnt) {
                 if ($(evnt.target).hasClass("w2ui-resize-toggle")) {
-                  obj.toggle(type, true); return;
+                  obj.toggle(type, false); return;
                 }
                 if (!obj.box) return;
                 
