@@ -1162,7 +1162,7 @@ function tabClose(obj, event) {
 
 var resizeTimer;
 
-function updateLayout(force) {
+function updateLayout(force,resizeEvent) {
   
   /* There are two main operations going on here:
   
@@ -1193,10 +1193,10 @@ function updateLayout(force) {
     
   */
   
-  window.requestAnimationFrame(function() {calcLayout(force)});
+  window.requestAnimationFrame(function() {calcLayout(force, resizeEvent)});
 }
 var fps = 0;
-function calcLayout (force) {
+function calcLayout (force,resizeEvent) {
   // refresh layout every n frames or x ms after last cursor move
   fps ++;
   if (fps < 10 && force === undefined) {
@@ -1239,6 +1239,7 @@ function calcLayout (force) {
       else $("#" + item.id).hide();
     }
   }
+  if (!resizeEvent) w2ui.layout.resize();
 }
 
 function togglePanel (id) {
@@ -1258,22 +1259,22 @@ function togglePanel (id) {
 
 w2ui.layout.on('refresh', function(event) {
     event.onComplete = function () {
-        updateLayout();
+        updateLayout(false,true);
     };
 });
 
 $(window).on("resize", function () {
- updateLayout(true);
+ updateLayout(false,true);
 });
 
 w2ui.leftsplit.on('resize', function () {
-  updateLayout();
+  updateLayout(false,true);
 });
 w2ui.middlesplit.on('resize', function () {
-  updateLayout();
+  updateLayout(false,true);
 });
 w2ui.rightsplit.on('resize', function () {
-  updateLayout();
+  updateLayout(false,true);
 });
 
 
