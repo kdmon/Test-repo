@@ -553,7 +553,10 @@
                 tmp.diff_x = resize_x;
                 tmp.diff_y = resize_y;
                 
-                window.requestAnimationFrame(function() {updateSize()});
+                // ANONYMOUS FUNCTION IS SLOW IN CHROME - AVOID!
+                // window.requestAnimationFrame(function() {updateSize()});
+                
+                window.requestAnimationFrame(updateSize);
                 
                 // event after
                 obj.trigger($.extend(eventData, { phase: 'after' }));
