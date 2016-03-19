@@ -566,9 +566,9 @@
                 // refresh layout every n frames or x ms after last cursor move
                 // for smoothest perf on low cpus, keep n high and x low
                 obj.fps ++;
-                if (obj.fps < 40 && force === undefined) {
+                if (obj.fps < 5 && force !== true) {
                   clearTimeout(obj.resizeTimer);
-                  obj.resizeTimer = setTimeout(function(){updateSize(true)}, 10);
+                  obj.resizeTimer = setTimeout(function(){updateSize(true)}, 20);
                   return;
                 }
                 //if (force === undefined)
