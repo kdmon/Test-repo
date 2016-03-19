@@ -480,8 +480,16 @@
                     panel: tmp ? tmp.type : 'all', diff_x: tmp ? tmp.diff_x : 0, diff_y: tmp ? tmp.diff_y : 0 });
                 if (eventData.isCancelled === true) return;
 
-                var resize_x  = ((evnt.clientX||evnt.originalEvent.touches[0].clientX) - tmp.x);
-                var resize_y  = ((evnt.clientY||evnt.originalEvent.touches[0].clientY) - tmp.y);
+                var resize_x = evnt.originalEvent.touches != undefined ? 
+                      evnt.originalEvent.touches[0].clientX :
+                      evnt.clientX;
+                resize_x -= tmp.x;
+                
+                var resize_y = evnt.originalEvent.touches != undefined ? 
+                      evnt.originalEvent.touches[0].clientY :
+                      evnt.clientY;
+                resize_y -= tmp.y;
+                
                 var mainPanel = obj.get('main');
 
                 switch (tmp.type) {
@@ -693,10 +701,19 @@
                 $(document).off('mouseup', obj.tmp.events.mouseUp).on('mouseup', obj.tmp.events.mouseUp);
                 $(document).off('touchmove', obj.tmp.events.mouseMove).on('touchmove', obj.tmp.events.mouseMove);
                 $(document).off('touchend', obj.tmp.events.mouseUp).on('touchend', obj.tmp.events.mouseUp);
+                
+                var newX = evnt.originalEvent.touches != undefined ? 
+                      evnt.originalEvent.touches[0].clientX :
+                      evnt.clientX;
+                
+                var newY = evnt.originalEvent.touches != undefined ? 
+                      evnt.originalEvent.touches[0].clientY :
+                      evnt.clientY;
+                
                 obj.tmp.resize = {
                     type    : type,
-                    x       : evnt.clientX||evnt.originalEvent.touches[0].clientX,
-                    y       : evnt.clientY||evnt.originalEvent.touches[0].clientY,
+                    x       : newX,
+                    y       : newY,
                     diff_x  : 0,
                     diff_y  : 0,
                     value   : 0
@@ -860,7 +877,13 @@
             // layout itself
             var width  = parseInt($(this.box).width());
             var height = parseInt($(this.box).height());
-            $(this.box).find(' > div').css({
+            
+            /*
+              var name = $(this.box).attr('name');
+              $('div[name="' + name + '"] > div').css({
+            */
+            
+            $(this.box).find(' > div').css({ // THIS IS A SLOW LOOKUP?
                 width    : width + 'px',
                 height    : height + 'px'
             });
