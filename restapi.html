@@ -6,34 +6,34 @@
     <script type="text/javascript" src="http://w2ui.com/src/w2ui-1.4.3.min.js"></script>
 </head>
 <body>
-    <h1>Incidents</h1>
-    <div id="grid" style="width: 100%; height: 250px;"></div>
-    <script>
+  <h1>Incidents</h1>
+  <div id="grid" style="width: 100%; height: 250px;"></div>
+  <script>
+  
+    // fetch records from API
+    // todo: catch network errors
     
-      // fetch records from API
-      // todo: catch network errors
+    $.get("http://it4se.com:3333/api/agents", function(data){
       
-      $.get("http://it4se.com:3333/api/agents", function(data){
-        
-        // inject record id for w2ui
-        for (i=0;i<data.length;i++) {
-          data[i].recid=i;
-        }
-        
-        $('#grid').w2grid({
-            name: 'grid',
-            header: 'List of Names',
-            columns: [
-                { field: 'severity', caption: 'Severity', size: '60px' },
-                { field: 'event', caption: 'Subject', size: '200px' },
-                { field: 'company', caption: 'Company', size: '120px' },
-                { field: 'address', caption: 'Address', size: '120px' },
-                { field: 'parent', caption: 'Parent', size: '120px' },
-                { field: 'date', caption: 'Date and time', size: '185px' }
-            ],
-            records: data
-        });
+      // inject record id for w2ui
+      for (i=0;i<data.length;i++) {
+        data[i].recid=i;
+      }
+      
+      $('#grid').w2grid({
+          name: 'grid',
+          header: 'List of Names',
+          columns: [
+              { field: 'severity', caption: 'Severity', size: '60px' },
+              { field: 'event', caption: 'Subject', size: '200px' },
+              { field: 'company', caption: 'Company', size: '120px' },
+              { field: 'address', caption: 'Address', size: '120px' },
+              { field: 'parent', caption: 'Parent', size: '120px' },
+              { field: 'date', caption: 'Date and time', size: '185px' }
+          ],
+          records: data
       });
-    </script>
+    });
+  </script>
 </body>
 </html>
