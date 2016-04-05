@@ -1,12 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="http://w2ui.com/src/w2ui-1.4.3.min.css" />
+    <link rel="stylesheet" type="text/css" href="http://w2ui.com/src/w2ui-1.4.3.min.css"/>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script type="text/javascript" src="http://w2ui.com/src/w2ui-1.4.3.min.js"></script>
+    <style>
+      body {
+        background: #005;
+        padding: 1em;
+      }
+      .w2ui-reset table{
+        font-size: 1.2em;
+      }
+    </style>
 </head>
 <body>
-  <div id="grid" style="width: 100%; height: 250px;"></div>
+  <div id="grid" style="width: 100%; height: 600px;"></div>
   <script>
   
     // fetch records from API
@@ -34,7 +43,7 @@
             footer: true
           },
           onExpand: function (event) {
-              $('#'+event.box_id).html('<div style="padding: 10px">' + (data[event.recid].body || "No details available.") + '</div>').animate({ 'height': 50 }, 100);
+              $('#'+event.box_id).html('<div style="padding: 10px">' + (data[event.recid].body || "No details available.") + '</div>').animate({ 'height': 50 }, 50);
           },
           columns: [
               { field: 'date', caption: 'Date', sortable: true, size: '90px' },
