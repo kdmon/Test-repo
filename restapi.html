@@ -50,7 +50,14 @@
             expandColumn: true,
             footer: true
           },
+          multiSelect : false,
           reorderColumns: true,
+          onDelete: function (event) {
+              if (event.force) { // user confirmed deletion
+                var rec = w2ui['grid'].getSelection();
+                alert('This could trigger an API delete request with id:\n' + data[rec]["_id"]);
+              }
+          },
           onExpand: function (event) {
               $('#'+event.box_id).html('<div style="padding: 10px">' + (data[event.recid].body || "No details available.") + '</div>').animate({ 'height': 50 }, 50);
           },
@@ -68,9 +75,10 @@
               { field: 'body', caption: 'Details', type: 'text' },
               { field: 'company', caption: 'Company', type: 'text' }
           ],
-          sortData: [{ field: 'date', direction: 'desc' }],
           records: data
       });
+      
+      w2ui['grid'].sort('date', 'desc')
     });
   </script>
 </body>
