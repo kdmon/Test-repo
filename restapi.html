@@ -35,6 +35,8 @@
         var d = data[i].date.split('T');
         data[i].date = d[0];
         data[i].time = d[1].substring(0,5);
+        if (data[i].severity == "Error") data[i].style = "background: #fcc"
+        if (data[i].severity == "Warning") data[i].style = "background: #ffc"
       }
       
       $('#grid').w2grid({
@@ -47,6 +49,7 @@
             expandColumn: true,
             footer: true
           },
+          reorderColumns: true,
           onExpand: function (event) {
               $('#'+event.box_id).html('<div style="padding: 10px">' + (data[event.recid].body || "No details available.") + '</div>').animate({ 'height': 50 }, 50);
           },
@@ -64,7 +67,7 @@
               { field: 'body', caption: 'Details', type: 'text' },
               { field: 'company', caption: 'Company', type: 'text' }
           ],
-          sortData: [{ field: 'date', direction: 'ASC' },{ field: 'time', direction: 'ASC' }],
+          sortData: [{ field: 'date', direction: 'desc' }],
           records: data
       });
     });
