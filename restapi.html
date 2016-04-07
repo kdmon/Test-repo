@@ -32,9 +32,11 @@
       
       for (i=0;i<data.length;i++) {
         data[i].recid=i;
+        /*
         var d = data[i].date.split('T');
         data[i].date = d[0];
         data[i].time = d[1].substring(0,5);
+        */
         if (data[i].severity == "Error") data[i].style = "background: #fcc"
         if (data[i].severity == "Warning") data[i].style = "background: #ffc"
       }
@@ -62,7 +64,6 @@
           },
           columns: [
               { field: 'date', caption: 'Date', sortable: true, size: '90px' },
-              { field: 'time', caption: 'Time', sortable: true, size: '50px' },
               { field: 'severity', caption: 'Severity', sortable: true, size: '60px' },
               { field: 'event', caption: 'Subject', sortable: true, size: '200px' },
               { field: 'company', caption: 'Company', sortable: true, size: '120px' },
