@@ -56,7 +56,13 @@
           onDelete: function (event) {
               if (event.force) { // user confirmed deletion
                 var rec = w2ui['grid'].getSelection();
-                alert('This could trigger an API delete request with id:\n' + data[rec]["_id"]);
+                $.ajax({
+                  url: 'http://sqldba.no:3333/api/agents/' + data[rec]["_id"],
+                  type: 'DELETE',
+                  success: function(result) {
+                    w2alert('Record deleted');
+                  }
+                });
               }
           },
           onExpand: function (event) {
