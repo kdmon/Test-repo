@@ -1291,17 +1291,14 @@ function init(inOverlay) {
   initButtons();
   if (!inOverlay) showProjectsInOverlay();
   else {
-    initAll();
-    setTimeout(function (){showProjectsInTab();}, 200);
+    setTimeout(function (){initAll();showProjectsInTab();},150);
   }
 }
 
 function initAll() {
-  setTimeout(function (){
-    initPanels();
-    refreshTabs();
-    updateLayout();
-  },150)
+  initPanels();
+  refreshTabs();
+  updateLayout();
 }
 
 function initPanels() {
