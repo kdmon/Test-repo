@@ -24,6 +24,51 @@ body {
   background: none;
 }
 
+h1.accordion {
+  font-family: 'Raleway', sans-serif;
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  padding: 1em;
+  width: 100%;
+  border: none;
+  text-align: left;
+  font-size: 1.1em;
+}
+
+h1.accordion.active, button.accordion:hover {
+  background-color: #ddd;
+}
+
+h1.accordion:after {
+  content: '\02795';
+  font-size: 13px;
+  color: #777;
+  float: right;
+  margin-left: 5px;
+}
+
+h1.accordion.active:after {
+  content: "\2796";
+}
+
+div.apanel {
+  padding: 0 18px;
+  background-color: white;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+}
+
+div.apanel.show {
+  opacity: 1;
+  max-height: 500px;  
+}
+
+#startscreen {
+  background: white;
+}
+
 #sign-in-notice {
   display: none;
   position: absolute;
