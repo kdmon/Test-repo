@@ -8,11 +8,10 @@ body,
   width: 100%;
   padding: 0;
   margin: 0;
-  background: #fff;
 }
 
 .panel-container {
-  background: none;
+  background: #fff !important;
 }
 
 body {
@@ -56,18 +55,35 @@ body {
   font-size: 1.5em;
 }
 
+#layout_leftsplit_panel_top,
+#layout_leftsplit_panel_main,
+#layout_leftsplit_panel_bottom,
+#layout_middlesplit_panel_top,
+#layout_middlesplit_panel_main,
+#layout_middlesplit_panel_bottom,
+#layout_rightsplit_panel_top,
+#layout_rightsplit_panel_main,
+#layout_rightsplit_panel_bottom {
+  border: 3px solid #abd !important;
+}
+
 .w2ui-panel-open {
   background: black;
 }
 
 #layoutContainer {
-  background: linear-gradient(0deg, #cdf 90%, #fff 100%) !important;
   height: calc(100% - 4px);
   padding: 0 4px 4px 4px;
+  background: #DBE2F0;
+  background: linear-gradient(180deg, #bcd 1px, #eef 70px, #DBE2F0 87px) !important;
+  /*
+  background: linear-gradient(0deg, #cdf 90%, #fff 100%) !important;
+  */
 }
 
 .w2ui-sidebar .w2ui-sidebar-div .w2ui-selected:before {
   content: none !important;
+  background: white !important;
 }
 
 .ace_search_field {
@@ -220,18 +236,22 @@ body {
 }
 
 .w2ui-panel-content {
-  background: none !important;  
+  background: none !important;
 }
 
 .w2ui-toolbar {
   min-height: 35px;
   background: white !important;
+  border-bottom: 1px solid #eee !important;
 }
 
 .w2ui-panel-tabs {
-  background: linear-gradient(0deg,  #cdf, #8ad 80%, #acf) !important;
+  background: #abd !important;
   padding: 3px 3px 0 3px !important;
+  /* 
+  background: linear-gradient(0deg,  #cdf, #8ad 80%, #acf) !important;
   border-radius: 10px 10px 2px 2px !important;
+  */
 }
 
 .w2ui-panel-toolbar {
@@ -308,16 +328,18 @@ body {
   height: 100%;
   color: #777;
   text-shadow: 1px 1px #fff;
+/*
   font-size: 1.2em;
   line-height: 1.4em;
   box-shadow: inset 0 0 20px  rgba(0,0,0,0.2);
+*/
 }
 
 .inactive-panel h1 {
   margin: 0;
 }
 
-
+/*
 #layout_layout_panel_left .w2ui-panel,
 #layout_layout_panel_main .w2ui-panel,
 #layout_layout_panel_right .w2ui-panel,
@@ -336,6 +358,8 @@ body {
   border: none;
 }
 
+*/
+
 #layout_layout_resizer_main,
 #layout_leftsplit_resizer_main,
 #layout_middlesplit_resizer_main,
@@ -345,15 +369,14 @@ body {
   display: none !important;
 }
 
-
 .w2ui-horizontal-resizer {
   height: 14px !important;
-  margin-top: 0px;
+  margin-top: 0;
 }
 
 .w2ui-vertical-resizer {
   width: 14px !important;
-  margin-left: 0px;
+  margin-left: 0;
 }
 
 
