@@ -75,7 +75,7 @@ body {
   height: calc(100% - 4px);
   padding: 0 4px 4px 4px;
   background: #DBE2F0;
-  background: linear-gradient(180deg, #bcd 1px, #eef 70px, #DBE2F0 87px) !important;
+  background: linear-gradient(180deg, #cdf 1px, #eef 70px, #DBE2F0 87px) !important;
   /*
   background: linear-gradient(0deg, #cdf 90%, #fff 100%) !important;
   */
