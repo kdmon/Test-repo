@@ -28,7 +28,8 @@ body {
 #sign-in-notice {
   display: none;
   position: absolute;
-  width: 600px;
+  max-width: 600px;
+  min-width: 300px;
   height: 240px;
   margin-top: auto;
   margin-bottom: auto;
