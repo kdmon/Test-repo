@@ -1554,13 +1554,36 @@ function showProjectsInPanel () {
         }
       });
       
-      $('#content4').addClass('inactive-panel').w2render('panelLayout');
-      w2ui.panelLayout.content('left', '<h1>Welcome ' + config.user + '</h1>' +
-       '<div id="project-details">' +
-       '<h3>1. Continue where you left off<h3>' + 
-       '<h3>2. Select a project from the list.</h3>' + 
-       '<h3>3. Create a brand new project.</h3></div>');
-      w2ui.panelLayout.content('main', w2ui.projectList);
+      var dashboard = '<h1>Welcome ' + config.user + '</h1><p>' +
+      '<div id="startscreen">' +
+       '<h1 class="accordion active">1. Continue where you left off.</h1>' + 
+       '<div class="apanel show" id="recent">' + 'Five most recent projects' + '</div>' +
+       '<h1 class="accordion">2. Work on an existing project.</h1>' + 
+       '<div class="apanel" style="height: 250px" id="existing"></div>' +
+       '<h1 class="accordion">3. Start a new project.</h1>' +
+       '<div class="apanel" id="newproject">' + 'Start new project' + '</div>' +
+      '</div></p>';
+       
+      $('#content4').addClass('inactive-panel').html(dashboard);
+      
+      $('#existing').addClass('inactive-panel').w2render('panelLayout');
+      
+      // Attach project list w2ui widget
+      w2ui.panelLayout.content('left', w2ui.projectList);
+      w2ui.panelLayout.content('main', '<h1> Select a project </h1>');
+      
+      // Handle accordion events
+      var acc = document.getElementsByClassName("accordion");
+
+      for (var i = 0; i < acc.length; i++) {
+        acc[i].onclick = function(){
+          $(".apanel").removeClass("show");
+          $(".accordion").removeClass("active");
+          this.classList.toggle("active");
+          this.nextElementSibling.classList.toggle("show");
+          setTimeout(updateLayout, 100);
+        };
+      }
     }
   });
 }
@@ -2232,6 +2255,7 @@ var app = new Model();
 setTimeout(function() {
   ko.applyBindings(app);
 }, 250);
+
 
 
 // Start app
