@@ -184,7 +184,7 @@ function initLayout () {
       type: 'left',
       size: 250,
       minSize: 150,
-      hidden: false,
+      hidden: true,
       resizable: true,
       content: ''
     }, {
@@ -443,7 +443,7 @@ function initButtons () {
       + '<span class="fa fa-2x fa-mobile logo"></span>'
       + '<span class="fa fa-pencil logo" style="top: -7px; left: -7px"></span>'
       + '<span class="wae-version">v.0.3-alpha</span>'
-      + 'WebAppEditor.com</h1>'
+      + '<strong>WebAppEditor</strong>.com</h1>'
     },
     topspacer: {
       id: 'topspacer',
@@ -1288,9 +1288,9 @@ $(".w2ui-toolbar:not(.selectable)").on('mousedown', function(event) {
 function init(inOverlay) {
   initLayout();
   initButtons();
-  if (!inOverlay) showProjectsInOverlay();
+  if (inOverlay) showProjectsInOverlay();
   else {
-    setTimeout(function (){initAll();showProjectsInTab();},150);
+    setTimeout(function (){initAll();showProjectsInPanel();},150);
   }
 }
 
@@ -1465,6 +1465,104 @@ function showProjectsInOverlay () {
   });
   w2popup.lock('Loading projects ...', true);
 
+}
+
+// Show and generate project list dialogue
+
+function showProjectsInPanel () {
+  
+  $().w2layout({
+    name: 'panelLayout',
+    panels: [
+      { type: 'left', size: 400},
+      { type: 'main', size: 350}
+    ]
+  });
+  
+  github.getUser().repos(function(err, repos) {
+    
+    if (err) w2alert('No repositories are accessible');
+    
+    else {
+      
+      var secret = {id: 'secret', text: 'Your private projects (', group: true, expanded: true, nodes: []};
+      var open = {id: 'public', text: 'Your public projects (', group: true, expanded: true, nodes: []};
+      var shared = {id: 'shared', text: 'Projects shared with you (', group: true, expanded: true, nodes: []};
+      var forked =  {id: 'forked', text: 'Projects you have forked (', group: true, expanded: true, nodes: []};
+      
+      var obj = repos.sort(function(a,b){
+        if(a.full_name.toLowerCase() > b.full_name.toLowerCase()) return 1;
+        if (a.full_name.toLowerCase() < b.full_name.toLowerCase()) return -1;
+        else return 0;
+      });
+        
+      for (var i in obj) {
+        var item = obj[i];
+        
+        if (item.fork)
+          forked.nodes.push({
+            id: item.full_name + '_' + Math.round(Math.random*1000000),
+            text: item.name,
+            icon: "fa fa-code-fork"
+          });
+        else if (item.private)
+          secret.nodes.push({
+            id: item.full_name + '_' + Math.round(Math.random*1000000),
+            text: item.name,
+            icon:  "fa fa-eye-slash"
+          });
+        else if (item.owner.login !== config.user)
+          shared.nodes.push({
+            id: item.full_name + '_' + Math.round(Math.random*1000000),
+            text: '<img class="custom-icon" src="' + item.owner.avatar_url +'"/> ' + item.full_name
+          });
+        else
+          open.nodes.push({
+            id: item.full_name + '_' + Math.round(Math.random*1000000),
+            text: item.name,
+            icon: "fa fa-github"
+          });
+      }
+      
+      // update count
+      
+      open.text += open.nodes.length + ')';
+      shared.text += shared.nodes.length + ')';
+      secret.text += secret.nodes.length + ')';
+      forked.text += forked.nodes.length + ')';
+      
+      if (w2ui.projectList) w2ui.projectList.destroy();
+      
+      $().w2sidebar({
+        name: 'projectList',
+        //topHTML: '<div style="padding:1em"><h1>Select a project to work on</h1></div>',
+        showMax: true,
+        nodes: [
+          secret,
+          open,
+          shared,
+          forked
+        ],
+        onDblClick: function (event) {
+          var target = event.target.split('/');
+          var user = target[0];
+          target = target[1].split('_');
+          target.pop();
+          var repo = target.join('_');
+          //initAll();
+          setTimeout (function () {openProject(user,repo);}, 300);
+        }
+      });
+      
+      $('#content4').addClass('inactive-panel').w2render('panelLayout');
+      w2ui.panelLayout.content('left', '<h1>Welcome ' + config.user + '</h1>' +
+       '<div id="project-details">' +
+       '<h3>1. Continue where you left off<h3>' + 
+       '<h3>2. Select a project from the list.</h3>' + 
+       '<h3>3. Create a brand new project.</h3></div>');
+      w2ui.panelLayout.content('main', w2ui.projectList);
+    }
+  });
 }
 
 
