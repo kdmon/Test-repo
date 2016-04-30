@@ -1566,7 +1566,6 @@ function showProjectsInTab (panelArea) {
           w2popup.open({
             title: 'Opening ' + repo
           });
-          w2popup.lock('Loading ' + repo, true);
           openProject(user,repo);
         }
       });
@@ -1586,6 +1585,12 @@ function showProjectsInTab (panelArea) {
 
 function addTab (id, caption, type, panel, activate) {
   
+}
+
+function pushNodes (id, nodes) {
+  var node = nodes.shift();
+  w2ui[id].add(node);
+  if (nodes.length !== 0) window.requestAnimationFrame(function(){pushNodes(id,nodes)});
 }
 
 // Create a sidebar for browsing repository files
@@ -1682,42 +1687,42 @@ function openProject (user, repository, branch, panelArea) {
       sortWorker.onmessage = function(e) {
         
         var fileNodes = e.data;
-        
-        w2ui[id].add(fileNodes);
-        
-        // 5. Handle events
-        // directory opened
-        w2ui[id].on('collapse', function(event) {
-          event.object.icon = 'fa fa-folder';
-        });
-        w2ui[id].on('expand', function(event) {
-          event.object.icon = 'fa fa-folder-open';
-        });
-        // file open
-        w2ui[id].on('dblClick', function(event) {
-          if(event.target.substr(0,6) === "folder") return;
-          var path = event.target.substr(event.target.indexOf("_")+1).split('/');
-          var id = path.join('/');
-          var user = path.shift();
-          var repo = path.shift();
-          var branch = path.shift();
-          var title = path[path.length-1];
-          path = path.join('/');
-          startDoc({
-            id: id,
-            user: user,
-            repo: repo,
-            branch: branch,
-            path: path,
-            title: title
-          });
-        });
-        w2popup.close();
+        pushNodes (id, fileNodes);
+
         w2ui[location.layout].get(location.panel).tabs.click(id);
         setTimeout(function () {$(location.id).find(".w2ui-tabs").scrollLeft(99999);},200);
         w2ui[id].unlock();
-        
       };
+        
+      
+      // 5. Handle events
+      // directory opened
+      w2ui[id].on('collapse', function(event) {
+        event.object.icon = 'fa fa-folder';
+      });
+      w2ui[id].on('expand', function(event) {
+        event.object.icon = 'fa fa-folder-open';
+      });
+      // file open
+      w2ui[id].on('dblClick', function(event) {
+        if(event.target.substr(0,6) === "folder") return;
+        var path = event.target.substr(event.target.indexOf("_")+1).split('/');
+        var id = path.join('/');
+        var user = path.shift();
+        var repo = path.shift();
+        var branch = path.shift();
+        var title = path[path.length-1];
+        path = path.join('/');
+        startDoc({
+          id: id,
+          user: user,
+          repo: repo,
+          branch: branch,
+          path: path,
+          title: title
+        });
+      });
+      
     }
   });
 }
