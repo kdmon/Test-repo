@@ -1474,8 +1474,8 @@ function showProjectsInPanel () {
   $().w2layout({
     name: 'panelLayout',
     panels: [
-      { type: 'left', size: 400},
-      { type: 'main', size: 350}
+      { type: 'main'},
+      { type: 'right', size: '50%'}
     ]
   });
   
@@ -1485,10 +1485,10 @@ function showProjectsInPanel () {
     
     else {
       
-      var secret = {id: 'secret', text: 'Your private projects (', group: true, expanded: true, nodes: []};
-      var open = {id: 'public', text: 'Your public projects (', group: true, expanded: true, nodes: []};
-      var shared = {id: 'shared', text: 'Projects shared with you (', group: true, expanded: true, nodes: []};
-      var forked =  {id: 'forked', text: 'Projects you have forked (', group: true, expanded: true, nodes: []};
+      var open = {id: 'public', text: 'Public (', group: true, expanded: true, nodes: []};
+      var secret = {id: 'secret', text: 'Private (', group: true, expanded: false, nodes: []};
+      var shared = {id: 'shared', text: 'Shared with you (', group: true, expanded: false, nodes: []};
+      var forked =  {id: 'forked', text: 'Forked (', group: true, expanded: false, nodes: []};
       
       var obj = repos.sort(function(a,b){
         if(a.full_name.toLowerCase() > b.full_name.toLowerCase()) return 1;
@@ -1535,11 +1535,11 @@ function showProjectsInPanel () {
       
       $().w2sidebar({
         name: 'projectList',
-        //topHTML: '<div style="padding:1em"><h1>Select a project to work on</h1></div>',
+        //topHTML: '<div style="padding:0.5em"><h3>Select project</h3></div>',
         showMax: true,
         nodes: [
-          secret,
           open,
+          secret,
           shared,
           forked
         ],
@@ -1554,14 +1554,15 @@ function showProjectsInPanel () {
         }
       });
       
-      var dashboard = '<h1>Welcome ' + config.user + '</h1><p>' +
+      var dashboard = '<h1 style="text-align:center;">Welcome back <strong>' +
+      config.user + '</strong></h1><p>' +
       '<div id="startscreen">' +
-       '<h1 class="accordion active">1. Continue where you left off.</h1>' + 
-       '<div class="apanel show" id="recent">' + 'Five most recent projects' + '</div>' +
-       '<h1 class="accordion">2. Work on an existing project.</h1>' + 
-       '<div class="apanel" style="height: 250px" id="existing"></div>' +
-       '<h1 class="accordion">3. Start a new project.</h1>' +
+       '<h2 class="accordion">1. Start a new project.</h2>' +
        '<div class="apanel" id="newproject">' + 'Start new project' + '</div>' +
+       '<h2 class="accordion">2. Work on an existing project.</h2>' + 
+       '<div class="apanel" style="height: 250px" id="existing"></div>' +
+       '<h2 class="accordion active">3. Continue where you left off.</h2>' + 
+       '<div class="apanel show" id="recent">' + 'Five most recent projects' + '</div>' +
       '</div></p>';
        
       $('#content4').addClass('inactive-panel').html(dashboard);
@@ -1569,8 +1570,8 @@ function showProjectsInPanel () {
       $('#existing').addClass('inactive-panel').w2render('panelLayout');
       
       // Attach project list w2ui widget
-      w2ui.panelLayout.content('left', w2ui.projectList);
-      w2ui.panelLayout.content('main', '<h1> Select a project </h1>');
+      w2ui.panelLayout.content('main', '<h3> Select a project from the list </h3>');
+      w2ui.panelLayout.content('right', w2ui.projectList);
       
       // Handle accordion events
       var acc = document.getElementsByClassName("accordion");
