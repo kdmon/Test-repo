@@ -1286,7 +1286,7 @@ $(".w2ui-toolbar:not(.selectable)").on('mousedown', function(event) {
 
 
 function init(inOverlay) {
-  if (inOverlay) showProjectsInOverlay();
+  if (!inOverlay) showProjectsInOverlay();
   else {
     initAll();
     setTimeout(function (){showProjectsInTab();}, 200);
@@ -1438,7 +1438,7 @@ function showProjectsInOverlay () {
           });
           w2popup.lock('Loading ' + repo, true);
           initAll();
-          setTimeout (function () {openProject(user,repo);}, 1000);
+          setTimeout (function () {w2popup.close();openProject(user,repo);}, 300);
         }
       });
       
@@ -1604,8 +1604,72 @@ function openProject (user, repository, branch, panelArea) {
     // 2. Generate widget
     else {
       var location = pickPanel(panelArea || 'filebrowser');
+      w2ui[location.layout].get(location.panel).tabs.add({
+        id: id,
+        closable: false,
+        caption: title
+      });
       
-      // Sort nodes in new thread
+      tabList[id] = {
+        id: id,
+        caption: title,
+        type: 'filebrowser',
+        panel: location.area
+      };
+    
+    
+      $('<div id="container_' + id +'" class="panel-content" style="display:none"></div>').appendTo( "body" );
+      $("#container_"+id).w2sidebar({
+        name: id,
+        menu : [
+          {
+            id: 'openfile',
+            text: 'Open',
+            icon: 'fa fa-folder-open-o' 
+          },
+          {
+            id: 'previewfile',
+            text: 'Preview',
+            icon: 'fa fa-eye'
+          },
+          {
+            id: 'renamefile',
+            text: 'Rename',
+            icon: 'fa fa-edit'
+          },
+          {
+            id: 'duplicatefile',
+            text: 'Duplicate',
+            icon: 'fa fa-copy'
+          },
+          {
+            id: 'deletefile',
+            text: 'Delete',
+            icon: 'fa fa-trash-o'
+          },
+          {},
+          {
+            id: 'newfile',
+            text: 'New file...',
+            icon: 'fa fa-file-o'
+          },{
+            id: 'newdirectory',
+            text: 'New folder...',
+            icon: 'fa fa-folder-o'
+          },{
+            id: 'uploadfile',
+            text: 'Upload...',
+            icon: 'fa fa-hdd-o'
+          }
+        ],
+        nodes: [] //fileNodes
+      });
+      w2ui[id].lock('-Loading files...', true);
+      w2ui[location.layout].get(location.panel).tabs.click(id);
+      
+      //refreshTabs();
+        
+      // Sort and update nodes in new thread
       var sortWorker = new Worker("worker.js");
       
       sortWorker.postMessage({
@@ -1619,68 +1683,7 @@ function openProject (user, repository, branch, panelArea) {
         
         var fileNodes = e.data;
         
-        // 3. Show tab
-        tabList[id] = {
-          id: id,
-          caption: title,
-          type: 'filebrowser',
-          panel: location.area
-        };
-        w2ui[location.layout].get(location.panel).tabs.add({
-          id: id,
-          closable: true,
-          caption: title
-        });
-        
-        refreshTabs();
-        
-        // 4. render into temporary dom element once
-        $('<div id="container_' + id +'" class="panel-content" style="display:none"></div>').appendTo( "body" );
-        $("#container_"+id).w2sidebar({
-          name: id,
-          menu : [
-            {
-              id: 'openfile',
-              text: 'Open',
-              icon: 'fa fa-folder-open-o' 
-            },
-            {
-              id: 'previewfile',
-              text: 'Preview',
-              icon: 'fa fa-eye'
-            },
-            {
-              id: 'renamefile',
-              text: 'Rename',
-              icon: 'fa fa-edit'
-            },
-            {
-              id: 'duplicatefile',
-              text: 'Duplicate',
-              icon: 'fa fa-copy'
-            },
-            {
-              id: 'deletefile',
-              text: 'Delete',
-              icon: 'fa fa-trash-o'
-            },
-            {},
-            {
-              id: 'newfile',
-              text: 'New file...',
-              icon: 'fa fa-file-o'
-            },{
-              id: 'newdirectory',
-              text: 'New folder...',
-              icon: 'fa fa-folder-o'
-            },{
-              id: 'uploadfile',
-              text: 'Upload...',
-              icon: 'fa fa-hdd-o'
-            }
-          ],
-          nodes: fileNodes
-        });
+        w2ui[id].add(fileNodes);
         
         // 5. Handle events
         // directory opened
@@ -1712,6 +1715,7 @@ function openProject (user, repository, branch, panelArea) {
         w2popup.close();
         w2ui[location.layout].get(location.panel).tabs.click(id);
         setTimeout(function () {$(location.id).find(".w2ui-tabs").scrollLeft(99999);},200);
+        w2ui[id].unlock();
         
       };
     }
