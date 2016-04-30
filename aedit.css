@@ -10,6 +10,11 @@ body,
   margin: 0;
 }
 
+h1, h2 {
+  font-weight: 400;
+}
+
+
 .panel-container {
   background: #fff !important;
 }
@@ -24,23 +29,25 @@ body {
   background: none;
 }
 
-h1.accordion {
+.accordion {
   font-family: 'Raleway', sans-serif;
   background-color: #eee;
   color: #444;
   cursor: pointer;
-  padding: 1em;
+  padding: 0.3em;
   width: 100%;
   border: none;
   text-align: left;
-  font-size: 1.1em;
+  margin: 0;
+  border-bottom: 1px #aaa solid;
 }
 
-h1.accordion.active, button.accordion:hover {
+.accordion.active, button.accordion:hover {
   background-color: #ddd;
 }
 
-h1.accordion:after {
+/*
+.accordion:after {
   content: '\02795';
   font-size: 13px;
   color: #777;
@@ -48,9 +55,10 @@ h1.accordion:after {
   margin-left: 5px;
 }
 
-h1.accordion.active:after {
+.accordion.active:after {
   content: "\2796";
 }
+*/
 
 div.apanel {
   padding: 0 18px;
@@ -130,8 +138,9 @@ div.apanel.show {
   content: none !important;
 }
 
-.w2ui-sidebar-div{
-  background: white !important;
+.w2ui-sidebar .w2ui-sidebar-div .w2ui-node-group {
+  color: #000 !important;
+  
 }
  
 .ace_search_field {
@@ -169,8 +178,18 @@ div.apanel.show {
 
 .w2ui-sidebar {
   font-family: 'Raleway', sans-serif !important;
+  font-size: 1.1em !important;
 }
 
+.w2ui-node-group {
+  border-bottom: 1px #ccc solid;
+  background: white !important;
+  cursor: pointer !important;
+}
+.w2ui-node-group span {
+  text-transform: none !important;
+  
+}
 
 .preview-iframe {
   background: white;
