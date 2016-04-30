@@ -1449,6 +1449,9 @@ function showProjectsInOverlay () {
     width: 1200,
     height: 1000,
     body: '<div id="popup"></div>',
+    showClose: false,
+    maximised: true,
+    modal: true,
     onOpen  : function (event) {
       event.onComplete = function () {
         $('#projectList').w2render('popupLayout');
