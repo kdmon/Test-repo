@@ -29,7 +29,6 @@ var cursorKey = 'Guest';
 
 // Helpers
 
-
 String.prototype.hashCode = function() {
   var hash = 0, i, chr, len;
   if (this.length === 0) return hash;
@@ -123,11 +122,11 @@ function isBinaryFile(bytes, size) {
 
 
 // Get authenticated user details
-
+var once = 0;
 function authenticate () {
 
   once ++;
-  if (once > 2) {w2alert ("Please sign-in to access your projects."); return;}
+  if (once > 2) {$("#sign-in-notice").show(); return;}
 
   github = new Github({
     token: localStorage.token,
@@ -160,7 +159,7 @@ function checkUser() {
     localStorage.token = token;
     authenticate();
   }).fail(function (result) {
-    w2alert ("Please sign-in to access your projects.");
+    $("#sign-in-notice").show();
   });
 }
 
@@ -440,10 +439,10 @@ function initButtons () {
     logo : {
       type: 'html',
       id: 'logo',
-      html: '<h1 id="logo" title="Edit Web Applications">'
+      html: '<h1 class="wae-logo" title="Edit Web Applications">'
       + '<span class="fa fa-2x fa-mobile logo"></span>'
       + '<span class="fa fa-pencil logo" style="top: -7px; left: -7px"></span>'
-      + '<span id="alpha">v.0.3-alpha</span>'
+      + '<span class="wae-version">v.0.3-alpha</span>'
       + 'WebAppEditor.com</h1>'
     },
     topspacer: {
