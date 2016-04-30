@@ -671,6 +671,14 @@ var buttons = {
   }
 };
 
+$().w2layout({
+  name: 'popupLayout',
+  panels: [
+    { type: 'left', size: 250, resizable: true, minSize: 200 },
+    { type: 'main', minSize: 350, overflow: 'hidden' }
+  ]
+});
+
 var fullscreen = false;
 
 function toggleFullscreen () {
@@ -1333,9 +1341,121 @@ function init() {
   updateLayout();  
 }
 
+
 // Show and generate project list dialogue
 
-function showProjects (panelArea) {
+function showProjects () {
+  
+  github.getUser().repos(function(err, repos) {
+    
+    if (err) w2alert('No repositories are accessible');
+    
+    else {
+      
+      var secret = {id: 'secret', text: 'Your private projects (', group: true, expanded: true, nodes: []};
+      var open = {id: 'public', text: 'Your public projects (', group: true, expanded: true, nodes: []};
+      var shared = {id: 'shared', text: 'Projects shared with you (', group: true, expanded: true, nodes: []};
+      var forked =  {id: 'forked', text: 'Projects you have forked (', group: true, expanded: true, nodes: []};
+      
+      var obj = repos.sort(function(a,b){
+        if(a.full_name.toLowerCase() > b.full_name.toLowerCase()) return 1;
+        if (a.full_name.toLowerCase() < b.full_name.toLowerCase()) return -1;
+        else return 0;
+      });
+        
+      for (var i in obj) {
+        var item = obj[i];
+        
+        if (item.fork)
+          forked.nodes.push({
+            id: item.full_name + '_' + Math.round(Math.random*1000000),
+            text: item.name,
+            icon: "fa fa-code-fork"
+          });
+        else if (item.private)
+          secret.nodes.push({
+            id: item.full_name + '_' + Math.round(Math.random*1000000),
+            text: item.name,
+            icon:  "fa fa-eye-slash"
+          });
+        else if (item.owner.login !== config.user)
+          shared.nodes.push({
+            id: item.full_name + '_' + Math.round(Math.random*1000000),
+            text: '<img class="custom-icon" src="' + item.owner.avatar_url +'"/> ' + item.full_name
+          });
+        else
+          open.nodes.push({
+            id: item.full_name + '_' + Math.round(Math.random*1000000),
+            text: item.name,
+            icon: "fa fa-github"
+          });
+      }
+      
+      // update count
+      
+      open.text += open.nodes.length + ')';
+      shared.text += shared.nodes.length + ')';
+      secret.text += secret.nodes.length + ')';
+      forked.text += forked.nodes.length + ')';
+      
+      if (w2ui.projectList) w2ui.projectList.destroy();
+      
+      $().w2sidebar({
+        name: 'projectList',
+        //topHTML: '<div style="background-color: #eee; text-align: center; padding: 10px 5px; border-bottom: 1px solid silver">YOUR PROJECTS</div>',
+        showMax: true,
+        nodes: [
+          secret,
+          open,
+          shared,
+          forked
+        ],
+        onDblClick: function (event) {
+          var target = event.target.split('/');
+          var user = target[0];
+          target = target[1].split('_');
+          target.pop();
+          var repo = target.join('_');
+          w2popup.open({
+            title: 'Opening ' + repo
+          });
+          w2popup.lock('Loading ' + repo, true);
+          openProject(user,repo);
+        }
+      });
+      
+      $('#popup').w2render('popupLayout');
+      w2ui.popupLayout.content('left', w2ui.projectList);
+      w2ui.popupLayout.content('main', '<h1>Select project</h1>');
+      w2ui.layout.resize();
+      w2popup.unlock();
+    }
+  });
+
+  w2popup.open({
+    title: 'Open an existing project',
+    width: 1200,
+    height: 1000,
+    body: '<div id="popup"></div>',
+    onOpen  : function (event) {
+      event.onComplete = function () {
+        $('#projectList').w2render('popupLayout');
+      };
+    },
+    onToggle: function (event) {
+      event.onComplete = function () {
+        w2ui.projectList.resize();
+      };
+    }
+  });
+  w2popup.lock('Loading projects ...', true);
+
+}
+
+
+// Show and generate project list dialogue
+
+function showProjectsInTab (panelArea) {
   
   github.getUser().repos(function(err, repos) {
     
