@@ -29,6 +29,7 @@ var cursorKey = 'Guest';
 
 // Helpers
 
+
 String.prototype.hashCode = function() {
   var hash = 0, i, chr, len;
   if (this.length === 0) return hash;
@@ -1286,6 +1287,8 @@ $(".w2ui-toolbar:not(.selectable)").on('mousedown', function(event) {
 
 
 function init(inOverlay) {
+  initLayout();
+  initButtons();
   if (!inOverlay) showProjectsInOverlay();
   else {
     initAll();
@@ -1294,8 +1297,6 @@ function init(inOverlay) {
 }
 
 function initAll() {
-  initLayout();
-  initButtons();
   setTimeout(function (){
     initPanels();
     refreshTabs();
@@ -1433,12 +1434,9 @@ function showProjectsInOverlay () {
           target = target[1].split('_');
           target.pop();
           var repo = target.join('_');
-          w2popup.open({
-            title: 'Opening ' + repo
-          });
-          w2popup.lock('Loading ' + repo, true);
+          w2popup.close();
           initAll();
-          setTimeout (function () {w2popup.close();openProject(user,repo);}, 300);
+          setTimeout (function () {openProject(user,repo);}, 300);
         }
       });
       
@@ -1588,9 +1586,13 @@ function addTab (id, caption, type, panel, activate) {
 }
 
 function pushNodes (id, nodes) {
-  var node = nodes.shift();
+  console.log("added 100");
+  var node = nodes.splice(0,100);
   w2ui[id].add(node);
-  if (nodes.length !== 0) window.requestAnimationFrame(function(){pushNodes(id,nodes)});
+  setTimeout(function() {
+    if (nodes.length > 0) window.requestAnimationFrame(function() {pushNodes (id, nodes);});
+    else w2ui[id].unlock();
+  }, 1000);
 }
 
 // Create a sidebar for browsing repository files
@@ -1688,10 +1690,8 @@ function openProject (user, repository, branch, panelArea) {
         
         var fileNodes = e.data;
         pushNodes (id, fileNodes);
-
         w2ui[location.layout].get(location.panel).tabs.click(id);
         setTimeout(function () {$(location.id).find(".w2ui-tabs").scrollLeft(99999);},200);
-        w2ui[id].unlock();
       };
         
       
@@ -2141,5 +2141,3 @@ setTimeout(function() {
 
 var connection = new sharejs.Connection("http://webappeditor.com:8081/channel");
 authenticate();
-
-
