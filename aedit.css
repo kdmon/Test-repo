@@ -83,9 +83,12 @@ body {
 
 .w2ui-sidebar .w2ui-sidebar-div .w2ui-selected:before {
   content: none !important;
-  background: white !important;
 }
 
+.w2ui-sidebar-div{
+  background: white !important;
+}
+ 
 .ace_search_field {
   font-size: 18px;
   width: 135px !important;
@@ -116,9 +119,13 @@ body {
 }
 
 .w2ui-reset table, body, .panel-content {
-  font-family: raleway, sans !important;
-  
+  font-family: 'Raleway', sans-serif !important;
 }
+
+.w2ui-sidebar {
+  font-family: 'Raleway', sans-serif !important;
+}
+
 
 .preview-iframe {
   background: white;
