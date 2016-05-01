@@ -360,7 +360,9 @@
       // -------
 
       this.getCommit = function(branch, sha, cb) {
-        _request("GET", repoPath + "/git/commits/"+sha, null, function(err, commit) {
+        var params = '';
+        if (branch !== undefined) params = '?ref=' + branch;
+        _request("GET", repoPath + "/git/commits/"+sha+ params, null, function(err, commit) {
           if (err) return cb(err);
           cb(null, commit);
         });
@@ -371,7 +373,9 @@
 
       this.getSha = function(branch, path, cb) {
         if (!path || path === "") return that.getRef("heads/"+branch, cb);
-        _request("GET", repoPath + "/contents/"+path, {ref: branch}, function(err, pathContent) {
+        var params = '';
+        if (branch !== undefined) params = '?ref=' + branch;
+        _request("GET", repoPath + "/contents/"+path + params, {ref: branch}, function(err, pathContent) {
           if (err) return cb(err);
           cb(null, pathContent.sha);
         });
@@ -562,7 +566,9 @@
       // -------
 
       this.read = function(branch, path, cb) {
-        _request("GET", repoPath + "/contents/"+path, {ref: branch}, function(err, obj) {
+        var params = '';
+        if (branch !== undefined) params = '?ref=' + branch;
+        _request("GET", repoPath + "/contents/"+path + params, {ref: branch}, function(err, obj) {
           if (err && err.error === 404) return cb("not found", null, null);
 
           if (err) return cb(err);
