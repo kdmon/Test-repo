@@ -1588,9 +1588,8 @@ function showProjectsInPanel () {
         }
       });
       
-      var dashboard = '<h2>Welcome back <strong>' +
-      '<img style="height:1em; padding-top:5px;" src="' + config.avatar + '"/>' +
-      config.user + '</strong></h2><p>' +
+      var dashboard = '<h2>Welcome back <strong>' + config.user + '</strong>' +
+      '<img class="avatar-large" src="' + config.avatar + '"/></h2><p>' +
       '<div id="startscreen">' +
        '<h3 class="accordion active">1. Continue where you left off.</h3>' + 
        '<div class="apanel show" id="recent">' + 'Loading recent changes...' + '</div>' +
