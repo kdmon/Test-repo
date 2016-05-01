@@ -1591,7 +1591,7 @@ function showProjectsInPanel () {
       config.user + '</strong></h1><p>' +
       '<div id="startscreen">' +
        '<h2 class="accordion">1. Start a new project.</h2>' +
-       '<div class="apanel" id="newproject">' + 'Start new project' + '</div>' +
+       '<div class="apanel" id="newproject"><h3>' + 'New project' + '</h3></div>' +
        '<h2 class="accordion">2. Work on an existing project.</h2>' + 
        '<div class="apanel" style="height: 250px" id="existing"></div>' +
        '<h2 class="accordion active">3. Continue where you left off.</h2>' + 
@@ -1600,7 +1600,7 @@ function showProjectsInPanel () {
        
       $('#content4').addClass('inactive-panel').html(dashboard);
       
-      $('#existing').addClass('inactive-panel').w2render('panelLayout');
+      $('#existing').w2render('panelLayout');
       
       // Attach project list w2ui widget
       w2ui.panelLayout.content('main', '<h3> Select a project from the list </h3>');
@@ -1636,16 +1636,16 @@ function showProjectsInPanel () {
             var repoName = item.repo.name.split('/')[1];
             var repoBranch = item.payload.ref.substr(11);
             
-            recentHistory += '<p><button class="resume" onclick="openProject(' +
+            recentHistory += '<p class="resume-group"><button class="resume" onclick="openProject(' +
               "'" + repoUser + "','" + repoName + "','" + repoBranch + "'" + ')">' +
               '<i class="fa fa-github-square" aria-hidden="true"></i> ' +
-              item.repo.name + '</button> (' + repoBranch + ' branch) ' + 
-              item.payload.commits[0].message + ', ' + 
-              timeSince(item.created_at) + '.</p>';
+              item.repo.name + '</button><br/>' + '<strong>Last change ' +
+              timeSince(item.created_at) + '</strong> (to <em>' + repoBranch + 
+              '</em> branch): "' + item.payload.commits[0].message +'"</p>';
           }
         }
         
-        $("#recent").html('').prepend('<h3>Your latest project(s)</h3>' +
+        $("#recent").html('').prepend('' +
         (recentHistory || '<p>You have not made any recent changes.</p>'));
       });
       
