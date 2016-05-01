@@ -1518,10 +1518,10 @@ function showProjectsInPanel () {
     
     else {
       
-      var open = {id: 'public', text: 'Public (', group: true, expanded: true, nodes: []};
-      var secret = {id: 'secret', text: 'Private (', group: true, expanded: false, nodes: []};
+      var open = {id: 'public', text: 'Public projects (', group: true, expanded: false, nodes: []};
+      var secret = {id: 'secret', text: 'Private  projects (', group: true, expanded: false, nodes: []};
       var shared = {id: 'shared', text: 'Shared with you (', group: true, expanded: false, nodes: []};
-      var forked =  {id: 'forked', text: 'Forked (', group: true, expanded: false, nodes: []};
+      var forked =  {id: 'forked', text: 'Forked  projects (', group: true, expanded: false, nodes: []};
       
       var obj = repos.sort(function(a,b){
         if(a.full_name.toLowerCase() > b.full_name.toLowerCase()) return 1;
@@ -1572,9 +1572,9 @@ function showProjectsInPanel () {
         showMax: true,
         nodes: [
           open,
-          secret,
           shared,
-          forked
+          forked,
+          secret
         ],
         onDblClick: function (event) {
           var target = event.target.split('/');
@@ -1620,11 +1620,11 @@ function showProjectsInPanel () {
       }
       
     
-      // List events performed by collaborators
+      // List push events performed by collaborators
       $.ajax({
         url: "https://api.github.com/users/" + config.user + "/received_events"
       }).done(function(data) {
-        var collaboratorEvents = '<h3>Collaborator activity</h3><ul>';
+        var collaboratorEvents = '';
         $.each(data, function(index, value) {
           if (value.type == "PushEvent") {
             collaboratorEvents += '<li>' + timeSince(value.created_at) + ' ' +
@@ -1634,25 +1634,33 @@ function showProjectsInPanel () {
             '" target="_blank">More</a>)</li>';
           }
         });
-        $("#recent").prepend(collaboratorEvents + '</ul>');
+        $("#recent").html('').prepend('<h3>Collaborator activity</h3><ul>' +
+        (collaboratorEvents || '<li>No recent activity.</li>') + '</ul>');
       });
       
       
-      // List events performed by collaborators
-      $.ajax({
-        url: "https://api.github.com/users/" + config.user + "/events"
-      }).done(function(data) {
-        var recentHistory = '<h3>Recent history</h3><ul>';
-        $.each(data, function(index, value) {
-          if (value.type == "PushEvent") {
-            recentHistory += '<li>' + timeSince(value.created_at) + ' ' +
-            value.actor.login + " modified <i>" + value.repo.name + '</i>:<br/> -- ' +
-            value.payload.commits[0].message + ' (<a href="https://github.com/' +
-            value.repo.name + "/commit/" + value.payload.head + 
-            '" target="_blank">More</a>)</li>';
+      // List most recent push events performed by the user by repo and branch
+
+      var reposArray = [];
+      var recentHistory = '';
+      
+      $.get("https://api.github.com/users/" + config.user + "/events").done(function(data) {
+        var repos = [];
+        for (var i = 0; i < data.length; i++) {
+          var item = data[i];
+          if (item.type == "PushEvent" && repos.indexOf(item.repo.name) == -1) {
+            repos.push (item.repo.name);
+        
+            recentHistory += '<li><strong>' + item.repo.name + '</strong> (' + 
+            item.payload.ref.substr(11) + ' branch)<br/>' + 
+            item.payload.commits[0].message + ', ' + 
+            timeSince(item.created_at) + '.<br/><br/></li>';
+            
           }
-        });
-        $("#recent").prepend(recentHistory + '</ul>');
+        }
+        
+        $("#recent").prepend('<h3>Your latest project(s)</h3><ul>' +
+        (recentHistory || '<li>You have not made any recent changes.</li>') + '</ul>');
       });
 
     }
