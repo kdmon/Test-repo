@@ -48,7 +48,7 @@ body {
 
 .apanel {
   padding: 0 1em 0 1em;
-  background: #ccc;
+  background: #ddd;
   max-height: 0;
   overflow: hidden;
   opacity: 0;
@@ -87,7 +87,7 @@ body {
 
 .resume-group {
   padding: 1em;
-  background: #ddd;
+  background: #eee;
   margin-top: 1em;
   margin-bottom: 1em;
   box-shadow: 1px 1px 5px 0 #aaa;
@@ -412,7 +412,8 @@ body {
   padding: 10px;
   margin: 0;
   width: 100%;
-  height: 100%;
+  height: auto;
+  min-height: 100%;
   color: #777;
   text-shadow: 1px 1px #fff;
 /*
