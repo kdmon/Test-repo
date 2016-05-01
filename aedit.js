@@ -814,11 +814,11 @@ function toolbarClick(obj, event) {
       var content = editors[tabList[tab].panel].getSession().getValue();
       var path =  tabList[tab].path;
       var reponame = tabList[tab].id.split('/')[1];
+      var branch = tabList[tab].id.split('/')[2];
       var message = prompt("Please describe your changes to the file", "Update file.");
-
       var repo = github.getRepo(config.user, reponame);
-      repo.write('master', path, content, message, function(err) {
-        if (err) {console.log(err); alert ("Failed to save changes! " + err);}
+      repo.write(branch, path, content, message, function(err) {
+        if (err) {console.log(err); alert ("Failed to save changes! " + err);console.log(err)}
         else alert ("Changes saved successfully!");
       });
       break;
@@ -835,9 +835,10 @@ function toolbarClick(obj, event) {
       break;
     case 'newfile':
       var reponame = tabList[tab].id.split('_')[1];
+      var branch = tabList[tab].id.split('/')[2];
       var filename = prompt ("Please enter new file name and path");
       var repo = github.getRepo(config.user, reponame);
-      repo.write('master', filename, '', 'New file', function(err) {
+      repo.write(branch, filename, '', 'New file', function(err) {
         if (err) {console.log(err); alert ("Failed to create file! " + err);}
         else {
           alert ("File created successfully!");
@@ -1507,8 +1508,8 @@ function showProjectsInPanel () {
   $().w2layout({
     name: 'panelLayout',
     panels: [
-      { type: 'main'},
-      { type: 'right', size: '50%'}
+      { type: 'left', size: '50%'},
+      { type: 'main'}
     ]
   });
   
@@ -1587,15 +1588,15 @@ function showProjectsInPanel () {
         }
       });
       
-      var dashboard = '<h1 style="text-align:center;">Welcome back <strong>' +
+      var dashboard = '<h2>Welcome back <strong>' +
       '<img style="height:1em; padding-top:5px;" src="' + config.avatar + '"/>' +
-      config.user + '</strong></h1><p>' +
+      config.user + '</strong></h2><p>' +
       '<div id="startscreen">' +
-       '<h2 class="accordion active">1. Continue where you left off.</h2>' + 
+       '<h3 class="accordion active">1. Continue where you left off.</h3>' + 
        '<div class="apanel show" id="recent">' + 'Loading recent changes...' + '</div>' +
-       '<h2 class="accordion">2. Work on a different project.</h2>' + 
+       '<h3 class="accordion">2. Work on a different project.</h3>' + 
        '<div class="apanel" style="height: 250px" id="existing"></div>' +
-       '<h2 class="accordion">3. Create a new project.</h2>' +
+       '<h3 class="accordion">3. Create a new project.</h3>' +
        '<div class="apanel" id="newproject"><p>' + 'New project' + '</p></div>' +
       '</div></p>';
        
@@ -1604,8 +1605,8 @@ function showProjectsInPanel () {
       $('#existing').w2render('panelLayout');
       
       // Attach project list w2ui widget
+      w2ui.panelLayout.content('left', w2ui.projectList);
       w2ui.panelLayout.content('main', '<p> Select a project from the list </p>');
-      w2ui.panelLayout.content('right', w2ui.projectList);
       
       // Handle accordion events
       var acc = document.getElementsByClassName("accordion");
@@ -1631,22 +1632,25 @@ function showProjectsInPanel () {
         var repos = [];
         for (var i = 0; i < data.length; i++) {
           var item = data[i];
-          if (item.type == "PushEvent" && repos.indexOf(item.repo.name) == -1) {
-            repos.push (item.repo.name);
+          // only use commit events as activity
+          if (item.type == "PushEvent") {
             var repoUser = item.repo.name.split('/')[0];
             var repoName = item.repo.name.split('/')[1];
             var repoBranch = item.payload.ref.substr(11);
-            
-            recentHistory += '<p class="resume-group"><button class="resume" onclick="openProject(' +
-              "'" + repoUser + "','" + repoName + "','" + repoBranch + "'" + ')">' +
-              '<i class="fa fa-github-square" aria-hidden="true"></i> ' +
-              item.repo.name + '</button><br/>' + '<strong>Last change ' +
-              timeSince(item.created_at) + '</strong> (to <em>' + repoBranch + 
-              '</em> branch): "' + item.payload.commits[0].message +'"</p>';
+            // Remove duplicates by repo name and branch
+            if (repos.indexOf(item.repo.name + repoBranch) == -1) {
+              repos.push (item.repo.name + repoBranch);
+              recentHistory += '<p class="resume-group"><button class="resume" onclick="openProject(' +
+                "'" + repoUser + "','" + repoName + "','" + repoBranch + "'" + ')">' +
+                '<i class="fa fa-github-square" aria-hidden="true"></i> ' +
+                item.repo.name + ' <em>(' + repoBranch +')</em></button><br/>' + '<strong>Last change ' +
+                timeSince(item.created_at) + '</strong> : "' + 
+                item.payload.commits[0].message +'"</p>';
+            }
           }
         }
         
-        $("#recent").html('').prepend('<p>Resume a recent saved project.</p>' +
+        $("#recent").html('').prepend('<p>Resume a recently saved project.</p>' +
         (recentHistory || '<p>You do not appear to have any recently saved projects.</p>'));
       });
       
@@ -2038,6 +2042,7 @@ function startDoc(settings) {
     if(err) {
       w2popup.close();
       w2alert ("unable to read file", err);
+      console.log(err);
     }
     
     else {
