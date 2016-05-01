@@ -1591,12 +1591,12 @@ function showProjectsInPanel () {
       '<img style="height:1em; padding-top:5px;" src="' + config.avatar + '"/>' +
       config.user + '</strong></h1><p>' +
       '<div id="startscreen">' +
-       '<h2 class="accordion">1. Start a new project.</h2>' +
-       '<div class="apanel" id="newproject"><h3>' + 'New project' + '</h3></div>' +
-       '<h2 class="accordion">2. Work on an existing project.</h2>' + 
-       '<div class="apanel" style="height: 250px" id="existing"></div>' +
-       '<h2 class="accordion active">3. Continue where you left off.</h2>' + 
+       '<h2 class="accordion active">1. Continue where you left off.</h2>' + 
        '<div class="apanel show" id="recent">' + 'Loading recent changes...' + '</div>' +
+       '<h2 class="accordion">2. Work on a different project.</h2>' + 
+       '<div class="apanel" style="height: 250px" id="existing"></div>' +
+       '<h2 class="accordion">3. Create a new project.</h2>' +
+       '<div class="apanel" id="newproject"><p>' + 'New project' + '</p></div>' +
       '</div></p>';
        
       $('#content4').addClass('inactive-panel').html(dashboard);
@@ -1604,7 +1604,7 @@ function showProjectsInPanel () {
       $('#existing').w2render('panelLayout');
       
       // Attach project list w2ui widget
-      w2ui.panelLayout.content('main', '<h3> Select a project from the list </h3>');
+      w2ui.panelLayout.content('main', '<p> Select a project from the list </p>');
       w2ui.panelLayout.content('right', w2ui.projectList);
       
       // Handle accordion events
@@ -1646,7 +1646,7 @@ function showProjectsInPanel () {
           }
         }
         
-        $("#recent").html('').prepend('<h2>Resume a project with recent changes</h2>' +
+        $("#recent").html('').prepend('<p>Resume a project with recent changes.</p>' +
         (recentHistory || '<p>You have not made any recent changes.</p>'));
       });
       
