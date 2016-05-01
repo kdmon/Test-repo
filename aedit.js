@@ -59,7 +59,7 @@ function timeSince(datestamp) {
   if (interval >= 1 && elapsed.split(' ').length < 3) {
     elapsed += interval + "m ";
   }
-  return (elapsed || 'Mere seconds ') + " ago";
+  return (elapsed || 'less than 1m ') + " ago";
 }
 
 String.prototype.hashCode = function() {
@@ -1588,6 +1588,7 @@ function showProjectsInPanel () {
       });
       
       var dashboard = '<h1 style="text-align:center;">Welcome back <strong>' +
+      '<img style="height:1em; padding-top:5px;" src="' + config.avatar + '"/>' +
       config.user + '</strong></h1><p>' +
       '<div id="startscreen">' +
        '<h2 class="accordion">1. Start a new project.</h2>' +
@@ -1645,7 +1646,7 @@ function showProjectsInPanel () {
           }
         }
         
-        $("#recent").html('').prepend('' +
+        $("#recent").html('').prepend('<h3>Resume a project with recent changes</h3>' +
         (recentHistory || '<p>You have not made any recent changes.</p>'));
       });
       
