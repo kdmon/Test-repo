@@ -42,33 +42,21 @@ body {
   border-bottom: 1px #aaa solid;
 }
 
-.accordion.active, button.accordion:hover {
+.accordion.active, .accordion:hover {
   background-color: #ddd;
 }
 
-/*
-.accordion:after {
-  content: '\02795';
-  font-size: 13px;
-  color: #777;
-  float: right;
-  margin-left: 5px;
-}
-
-.accordion.active:after {
-  content: "\2796";
-}
-*/
-
-div.apanel {
-  padding: 0 18px;
-  background-color: white;
+.apanel {
+  padding: 0 1em 0 1em;
+  background: #ccc;
   max-height: 0;
   overflow: hidden;
   opacity: 0;
+  color: #333;
+  text-shadow: none;
 }
 
-div.apanel.show {
+.apanel.show {
   opacity: 1;
   max-height: 500px;  
 }
@@ -77,6 +65,36 @@ div.apanel.show {
   background: white;
 }
 
+.resume {
+  font-family: 'Raleway', sans-serif;
+  cursor: pointer;
+  margin-bottom: 0.5em;
+  padding: 0.5em;
+  font-size: 1.2em;
+  width: 100%;
+  overflow:hidden;
+  background: #fff;
+  border: none;
+  color: black;
+  box-shadow: 1px 1px 5px 0 #aaa;
+}
+
+
+.resume:hover {
+  background: #abd;
+  color: white;
+  text-shadow: 1px 1px 1px #555;
+  font-weight: 600;
+  box-shadow: none;
+}
+
+.resume-group {
+  padding: 1em;
+  background: #eee;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  box-shadow: 1px 1px 5px 0 #aaa;
+}
 #sign-in-notice {
   display: none;
   position: absolute;
@@ -271,7 +289,7 @@ div.apanel.show {
   font-style: italic;
 }
 
-.fa {
+.w2ui-reset .fa {
   color: #444 !important;
 }
 
