@@ -1572,8 +1572,8 @@ function showProjectsInPanel () {
         showMax: true,
         nodes: [
           open,
-          shared,
           forked,
+          shared,
           secret
         ],
         onDblClick: function (event) {
@@ -1619,24 +1619,6 @@ function showProjectsInPanel () {
         };
       }
       
-    
-      // List push events performed by collaborators
-      $.ajax({
-        url: "https://api.github.com/users/" + config.user + "/received_events"
-      }).done(function(data) {
-        var collaboratorEvents = '';
-        $.each(data, function(index, value) {
-          if (value.type == "PushEvent") {
-            collaboratorEvents += '<li>' + timeSince(value.created_at) + ' ' +
-            value.actor.login + " modified <i>" + value.repo.name + '</i>:<br/> -- ' +
-            value.payload.commits[0].message + ' (<a href="https://github.com/' +
-            value.repo.name + "/commit/" + value.payload.head + 
-            '" target="_blank">More</a>)</li>';
-          }
-        });
-        $("#recent").html('').prepend('<h3>Collaborator activity</h3><ul>' +
-        (collaboratorEvents || '<li>No recent activity.</li>') + '</ul>');
-      });
       
       
       // List most recent push events performed by the user by repo and branch
@@ -1650,19 +1632,45 @@ function showProjectsInPanel () {
           var item = data[i];
           if (item.type == "PushEvent" && repos.indexOf(item.repo.name) == -1) {
             repos.push (item.repo.name);
-        
-            recentHistory += '<li><strong>' + item.repo.name + '</strong> (' + 
-            item.payload.ref.substr(11) + ' branch)<br/>' + 
-            item.payload.commits[0].message + ', ' + 
-            timeSince(item.created_at) + '.<br/><br/></li>';
+            var repoUser = item.repo.name.split('/')[0];
+            var repoName = item.repo.name.split('/')[1];
+            var repoBranch = item.payload.ref.substr(11);
             
+            recentHistory += '<p><button class="resume" onclick="openProject(' +
+              "'" + repoUser + "','" + repoName + "','" + repoBranch + "'" + ')">' +
+              '<i class="fa fa-github-square" aria-hidden="true"></i> ' +
+              item.repo.name + '</button> (' + repoBranch + ' branch) ' + 
+              item.payload.commits[0].message + ', ' + 
+              timeSince(item.created_at) + '.</p>';
           }
         }
         
-        $("#recent").prepend('<h3>Your latest project(s)</h3><ul>' +
-        (recentHistory || '<li>You have not made any recent changes.</li>') + '</ul>');
+        $("#recent").html('').prepend('<h3>Your latest project(s)</h3>' +
+        (recentHistory || '<p>You have not made any recent changes.</p>'));
       });
-
+      
+      
+      /*
+      // List push events performed by collaborators
+      
+      $.ajax({
+        url: "https://api.github.com/users/" + config.user + "/received_events"
+      }).done(function(data) {
+        var collaboratorEvents = '';
+        $.each(data, function(index, value) {
+          if (value.type == "PushEvent") {
+            collaboratorEvents += '<li>' + timeSince(value.created_at) + ' ' +
+            value.actor.login + " modified <i>" + value.repo.name + '</i>:<br/> -- ' +
+            value.payload.commits[0].message + ' (<a href="https://github.com/' +
+            value.repo.name + "/commit/" + value.payload.head + 
+            '" target="_blank">More</a>)</li>';
+          }
+        });
+        $("#recent").append('<h3>Collaborator activity</h3><ul>' +
+        (collaboratorEvents || '<li>No recent activity.</li>') + '</ul>');
+      });
+      */
+      
     }
   });
 }
