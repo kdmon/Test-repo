@@ -29,6 +29,39 @@ var cursorKey = 'Guest';
 
 // Helpers
 
+
+function timeSince(datestamp) {
+  //datestamp = datestamp.replace(/[.Z]\w+/, "Z");
+  var elapsed = '';
+  var date = new Date(datestamp)
+  var seconds = Math.floor((new Date() - date) / 1000);
+  var interval = Math.floor(seconds / 31536000);
+  if (interval >= 1) {
+    elapsed += interval + "y ";
+    seconds -= 31536000 * interval;
+  }
+  interval = Math.floor(seconds / 2592000);
+  if (interval >= 1) {
+    elapsed += interval + "m ";
+    seconds -= 2592000 * interval;
+  }
+  interval = Math.floor(seconds / 86400);
+  if (interval >= 1) {
+    elapsed += interval + "d ";
+    seconds -= 86400 * interval;
+  }
+  interval = Math.floor(seconds / 3600);
+  if (interval >= 1 && elapsed.split(' ').length < 3) {
+    elapsed += interval + "h ";
+    seconds -= 3600 * interval;
+  }
+  interval = Math.floor(seconds / 60);
+  if (interval >= 1 && elapsed.split(' ').length < 3) {
+    elapsed += interval + "m ";
+  }
+  return (elapsed || 'Mere seconds ') + " ago";
+}
+
 String.prototype.hashCode = function() {
   var hash = 0, i, chr, len;
   if (this.length === 0) return hash;
@@ -1562,7 +1595,7 @@ function showProjectsInPanel () {
        '<h2 class="accordion">2. Work on an existing project.</h2>' + 
        '<div class="apanel" style="height: 250px" id="existing"></div>' +
        '<h2 class="accordion active">3. Continue where you left off.</h2>' + 
-       '<div class="apanel show" id="recent">' + 'Five most recent projects' + '</div>' +
+       '<div class="apanel show" id="recent">' + 'Loading recent changes...' + '</div>' +
       '</div></p>';
        
       $('#content4').addClass('inactive-panel').html(dashboard);
@@ -1585,6 +1618,43 @@ function showProjectsInPanel () {
           setTimeout(updateLayout, 100);
         };
       }
+      
+    
+      // List events performed by collaborators
+      $.ajax({
+        url: "https://api.github.com/users/" + config.user + "/received_events"
+      }).done(function(data) {
+        var collaboratorEvents = '<h3>Collaborator activity</h3><ul>';
+        $.each(data, function(index, value) {
+          if (value.type == "PushEvent") {
+            collaboratorEvents += '<li>' + timeSince(value.created_at) + ' ' +
+            value.actor.login + " modified <i>" + value.repo.name + '</i>:<br/> -- ' +
+            value.payload.commits[0].message + ' (<a href="https://github.com/' +
+            value.repo.name + "/commit/" + value.payload.head + 
+            '" target="_blank">More</a>)</li>';
+          }
+        });
+        $("#recent").prepend(collaboratorEvents + '</ul>');
+      });
+      
+      
+      // List events performed by collaborators
+      $.ajax({
+        url: "https://api.github.com/users/" + config.user + "/events"
+      }).done(function(data) {
+        var recentHistory = '<h3>Recent history</h3><ul>';
+        $.each(data, function(index, value) {
+          if (value.type == "PushEvent") {
+            recentHistory += '<li>' + timeSince(value.created_at) + ' ' +
+            value.actor.login + " modified <i>" + value.repo.name + '</i>:<br/> -- ' +
+            value.payload.commits[0].message + ' (<a href="https://github.com/' +
+            value.repo.name + "/commit/" + value.payload.head + 
+            '" target="_blank">More</a>)</li>';
+          }
+        });
+        $("#recent").prepend(recentHistory + '</ul>');
+      });
+
     }
   });
 }
