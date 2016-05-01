@@ -1646,7 +1646,7 @@ function showProjectsInPanel () {
           }
         }
         
-        $("#recent").html('').prepend('<h3>Resume a project with recent changes</h3>' +
+        $("#recent").html('').prepend('<h2>Resume a project with recent changes</h2>' +
         (recentHistory || '<p>You have not made any recent changes.</p>'));
       });
       
