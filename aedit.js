@@ -813,10 +813,11 @@ function toolbarClick(obj, event) {
     case 'filemenu:Save file':
       var content = editors[tabList[tab].panel].getSession().getValue();
       var path =  tabList[tab].path;
-      var reponame = tabList[tab].id.split('/')[1];
+      var repoUser = tabList[tab].id.split('/')[0];
+      var repoName = tabList[tab].id.split('/')[1];
       var branch = tabList[tab].id.split('/')[2];
       var message = prompt("Please describe your changes to the file", "Update file.");
-      var repo = github.getRepo(config.user, reponame);
+      var repo = github.getRepo(repoUser, repoName);
       repo.write(branch, path, content, message, function(err) {
         if (err) {console.log(err); alert ("Failed to save changes! " + err);console.log(err)}
         else alert ("Changes saved successfully!");
@@ -1642,7 +1643,8 @@ function showProjectsInPanel () {
               recentHistory += '<p class="resume-group"><button class="resume" onclick="openProject(' +
                 "'" + repoUser + "','" + repoName + "','" + repoBranch + "'" + ')">' +
                 '<i class="fa fa-github-square" aria-hidden="true"></i> ' +
-                item.repo.name + ' <em>(' + repoBranch +')</em></button><br/>' + '<strong>Last change ' +
+                (repoUser == config.user ? '': repoUser) +
+                repoName + ' <em>(' + repoBranch +')</em></button><br/>' + '<strong>Last changed ' +
                 timeSince(item.created_at) + '</strong> : "' + 
                 item.payload.commits[0].message +'"</p>';
             }
