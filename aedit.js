@@ -1509,7 +1509,7 @@ function showProjectsInPanel () {
   $().w2layout({
     name: 'panelLayout',
     panels: [
-      { type: 'left', size: '50%'},
+      //{ type: 'left', size: '50%'},
       { type: 'main'}
     ]
   });
@@ -1592,12 +1592,12 @@ function showProjectsInPanel () {
       var dashboard = '<h2>Welcome back <strong>' + config.user + '</strong>' +
       '<img class="avatar-large" src="' + config.avatar + '"/></h2><p>' +
       '<div id="startscreen">' +
+       '<h3 class="accordion"><i class="fa fa-plus-square"></i> Create a new project.</h3>' +
+       '<div class="apanel" id="newproject"><p>' + 'New project' + '</p></div>' +
+       '<h3 class="accordion"><i class="fa fa-search"></i> Browse all projects.</h3>' + 
+       '<div class="apanel" style="height: 250px" id="existing"></div>' +
        '<h3 class="accordion active"><i class="fa fa-hourglass-end"></i> Resume a recent project.</h3>' + 
        '<div class="apanel show" id="recent">' + 'Loading recent changes...' + '</div>' +
-       '<h3 class="accordion"><i class="fa fa-search"></i> Browse existing projects.</h3>' + 
-       '<div class="apanel" style="height: 250px" id="existing"></div>' +
-       '<h3 class="accordion"><i class="fa fa-file-text-o"></i> Create a new project.</h3>' +
-       '<div class="apanel" id="newproject"><p>' + 'New project' + '</p></div>' +
       '</div></p>';
        
       $('#content4').addClass('inactive-panel').html(dashboard);
@@ -1605,8 +1605,8 @@ function showProjectsInPanel () {
       $('#existing').w2render('panelLayout');
       
       // Attach project list w2ui widget
-      w2ui.panelLayout.content('left', w2ui.projectList);
-      w2ui.panelLayout.content('main', '<p> Select a project from the list </p>');
+      w2ui.panelLayout.content('main', w2ui.projectList);
+      //w2ui.panelLayout.content('main', '<p> Select a project from the list </p>');
       
       // Handle accordion events
       
@@ -1643,18 +1643,19 @@ function showProjectsInPanel () {
             // Remove duplicates by repo name and branch
             if (repos.indexOf(item.repo.name + repoBranch) == -1) {
               repos.push (item.repo.name + repoBranch);
-              recentHistory += '<p class="resume-group"><button class="resume" onclick="openProject(' +
+              recentHistory += '<p class="resume-group">' + 
+                '<button class="resume" onclick="openProject(' +
                 "'" + repoUser + "','" + repoName + "','" + repoBranch + "'" + ')">' +
-                '<i class="fa fa-folder-open-o" aria-hidden="true"></i> ' +
+                '<i class="fa fa-edit" aria-hidden="true"></i> ' +
                 (repoUser == config.user ? '': repoUser +'/') +
-                repoName + ' <em>(' + repoBranch +')</em></button><br/>' + '<strong>Last changed ' +
-                timeSince(item.created_at) + '</strong> : "' + 
-                item.payload.commits[0].message +'"</p>';
+                repoName + ' <em>(' + repoBranch +')</em></button><br/> ' +
+                timeSince(item.created_at) + ': "' + 
+                item.payload.commits[0].message + '"</p>';
             }
           }
         }
         
-        $("#recent").html('').prepend('<p>Recently saved projects.</p>' +
+        $("#recent").html('').prepend(
         (recentHistory || '<p>You do not appear to have any recently saved projects.</p>'));
       });
       
