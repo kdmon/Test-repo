@@ -1595,7 +1595,7 @@ function showProjectsInPanel () {
        '<h3 class="accordion"><i class="fa fa-plus-square"></i> Create a new project.</h3>' +
        '<div class="apanel" id="newproject"><p>' + 'New project' + '</p></div>' +
        '<h3 class="accordion"><i class="fa fa-search"></i> Browse all projects.</h3>' + 
-       '<div class="apanel" style="height: 250px" id="existing"></div>' +
+       '<div class="apanel project-browser" id="existing"></div>' +
        '<h3 class="accordion active"><i class="fa fa-hourglass-end"></i> Resume a recent project.</h3>' + 
        '<div class="apanel show" id="recent">' + 'Loading recent changes...' + '</div>' +
       '</div></p>';
@@ -1630,8 +1630,15 @@ function showProjectsInPanel () {
       var reposArray = [];
       var recentHistory = '';
       
-      $.get("https://api.github.com/users/" + config.user + "/events?t=" +
-        new Date() + Math.random()).done(function(data) {
+
+      $.ajax({
+        type: "get",
+        url: "https://api.github.com/users/" + config.user + "/events?t=" +
+        Math.random(),
+        headers: {
+          "Authorization": "Token " + localStorage.token
+        }
+      }).done(function(data) {
         var repos = [];
         for (var i = 0; i < data.length; i++) {
           var item = data[i];
@@ -1654,7 +1661,7 @@ function showProjectsInPanel () {
             }
           }
         }
-        
+          
         $("#recent").html('').prepend(
         (recentHistory || '<p>You do not appear to have any recently saved projects.</p>'));
       });
