@@ -34,7 +34,7 @@ body {
   background-color: #eee;
   color: #444;
   cursor: pointer;
-  padding: 0.3em;
+  padding: 0.5em;
   width: 100%;
   text-align: left;
   margin: 0;
@@ -59,20 +59,24 @@ body {
 
 .apanel.show {
   opacity: 1;
-  max-height: 250px;
+  height: 100%;
+  min-height: 250px;
   overflow-y: auto;
 }
 
 #startscreen {
   background: white;
+  margin: 1em;
 }
 
 .avatar-large {
-  height: 3em;
-  margin-top: -1em;
+  height: 2em;
+  margin-top: -0.5em;
   float: left;
-  padding-right: 1em;
+  margin-left: 1em;
+  margin-right: 1em;
 }
+
 .resume {
   font-family: 'Raleway', sans-serif;
   cursor: pointer;
@@ -544,8 +548,6 @@ body {
 .w2ui-resize-toggle-right:hover {
  right: 4px;
 }
-
-
 
 
 body:not(.selectable) {
