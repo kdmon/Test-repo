@@ -1630,7 +1630,7 @@ function showProjectsInPanel () {
       var reposArray = [];
       var recentHistory = '';
       
-
+      // Prevent hitting rate limit by using token authentication
       $.ajax({
         type: "get",
         url: "https://api.github.com/users/" + config.user + "/events?t=" +
