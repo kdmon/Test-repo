@@ -1592,7 +1592,7 @@ function showProjectsInPanel () {
       var dashboard = '<h2>Welcome back <strong>' + config.user + '</strong>' +
       '<img class="avatar-large" src="' + config.avatar + '"/></h2><p>' +
       '<div id="startscreen">' +
-       '<h3 class="accordion active">1. Continue where you left off.</h3>' + 
+       '<h3 class="accordion active">1. Resume a recent project.</h3>' + 
        '<div class="apanel show" id="recent">' + 'Loading recent changes...' + '</div>' +
        '<h3 class="accordion">2. Work on a different project.</h3>' + 
        '<div class="apanel" style="height: 250px" id="existing"></div>' +
@@ -1609,18 +1609,20 @@ function showProjectsInPanel () {
       w2ui.panelLayout.content('main', '<p> Select a project from the list </p>');
       
       // Handle accordion events
-      var acc = document.getElementsByClassName("accordion");
-
-      for (var i = 0; i < acc.length; i++) {
-        acc[i].onclick = function(){
+      
+      $(".accordion").on("click", function (event) {
+        if ($(this).hasClass("active")) {
+          $(this).removeClass("show");
+          $(this).removeClass("active");
+        }
+        else {
           $(".apanel").removeClass("show");
           $(".accordion").removeClass("active");
-          this.classList.toggle("active");
-          this.nextElementSibling.classList.toggle("show");
-          setTimeout(updateLayout, 100);
-        };
-      }
-      
+        }
+        $(this).toggleClass("active");
+        $(this).next().toggleClass("show");
+        setTimeout(updateLayout, 10);
+      });
       
       
       // List most recent push events performed by the user by repo and branch
@@ -1651,7 +1653,7 @@ function showProjectsInPanel () {
           }
         }
         
-        $("#recent").html('').prepend('<p>Resume a recently saved project.</p>' +
+        $("#recent").html('').prepend('<p>Recently saved projects.</p>' +
         (recentHistory || '<p>You do not appear to have any recently saved projects.</p>'));
       });
       
