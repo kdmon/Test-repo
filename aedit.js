@@ -1592,11 +1592,11 @@ function showProjectsInPanel () {
       var dashboard = '<h2>Welcome back <strong>' + config.user + '</strong>' +
       '<img class="avatar-large" src="' + config.avatar + '"/></h2><p>' +
       '<div id="startscreen">' +
-       '<h3 class="accordion active">1. Resume a recent project.</h3>' + 
+       '<h3 class="accordion active"><i class="fa fa-star-o"></i> Resume a recent project.</h3>' + 
        '<div class="apanel show" id="recent">' + 'Loading recent changes...' + '</div>' +
-       '<h3 class="accordion">2. Work on a different project.</h3>' + 
+       '<h3 class="accordion"><i class="fa fa-briefcase"></i> Open an existing project.</h3>' + 
        '<div class="apanel" style="height: 250px" id="existing"></div>' +
-       '<h3 class="accordion">3. Create a new project.</h3>' +
+       '<h3 class="accordion"><i class="fa fa-file-o"></i> Create a new project.</h3>' +
        '<div class="apanel" id="newproject"><p>' + 'New project' + '</p></div>' +
       '</div></p>';
        
@@ -1618,8 +1618,8 @@ function showProjectsInPanel () {
         else {
           $(".apanel").removeClass("show");
           $(".accordion").removeClass("active");
+          $(this).toggleClass("active");
         }
-        $(this).toggleClass("active");
         $(this).next().toggleClass("show");
         setTimeout(updateLayout, 10);
       });
@@ -1630,7 +1630,8 @@ function showProjectsInPanel () {
       var reposArray = [];
       var recentHistory = '';
       
-      $.get("https://api.github.com/users/" + config.user + "/events").done(function(data) {
+      $.get("https://api.github.com/users/" + config.user + "/events?t=" +
+        new Date() + Math.random()).done(function(data) {
         var repos = [];
         for (var i = 0; i < data.length; i++) {
           var item = data[i];
@@ -1644,7 +1645,7 @@ function showProjectsInPanel () {
               repos.push (item.repo.name + repoBranch);
               recentHistory += '<p class="resume-group"><button class="resume" onclick="openProject(' +
                 "'" + repoUser + "','" + repoName + "','" + repoBranch + "'" + ')">' +
-                '<i class="fa fa-github-square" aria-hidden="true"></i> ' +
+                '<i class="fa fa-folder-open-o" aria-hidden="true"></i> ' +
                 (repoUser == config.user ? '': repoUser +'/') +
                 repoName + ' <em>(' + repoBranch +')</em></button><br/>' + '<strong>Last changed ' +
                 timeSince(item.created_at) + '</strong> : "' + 
