@@ -59,7 +59,7 @@ function timeSince(datestamp) {
   if (interval >= 1 && elapsed.split(' ').length < 3) {
     elapsed += interval + "m ";
   }
-  return (elapsed || 'less than 1m ') + " ago";
+  return (elapsed || '< 1m ') + " ago";
 }
 
 String.prototype.hashCode = function() {
