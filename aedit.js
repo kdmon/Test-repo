@@ -1643,7 +1643,7 @@ function showProjectsInPanel () {
               recentHistory += '<p class="resume-group"><button class="resume" onclick="openProject(' +
                 "'" + repoUser + "','" + repoName + "','" + repoBranch + "'" + ')">' +
                 '<i class="fa fa-github-square" aria-hidden="true"></i> ' +
-                (repoUser == config.user ? '': repoUser) +
+                (repoUser == config.user ? '': repoUser +'/') +
                 repoName + ' <em>(' + repoBranch +')</em></button><br/>' + '<strong>Last changed ' +
                 timeSince(item.created_at) + '</strong> : "' + 
                 item.payload.commits[0].message +'"</p>';
