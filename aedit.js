@@ -1821,12 +1821,13 @@ function pushNodes (id, nodes) {
 
 // Create a sidebar for browsing repository files
 function openProject (user, repository, branch, panelArea) {
+  var safeRepo = repository.replace(/[^a-z0-9_-]|\s+/gmi, "");
   var repo = github.getRepo(user, repository);
   branch = (branch !== undefined) ? branch : 'master';
   // 1. Fetch repo files, recursively - allocated to a web worker
   repo.getTree(branch + '?recursive=true', function (err, tree) {
     var title = '<i class="fa fa-folder-open-o"></i> ' + repository;
-    var id = "filebrowser_" + repository + "_" + Math.round(Math.random() * 10000000);
+    var id = "filebrowser_" + safeRepo + "_" + Math.round(Math.random() * 10000000);
 
     if (err) {
       console.log("Error retrieving files", err);
@@ -1847,7 +1848,6 @@ function openProject (user, repository, branch, panelArea) {
         type: 'filebrowser',
         panel: location.area
       };
-    
     
       $('<div id="container_' + id +'" class="panel-content" style="display:none"></div>').appendTo( "body" );
       $("#container_"+id).w2sidebar({
