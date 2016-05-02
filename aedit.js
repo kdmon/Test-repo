@@ -1592,12 +1592,12 @@ function showProjectsInPanel () {
       var dashboard = '<h2>Welcome back <strong>' + config.user + '</strong>' +
       '<img class="avatar-large" src="' + config.avatar + '"/></h2><p>' +
       '<div id="startscreen">' +
-       '<h3 class="accordion"><i class="fa fa-plus-square"></i> Create a new project.</h3>' +
-       '<div class="apanel" id="newproject"><p>' + 'New project' + '</p></div>' +
-       '<h3 class="accordion"><i class="fa fa-search"></i> Browse all projects.</h3>' + 
-       '<div class="apanel project-browser" id="existing"></div>' +
        '<h3 class="accordion active"><i class="fa fa-hourglass-end"></i> Resume a recent project.</h3>' + 
        '<div class="apanel show" id="recent">' + 'Loading recent changes...' + '</div>' +
+       '<h3 class="accordion"><i class="fa fa-search"></i> Browse all projects.</h3>' + 
+       '<div class="apanel project-browser" id="existing"></div>' +
+       '<h3 class="accordion"><i class="fa fa-plus-square"></i> Create a new project.</h3>' +
+       '<div class="apanel" id="newproject"><p>' + 'New project' + '</p></div>' +
       '</div></p>';
        
       $('#content4').addClass('inactive-panel').html(dashboard);
