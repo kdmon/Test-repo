@@ -60,7 +60,7 @@ body {
 .apanel.show {
   opacity: 1;
   height: 100%;
-  min-height: 250px;
+  min-height: 350px;
   overflow-y: auto;
 }
 
@@ -73,8 +73,8 @@ body {
   height: 2em;
   margin-top: -0.5em;
   float: left;
-  margin-left: 1em;
-  margin-right: 1em;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
 }
 
 .resume {
@@ -98,6 +98,12 @@ body {
 
 .resume-group {
   padding-bottom: 0.5em;
+}
+
+.project-browser {
+  height: 350px;
+  padding-left: 0.2em;
+  padding-right: 0.2em;
 }
 
 #sign-in-notice {
@@ -206,9 +212,14 @@ body {
 
 .w2ui-node-group {
   border-bottom: 1px #ccc solid;
-  background: white !important;
+  background: #efefef !important;
   cursor: pointer !important;
 }
+
+.w2ui-node-group:hover {
+  background: #fff !important;
+}
+
 .w2ui-node-group span {
   text-transform: none !important;
   
