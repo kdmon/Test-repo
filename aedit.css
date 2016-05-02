@@ -38,7 +38,7 @@ body {
   width: 100%;
   text-align: left;
   margin: 0;
-  border: 1px solid transparent;
+  border: 1px solid #ddd;
   font-weight: 400;
 }
 
@@ -93,12 +93,9 @@ body {
 }
 
 .resume-group {
-  padding: 1em;
-  background: #e5e5e5;
-  margin-top: 1em;
-  margin-bottom: 1em;
-  box-shadow: 1px 1px 5px 0 #aaa;
+  padding-bottom: 1em;
 }
+
 #sign-in-notice {
   display: none;
   position: absolute;
