@@ -245,6 +245,8 @@ body {
   background: #d8d8d8 !important;
   margin-bottom: 1px;
   cursor: pointer !important;
+  border-right: 1px solid #aaa !important;
+  border-left: 1px solid #aaa !important;
   border-bottom: 1px solid #aaa !important;
 }
 
