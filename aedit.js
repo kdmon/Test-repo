@@ -1598,7 +1598,7 @@ function showProjectsInPanel () {
         }*/
       });
       
-      var dashboard = '<h2>Welcome back <strong>' + config.user + '</strong>' +
+      var dashboard = '<h2>Welcome <strong>' + config.user + '</strong>' +
       '<img class="avatar-large" src="' + config.avatar + '"/></h2><p>' +
       '<div id="startscreen">' +
        '<h2 class="accordion active"><i class="fa fa-hourglass-end"></i> Resume a recent project.</h2>' + 
@@ -1903,6 +1903,7 @@ function openProject (user, repository, branch, panelArea) {
     // 2. Generate widget
     else {
       var location = pickPanel(panelArea || 'filebrowser');
+      console.log(location);
       w2ui[location.layout].get(location.panel).tabs.add({
         id: id,
         closable: false,
@@ -1962,6 +1963,7 @@ function openProject (user, repository, branch, panelArea) {
         ],
         nodes: [] //fileNodes
       });
+      w2ui.layout.show('left');
       w2ui[id].lock('-Loading files...', true);
       w2ui[location.layout].get(location.panel).tabs.click(id);
       
