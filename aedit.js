@@ -963,10 +963,7 @@ function refreshTabs() {
       
       '</ul></div>');
       if (location[1] === 'middlesplit' && location[3] === 'main')
-      $("#content" + i).html('<div class="inactive-panel">' +
-      '<p><b>This panel is empty.</b></p>' +
-      '<ul><li>To use it, drag a tab over.' +
-      '</li></ul></div>');
+      $("#content" + i).html('<div class="inactive-panel"></div>');
       $("#content" + i).show();
       switchToolbar(location[1], location[3], 'empty');
     }
@@ -1602,12 +1599,12 @@ function showProjectsInPanel () {
       var dashboard = '<h2>Welcome <strong>' + config.user + '</strong>' +
       '<img class="avatar-large" src="' + config.avatar + '"/></h2><p>' +
       '<div id="startscreen">' +
-       '<h2 class="accordion active"><i class="fa fa-hourglass-end"></i> Resume a recent project.</h2>' + 
-       '<div class="apanel show" id="recent">' + 'Loading recent changes...' + '</div>' +
-       '<h2 class="accordion"><i class="fa fa-search"></i> Browse all projects.</h2>' + 
-       '<div class="apanel project-browser" id="project-browser"></div>' +
        '<h2 class="accordion"><i class="fa fa-plus-square"></i> Create a new project.</h2>' +
        '<div class="apanel" id="newproject"><p>' + 'New project' + '</p></div>' +
+       '<h2 class="accordion"><i class="fa fa-search"></i> Browse all projects.</h2>' + 
+       '<div class="apanel project-browser" id="project-browser"></div>' +
+       '<h2 class="accordion active"><i class="fa fa-hourglass-end"></i> Open a recent project.</h2>' + 
+       '<div class="apanel show" id="recent">' + 'Loading recent changes...' + '</div>' +
       '</div></p>';
        
       $('#content4').addClass("inactive-panel").html(dashboard);
@@ -1858,7 +1855,7 @@ function showProject (user, repository) {
     if (parentRepo) history = '<p>Forked ' + created + ' from ' + parentRepo.full_name + 
     ' by ' + owner + '.</p>';
     
-   var editButton = '<div id="editbutton" class="pressable" ' +
+   var editButton = '<div id="editbutton" class="green" ' +
       'style="display: none; margin-bottom: 0;" ' +
       'onclick="openProject(' + "'" + owner + "','" + repository + 
       "', 'getbranchfromselection'" + ')">' +
@@ -1907,7 +1904,7 @@ function openProject (user, repository, branch, panelArea) {
       console.log(location);
       w2ui[location.layout].get(location.panel).tabs.add({
         id: id,
-        closable: false,
+        closable: true,
         caption: title
       });
       
