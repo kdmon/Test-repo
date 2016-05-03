@@ -1507,8 +1507,8 @@ function showProjectsInPanel () {
   $().w2layout({
     name: 'panelLayout',
     panels: [
-      { type: 'main'},
-      { type: 'right', size: '50%', hidden: true}
+      { type: 'left', size: '50%', hidden: true},
+      { type: 'main'}
     ]
   });
   
@@ -1833,8 +1833,8 @@ function pushNodes (id, nodes) {
 // Create a sidebar for browsing repository files
 function showProject (user, repository) {
   
-  w2ui.panelLayout.content('right', '<p>Fetching repository details...</p>');
-  w2ui.panelLayout.show('right');
+  w2ui.panelLayout.content('left', '<p>Fetching repository details...</p>');
+  w2ui.panelLayout.show('left');
 
   var repo = github.getRepo(user, repository);
   
@@ -1868,7 +1868,7 @@ function showProject (user, repository) {
       '<div id="branch-list"><p>Fetching branches ...</p></div>' + 
       editButton + '</div>';
       
-    w2ui.panelLayout.content('right', projectHTML);
+    w2ui.panelLayout.content('left', projectHTML);
     
     repo.listBranches(function(err, branches) {
       $("#branch-list").html('<select><option>' + 
