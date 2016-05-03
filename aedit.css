@@ -64,10 +64,24 @@ body {
   overflow-y: auto;
 }
 
+
+.accordion:after {
+    content: '\02795';
+    color: #777;
+    float: right;
+    margin-left: 5px;
+}
+
+.accordion.active:after {
+    content: "\2796";
+}
+
 .note {
   background: white;
   box-shadow: 1px 1px 5px 0 #aaa;
-  padding:1em;
+  padding: 1em;
+  margin: 1em;
+  margin-left: 0;
 }
 
 #startscreen {
@@ -87,24 +101,19 @@ body {
 .resume {
   font-family: 'Raleway', sans-serif;
   cursor: pointer;
-  margin-bottom: 0.5em;
-  padding: 0.5em;
   font-size: 1.2em;
   width: 100%;
+  min-width: 350px;
   overflow:hidden;
   background: #eaeaea;
   border: none;
-  color: black;
+  padding-left: 1em;
   box-shadow: 1px 1px 5px 0 #aaa;
   text-align:left;
 }
 
 .resume:hover {
   background: #fff;
-}
-
-.resume-group {
-  padding-bottom: 0.5em;
 }
 
 .project-browser {
