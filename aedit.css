@@ -10,7 +10,7 @@ body,
   margin: 0;
 }
 
-h1, h2,h3 {
+h1, h2 {
   font-weight: 400;
 }
 
@@ -30,17 +30,13 @@ body {
 }
 
 .accordion {
-  font-family: 'Raleway', sans-serif;
   background-color: #fff;
-  color: #444;
   cursor: pointer;
-  padding: 0.5em;
+  padding: 0.3em;
   width: 100%;
-  text-align: left;
   margin: 0;
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
-  font-weight: 400;
 }
 
 .accordion.active, .accordion:hover {
@@ -85,7 +81,7 @@ body {
 
 #startscreen {
   background: white;
-  border:1em solid #ccc;
+  border: 0.5em solid #ccc;
 }
 
 .avatar-large {
@@ -96,11 +92,8 @@ body {
 }
 
 .pressable {
-  font-family: 'Raleway', sans-serif;
   cursor: pointer;
-  font-size: 1.2em;
   overflow:hidden;
-  background: #ffffff;
   border: none;
   padding-left: 1em;
   text-align:left;
@@ -108,7 +101,6 @@ body {
   margin-left: 0;
   margin-right: 0;
   background: #5b5;
-  color: black;
   max-width: 600px;
 }
 
@@ -123,6 +115,7 @@ body {
   font-size:1.5em;
   width: 100%;
   margin-top: 0.5em;
+  color: #555;
 }
 
 .project-browser {
@@ -258,7 +251,7 @@ body {
 .w2ui-sidebar-div .w2ui-selected, .w2ui-node:hover {
   background: #bbb !important;
   border-top: 1px solid transparent !important;
-  border-bottom: 1px solid transparent !important;
+  border-bottom: 1px solid #aaa !important;
 }
 
 .w2ui-sidebar .w2ui-sidebar-div .w2ui-selected:before {
