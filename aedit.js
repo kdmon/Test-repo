@@ -1509,8 +1509,8 @@ function showProjectsInPanel () {
   $().w2layout({
     name: 'panelLayout',
     panels: [
-      //{ type: 'left', size: '50%'},
-      { type: 'main'}
+      { type: 'main'},
+      { type: 'right', size: '50%', hidden: true}
     ]
   });
   
@@ -1578,6 +1578,15 @@ function showProjectsInPanel () {
           shared,
           secret
         ],
+        onClick: function (event) {
+          var target = event.target.split('/');
+          var user = target[0];
+          target = target[1].split('_');
+          target.pop();
+          var repo = target.join('_');
+          //initAll();
+          showProject(user,repo);
+        },
         onDblClick: function (event) {
           var target = event.target.split('/');
           var user = target[0];
@@ -1595,18 +1604,17 @@ function showProjectsInPanel () {
        '<h3 class="accordion active"><i class="fa fa-hourglass-end"></i> Resume a recent project.</h3>' + 
        '<div class="apanel show" id="recent">' + 'Loading recent changes...' + '</div>' +
        '<h3 class="accordion"><i class="fa fa-search"></i> Browse all projects.</h3>' + 
-       '<div class="apanel project-browser" id="existing"></div>' +
+       '<div class="apanel project-browser" id="project-browser"></div>' +
        '<h3 class="accordion"><i class="fa fa-plus-square"></i> Create a new project.</h3>' +
        '<div class="apanel" id="newproject"><p>' + 'New project' + '</p></div>' +
       '</div></p>';
        
-      $('#content4').addClass('inactive-panel').html(dashboard);
+      $('#content4').html(dashboard);
       
-      $('#existing').w2render('panelLayout');
+      $('#project-browser').w2render('panelLayout');
       
       // Attach project list w2ui widget
       w2ui.panelLayout.content('main', w2ui.projectList);
-      //w2ui.panelLayout.content('main', '<p> Select a project from the list </p>');
       
       // Handle accordion events
       
@@ -1818,6 +1826,54 @@ function pushNodes (id, nodes) {
     else w2ui[id].unlock();
   }, 1000);
 }
+
+
+// Show project details on front screen
+
+// Create a sidebar for browsing repository files
+function showProject (user, repository) {
+  
+  w2ui.panelLayout.content('right', 'Fetching repository details...');
+  w2ui.panelLayout.show('right');
+
+  var repo = github.getRepo(user, repository);
+  
+  repo.show(function(err, data) {
+    var description = data.description;
+    var created = timeSince(data.created_at);
+    var fork = data.fork;
+    var isPrivate = data.private;
+    var parentRepo = fork ? data.parent : false;
+    var language = data.language;
+    var owner = data.owner.login;
+    var repoIcon = '<i class="fa fa-github"></i> ';
+    if (fork) repoIcon = '<i class="fa fa-code-fork"></i> ';
+    if (isPrivate) repoIcon = '<i class="fa fa-eye-slash"></i> ';
+    if (owner !== config.user) repoIcon = '<img class="avatar-large" src="' +
+      data.owner.avatar_url +'"/> ';
+    var history = '<p>Created ' + created + ' by ' + owner + '.</p>';
+    if (parentRepo) history = '<p>Forked from ' + parentRepo.full_name + ' ' +
+    created + ' by ' + owner + '.</p>';
+    
+    var projectHTML = '<div class="note">' +
+      '<h1>' + repoIcon + repository + '</h1>' +
+      (description !== null ? '<p>' + description + '</p>' : '') + history +
+      (language !== null ? '<p>Written in ' + language + '</p>' : '') +
+      '<div id="branch-list">Fetching branches ...</div>';
+      
+    w2ui.panelLayout.content('right', projectHTML);
+    
+    repo.listBranches(function(err, branches) {
+      $("#branch-list").html('<select><option>' + 
+        branches.join('</option><option>') +
+        '</option></select>');
+    });
+    
+    console.log(data);
+    
+  });
+}
+
 
 // Create a sidebar for browsing repository files
 function openProject (user, repository, branch, panelArea) {
