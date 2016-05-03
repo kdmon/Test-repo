@@ -31,20 +31,21 @@ body {
 
 .accordion {
   font-family: 'Raleway', sans-serif;
-  background-color: #eee;
+  background-color: #fff;
   color: #444;
   cursor: pointer;
   padding: 0.5em;
   width: 100%;
   text-align: left;
   margin: 0;
-  border: 1px solid #ddd;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
   font-weight: 400;
 }
 
 .accordion.active, .accordion:hover {
-  border: 1px solid #ddd;
-  background: white;
+  border-bottom: 1px solid #ccc;
+  background: #eaeaea;
 }
 
 .apanel {
@@ -77,17 +78,17 @@ body {
 }
 
 .note {
-  background: white;
+  background: #eee;
   box-shadow: 1px 1px 5px 0 #aaa;
   padding: 1em;
-  margin: 1em;
-  margin-left: 0;
+  margin-top: 0.2em;
+  margin-right: 1em;
+  margin-bottom: 1em;
 }
 
 #startscreen {
   background: white;
-  margin-left: 1em;
-  margin-right: 1em;
+  border:1em solid #ccc;
 }
 
 .avatar-large {
@@ -98,27 +99,31 @@ body {
   margin-right: 0.5em;
 }
 
-.resume {
+.pressable {
   font-family: 'Raleway', sans-serif;
   cursor: pointer;
   font-size: 1.2em;
   overflow:hidden;
-  background: #eaeaea;
+  background: #ffffff;
   border: none;
   padding-left: 1em;
   box-shadow: 1px 1px 5px 0 #aaa;
   text-align:left;
+  margin: 1em;
+  margin-left: 0;
+  margin-right: 0;
 }
 
-.resume:hover {
-  background: #fff;
+.pressable:hover {
+  background: #eaeaea;
 }
 
 #branch-list select {
   border: 0;
-  background: #eee;
+  background: #fff;
   font-size:1.5em;
-  width: 100%;
+  display: block;
+  box-shadow: 1px 1px 5px 0 #aaa;
 }
 
 .project-browser {
@@ -184,14 +189,6 @@ body {
   */
 }
 
-.w2ui-sidebar .w2ui-sidebar-div .w2ui-selected:before {
-  content: none !important;
-}
-
-.w2ui-sidebar .w2ui-sidebar-div .w2ui-node-group {
-  color: #000 !important;
-  
-}
  
 .ace_search_field {
   font-size: 18px;
@@ -226,24 +223,36 @@ body {
   font-family: 'Raleway', sans-serif !important;
 }
 
-.w2ui-sidebar {
+.w2ui-reset table tr td, .w2ui-node-caption {
   font-family: 'Raleway', sans-serif !important;
   font-size: 1.1em !important;
 }
 
+.w2ui-sidebar-div {
+  font-family: 'Raleway', sans-serif !important;
+  font-size: 1.5em !important;
+}
+
 .w2ui-node-group {
+  font-size: 1.5em !important;
   border-bottom: 1px #ccc solid;
-  background: #efefef !important;
+  background: #ffffff !important;
   cursor: pointer !important;
+  color: #555 !important;
+  font-size: 1.5em !important;
 }
 
 .w2ui-node-group:hover {
-  background: #fff !important;
+  background: #eaeaea !important;
 }
 
 .w2ui-node-group span {
   text-transform: none !important;
-  
+}
+
+
+.w2ui-sidebar .w2ui-sidebar-div .w2ui-selected:before {
+  content: none !important;
 }
 
 .preview-iframe {
@@ -341,10 +350,6 @@ body {
   height: 58px;
   border: 0;
   padding-top: 0;
-}
-
-.w2ui-reset table tr td, .w2ui-node-caption {
-  font-size: 16px !important;
 }
 
 .small-button {
