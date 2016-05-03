@@ -95,7 +95,7 @@ body {
   margin-right: 0.5em;
 }
 
-.pressable, .green {
+.pressable {
   font-family: 'Raleway', sans-serif;
   cursor: pointer;
   font-size: 1.2em;
@@ -103,33 +103,29 @@ body {
   background: #ffffff;
   border: none;
   padding-left: 1em;
-  box-shadow: 1px 1px 5px 0 #aaa;
   text-align:left;
   margin: 1em;
   margin-left: 0;
   margin-right: 0;
 }
 
-.green {
+.pressable {
   background: #5b5;
   color: black;
 }
 
-.green:hover {
+.pressable:hover {
   color: white;
   background: #0a0;
-}
-
-.pressable:hover {
-  background: #eaeaea;
 }
 
 #branch-list select {
   border: 0;
   background: #fff;
   font-size:1.5em;
-  display: block;
   box-shadow: 1px 1px 5px 0 #aaa;
+  float: right;
+  width: 100%;
 }
 
 .project-browser {
@@ -256,9 +252,10 @@ body {
 }
 
 .w2ui-node {
-  background: #eaeaea !important;
+  background: #d8d8d8 !important;
   margin-bottom: 1px;
   cursor: pointer !important;
+  border-bottom: 1px solid #aaa !important;
 }
 
 .w2ui-sidebar-div .w2ui-selected, .w2ui-node:hover {
