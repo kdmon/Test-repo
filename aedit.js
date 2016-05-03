@@ -1873,7 +1873,7 @@ function showProject (user, repository) {
     repo.listBranches(function(err, branches) {
       $("#branch-list").html('<select><option>' + 
         branches.join('</option><option>') +
-        '</option><option>Create new branch ...</option></select>');
+        '</option><option>New branch...</option></select>');
       // Allow edit
       $('#editbutton').show();
       // Default to master branch, if it exists
