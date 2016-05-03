@@ -258,6 +258,17 @@ body {
   content: none !important;
 }
 
+.w2ui-overlay {
+  box-shadow: 0 0 50px #aaa;
+}
+.w2ui-overlay>div {
+  border: 0 !important;
+}
+
+.w2ui-overlay:before {
+  content: none !important;
+}
+
 .preview-iframe {
   background: white;
   border: 0;
