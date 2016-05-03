@@ -897,6 +897,7 @@ function openPreview (url, caption, panel) {
       };
     });
 
+  w2ui.layout.show('right');
   w2ui[location.layout].get(location.panel).tabs.click(previewId);
   // Does not work
   $(location.id).find(".w2ui-tabs").scrollLeft(99999);
