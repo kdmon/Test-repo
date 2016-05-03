@@ -1857,8 +1857,10 @@ function showProject (user, repository) {
     if (parentRepo) history = '<p>Forked ' + created + ' from ' + parentRepo.full_name + 
     ' by ' + owner + '.</p>';
     
-   var editButton = '<div style="margin-right:1em;" class="resume" onclick="openProject(' +
-      "'" + owner + "','" + repository + "', 'getbranchfromselection'" + ')">' +
+   var editButton = '<div id="editbutton" class="resume" ' +
+      'style="display: none; margin-bottom: 1em; margin-right:1em;" ' +
+      'onclick="openProject(' + "'" + owner + "','" + repository + 
+      "', 'getbranchfromselection'" + ')">' +
       '<h3><i class="fa fa-edit" aria-hidden="true"></i> Edit </h3></div>';
     
     var projectHTML = '<div class="note">' +
@@ -1872,7 +1874,10 @@ function showProject (user, repository) {
       $("#branch-list").html('<select><option>' + 
         branches.join('</option><option>') +
         '</option><option>Create new branch ...</option></select>');
-      $('#branch-list select').val('master'); // Default to master
+      // Allow edit
+      $('#editbutton').show();
+      // Default to master branch, if it exists
+      if (branches.indexOf('master')>-1) $('#branch-list select').val('master');
     });
     
   });
