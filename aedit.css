@@ -10,7 +10,7 @@ body,
   margin: 0;
 }
 
-h1, h2 {
+h1, h2,h3 {
   font-weight: 400;
 }
 
@@ -95,7 +95,7 @@ body {
   margin-right: 0.5em;
 }
 
-.pressable {
+.pressable, .green {
   font-family: 'Raleway', sans-serif;
   cursor: pointer;
   font-size: 1.2em;
@@ -108,6 +108,16 @@ body {
   margin: 1em;
   margin-left: 0;
   margin-right: 0;
+}
+
+.green {
+  background: #5b5;
+  color: black;
+}
+
+.green:hover {
+  color: white;
+  background: #0a0;
 }
 
 .pressable:hover {
@@ -245,6 +255,17 @@ body {
   text-transform: none !important;
 }
 
+.w2ui-node {
+  background: #eaeaea !important;
+  margin-bottom: 1px;
+  cursor: pointer !important;
+}
+
+.w2ui-sidebar-div .w2ui-selected, .w2ui-node:hover {
+  background: #bbb !important;
+  border-top: 1px solid transparent !important;
+  border-bottom: 1px solid transparent !important;
+}
 
 .w2ui-sidebar .w2ui-sidebar-div .w2ui-selected:before {
   content: none !important;
@@ -307,7 +328,7 @@ body {
 
 .wae-logo {
   cursor: pointer;
-  font-size: 1.9em;
+  font-size: 2.3em;
   font-family: 'Raleway', sans-serif;
   vertical-align: bottom;
   font-weight: normal;
