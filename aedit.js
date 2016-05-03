@@ -1604,7 +1604,7 @@ function showProjectsInPanel () {
        '<h2 class="accordion"><i class="fa fa-search"></i> Browse all projects.</h2>' + 
        '<div class="apanel project-browser" id="project-browser"></div>' +
        '<h2 class="accordion active"><i class="fa fa-hourglass-end"></i> ' +
-       'Edit a recent project.</h2><div class="apanel show" id="recent">' +
+       'Resume a recent project.</h2><div class="apanel show" id="recent">' +
        'Loading recent changes...' + '</div>' +
       '</div>';
        
