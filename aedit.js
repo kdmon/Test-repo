@@ -1659,9 +1659,10 @@ function showProjectsInPanel () {
               repos.push (item.repo.name + repoBranch);
               recentHistory += '<div class="green" onclick="openProject(' +
                 "'" + repoUser + "','" + repoName + "','" + repoBranch + "'" + ')">' +
-                '<h2><i class="fa fa-edit" aria-hidden="true"></i> ' +
+                '<h3><i class="fa fa-edit" aria-hidden="true"></i> ' +
                 (repoUser == config.user ? '': repoUser +'/') +
-                repoName + ' <em>(' + repoBranch +')</em></h2></div><p>Modified ' +
+                repoName + ' <em>(' + repoBranch +')</em></h3></div>' +
+                '<p style="margin-top: -1em;">Modified ' +
                 timeSince(item.created_at) + ': "' + 
                 item.payload.commits[0].message + '"</p>';
             }
@@ -1860,7 +1861,7 @@ function showProject (user, repository) {
       'style="display: none; margin-bottom: 0;" ' +
       'onclick="openProject(' + "'" + owner + "','" + repository + 
       "', 'getbranchfromselection'" + ')">' +
-      '<h2><i class="fa fa-edit" aria-hidden="true"></i> Edit </h2></div>';
+      '<h3><i class="fa fa-edit" aria-hidden="true"></i> Edit </h3></div>';
     
     var projectHTML = '<div class="note">' +
       '<h1>' + repoIcon + repository + '</h1>'  + description + history +
