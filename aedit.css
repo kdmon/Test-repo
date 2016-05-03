@@ -107,9 +107,6 @@ body {
   margin: 1em;
   margin-left: 0;
   margin-right: 0;
-}
-
-.pressable {
   background: #5b5;
   color: black;
 }
@@ -121,9 +118,8 @@ body {
 
 #branch-list select {
   border: 0;
-  background: #fff;
+  background: #cdc;
   font-size:1.5em;
-  box-shadow: 1px 1px 5px 0 #aaa;
   float: right;
   width: 100%;
 }
