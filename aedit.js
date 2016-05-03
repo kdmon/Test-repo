@@ -1597,15 +1597,16 @@ function showProjectsInPanel () {
       });
       
       var dashboard = '<h2>Welcome <strong>' + config.user + '</strong>' +
-      '<img class="avatar-large" src="' + config.avatar + '"/></h2><p>' +
+      '<img class="avatar-large" src="' + config.avatar + '"/></h2>' +
       '<div id="startscreen">' +
        '<h2 class="accordion"><i class="fa fa-plus-square"></i> Create a new project.</h2>' +
        '<div class="apanel" id="newproject"><p>' + 'New project' + '</p></div>' +
        '<h2 class="accordion"><i class="fa fa-search"></i> Browse all projects.</h2>' + 
        '<div class="apanel project-browser" id="project-browser"></div>' +
-       '<h2 class="accordion active"><i class="fa fa-hourglass-end"></i> Open a recent project.</h2>' + 
-       '<div class="apanel show" id="recent">' + 'Loading recent changes...' + '</div>' +
-      '</div></p>';
+       '<h2 class="accordion active"><i class="fa fa-hourglass-end"></i> ' +
+       'Edit a recent project.</h2><div class="apanel show" id="recent">' +
+       'Loading recent changes...' + '</div>' +
+      '</div>';
        
       $('#content4').addClass("inactive-panel").html(dashboard);
       
@@ -1656,13 +1657,13 @@ function showProjectsInPanel () {
             // Remove duplicates by repo name and branch
             if (repos.indexOf(item.repo.name + repoBranch) == -1) {
               repos.push (item.repo.name + repoBranch);
-              recentHistory += '<div class="pressable" onclick="openProject(' +
+              recentHistory += '<div class="green" onclick="openProject(' +
                 "'" + repoUser + "','" + repoName + "','" + repoBranch + "'" + ')">' +
-                '<h2><i class="fa fa-github" aria-hidden="true"></i> ' +
+                '<h2><i class="fa fa-edit" aria-hidden="true"></i> ' +
                 (repoUser == config.user ? '': repoUser +'/') +
-                repoName + ' <em>(' + repoBranch +')</em></h2><p>Modified ' +
+                repoName + ' <em>(' + repoBranch +')</em></h2></div><p>Modified ' +
                 timeSince(item.created_at) + ': "' + 
-                item.payload.commits[0].message + '"</p></div>';
+                item.payload.commits[0].message + '"</p>';
             }
           }
         }
@@ -1859,7 +1860,7 @@ function showProject (user, repository) {
       'style="display: none; margin-bottom: 0;" ' +
       'onclick="openProject(' + "'" + owner + "','" + repository + 
       "', 'getbranchfromselection'" + ')">' +
-      '<h3><i class="fa fa-edit" aria-hidden="true"></i> Open project </h3></div>';
+      '<h2><i class="fa fa-edit" aria-hidden="true"></i> Edit </h2></div>';
     
     var projectHTML = '<div class="note">' +
       '<h1>' + repoIcon + repository + '</h1>'  + description + history +
@@ -1869,7 +1870,7 @@ function showProject (user, repository) {
     w2ui.panelLayout.content('right', projectHTML);
     
     repo.listBranches(function(err, branches) {
-      $("#branch-list").html('<select><option>' + 
+      $("#branch-list").html('<h3 style="display:inline">Branches:</h3><select><option>' + 
         branches.join('</option><option>') +
         '</option><option>New branch...</option></select>');
       // Allow edit
