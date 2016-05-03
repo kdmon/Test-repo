@@ -1658,20 +1658,20 @@ function showProjectsInPanel () {
             // Remove duplicates by repo name and branch
             if (repos.indexOf(item.repo.name + repoBranch) == -1) {
               repos.push (item.repo.name + repoBranch);
-              recentHistory += '<p class="resume-group">' + 
-                '<button class="resume" onclick="openProject(' +
+              recentHistory += '<div class="resume" onclick="openProject(' +
                 "'" + repoUser + "','" + repoName + "','" + repoBranch + "'" + ')">' +
-                '<i class="fa fa-edit" aria-hidden="true"></i> ' +
+                '<h2><i class="fa fa-github" aria-hidden="true"></i> ' +
                 (repoUser == config.user ? '': repoUser +'/') +
-                repoName + ' <em>(' + repoBranch +')</em></button><br/> ' +
+                repoName + ' <em>(' + repoBranch +')</em></h2><p>Modified ' +
                 timeSince(item.created_at) + ': "' + 
-                item.payload.commits[0].message + '"</p>';
+                item.payload.commits[0].message + '"</p></div>';
             }
           }
         }
           
-        $("#recent").html('').prepend(
-        (recentHistory || '<p>You do not appear to have any recently saved projects.</p>'));
+        $("#recent").html('').prepend('<p>' +
+        (recentHistory || 'You do not appear to have any recently saved projects.') + 
+        '</p>');
       });
       
       
@@ -1833,7 +1833,7 @@ function pushNodes (id, nodes) {
 // Create a sidebar for browsing repository files
 function showProject (user, repository) {
   
-  w2ui.panelLayout.content('right', 'Fetching repository details...');
+  w2ui.panelLayout.content('right', '<p>Fetching repository details...</p>');
   w2ui.panelLayout.show('right');
 
   var repo = github.getRepo(user, repository);
@@ -1857,13 +1857,13 @@ function showProject (user, repository) {
     if (parentRepo) history = '<p>Forked ' + created + ' from ' + parentRepo.full_name + 
     ' by ' + owner + '.</p>';
     
-   var editButton = '<button class="resume" onclick="openProject(' +
+   var editButton = '<div style="margin-right:1em;" class="resume" onclick="openProject(' +
       "'" + owner + "','" + repository + "', 'getbranchfromselection'" + ')">' +
-      '<i class="fa fa-edit" aria-hidden="true"></i> Open branch </button>';
+      '<h3><i class="fa fa-edit" aria-hidden="true"></i> Edit </h3></div>';
     
     var projectHTML = '<div class="note">' +
       '<h1>' + repoIcon + repository + '</h1>'  + description + history +
-      '<p><div id="branch-list">Fetching branches ...</div><p>' + 
+      '<div id="branch-list"><p>Fetching branches ...</p></div></div>' + 
       editButton;
       
     w2ui.panelLayout.content('right', projectHTML);
