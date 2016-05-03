@@ -64,6 +64,12 @@ body {
   overflow-y: auto;
 }
 
+.note {
+  background: white;
+  box-shadow: 1px 1px 5px 0 #aaa;
+  padding:1em;
+}
+
 #startscreen {
   background: white;
   margin-left: 1em;
