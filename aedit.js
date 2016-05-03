@@ -1586,7 +1586,7 @@ function showProjectsInPanel () {
           var repo = target.join('_');
           //initAll();
           showProject(user,repo);
-        },
+        }/*,
         onDblClick: function (event) {
           var target = event.target.split('/');
           var user = target[0];
@@ -1595,7 +1595,7 @@ function showProjectsInPanel () {
           var repo = target.join('_');
           //initAll();
           setTimeout (function () {openProject(user,repo);}, 300);
-        }
+        }*/
       });
       
       var dashboard = '<h2>Welcome back <strong>' + config.user + '</strong>' +
@@ -1609,7 +1609,7 @@ function showProjectsInPanel () {
        '<div class="apanel" id="newproject"><p>' + 'New project' + '</p></div>' +
       '</div></p>';
        
-      $('#content4').html(dashboard);
+      $('#content4').addClass("inactive-panel").html(dashboard);
       
       $('#project-browser').w2render('panelLayout');
       
@@ -1840,11 +1840,13 @@ function showProject (user, repository) {
   
   repo.show(function(err, data) {
     var description = data.description;
+    description = (description !== null && description !== '' ?
+      '<p>' + description + '</p>': '<p>No description available.</p>');
+    
     var created = timeSince(data.created_at);
     var fork = data.fork;
     var isPrivate = data.private;
     var parentRepo = fork ? data.parent : false;
-    var language = data.language;
     var owner = data.owner.login;
     var repoIcon = '<i class="fa fa-github"></i> ';
     if (fork) repoIcon = '<i class="fa fa-code-fork"></i> ';
@@ -1855,21 +1857,23 @@ function showProject (user, repository) {
     if (parentRepo) history = '<p>Forked from ' + parentRepo.full_name + ' ' +
     created + ' by ' + owner + '.</p>';
     
+   var editButton = '<button class="resume" onclick="openProject(' +
+      "'" + owner + "','" + repository + "', 'getbranchfromselection'" + ')">' +
+      '<i class="fa fa-edit" aria-hidden="true"></i> Open branch </button>';
+    
     var projectHTML = '<div class="note">' +
-      '<h1>' + repoIcon + repository + '</h1>' +
-      (description !== null ? '<p>' + description + '</p>' : '') + history +
-      (language !== null ? '<p>Written in ' + language + '</p>' : '') +
-      '<div id="branch-list">Fetching branches ...</div>';
+      '<h1>' + repoIcon + repository + '</h1>'  + description + history +
+      '<p><div id="branch-list">Fetching branches ...</div><p>' + 
+      editButton;
       
     w2ui.panelLayout.content('right', projectHTML);
     
     repo.listBranches(function(err, branches) {
       $("#branch-list").html('<select><option>' + 
         branches.join('</option><option>') +
-        '</option></select>');
+        '</option><option>Create new branch ...</option></select>');
+      $('#branch-list select').val('master'); // Default to master
     });
-    
-    console.log(data);
     
   });
 }
@@ -1880,6 +1884,8 @@ function openProject (user, repository, branch, panelArea) {
   var safeRepo = repository.replace(/[^a-z0-9_-]|\s+/gmi, "");
   var repo = github.getRepo(user, repository);
   branch = (branch !== undefined) ? branch : 'master';
+  if (branch == 'getbranchfromselection') branch = $('#branch-list select').val();
+  
   // 1. Fetch repo files, recursively - allocated to a web worker
   repo.getTree(branch + '?recursive=true', function (err, tree) {
     var title = '<i class="fa fa-folder-open-o"></i> ' + repository;
