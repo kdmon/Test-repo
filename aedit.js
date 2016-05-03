@@ -1854,8 +1854,8 @@ function showProject (user, repository) {
     if (owner !== config.user) repoIcon = '<img class="avatar-large" src="' +
       data.owner.avatar_url +'"/> ';
     var history = '<p>Created ' + created + ' by ' + owner + '.</p>';
-    if (parentRepo) history = '<p>Forked ' + created + ' from ' + parentRepo.full_name + 
-    ' by ' + owner + '.</p>';
+    if (parentRepo) history = '<p>Forked from ' + parentRepo.full_name + 
+    created + ', by ' + owner + '.</p>';
     
    var editButton = '<div id="editbutton" class="pressable" ' +
       'style="display: none; margin-bottom: 0;" ' +
@@ -1865,8 +1865,8 @@ function showProject (user, repository) {
     
     var projectHTML = '<div class="note">' +
       '<h1>' + repoIcon + repository + '</h1>'  + description + history +
-      '<div id="branch-list"><p>Fetching branches ...</p></div>' + 
-      editButton + '</div>';
+      editButton + '<div id="branch-list"><p>Fetching branches ...</p></div>' + 
+      '</div>';
       
     w2ui.panelLayout.content('left', projectHTML);
     
