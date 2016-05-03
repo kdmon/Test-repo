@@ -1657,7 +1657,7 @@ function showProjectsInPanel () {
             // Remove duplicates by repo name and branch
             if (repos.indexOf(item.repo.name + repoBranch) == -1) {
               repos.push (item.repo.name + repoBranch);
-              recentHistory += '<div class="green" onclick="openProject(' +
+              recentHistory += '<div class="pressable" onclick="openProject(' +
                 "'" + repoUser + "','" + repoName + "','" + repoBranch + "'" + ')">' +
                 '<h3><i class="fa fa-edit" aria-hidden="true"></i> ' +
                 (repoUser == config.user ? '': repoUser +'/') +
@@ -1857,7 +1857,7 @@ function showProject (user, repository) {
     if (parentRepo) history = '<p>Forked ' + created + ' from ' + parentRepo.full_name + 
     ' by ' + owner + '.</p>';
     
-   var editButton = '<div id="editbutton" class="green" ' +
+   var editButton = '<div id="editbutton" class="pressable" ' +
       'style="display: none; margin-bottom: 0;" ' +
       'onclick="openProject(' + "'" + owner + "','" + repository + 
       "', 'getbranchfromselection'" + ')">' +
@@ -1871,7 +1871,7 @@ function showProject (user, repository) {
     w2ui.panelLayout.content('right', projectHTML);
     
     repo.listBranches(function(err, branches) {
-      $("#branch-list").html('<h3 style="display:inline">Branches:</h3><select><option>' + 
+      $("#branch-list").html('<select><option>' + 
         branches.join('</option><option>') +
         '</option><option>New branch...</option></select>');
       // Allow edit
