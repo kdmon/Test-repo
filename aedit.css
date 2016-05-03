@@ -109,6 +109,7 @@ body {
   margin-right: 0;
   background: #5b5;
   color: black;
+  max-width: 600px;
 }
 
 .pressable:hover {
@@ -120,8 +121,8 @@ body {
   border: 0;
   background: #cdc;
   font-size:1.5em;
-  float: right;
   width: 100%;
+  margin-top: 0.5em;
 }
 
 .project-browser {
