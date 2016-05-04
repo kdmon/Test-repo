@@ -1883,24 +1883,34 @@ function showProject (user, repository) {
   });
 }
 
-// Context menu call back for jstree
+// Contextmenu callback for jstree
 
 function fileTreeMenu (node) {
   var items = {
-    preview: { // The "rename" menu item
-      label: "Preview",
+    edit: {
+      label: "edit",
+      icon: "fa fa-pencil",
       action: function () {
         alert ("previewing");
       }
     },
-    rename: { // The "rename" menu item
+    preview: {
+      label: "Preview",
+      icon: "fa fa-eye",
+      action: function () {
+        alert ("previewing");
+      }
+    },
+    rename: { 
       label: "Rename",
+      icon: "fa fa-edit",
       action: function () {
         alert ("renaming");
       }
     },
-    remove: { // The "delete" menu item
+    remove: { 
       label: "Delete",
+      icon: "fa fa-trash",
       action: function () {
         alert ("deleting");
       }
