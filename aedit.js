@@ -1956,14 +1956,20 @@ function openProject (user, repository, branch, panelArea) {
       $('<div id="container_' + id +'" style="display:none; background: white;"></div>').appendTo("body");
       
       $("#container_"+id).jstree({
-        'core' : {'data' : jsTreeFolders.concat(jsTreeFiles)}
+        core : {'data' : jsTreeFolders.concat(jsTreeFiles)},
+        plugins : [ "wholerow" ]
       });
       
       // Listen for double click events
       
       $("#container_"+id).on("dblclick", function (event) {
-        // Return if folder
         var elem = event.target.id;
+        // Return if folder
+        
+        console.log (event.target)
+        
+        if ($(event.target).hasClass('fa-folder-o')) return;
+        
         // Otherwise start new document
         var conf = {
           user: user,
