@@ -1657,14 +1657,17 @@ function showProjectsInPanel () {
             // Remove duplicates by repo name and branch
             if (repos.indexOf(item.repo.name + repoBranch) == -1) {
               repos.push (item.repo.name + repoBranch);
-              recentHistory += '<div class="pressable" onclick="openProject(' +
-                "'" + repoUser + "','" + repoName + "','" + repoBranch + "'" + ')">' +
-                '<h3><i class="fa fa-edit" aria-hidden="true"></i> ' +
+              recentHistory += '<div class="note"><h2>' + 
+                '<i class="fa fa-github"></i> ' + 
                 (repoUser == config.user ? '': repoUser +'/') +
-                repoName + ' <em>(' + repoBranch +')</em></h3></div>' +
-                '<p style="margin-top: -1em;">Modified ' +
-                timeSince(item.created_at) + ': "' + 
-                item.payload.commits[0].message + '"</p>';
+                repoName + ' <em>(' + repoBranch +')</em>' + '</h2>' +
+                '<p>Modified ' + timeSince(item.created_at) + ': "' + 
+                item.payload.commits[0].message + '"</p>' + 
+                '<div class="pressable" onclick="openProject(' +
+                "'" + repoUser + "','" + repoName + "','" + repoBranch + "'" + ')">' +
+                '<h3><i class="fa fa-edit" aria-hidden="true"></i> Resume editing ' +
+                '</h3></div></div>'
+                
             }
           }
         }
