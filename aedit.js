@@ -1887,23 +1887,26 @@ function showProject (user, repository) {
 // Create a sidebar for browsing repository files
 function openProject (user, repository, branch, panelArea) {
   var safeRepo = repository.replace(/[^a-z0-9_-]|\s+/gmi, "");
+  var id = "filebrowser_" + safeRepo + "_" + Math.round(Math.random() * 10000000);
   var repo = github.getRepo(user, repository);
   branch = (branch !== undefined) ? branch : 'master';
   if (branch == 'getbranchfromselection') branch = $('#branch-list select').val();
   
+  w2ui.layout.show('left');
+  
   // 1. Fetch repo files, recursively - allocated to a web worker
   repo.getTree(branch + '?recursive=true', function (err, tree) {
     var title = '<i class="fa fa-folder-open-o"></i> ' + repository;
-    var id = "filebrowser_" + safeRepo + "_" + Math.round(Math.random() * 10000000);
 
     if (err) {
+      w2ui[id].unlock();
       console.log("Error retrieving files", err);
     }
 
     // 2. Generate widget
     else {
       var location = pickPanel(panelArea || 'filebrowser');
-      console.log(location);
+      
       w2ui[location.layout].get(location.panel).tabs.add({
         id: id,
         closable: true,
@@ -1963,8 +1966,8 @@ function openProject (user, repository, branch, panelArea) {
         ],
         nodes: [] //fileNodes
       });
-      w2ui.layout.show('left');
-      w2ui[id].lock('-Loading files...', true);
+
+      w2ui[id].lock('Loading project...', true);
       w2ui[location.layout].get(location.panel).tabs.click(id);
       
       //refreshTabs();
