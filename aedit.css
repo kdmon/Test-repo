@@ -81,7 +81,11 @@ body {
   background: #fff;
   box-shadow: 1px 1px 5px 0 #aaa;
   padding: 1em;
-  margin-top: 1em;
+  margin: 1em;
+  margin-left: 0;
+  width: 100%;
+  max-width: 500px;
+  display: inline-block;
 }
 
 #startscreen {
@@ -107,10 +111,10 @@ body {
   margin-right: 0;
   background: #5b5;
   max-width: 600px;
+  color: white;
 }
 
 .pressable:hover {
-  color: white;
   background: #0a0;
 }
 
