@@ -14,6 +14,11 @@ h1, h2 {
   font-weight: 400;
 }
 
+.jstree-contextmenu { z-index:10052 !important; }
+
+.jstree-container-ul {
+  background: white;
+}
 
 .panel-container {
   background: #fff !important;
