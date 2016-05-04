@@ -1919,6 +1919,7 @@ function fileTreeMenu (node) {
 
   if ($(node).hasClass("folder")) {
     // Delete the "preview" menu item
+    delete items.edit;
     delete items.preview;
   }
   return items;
