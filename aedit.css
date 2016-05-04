@@ -16,7 +16,7 @@ h1, h2 {
 
 .jstree-contextmenu { z-index:10052 !important; }
 
-.jstree-container-ul {
+.jstree {
   background: white;
 }
 
