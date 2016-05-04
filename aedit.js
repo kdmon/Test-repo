@@ -1963,23 +1963,23 @@ function openProject (user, repository, branch, panelArea) {
       // Listen for double click events
       
       $("#container_"+id).on("dblclick", function (event) {
-        var elem = event.target.id;
-        // Return if folder
         
-        console.log (event.target)
+        var elem = event.target.parentElement;
         
-        if ($(event.target).children("i.first").hasClass('fa-folder-o')) return;
+        // Ignore folders
+        if ($(elem).find("a i:first").hasClass('fa-folder-o')) return;
         
-        // Otherwise start new document
+        // Otherwise, assume file and open thedocument
         var conf = {
           user: user,
           repo: repository,
           branch: branch,
-          path: elem.substring(0,elem.length-7),
-          title: event.target.text
+          path: elem.id,
+          title: $(elem).find("a").text()
         };
-        console.log (conf);
+        
         startDoc(conf);
+        
         /*
         return;
         var path = event.target.substr(event.target.indexOf("_")+1).split('/');
