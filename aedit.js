@@ -1883,6 +1883,36 @@ function showProject (user, repository) {
   });
 }
 
+// Context menu call back for jstree
+
+function fileTreeMenu (node) {
+  var items = {
+    preview: { // The "rename" menu item
+      label: "Preview",
+      action: function () {
+        alert ("previewing");
+      }
+    },
+    rename: { // The "rename" menu item
+      label: "Rename",
+      action: function () {
+        alert ("renaming");
+      }
+    },
+    remove: { // The "delete" menu item
+      label: "Delete",
+      action: function () {
+        alert ("deleting");
+      }
+    }
+  };
+
+  if ($(node).hasClass("folder")) {
+    // Delete the "preview" menu item
+    delete items.preview;
+  }
+  return items;
+}
 
 // Create a sidebar for browsing repository files
 function openProject (user, repository, branch, panelArea) {
@@ -1953,7 +1983,7 @@ function openProject (user, repository, branch, panelArea) {
       
       // Insert jstree widget into DOM
       
-      $('<div id="container_' + id +'" style="display:none; background: white;"></div>').appendTo("body");
+      $('<div id="container_' + id +'"></div>').appendTo("body");
       
       $("#container_"+id).jstree({
         core : {
@@ -1961,7 +1991,18 @@ function openProject (user, repository, branch, panelArea) {
           check_callback : true,
           show_only_matches: true
         },
-        plugins : ["contextmenu", "wholerow", "search", "unique", "dnd", "state", "sort"]
+        plugins : [
+          "contextmenu",
+          "wholerow",
+          "search",
+          "unique",
+          "dnd",
+          "state",
+          "sort"
+        ],
+        contextmenu : {
+          items : fileTreeMenu
+        }
       });
       
       // Listen for doubleclick events
