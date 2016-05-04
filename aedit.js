@@ -1896,6 +1896,29 @@ function openProject (user, repository, branch, panelArea) {
   
   // 1. Fetch repo files, recursively - allocated to a web worker
   repo.getTree(branch + '?recursive=true', function (err, tree) {
+    
+    // prepare jstree data structure
+    var jsTreeData = [];
+    for (var i = 0; i < tree.length; i ++) {
+      var item = tree[i];
+      var node = {};
+      node.id = item.path;
+      var parts = item.path.split('/');
+      node.text = parts.pop();
+      
+      // Check if root node
+      if (parts.length === 0) node.parent = '#';
+      else node.parent = parts.join('/');
+      
+      // Check if folder node
+      if (item.type === "tree") node.icon = "fa fa-folder";
+      else node.icon = "fa fa-file-o";
+      
+      jsTreeData.push(node);
+    }
+    
+    console.log (jsTreeData);
+    
     var title = '<i class="fa fa-folder-open-o"></i> ' + repository;
 
     if (err) {
