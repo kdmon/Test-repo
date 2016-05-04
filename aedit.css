@@ -62,7 +62,7 @@ body {
 .apanel.show {
   opacity: 1;
   height: 100%;
-  min-height: 340px;
+  min-height: 360px;
   overflow-y: auto;
 }
 
@@ -89,8 +89,8 @@ body {
   vertical-align: top;
 }
 
-.repo-split {
-  height:9em;
+.repo-blurb {
+  height:9.5em;
   overflow-y: auto;
 }
 
@@ -140,7 +140,7 @@ body {
 }
 
 .project-browser {
-  height: 340px;
+  height: 360px;
   padding-left: 1em;
 }
 
