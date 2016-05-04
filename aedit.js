@@ -1968,7 +1968,7 @@ function openProject (user, repository, branch, panelArea) {
         
         console.log (event.target)
         
-        if ($(event.target).hasClass('fa-folder-o')) return;
+        if ($(event.target).children("i.first").hasClass('fa-folder-o')) return;
         
         // Otherwise start new document
         var conf = {
