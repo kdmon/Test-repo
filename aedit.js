@@ -1657,18 +1657,16 @@ function showProjectsInPanel () {
             // Remove duplicates by repo name and branch
             if (repos.indexOf(item.repo.name + repoBranch) == -1) {
               repos.push (item.repo.name + repoBranch);
-              recentHistory += '<div class="note"><div class="repo-split"><h1>' + 
-                '<i class="fa fa-github"></i> ' + 
+              recentHistory += '<div class="note"><div class="repo-blurb">' +
+                '<h1><i class="fa fa-github"></i> ' + 
                 (repoUser == config.user ? '': repoUser +' / ') + repoName + 
                 '</h1><p>Modified ' + timeSince(item.created_at) + ' "' + 
                 item.payload.commits[0].message + '"</p></div>' + 
-                '<divclass="repo-split"><div class="pressable" ' +
-                'onclick="openProject(' + "'" + repoUser + "','" + 
-                repoName + "','" + repoBranch + "'" + ')">' +
+                '<div class="pressable" onclick="openProject(' + "'" +
+                repoUser + "','" + repoName + "','" + repoBranch + "'" + ')">' +
                 '<h2><i class="fa fa-pencil" aria-hidden="true"></i> Edit ' +
                 '</h2></div><p class="branch-selector inactive">Branch: ' +
                 repoBranch + '</p></div></div>';
-                
             }
           }
         }
@@ -1867,10 +1865,10 @@ function showProject (user, repository) {
       "', 'getbranchfromselection'" + ')">' +
       '<h2><i class="fa fa-pencil" aria-hidden="true"></i> Edit </h2></div>';
     
-    var projectHTML = '<div class="note">' +
-      '<h1>' + repoIcon + repository + '</h1>'  + description + history +
-      editButton + '<div id="branch-list"><p>Fetching branches ...</p></div>' + 
-      '</div>';
+    var projectHTML = '<div class="note"> <div class="repo-blurb">' +
+      '<h1>' + repoIcon + repository + '</h1>'+ description + history + 
+      '</div>' + editButton + '<div id="branch-list">' + 
+      '<p>Fetching branches ...</p></div></div>';
       
     w2ui.panelLayout.content('left', projectHTML);
     
