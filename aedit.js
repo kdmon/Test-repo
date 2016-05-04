@@ -1956,11 +1956,15 @@ function openProject (user, repository, branch, panelArea) {
       $('<div id="container_' + id +'" style="display:none; background: white;"></div>').appendTo("body");
       
       $("#container_"+id).jstree({
-        core : {'data' : jsTreeFolders.concat(jsTreeFiles)},
-        plugins : [ "wholerow" ]
+        core : {
+          data : jsTreeFolders.concat(jsTreeFiles),
+          check_callback : true,
+          show_only_matches: true
+        },
+        plugins : ["contextmenu", "wholerow", "search", "unique", "dnd", "state", "sort"]
       });
       
-      // Listen for double click events
+      // Listen for doubleclick events
       
       $("#container_"+id).on("dblclick", function (event) {
         
