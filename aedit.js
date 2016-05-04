@@ -1925,7 +1925,8 @@ function openProject (user, repository, branch, panelArea) {
         panel: location.area
       };
 
-      // prepare jstree data structure
+      // Prepare jstree data structure
+      
       var jsTreeFiles = [];
       var jsTreeFolders = [];
       for (var i = 0; i < tree.length; i ++) {
@@ -1941,7 +1942,7 @@ function openProject (user, repository, branch, panelArea) {
         
         // Check if folder node
         if (item.type === "tree") {
-          node.icon = "fa fa-folder";
+          node.icon = "fa fa-folder-o";
           jsTreeFolders.push(node);
         }
         else {
@@ -1950,12 +1951,44 @@ function openProject (user, repository, branch, panelArea) {
         }
       }
       
-      // Insert filetree widget into DOM
+      // Insert jstree widget into DOM
       
       $('<div id="container_' + id +'" style="display:none; background: white;"></div>').appendTo("body");
       
       $("#container_"+id).jstree({
         'core' : {'data' : jsTreeFolders.concat(jsTreeFiles)}
+      });
+      
+      // Listen for double click events
+      
+      $("#container_"+id).on("dblclick", function (event) {
+        // Return if folder
+        var elem = event.target.id;
+        // Otherwise start new document
+        var conf = {
+          user: user,
+          repo: repository,
+          branch: branch,
+          path: elem.substring(0,elem.length-7),
+          title: event.target.text
+        };
+        console.log (conf);
+        startDoc(conf);
+        /*
+        return;
+        var path = event.target.substr(event.target.indexOf("_")+1).split('/');
+        var id = path.join('/');
+        var user = path.shift();
+        var repo = path.shift();
+        var branch = path.shift();
+        var title = path[path.length-1];
+        path = path.join('/');
+        */
+        /*
+        var li = $(event.target).closest("li");
+        var node = $('#jstree_div').get_node(li[0].id);
+        $('#jstree_div').toggle_node(node)
+        */
       });
 
 
@@ -2156,7 +2189,9 @@ function pickPanel(identifier) {
 
 function startDoc(settings) {
   w2popup.open().lock("Loading " + settings.path, true);
-  var tabId = settings.id;
+  // TabId stores the full url of the file
+  var tabId = settings.user + '/' + settings.repo + '/' + 
+    settings.branch + '/' + settings.path;
   var user = settings.user;
   var repository = settings.repo;
   var branch = settings.branch;
