@@ -1894,40 +1894,22 @@ function openProject (user, repository, branch, panelArea) {
   
   w2ui.layout.show('left');
   
-  // 1. Fetch repo files, recursively - allocated to a web worker
+  // 1. Fetch all repo files in one go
+
   repo.getTree(branch + '?recursive=true', function (err, tree) {
-    
-    // prepare jstree data structure
-    var jsTreeData = [];
-    for (var i = 0; i < tree.length; i ++) {
-      var item = tree[i];
-      var node = {};
-      node.id = item.path;
-      var parts = item.path.split('/');
-      node.text = parts.pop();
-      
-      // Check if root node
-      if (parts.length === 0) node.parent = '#';
-      else node.parent = parts.join('/');
-      
-      // Check if folder node
-      if (item.type === "tree") node.icon = "fa fa-folder";
-      else node.icon = "fa fa-file-o";
-      
-      jsTreeData.push(node);
-    }
-    
-    console.log (jsTreeData);
-    
-    var title = '<i class="fa fa-folder-open-o"></i> ' + repository;
 
     if (err) {
       w2ui[id].unlock();
       console.log("Error retrieving files", err);
     }
 
-    // 2. Generate widget
+    // 2. Generate filetree widget
     else {
+      
+      // Add tab
+      
+      var title = '<i class="fa fa-folder-open-o"></i> ' + repository;
+
       var location = pickPanel(panelArea || 'filebrowser');
       
       w2ui[location.layout].get(location.panel).tabs.add({
@@ -1942,8 +1924,48 @@ function openProject (user, repository, branch, panelArea) {
         type: 'filebrowser',
         panel: location.area
       };
-    
-      $('<div id="container_' + id +'" class="panel-content" style="display:none"></div>').appendTo( "body" );
+
+      // prepare jstree data structure
+      var jsTreeFiles = [];
+      var jsTreeFolders = [];
+      for (var i = 0; i < tree.length; i ++) {
+        var item = tree[i];
+        var node = {};
+        node.id = item.path;
+        var parts = item.path.split('/');
+        node.text = parts.pop();
+        
+        // Check if root node
+        if (parts.length === 0) node.parent = '#';
+        else node.parent = parts.join('/');
+        
+        // Check if folder node
+        if (item.type === "tree") {
+          node.icon = "fa fa-folder";
+          jsTreeFolders.push(node);
+        }
+        else {
+          node.icon = "fa fa-file-o"; 
+          jsTreeFiles.push(node);
+        }
+      }
+      
+      // Insert filetree widget into DOM
+      
+      $('<div id="container_' + id +'" style="display:none; background: white;"></div>').appendTo("body");
+      
+      $("#container_"+id).jstree({
+        'core' : {'data' : jsTreeFolders.concat(jsTreeFiles)}
+      });
+
+
+      // Activate filetree widget
+      
+      w2ui[location.layout].get(location.panel).tabs.click(id);
+      $(location.id).find(".w2ui-tabs").scrollLeft(99999);
+      refreshTabs();
+      
+      /*
       $("#container_"+id).w2sidebar({
         name: id,
         menu : [
@@ -2042,6 +2064,10 @@ function openProject (user, repository, branch, panelArea) {
         });
       });
       
+    }
+  });
+  */
+    
     }
   });
 }
