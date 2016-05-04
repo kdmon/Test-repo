@@ -1657,16 +1657,17 @@ function showProjectsInPanel () {
             // Remove duplicates by repo name and branch
             if (repos.indexOf(item.repo.name + repoBranch) == -1) {
               repos.push (item.repo.name + repoBranch);
-              recentHistory += '<div class="note"><h1>' + 
+              recentHistory += '<div class="note"><div class="repo-split"><h1>' + 
                 '<i class="fa fa-github"></i> ' + 
-                (repoUser == config.user ? '': repoUser +' / ') +
-                repoName + ' <em>(' + repoBranch +')</em>' + '</h1>' +
-                '<p>Modified ' + timeSince(item.created_at) + ': "' + 
-                item.payload.commits[0].message + '"</p>' + 
-                '<div class="pressable" onclick="openProject(' +
-                "'" + repoUser + "','" + repoName + "','" + repoBranch + "'" + ')">' +
-                '<h3><i class="fa fa-edit" aria-hidden="true"></i> Resume editing ' +
-                '</h3></div></div>'
+                (repoUser == config.user ? '': repoUser +' / ') + repoName + 
+                '</h1><p>Modified ' + timeSince(item.created_at) + ' "' + 
+                item.payload.commits[0].message + '"</p></div>' + 
+                '<divclass="repo-split"><div class="pressable" ' +
+                'onclick="openProject(' + "'" + repoUser + "','" + 
+                repoName + "','" + repoBranch + "'" + ')">' +
+                '<h2><i class="fa fa-pencil" aria-hidden="true"></i> Edit ' +
+                '</h2></div><p class="branch-selector inactive">Branch: ' +
+                repoBranch + '</p></div></div>';
                 
             }
           }
@@ -1864,7 +1865,7 @@ function showProject (user, repository) {
       'style="display: none; margin-bottom: 0;" ' +
       'onclick="openProject(' + "'" + owner + "','" + repository + 
       "', 'getbranchfromselection'" + ')">' +
-      '<h3><i class="fa fa-edit" aria-hidden="true"></i> Edit </h3></div>';
+      '<h2><i class="fa fa-pencil" aria-hidden="true"></i> Edit </h2></div>';
     
     var projectHTML = '<div class="note">' +
       '<h1>' + repoIcon + repository + '</h1>'  + description + history +
@@ -1874,7 +1875,7 @@ function showProject (user, repository) {
     w2ui.panelLayout.content('left', projectHTML);
     
     repo.listBranches(function(err, branches) {
-      $("#branch-list").html('<select><option>' + 
+      $("#branch-list").html('<select class="branch-selector"><option>' + 
         branches.join('</option><option>') +
         '</option><option>New branch...</option></select>');
       // Allow edit
