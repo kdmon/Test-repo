@@ -1662,16 +1662,18 @@ function showProjectsInPanel () {
               var editButton = '<div class="pressable" onclick="openProject(' + "'" +
                 repoUser + "','" + repoName + "','" + repoBranch + "'" + ')">' +
                 '<h2><i class="fa fa-pencil" aria-hidden="true"></i> Edit ' +
-                '</h2></div><p class="branch-selector inactive">Branch: ' +
-                repoBranch + '</p></div>';
+                '</h2></div>'; ;
               
-              var cardFront = '<div class="card-front"><i class="fa fa-2x fa-gear ' +
-              'repo-config" onclick="flipRepo(this);"></i>' + 
-              '<div class="repo-blurb"><h1><i class="fa fa-github"></i> ' + 
+              var cardFront = '<div class="card-front">' +
+                '<i class="fa fa-2x fa-gear repo-config" ' + 
+                'onclick="$(this).parent().parent().toggleClass(' + 
+                "'flipped'" + ')"></i>' + '<div class="repo-blurb">' + 
+                '<h1><i class="fa fa-github"></i> ' + 
                 (repoUser == config.user ? '': repoUser +' / ') + repoName + 
                 '</h1><p>Modified ' + timeSince(item.created_at) + ':<br/><br/> "' + 
                 item.payload.commits[0].message + '"</p></div>' + editButton +
-                '</div></div>';
+                '<p class="branch-selector inactive">Branch: ' +
+                repoBranch + '</p></div>';
                 
               var cardBack = '<div class="card-back"><i class="fa fa-2x fa-share repo-config" ' + 
                 'onclick="$(this).parent().parent().toggleClass(' + "'flipped'" + ')"></i>' + 
@@ -1679,15 +1681,13 @@ function showProjectsInPanel () {
                 '</div>';
               
               recentHistory += '<div class="card-container"><div class="card">' + 
-                cardFront + cardBack + '</div></div>';
-                
+                cardFront + cardBack + '</div></div></div>';
             }
           }
         }
-          
-        $("#recent").html('').prepend('<p>' +
-        (recentHistory || 'You do not appear to have any recently saved projects.') + 
-        '</p>');
+        console.log(recentHistory);
+        $("#recent").html('').prepend(recentHistory || 
+          '<p>You do not appear to have any recently saved projects.</p>');
       });
       
       
