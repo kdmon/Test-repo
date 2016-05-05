@@ -1596,8 +1596,9 @@ function showProjectsInPanel () {
         }*/
       });
       
-      var dashboard = '<h2>Welcome <strong>' + config.user + '</strong>' +
-      '<img class="avatar-large" src="' + config.avatar + '"/></h2>' +
+      var dashboard = 
+      //'<h2>Welcome <strong>' + config.user + '</strong>' +
+      //'<img class="avatar-large" src="' + config.avatar + '"/></h2>' +
       '<div id="startscreen">' +
        '<h2 class="accordion"><i class="fa fa-plus-square"></i> Create a new project.</h2>' +
        '<div class="apanel" id="newproject"><p>' + 'New project' + '</p></div>' +
@@ -1657,8 +1658,9 @@ function showProjectsInPanel () {
             // Remove duplicates by repo name and branch
             if (repos.indexOf(item.repo.name + repoBranch) == -1) {
               repos.push (item.repo.name + repoBranch);
-              recentHistory += '<div class="note"><div class="repo-blurb">' +
-                '<h1><i class="fa fa-github"></i> ' + 
+              recentHistory += '<div class="note"><i class="fa fa-2x fa-gear ' +
+              'repo-config" onclick="flipRepo(this);"></i>' + 
+              '<div class="repo-blurb"><h1><i class="fa fa-github"></i> ' + 
                 (repoUser == config.user ? '': repoUser +' / ') + repoName + 
                 '</h1><p>Modified ' + timeSince(item.created_at) + ':<br/><br/> "' + 
                 item.payload.commits[0].message + '"</p></div>' + 
@@ -1702,6 +1704,9 @@ function showProjectsInPanel () {
   });
 }
 
+function flipRepo (elem) {
+  console.log("css flip", elem);
+}
 
 // Show and generate project list dialogue
 
@@ -1865,9 +1870,10 @@ function showProject (user, repository) {
       "', 'getbranchfromselection'" + ')">' +
       '<h2><i class="fa fa-pencil" aria-hidden="true"></i> Edit </h2></div>';
     
-    var projectHTML = '<div class="note"> <div class="repo-blurb">' +
-      '<h1>' + repoIcon + repository + '</h1>'+ description + history + 
-      '</div>' + editButton + '<div id="branch-list">' + 
+    var projectHTML = '<div class="note"><i class="fa fa-2x fa-gear ' +
+      'repo-config" onclick="flipRepo(this);"></i>' + 
+      '<div class="repo-blurb"><h1>' + repoIcon + repository + '</h1>' +
+      description + history + '</div>' + editButton + '<div id="branch-list">' + 
       '<p>Fetching branches ...</p></div></div>';
       
     w2ui.panelLayout.content('left', projectHTML);
