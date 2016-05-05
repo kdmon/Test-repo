@@ -1903,11 +1903,20 @@ function fileTreeMenu (node) {
       }
     },
     preview: {
-      label: "Preview",
+      label: "Preview in editor",
       icon: "fa fa-eye",
       action: function () {
         openPreview (node.data.user + '/' + node.data.repo + '/' +
           node.data.branch +'/' + node.id);
+      }
+    },
+    open: {
+      label: "External preview",
+      icon: "fa fa-external-link",
+      action: function () {
+        window.open('/' + node.data.user + '/' + node.data.repo + '/' +
+          node.data.branch +'/' + node.id, 
+          "_blank", "top=100, left=100, width=500, height=500");
       }
     },
     rename: { 
@@ -1997,7 +2006,7 @@ function openProject (user, repository, branch, panelArea) {
         
         // Check if folder node
         if (item.type === "tree") {
-          node.icon = "fa fa-folder-o";
+          node.icon = "fa fa-folder";
           node.data.type = "directory";
           jsTreeFolders.push(node);
         }
@@ -2028,6 +2037,16 @@ function openProject (user, repository, branch, panelArea) {
         ],
         contextmenu : {
           items : fileTreeMenu
+        },
+        sort: function (a, b) {
+            var nodeA = this.get_node(a);
+            var nodeB = this.get_node(b);
+            var lengthA = nodeA.children.length;
+            var lengthB = nodeB.children.length;                
+            if ((lengthA === 0 && lengthB === 0) || (lengthA > 0 && lengthB > 0))
+              return this.get_text(a).toLowerCase() > this.get_text(b).toLowerCase() ? 1 : -1;
+            else
+              return lengthA > lengthB ? -1 : 1;
         }
       });
       
