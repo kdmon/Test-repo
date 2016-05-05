@@ -1660,7 +1660,7 @@ function showProjectsInPanel () {
               recentHistory += '<div class="note"><div class="repo-blurb">' +
                 '<h1><i class="fa fa-github"></i> ' + 
                 (repoUser == config.user ? '': repoUser +' / ') + repoName + 
-                '</h1><p>Modified ' + timeSince(item.created_at) + ' "' + 
+                '</h1><p>Modified ' + timeSince(item.created_at) + ':<br/><br/> "' + 
                 item.payload.commits[0].message + '"</p></div>' + 
                 '<div class="pressable" onclick="openProject(' + "'" +
                 repoUser + "','" + repoName + "','" + repoBranch + "'" + ')">' +
