@@ -1890,10 +1890,16 @@ function showProject (user, repository) {
 function fileTreeMenu (node) {
   var items = {
     edit: {
-      label: "edit",
+      label: "Edit",
       icon: "fa fa-pencil",
       action: function () {
-        alert ("editing...");
+        var conf = {
+          user: node.data.user,
+          repo: node.data.repo,
+          branch: node.data.branch,
+          path: node.id
+        };
+        startDoc(conf);
       }
     },
     preview: {
@@ -2039,8 +2045,7 @@ function openProject (user, repository, branch, panelArea) {
           user: user,
           repo: repository,
           branch: branch,
-          path: elem.id,
-          title: $(elem).find("a").text()
+          path: elem.id
         };
         
         startDoc(conf);
@@ -2267,7 +2272,8 @@ function startDoc(settings) {
   var repository = settings.repo;
   var branch = settings.branch;
   var path = settings.path;
-  var title = settings.title;
+  var file = path.split('/');
+  var title = settings.caption || (file.length > 0) ? file[file.length-1] : file;
   var preserveContent = settings.preserveContent || false;
   var color = settings.color || "red";
   var username = config.user || 'guest';
