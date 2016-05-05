@@ -1892,6 +1892,7 @@ function fileTreeMenu (node) {
     edit: {
       label: "Edit",
       icon: "fa fa-pencil",
+      separator_after : true,
       action: function () {
         var conf = {
           user: node.data.user,
@@ -1902,8 +1903,37 @@ function fileTreeMenu (node) {
         startDoc(conf);
       }
     },
+    rename: { 
+      label: "Rename",
+      icon: "fa fa-edit",
+      action: function () {
+        alert ("renaming");
+      }
+    },
+    duplicate: { 
+      label: "Duplicate",
+      icon: "fa fa-copy",
+      action: function () {
+        alert ("duplicate");
+      }
+    },
+    remove: { 
+      separator_after : true,
+      label: "Delete",
+      icon: "fa fa-trash",
+      action: function () {
+        w2confirm("Are you sure you want to delete <em>" +
+        node.data.name + "</em>?", "Warning",
+        function (result) {
+          if (result === "Yes") {
+            w2alert("File deleted");
+          }
+        });
+      }
+    },
     preview: {
-      label: "Preview in editor",
+      separator_before : true,
+      label: "Quick preview",
       icon: "fa fa-eye",
       action: function () {
         openPreview (node.data.user + '/' + node.data.repo + '/' +
@@ -1919,18 +1949,21 @@ function fileTreeMenu (node) {
           "_blank", "top=100, left=100, width=500, height=500");
       }
     },
-    rename: { 
-      label: "Rename",
-      icon: "fa fa-edit",
+    qrcode: {
+      label: "Show QR code",
+      separator_after : true,
+      icon: "fa fa-qrcode",
       action: function () {
-        alert ("renaming");
+        openPreview (node.data.user + '/' + node.data.repo + '/' +
+          node.data.branch +'/' + node.data.path);
       }
     },
-    remove: { 
-      label: "Delete",
-      icon: "fa fa-trash",
+    new: {
+      label: "Create new ...",
+      separator_after : true,
+      icon: "fa fa-plus-square",
       action: function () {
-        confirm ("Are you sure you want to delete " + node.data.name + "?");
+        
       }
     }
   };
