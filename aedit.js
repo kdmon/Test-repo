@@ -1658,17 +1658,29 @@ function showProjectsInPanel () {
             // Remove duplicates by repo name and branch
             if (repos.indexOf(item.repo.name + repoBranch) == -1) {
               repos.push (item.repo.name + repoBranch);
-              recentHistory += '<div class="note"><i class="fa fa-2x fa-gear ' +
+                        
+              var editButton = '<div class="pressable" onclick="openProject(' + "'" +
+                repoUser + "','" + repoName + "','" + repoBranch + "'" + ')">' +
+                '<h2><i class="fa fa-pencil" aria-hidden="true"></i> Edit ' +
+                '</h2></div><p class="branch-selector inactive">Branch: ' +
+                repoBranch + '</p></div>';
+              
+              var cardFront = '<div class="card-front"><i class="fa fa-2x fa-gear ' +
               'repo-config" onclick="flipRepo(this);"></i>' + 
               '<div class="repo-blurb"><h1><i class="fa fa-github"></i> ' + 
                 (repoUser == config.user ? '': repoUser +' / ') + repoName + 
                 '</h1><p>Modified ' + timeSince(item.created_at) + ':<br/><br/> "' + 
-                item.payload.commits[0].message + '"</p></div>' + 
-                '<div class="pressable" onclick="openProject(' + "'" +
-                repoUser + "','" + repoName + "','" + repoBranch + "'" + ')">' +
-                '<h2><i class="fa fa-pencil" aria-hidden="true"></i> Edit ' +
-                '</h2></div><p class="branch-selector inactive">Branch: ' +
-                repoBranch + '</p></div></div>';
+                item.payload.commits[0].message + '"</p></div>' + editButton +
+                '</div></div>';
+                
+              var cardBack = '<div class="card-back"><i class="fa fa-2x fa-share repo-config" ' + 
+                'onclick="$(this).parent().parent().toggleClass(' + "'flipped'" + ')"></i>' + 
+                '<div class="repo-blurb"><h1>Options</h1><p>Add collaborator</p></div>'
+                '</div>';
+              
+              recentHistory += '<div class="card-container"><div class="card">' + 
+                cardFront + cardBack + '</div></div>';
+                
             }
           }
         }
@@ -1864,17 +1876,25 @@ function showProject (user, repository) {
     if (parentRepo) history = '<p>Forked from ' + parentRepo.full_name + ' ' +
     created + ', by ' + owner + '.</p>';
     
-   var editButton = '<div id="editbutton" class="pressable" ' +
+    var editButton = '<div id="editbutton" class="pressable" ' +
       'style="display: none; margin-bottom: 0;" ' +
       'onclick="openProject(' + "'" + owner + "','" + repository + 
       "', 'getbranchfromselection'" + ')">' +
       '<h2><i class="fa fa-pencil" aria-hidden="true"></i> Edit </h2></div>';
     
-    var projectHTML = '<div class="note"><i class="fa fa-2x fa-gear ' +
-      'repo-config" onclick="flipRepo(this);"></i>' + 
+    var cardFront = '<div class="card-front"><i class="fa fa-2x fa-gear repo-config" ' + 
+      'onclick="$(this).parent().parent().toggleClass(' + "'flipped'" + ')"></i>' + 
       '<div class="repo-blurb"><h1>' + repoIcon + repository + '</h1>' +
       description + history + '</div>' + editButton + '<div id="branch-list">' + 
       '<p>Fetching branches ...</p></div></div>';
+      
+    var cardBack = '<div class="card-back"><i class="fa fa-2x fa-share repo-config" ' + 
+      'onclick="$(this).parent().parent().toggleClass(' + "'flipped'" + ')"></i>' + 
+      '<div class="repo-blurb"><h1>Options</h1><p>Add collaborator</p></div>'
+      '</div>';
+    
+    var projectHTML = '<div class="card-container"><div class="card">' + 
+      cardFront + cardBack + '</div></div>';
       
     w2ui.panelLayout.content('left', projectHTML);
     
