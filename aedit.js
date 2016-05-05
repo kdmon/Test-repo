@@ -1897,7 +1897,7 @@ function fileTreeMenu (node) {
           user: node.data.user,
           repo: node.data.repo,
           branch: node.data.branch,
-          path: node.id
+          path: node.data.path
         };
         startDoc(conf);
       }
@@ -1907,7 +1907,7 @@ function fileTreeMenu (node) {
       icon: "fa fa-eye",
       action: function () {
         openPreview (node.data.user + '/' + node.data.repo + '/' +
-          node.data.branch +'/' + node.id);
+          node.data.branch +'/' + node.data.path);
       }
     },
     open: {
@@ -1915,7 +1915,7 @@ function fileTreeMenu (node) {
       icon: "fa fa-external-link",
       action: function () {
         window.open('/' + node.data.user + '/' + node.data.repo + '/' +
-          node.data.branch +'/' + node.id, 
+          node.data.branch +'/' + node.data.path, 
           "_blank", "top=100, left=100, width=500, height=500");
       }
     },
@@ -1930,7 +1930,7 @@ function fileTreeMenu (node) {
       label: "Delete",
       icon: "fa fa-trash",
       action: function () {
-        confirm ("Are you sure you want to delete " + node.id + "?");
+        confirm ("Are you sure you want to delete " + node.data.name + "?");
       }
     }
   };
@@ -1992,13 +1992,16 @@ function openProject (user, repository, branch, panelArea) {
         var item = tree[i];
         var node = {};
         node.id = item.path;
+        var parts = item.path.split('/');
+        node.text = parts.pop();
+        
         node.data = {
           user: user,
           repo: repository,
-          branch: branch
+          branch: branch,
+          path: node.id,
+          name: node.text
         };
-        var parts = item.path.split('/');
-        node.text = parts.pop();
         
         // Check if root node
         if (parts.length === 0) node.parent = '#';
