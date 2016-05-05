@@ -2494,7 +2494,9 @@ function drawMarker(returnArray, range, left, top, config) {
 
 // Fix iframe overlapping resize toggles bug
 // Todo: should be done at render finish, not arbitrary timeout
+// NOT REQUIRED ANYMORE
 
+/*
 setTimeout(function () {
   $( ".w2ui-resize-toggle" ).hover(function() {
     $(".preview-iframe").css("z-index", 120);
@@ -2502,6 +2504,7 @@ setTimeout(function () {
     $(".preview-iframe").css("z-index", 121);
   });
 }, 500);
+*/
 
 // KNOCKOUT MODEL - not implemented
 
