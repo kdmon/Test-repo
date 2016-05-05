@@ -643,28 +643,28 @@
                     obj.tmp.resize.diff_x = 0;
                     obj.tmp.resize.diff_y = 0;
                     obj.resize();
-                    
-                    
-                    /* 
+                     
                     // Recreate iframe blockers with new dimensions
                     
                     if ( obj.iframeBlocks ) {
-                			obj.iframeBlocks.remove();
-                			delete obj.iframeBlocks;
-                		}
-                		obj.iframeBlocks = $(document).find( 'iframe' ).map(function() {
-                			var iframe = $( this );
-                			return $( '<div>' )
-                				.css( "position", "absolute" )
-                				.css( "z-index", "200" )
-                				.appendTo( iframe.parent() )
-                				.outerWidth( iframe.outerWidth() )
-                				.outerHeight( iframe.outerHeight() )
-                				.offset( iframe.offset() )[ 0 ];
-                		});
-                    */
+                      // temporarily hide iframe while recreating blockers
+                      // prevents firefox resizing bug!
+                      $(".preview-iframe").css("z-index", "120");
+                      obj.iframeBlocks.remove();
+                      delete obj.iframeBlocks;
+                    }
+                    obj.iframeBlocks = $(document).find( 'iframe' ).map(function() {
+                      var iframe = $( this );
+                      return $( '<div>' )
+                        .css( "position", "absolute" )
+                        .css( "z-index", "125" )
+                        .appendTo( iframe.parent() )
+                        .outerWidth( iframe.outerWidth() )
+                        .outerHeight( iframe.outerHeight() )
+                        .offset( iframe.offset() )[ 0 ];
+                    });
                     
-                    $(".preview-iframe").css("z-index", "120");
+                    $(".preview-iframe").css("z-index", "121");
                     
                     // Show hidden panel!
                     setTimeout(function () {
@@ -681,9 +681,9 @@
                 if (!obj.box) return;
                 
               
-                $(".preview-iframe").css("z-index", "120");
+               // $(".preview-iframe").css("z-index", "120");
                 
-                /*
+                
                 // Block all iframes from capturing mouse events by
                 // temporarily overlaying an empty div element.
                 // Solution adapted from jquery UI library.
@@ -691,13 +691,13 @@
             			var iframe = $( this );
             			return $( '<div>' )
             				.css( "position", "absolute" )
-            				.css( "z-index", "200" )
+            				.css( "z-index", "125" )
             				.appendTo( iframe.parent() )
             				.outerWidth( iframe.outerWidth() )
             				.outerHeight( iframe.outerHeight() )
             				.offset( iframe.offset() )[ 0 ];
             		});
-                */
+                
                 
                 if (!evnt) evnt = window.event;
                 $(document).off('mousemove', obj.tmp.events.mouseMove).on('mousemove', obj.tmp.events.mouseMove);
@@ -723,7 +723,7 @@
                 };
                 
                 // lock all panels
-                
+                /*
                 for (var p1 = 0; p1 < w2panels.length; p1++) {
                     var $tmp = $(obj.el(w2panels[p1])).parent().find('.w2ui-lock');
                     if ($tmp.length > 0) {
@@ -732,7 +732,7 @@
                         obj.lock(w2panels[p1], { opacity: 0 });
                     }
                 }
-                
+                */
                 if (type == 'left' || type == 'right') {
                     obj.tmp.resize.value = parseInt($('#layout_'+ obj.name +'_resizer_'+ type)[0].style.left);
                     $("body").css ('cursor','ew-resize');
@@ -759,8 +759,9 @@
                 $(document).off('mousemove', obj.tmp.events.mouseMove);
                 $(document).off('mouseup', obj.tmp.events.mouseUp);
                 if (typeof obj.tmp.resize == 'undefined') return;
+
                 // unlock all panels
-                
+                /*
                 for (var p1 = 0; p1 < w2panels.length; p1++) {
                     var $tmp = $(obj.el(w2panels[p1])).parent().find('.w2ui-lock');
                     if ($tmp.attr('locked') == 'previous') {
@@ -769,24 +770,24 @@
                         obj.unlock(w2panels[p1]);
                     }
                 }
-                
+                */
                 
                 /*
                 // Unblock all iframes from capturing mouse events by
                 // removing temporary overlaying empty div elements.
                 // Solution adapted from jquery UI library.
                 
-                if ( obj.iframeBlocks ) {
-            			obj.iframeBlocks.remove();
-            			delete obj.iframeBlocks;
-            		}
+                
                 */
                 
                 $('#layout_'+ obj.name + '_resizer_'+ obj.tmp.resize.type).removeClass('active');
                 delete obj.tmp.resize;
                 clearTimeout(this.shiftIframe);
                 this.shiftIframe = setTimeout(function () {
-                  $(".preview-iframe").css("z-index", "121");
+                  if ( obj.iframeBlocks ) {
+              			obj.iframeBlocks.remove();
+              			delete obj.iframeBlocks;
+                  }
                 }, 100);
             }
         },
