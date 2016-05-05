@@ -1893,14 +1893,15 @@ function fileTreeMenu (node) {
       label: "edit",
       icon: "fa fa-pencil",
       action: function () {
-        alert ("previewing");
+        alert ("editing...");
       }
     },
     preview: {
       label: "Preview",
       icon: "fa fa-eye",
       action: function () {
-        alert ("previewing");
+        openPreview (node.data.user + '/' + node.data.repo + '/' +
+          node.data.branch +'/' + node.id);
       }
     },
     rename: { 
@@ -1914,16 +1915,16 @@ function fileTreeMenu (node) {
       label: "Delete",
       icon: "fa fa-trash",
       action: function () {
-        alert ("deleting");
+        confirm ("Are you sure you want to delete " + node.id + "?");
       }
     }
   };
 
-  if ($(node).hasClass("folder")) {
-    // Delete the "preview" menu item
+  if (node.data.type == "directory" || node.data.type == "binary") {
     delete items.edit;
     delete items.preview;
   }
+  
   return items;
 }
 
@@ -1976,6 +1977,11 @@ function openProject (user, repository, branch, panelArea) {
         var item = tree[i];
         var node = {};
         node.id = item.path;
+        node.data = {
+          user: user,
+          repo: repository,
+          branch: branch
+        };
         var parts = item.path.split('/');
         node.text = parts.pop();
         
@@ -1986,6 +1992,7 @@ function openProject (user, repository, branch, panelArea) {
         // Check if folder node
         if (item.type === "tree") {
           node.icon = "fa fa-folder-o";
+          node.data.type = "directory";
           jsTreeFolders.push(node);
         }
         else {
