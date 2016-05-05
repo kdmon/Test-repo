@@ -94,6 +94,16 @@ body {
   overflow-y: auto;
 }
 
+.repo-config {
+  cursor: pointer;
+  color: #888;
+  float: right;
+}
+
+.repo-config:hover {
+  color: #333;
+}
+
 #startscreen {
   background: white;
   border: 0.5em solid #ccc;
