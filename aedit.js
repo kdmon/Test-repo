@@ -869,7 +869,11 @@ function openPreview (url, caption, panel) {
   url = (url.substr(0,1) === "/") ? url.substr(1, url.length) : url;
   var fullUrl = (url.substr(4) === 'http') ? url : 'http://webappeditor.com/' + url;
   if (url.substr(url.length-3).toLowerCase() == '.md')
-    fullUrl = 'http://webappeditor.com/markdown.html?r=' + randomString(100) + "&url=" + fullUrl;
+    fullUrl = 'http://webappeditor.com/markdown.html?r=' + randomString(100) +
+    "&url=" + fullUrl;
+  if (url.substr(url.length-4).toLowerCase() == '.tex')
+    fullUrl = 'http://webappeditor.com/kdmon/texlive.js/master/tex.html?r=' +
+    randomString(100) + "&url=" + fullUrl;
   tabList[previewId] = {
     id: previewId,
     fullUrl: fullUrl,
