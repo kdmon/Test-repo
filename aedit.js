@@ -2045,7 +2045,7 @@ function openProject (user, repository, branch, panelArea) {
 
       // Prepare jstree data structure
       
-      console.log(tree);
+      // console.log(tree);
       
       var jsTreeFiles = [];
       var jsTreeFolders = [];
