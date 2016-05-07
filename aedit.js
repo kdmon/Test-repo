@@ -2045,6 +2045,8 @@ function openProject (user, repository, branch, panelArea) {
 
       // Prepare jstree data structure
       
+      console.log(tree);
+      
       var jsTreeFiles = [];
       var jsTreeFolders = [];
       for (var i = 0; i < tree.length; i ++) {
@@ -2066,16 +2068,22 @@ function openProject (user, repository, branch, panelArea) {
         if (parts.length === 0) node.parent = '#';
         else node.parent = parts.join('/');
         
-        // Check if folder node
+        // Check if directory (type "tree") or file (type "blob").
+        // Ignore git submodules (has type "commit") and symbolic links.
+
         if (item.type === "tree") {
           node.icon = "fa fa-folder";
           node.data.type = "directory";
           jsTreeFolders.push(node);
         }
-        else {
+        
+        // Or a file
+        else if (item.type === "blob") {
           node.icon = "fa fa-file-o"; 
+          node.data.type = "file";
           jsTreeFiles.push(node);
         }
+        
       }
       
       // Insert jstree widget into DOM
