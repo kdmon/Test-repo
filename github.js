@@ -114,6 +114,9 @@
     */
     
     
+    
+    // https://developer.github.com/guides/traversing-with-pagination/
+    
     function _requestAllPages(path, cb) {
       var results = [];
       (function iterate() {
@@ -121,18 +124,17 @@
           if (err) {
             return cb(err);
           }
-
+          
           results.push.apply(results, res);
-
-          var links = (xhr.getResponseHeader('link') || '').split(/\s*,\s*/g),
-            //next = _.find(links, function(link) { return /rel="next"/.test(link); });
-            next = $.grep(links, function(link) { return (/rel="next"/).test(link); });
-
-          if (next) {
-            next = (/<(.*)>/.exec(next) || [])[1];
+          
+          var links = (xhr.getResponseHeader('link') || '').split(/\s*,\s*/g);
+          var next = '';
+          
+          for (var i = 0; i < links.length; i++) {
+            if (links[i].substring('rel="next"')) next = url;
           }
-
-          if (!next) {
+          
+          if (next.length === 0) {
             cb(err, results);
           } else {
             path = next;
