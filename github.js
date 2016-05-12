@@ -22,19 +22,7 @@
   // Initial Setup
   // -------------
 
-  var XMLHttpRequest,  _;
-  if (typeof exports !== 'undefined') {
-      XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
-      _ = require('underscore');
-      btoa = require('btoa');
-  } else {
-      _ = window._;
-  }
-  //prefer native XMLHttpRequest always
-  if (typeof window !== 'undefined' && typeof window.XMLHttpRequest !== 'undefined'){
-      XMLHttpRequest = window.XMLHttpRequest;
-  }
-
+  var XMLHttpRequest = window.XMLHttpRequest;
 
   var API_URL = 'https://api.github.com';
 
@@ -43,7 +31,8 @@
     // HTTP Request Abstraction
     // =======
     //
-    // I'm not proud of this and neither should you be if you were responsible for the XMLHttpRequest spec.
+    // I'm not proud of this and neither should you be if you were
+    // responsible for the XMLHttpRequest spec.
 
     function _request(method, path, data, cb, raw, sync) {
       function getURL() {
@@ -53,10 +42,11 @@
 
       var xhr = new XMLHttpRequest();
 
-
       xhr.open(method, getURL(), !sync);
+      
       if (!sync) {
         xhr.onreadystatechange = function () {
+          console.log ('gh library...')
           if (this.readyState == 4) {
             if (this.status >= 200 && this.status < 300 || this.status === 304) {
               cb(null, raw ? this.responseText : this.responseText ? JSON.parse(this.responseText) : true, this);
@@ -97,7 +87,8 @@
           results.push.apply(results, res);
 
           var links = (xhr.getResponseHeader('link') || '').split(/\s*,\s*/g),
-              next = _.find(links, function(link) { return /rel="next"/.test(link); });
+            //next = _.find(links, function(link) { return /rel="next"/.test(link); });
+            next = $.grep(links, function(link) { return (/rel="next"/).test(link); });
 
           if (next) {
             next = (/<(.*)>/.exec(next) || [])[1];
@@ -345,7 +336,9 @@
       this.listBranches = function(cb) {
         _request("GET", repoPath + "/git/refs/heads", null, function(err, heads) {
           if (err) return cb(err);
-          cb(null, _.map(heads, function(head) { return _.last(head.ref.split('/')); }));
+          cb(null, $.map(heads, function(head) { 
+            var items = head.ref.split('/');
+            return items[items.length-1] }));
         });
       };
 
@@ -616,7 +609,8 @@
         updateTree(branch, function(err, latestCommit) {
           that.getTree(latestCommit+"?recursive=true", function(err, tree) {
             // Update Tree
-            _.each(tree, function(ref) {
+            //_.each(tree, function(ref) {
+            $.each(tree, function(ref) {
               if (ref.path === path) ref.path = newPath;
               if (ref.type === "tree") delete ref.sha;
             });
