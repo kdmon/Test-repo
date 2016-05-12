@@ -1,4 +1,4 @@
-// Globals
+// Globals ui ui ui 
 
 var toolbars = {};
 var buttons = {};
@@ -2295,7 +2295,7 @@ function startDoc(settings) {
   var path = settings.path;
   var file = path.split('/');
   var title = settings.caption || (file.length > 0) ? file[file.length-1] : file;
-  var preserveContent = settings.preserveContent || false;
+  var preserveContent = settings.preserveContent || true;
   var color = settings.color || "red";
   var username = config.user || 'guest';
   var url = '/' + user + '/' + repository + '/' + branch + '/' + path;
@@ -2323,16 +2323,9 @@ function startDoc(settings) {
         console.log ("Unable to initiate real-time document", error);
       }
       else {
-        var editSession = ace.createEditSession('', '');
-        var editorObj = editors[location.area].setSession(editSession);
-        tabList[tabId] = {
-          id: tabId,
-          caption: '<i class="fa fa-file-text-o"></i> ' + title,
-          path: path,
-          panel: location.area,
-          type: 'editor',
-          editSession: editSession
-        };
+        
+        // Attach editor to share document
+        
         doc.attach_ace(editors[location.area], preserveContent, username, color);
         doc.shout({
           action: "announce",
@@ -2349,7 +2342,7 @@ function startDoc(settings) {
                 column: data.column,
                 color: data.color
               };
-              updateCursor(data.user, location.area);
+              // updateCursor(data.user, location.area);
             break;
             case "selection":
               selections[data.user] = [data.row, data.column, data.row2, data.column2, data.color];
@@ -2358,6 +2351,16 @@ function startDoc(settings) {
           }
         });
         
+        var editSession = ace.createEditSession('', '');
+        var editorObj = editors[location.area].setSession(editSession);
+        tabList[tabId] = {
+          id: tabId,
+          caption: '<i class="fa fa-file-text-o"></i> ' + title,
+          path: path,
+          panel: location.area,
+          type: 'editor',
+          editSession: editSession
+        };
         editors[location.area].selection.on("changeCursor", function(data) {
           var position = editors[location.area].selection.getCursor();
           doc.shout({
@@ -2403,6 +2406,9 @@ function startDoc(settings) {
         //editors[location.area].session.setValue(value);
         editors[location.area].setValue(value, -1);
         editors[location.area].getSession().setUndoManager(new UndoManager());
+        editors[location.area].gotoLine(0,0); // start at top
+        editors[location.area].focus();
+
         
         /*
         // Hover over text in editor to trigger guides
@@ -2461,22 +2467,19 @@ function startDoc(settings) {
           }
         }
         
-        // add tab and listen for tab close clicks
+        // add tab
         w2ui[location.layout].get(location.panel).tabs.add({
           id: tabId,
           closable: true,
           caption: '<i class="fa fa-file-text-o"></i> ' + title
         });
         
-        // needs to be handled elsewhere for all tabs at once!
+        //  Tab close clicks to be handled elsewhere!
         
-                
-        // alert ("running");
+        w2popup.close();
         refreshTabs();
         w2ui[location.layout].get(location.panel).tabs.click(tabId);
-        w2popup.close();
-        editors[location.area].focus();
-  
+        
       }
       
     });
