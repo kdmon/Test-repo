@@ -846,7 +846,7 @@ function toolbarClick(obj, event) {
       var branch = tabList[tab].id.split('/')[2];
       var filename = prompt ("Please enter new file name and path");
       var repo = github.getRepo(config.user, reponame);
-      repo.write(branch, filename, '', 'New file', function(err) {
+      repo.write(branch, filename, '', 'New file: ' + filename, function(err) {
         if (err) {console.log(err); alert ("Failed to create file! " + err);}
         else {
           alert ("File created successfully!");
@@ -1696,7 +1696,7 @@ function showProjectsInPanel () {
             }
           }
         }
-        console.log(recentHistory);
+        
         $("#recent").html('').prepend(recentHistory || 
           '<p>You do not appear to have any recently saved projects.</p>');
       });
@@ -1925,6 +1925,7 @@ function showProject (user, repository) {
 // Contextmenu callback for jstree
 
 function fileTreeMenu (node) {
+  var tree = $("#container_" + node.data.jsTree).jstree(true);
   var items = {
     edit: {
       label: "Edit",
@@ -1944,7 +1945,7 @@ function fileTreeMenu (node) {
       label: "Rename",
       icon: "fa fa-edit",
       action: function () {
-        alert ("renaming");
+        tree.edit(node);
       }
     },
     duplicate: { 
@@ -1963,7 +1964,12 @@ function fileTreeMenu (node) {
         node.data.name + "</em>?", "Warning",
         function (result) {
           if (result === "Yes") {
-            w2alert("File deleted");
+            var branch = node.data.branch;
+            var path = node.data.path;
+            repo.remove(branch, path, function(err) {
+              if(err) w2alert("File deleted");
+              else w2alert("File deleted successfully.");
+            });
           }
         });
       }
@@ -2068,6 +2074,7 @@ function openProject (user, repository, branch, panelArea) {
         node.text = parts.pop();
         
         node.data = {
+          jsTree: id,
           user: user,
           repo: repository,
           branch: branch,
@@ -2104,7 +2111,16 @@ function openProject (user, repository, branch, panelArea) {
       $("#container_"+id).jstree({
         core : {
           data : jsTreeFolders.concat(jsTreeFiles),
-          check_callback : true,
+          check_callback : function (action, node, node_parent, position, evt) {
+            if (action === "move_node") {
+              console.log(node_parent);
+              //only allow dropping inside directory or tree root
+              var targetType = node_parent.data ? node_parent.data : {};
+              return (node_parent.id === "#" || 
+                      targetType.type === "directory");
+            }
+            return true;  //allow all other operations
+          },
           show_only_matches: true
         },
         plugins : [
@@ -2131,6 +2147,22 @@ function openProject (user, repository, branch, panelArea) {
         }
       });
       
+      // Listen for and handle jsTree events
+      
+      $('#container_' + id)
+      .on('create_node.jstree', function (e, data) {
+        console.log("Created node", data);
+      })
+      .on('delete_node.jstree', function (e, data) {
+        console.log("Deleted node", data);
+      })
+      .on('move_node.jstree', function (e, data) {
+        console.log("Moved node", data);
+      })
+      .on('rename_node.jstree', function (e, data) {
+        console.log("Renamed node", data);
+      });
+      
       // Listen for doubleclick events
       
       $("#container_"+id).on("dblclick", function (event) {
@@ -2140,7 +2172,8 @@ function openProject (user, repository, branch, panelArea) {
         // Ignore folders
         if ($(elem).find("a i:first").hasClass('fa-folder-o')) return;
         
-        // Otherwise, assume file and open thedocument
+        // Otherwise, assume file and open the document
+        
         var conf = {
           user: user,
           repo: repository,
@@ -2150,21 +2183,6 @@ function openProject (user, repository, branch, panelArea) {
         
         startDoc(conf);
         
-        /*
-        return;
-        var path = event.target.substr(event.target.indexOf("_")+1).split('/');
-        var id = path.join('/');
-        var user = path.shift();
-        var repo = path.shift();
-        var branch = path.shift();
-        var title = path[path.length-1];
-        path = path.join('/');
-        */
-        /*
-        var li = $(event.target).closest("li");
-        var node = $('#jstree_div').get_node(li[0].id);
-        $('#jstree_div').toggle_node(node)
-        */
       });
 
 
@@ -2173,109 +2191,6 @@ function openProject (user, repository, branch, panelArea) {
       w2ui[location.layout].get(location.panel).tabs.click(id);
       $(location.id).find(".w2ui-tabs").scrollLeft(99999);
       refreshTabs();
-      
-      /*
-      $("#container_"+id).w2sidebar({
-        name: id,
-        menu : [
-          {
-            id: 'openfile',
-            text: 'Open',
-            icon: 'fa fa-folder-open-o' 
-          },
-          {
-            id: 'previewfile',
-            text: 'Preview',
-            icon: 'fa fa-eye'
-          },
-          {
-            id: 'renamefile',
-            text: 'Rename',
-            icon: 'fa fa-edit'
-          },
-          {
-            id: 'duplicatefile',
-            text: 'Duplicate',
-            icon: 'fa fa-copy'
-          },
-          {
-            id: 'deletefile',
-            text: 'Delete',
-            icon: 'fa fa-trash-o'
-          },
-          {},
-          {
-            id: 'newfile',
-            text: 'New file...',
-            icon: 'fa fa-file-o'
-          },{
-            id: 'newdirectory',
-            text: 'New folder...',
-            icon: 'fa fa-folder-o'
-          },{
-            id: 'uploadfile',
-            text: 'Upload...',
-            icon: 'fa fa-hdd-o'
-          }
-        ],
-        nodes: [] //fileNodes
-      });
-
-      w2ui[id].lock('Loading project...', true);
-      w2ui[location.layout].get(location.panel).tabs.click(id);
-      
-      //refreshTabs();
-        
-      // Sort and update nodes in new thread
-      var sortWorker = new Worker("worker.js");
-      
-      sortWorker.postMessage({
-        tree: tree,
-        user: user,
-        repo: repository,
-        branch: branch
-      });
-      
-      sortWorker.onmessage = function(e) {
-        
-        var fileNodes = e.data;
-        pushNodes (id, fileNodes);
-        w2ui[location.layout].get(location.panel).tabs.click(id);
-        setTimeout(function () {$(location.id).find(".w2ui-tabs").scrollLeft(99999);},200);
-      };
-        
-      
-      // 5. Handle events
-      // directory opened
-      w2ui[id].on('collapse', function(event) {
-        event.object.icon = 'fa fa-folder';
-      });
-      w2ui[id].on('expand', function(event) {
-        event.object.icon = 'fa fa-folder-open';
-      });
-      // file open
-      w2ui[id].on('dblClick', function(event) {
-        if(event.target.substr(0,6) === "folder") return;
-        var path = event.target.substr(event.target.indexOf("_")+1).split('/');
-        var id = path.join('/');
-        var user = path.shift();
-        var repo = path.shift();
-        var branch = path.shift();
-        var title = path[path.length-1];
-        path = path.join('/');
-        startDoc({
-          id: id,
-          user: user,
-          repo: repo,
-          branch: branch,
-          path: path,
-          title: title
-        });
-      });
-      
-    }
-  });
-  */
     
     }
   });
@@ -2285,6 +2200,7 @@ function openProject (user, repository, branch, panelArea) {
 // Identifier can be a number (0-8),
 // an element id, an area label or
 // blank to return a default value.
+
 function pickPanel(identifier) {
   
   identifier = (identifier !== undefined) ? identifier : '';
