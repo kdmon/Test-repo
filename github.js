@@ -26,10 +26,12 @@
 
   var Github = function(options) {
 
-    function _request(method, path, data, cb, raw) {
+    function _request(method, path, data, cb, raw, proxy) {
+      
       function getURL() {
-        var url = path.indexOf('//') >= 0 ? path : API_URL + path;
-        return url + ((/\?/).test(url) ? "&" : "?") + (new Date()).getTime();
+        var url = (path.indexOf('//') >= 0 || proxy) ? path : API_URL + path;
+        url = url + ((/\?/).test(url) ? "&" : "?") + (new Date()).getTime();
+        return url;
       }
       
       $.ajax({
@@ -49,15 +51,15 @@
           }
         },
         type: method,
-        url: path,
+        url: getURL(),
         data: data,
       })
-      .success(function () {
-        cb(null, raw ? this.responseText : this.responseText ?
-                 JSON.parse(this.responseText) : true, this)
+      .done(function (response, status, xhr) {
+        // if (!raw && typeof response !== Object) response = JSON.parse(response);
+        cb(null, response, xhr);
       })
-      .fail(function () {
-        cb({path: path, request: this, error: this.status});
+      .fail(function (xhr, status, error) {
+        cb({path: path, request: xhr, error: status});
       });
     }
     
@@ -603,6 +605,20 @@
           if (err) return cb(err);
           cb(null, obj);
         }, true);
+      };
+
+      // Read file at given path via local proxy
+      // -------
+      
+      this.readProxy = function(branch, path, cb) {
+        var params = '';
+        if (branch !== undefined) params = '?ref=' + branch;
+        var url = "/" + user + "/" + repo + "/" + branch + "/" + path;
+        _request("GET", url, null, function(err, obj) {
+          if (err && err.error === 404) return cb("not found", null, null);
+          if (err) return cb(err);
+          cb(null, obj);
+        }, true, true);
       };
 
 
