@@ -22,12 +22,46 @@
   // Initial Setup
   // -------------
 
-  var XMLHttpRequest = window.XMLHttpRequest;
-
   var API_URL = 'https://api.github.com';
 
   var Github = function(options) {
 
+    function _request(method, path, data, cb, raw) {
+      function getURL() {
+        var url = path.indexOf('//') >= 0 ? path : API_URL + path;
+        return url + ((/\?/).test(url) ? "&" : "?") + (new Date()).getTime();
+      }
+      
+      $.ajax({
+        beforeSend: function (xhr)
+        {
+          if (!raw) {
+            xhr.dataType = "json";
+            xhr.setRequestHeader('Accept','application/vnd.github.v3+json');
+          } else {
+            xhr.setRequestHeader('Accept','application/vnd.github.v3.raw+json');
+          }
+          xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+          if ((options.token) || (options.username && options.password)) {
+            var authorization = options.token ? 'token ' + options.token : 
+              'Basic ' + btoa(options.username + ':' + options.password);
+            xhr.setRequestHeader('Authorization', authorization);
+          }
+        },
+        type: method,
+        url: path,
+        data: data,
+      })
+      .success(function () {
+        cb(null, raw ? this.responseText : this.responseText ?
+                 JSON.parse(this.responseText) : true, this)
+      })
+      .fail(function () {
+        cb({path: path, request: this, error: this.status});
+      });
+    }
+    
+    /*
     // HTTP Request Abstraction
     // =======
     //
@@ -75,7 +109,9 @@
         xhr.send();
       if (sync) return xhr.response;
     }
-
+    */
+    
+    
     function _requestAllPages(path, cb) {
       var results = [];
       (function iterate() {
