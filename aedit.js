@@ -2113,7 +2113,6 @@ function openProject (user, repository, branch, panelArea) {
           data : jsTreeFolders.concat(jsTreeFiles),
           check_callback : function (action, node, node_parent, position, evt) {
             if (action === "move_node") {
-              console.log(node_parent);
               //only allow dropping inside directory or tree root
               var targetType = node_parent.data ? node_parent.data : {};
               return (node_parent.id === "#" || 
@@ -2125,7 +2124,6 @@ function openProject (user, repository, branch, panelArea) {
         },
         plugins : [
           "contextmenu",
-          "wholerow",
           "search",
           "unique",
           "dnd",
@@ -2141,7 +2139,7 @@ function openProject (user, repository, branch, panelArea) {
             var lengthA = nodeA.children.length;
             var lengthB = nodeB.children.length;                
             if ((lengthA === 0 && lengthB === 0) || (lengthA > 0 && lengthB > 0))
-              return this.get_text(a).toLowerCase() > this.get_text(b).toLowerCase() ? 1 : -1;
+              return this.get_text(a) > this.get_text(b) ? 1 : -1;
             else
               return lengthA > lengthB ? -1 : 1;
         }
@@ -2161,29 +2159,35 @@ function openProject (user, repository, branch, panelArea) {
       })
       .on('rename_node.jstree', function (e, data) {
         console.log("Renamed node", data);
-      });
-      
-      // Listen for doubleclick events
-      
-      $("#container_"+id).on("dblclick", function (event) {
         
-        var elem = event.target.parentElement;
+        /*
+        var old = node.text.replace(/\s+$/, ''); // trim right spaces
+
+        instance.edit(node, null, function(node, success, cancelled) {
+            if (!success || cancelled) return;
+            if (node.text.replace(/\s+$/, '')==old) return;
+
+            // all good, your rename code here
+        */
         
-        // Ignore folders
-        if ($(elem).find("a i:first").hasClass('fa-folder-o')) return;
+      })
+      .on('dblclick', '.jstree-anchor', function () {
+        var instance = $.jstree.reference(this),
+        node = instance.get_node(this);
         
-        // Otherwise, assume file and open the document
+        // Only open files for editing
+        if (node.data.type !== 'file') return;
         
         var conf = {
-          user: user,
-          repo: repository,
-          branch: branch,
-          path: elem.id
+          user: node.data.user,
+          repo: node.data.repo,
+          branch: node.data.branch,
+          path: node.data.path
         };
         
         startDoc(conf);
-        
       });
+      
 
 
       // Activate filetree widget
