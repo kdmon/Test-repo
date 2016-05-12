@@ -459,11 +459,8 @@ function initButtons () {
   toolbars = {
     topmenu: ['logo', 'topspacer','signin'],
     editor: ['usermenu','filemenu', 'editmenu', 'tools'],
-    preview: ['pause', 'previewurl', 'refresh', 'share'],
-    projectmanager: ['sidebarsearch', 'refresh','newproject', 'selectproject', 'closeproject'],
-    chat: ['url', 'refresh', 'share'],
-    prefs: ['url', 'refresh', 'share'],
-    filebrowser: ['newfile','sidebarsearch','refresh'],
+    preview: ['pause', 'previewurl', 'refreshPreview', 'share'],
+    filebrowser: ['newfile','sidebarsearch','refreshFiles'],
     media: ['url', 'refresh', 'share'],
     empty: [],
     help: []
@@ -698,12 +695,19 @@ function initButtons () {
       icon: 'fa fa-sort',
       hint: 'Split view'
     },
-    refresh: {
-      id: 'refresh',
+    refreshFiles: {
+      id: 'refreshFiles',
       type: 'button',
       caption: '',
       icon: 'fa fa-refresh',
-      hint: 'Force preview reload'
+      hint: 'Reload files'
+    },
+    refreshPreview: {
+      id: 'refreshPreview',
+      type: 'button',
+      caption: '',
+      icon: 'fa fa-refresh',
+      hint: 'Reload preview'
     },
     share: {
       id: 'share',
@@ -831,7 +835,10 @@ function toolbarClick(obj, event) {
       localStorage.removeItem('token');
       window.location = 'waelogout?token=' + token;
       break;
-    case 'refresh':
+    case 'refreshFiles':
+      console.log ('refreshing', tabList[tab]);
+      break;
+    case 'refreshPreview':
       $("#" + tabList[tab].id).attr("src", tabList[tab].fullUrl);
       break;
     case 'newfile':
