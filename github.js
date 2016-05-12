@@ -27,22 +27,17 @@
   var Github = function(options) {
 
     function _request(method, path, data, cb, raw, proxy) {
-      
       function getURL() {
         var url = (path.indexOf('//') >= 0 || proxy) ? path : API_URL + path;
         url = url + ((/\?/).test(url) ? "&" : "?") + (new Date()).getTime();
         return url;
       }
       
+      // Important to prevent default behaviour auto-injecting javascript files!
+      var dataType = raw ? 'text' : 'json';
+      
       $.ajax({
-        beforeSend: function (xhr)
-        {
-          if (!raw) {
-            xhr.dataType = "json";
-            xhr.setRequestHeader('Accept','application/vnd.github.v3+json');
-          } else {
-            xhr.setRequestHeader('Accept','application/vnd.github.v3.raw+json');
-          }
+        beforeSend: function (xhr){
           xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
           if ((options.token) || (options.username && options.password)) {
             var authorization = options.token ? 'token ' + options.token : 
@@ -52,6 +47,7 @@
         },
         type: method,
         url: getURL(),
+        dataType: dataType, // Vital to ensure js files are not auto-injected!
         data: data,
       })
       .done(function (response, status, xhr) {
@@ -561,7 +557,7 @@
         }, true);
       };
 
-      // Read file at given path via local proxy
+      // Read file at given path via proxy
       // -------
       
       this.readProxy = function(branch, path, cb) {
