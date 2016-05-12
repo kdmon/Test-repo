@@ -2301,196 +2301,185 @@ function startDoc(settings) {
   var encodedUrl = encodeURIComponent(url);
   var location = pickPanel();
   
-  // fetch file via github api
-  // NB: Github API is limited to 1MB files and will return '204' if exceeded
-  var repo = github.getRepo(user, repository);
-  repo.read(branch, path, function(err, value) {
-    if(err) {
+  // fetch requested file
+  $.get(url, function (value) {
+  
+    // Don't attempt to open binaries in editor!
+    
+    var bytes = toUTF8Array(value);
+    
+    if (isBinaryFile(bytes, bytes.length)) {
+      openPreview (url, title);
+      refreshTabs();
+      w2ui[location.layout].get(location.panel).tabs.click(tabId);
       w2popup.close();
-      w2alert ("unable to read file", err);
-      console.log(err);
+      return;
     }
     
-    else {
-      
-      // Don't attempt to open binaries in editor!
-      
-      var bytes = toUTF8Array(value);
-      
-      if (isBinaryFile(bytes, bytes.length)) {
-        openPreview (url, title);
+    connection.open(encodedUrl, 'text', function(error, doc) {
+      if(error) {
+        w2popup.close();
+        console.log ("Unable to initiate real-time document", error);
+      }
+      else {
+        var editSession = ace.createEditSession('', '');
+        var editorObj = editors[location.area].setSession(editSession);
+        tabList[tabId] = {
+          id: tabId,
+          caption: '<i class="fa fa-file-text-o"></i> ' + title,
+          path: path,
+          panel: location.area,
+          type: 'editor',
+          editSession: editSession
+        };
+        doc.attach_ace(editors[location.area], preserveContent, username, color);
+        doc.shout({
+          action: "announce",
+          msg: username + ' opened document.'
+        });
+        doc.on('shout', function(data) {
+          switch (data.action) {
+            case "announce":
+              console.log(data.msg);
+            break;
+            case "cursor":
+              cursors[data.user] = {
+                row: data.row,
+                column: data.column,
+                color: data.color
+              };
+              updateCursor(data.user, location.area);
+            break;
+            case "selection":
+              selections[data.user] = [data.row, data.column, data.row2, data.column2, data.color];
+              //updateSelections(data.user, location.area);
+            break;
+          }
+        });
+        
+        editors[location.area].selection.on("changeCursor", function(data) {
+          var position = editors[location.area].selection.getCursor();
+          doc.shout({
+            action: "cursor",
+            user: username,
+            color: color,
+            column: position.column,
+            row: position.row
+          });
+        });
+        editors[location.area].selection.on("changeSelection", function(data) {
+          var position = editors[location.area].getSelectionRange();
+          if (position.first) doc.shout({
+            action: "selections",
+            user: username,
+            color: cursorColor,
+            column: position.first.column,
+            row: position.first.row,
+            column2: position.end.column,
+            row2: position.end.row
+          });
+        });
+          
+        var modelist = ace.require('ace/ext/modelist');
+        var UndoManager = ace.require("ace/undomanager").UndoManager;
+        ace.require("ace/ext/emmet");
+        editors[location.area] = ace.edit("editor" + location.area);
+        editors[location.area].setBehavioursEnabled(true);
+        
+        if (localStorage.fontSize) {$(".panel-editor").css("font-size", localStorage.fontSize + "px");}
+        
+        editors[location.area].setOptions({
+          enableBasicAutocompletion: true
+        });
+        editors[location.area].focus();
+        var mode = modelist.getModeForPath(path).mode;
+        editors[location.area].getSession().setMode(mode);
+        editors[location.area].setOption("enableEmmet", true);
+        editors[location.area].getSession().setTabSize(2);
+        
+        if (localStorage.lineWrap > 0) editors[location.area].getSession().setUseWrapMode(true);
+        else editors[location.area].getSession().setUseWrapMode(false);
+        
+        //editors[location.area].session.setValue(value);
+        editors[location.area].setValue(value, -1);
+        editors[location.area].getSession().setUndoManager(new UndoManager());
+        
+        /*
+        // Hover over text in editor to trigger guides
+        editors[location.area].on('mousemove', function(e) {
+          var position = e.getDocumentPosition();
+          var token = editors[location.area].session.getTokenAt(position.row, position.column);
+          if (token.type == 'support.type' || token.type == 'support.function') {
+            switch (token.value) {
+  	      case '': break;
+            }
+          //console.log(token);
+          }
+        });
+        */
+
+        editors[location.area].getSession().on('change', function(e) {
+          clearTimeout(dirtyFileTimer);
+          dirtyFileTimer = setTimeout(function () {
+
+            // force browsersync update
+/*  
+            $.get("http://webappeditor.com:3000/__browser_sync__?method=reload&args=" + encodedUrl, function (data) {});
+
+            if (editors[location.area].getSession().getUndoManager().isClean()) w2ui[location.layout].get(location.panel).set(tabId, { caption: path });
+            else w2ui[location.layout].get(location.panel).set(tabId, { caption: ' * ' + path});
+
+            if (editors[currentFile].getSession().getUndoManager().hasUndo()) console.log("enable undo button");
+            else console.log("disable undo button");
+
+            if (editors[currentFile].getSession().getUndoManager().hasRedo()) console.log("enable redo button");
+            else console.log("disable redo button");
+
+            checkUnsaved();
+*/
+
+          }, 500);
+          
+          /*
+          // alert ("livecoding: " + liveCoding + "\nDelay:" + liveCodingDelay + "\nrunning?" + editors[currentFile].running);
+          if (liveCodingDelay > 0 && editors[currentFile].running) {
+            clearTimeout(liveCodingTimer);
+            liveCodingTimer = setTimeout(function() {
+              runCode();
+            }, liveCodingDelay);
+          }
+          */
+        });
+        
+        if (localStorage.editorTheme) {editors[location.area].setTheme(localStorage.editorTheme);}
+        else {
+            
+          if (localStorage.uitheme == "dark") {
+            editors[location.area].setTheme("ace/theme/vibrant_ink");
+          } else {
+            editors[location.area].setTheme("ace/theme/chrome");
+          }
+        }
+        
+        // add tab and listen for tab close clicks
+        w2ui[location.layout].get(location.panel).tabs.add({
+          id: tabId,
+          closable: true,
+          caption: '<i class="fa fa-file-text-o"></i> ' + title
+        });
+        
+        // needs to be handled elsewhere for all tabs at once!
+        
+                
+        // alert ("running");
         refreshTabs();
         w2ui[location.layout].get(location.panel).tabs.click(tabId);
         w2popup.close();
-        return;
+
       }
       
-      connection.open(encodedUrl, 'text', function(error, doc) {
-        if(error) {
-          w2popup.close();
-          console.log ("Unable to initiate real-time document", error);
-        }
-        else {
-          var editSession = ace.createEditSession('', '');
-          var editorObj = editors[location.area].setSession(editSession);
-          tabList[tabId] = {
-            id: tabId,
-            caption: '<i class="fa fa-file-text-o"></i> ' + title,
-            path: path,
-            panel: location.area,
-            type: 'editor',
-            editSession: editSession
-          };
-          doc.attach_ace(editors[location.area], preserveContent, username, color);
-          doc.shout({
-            action: "announce",
-            msg: username + ' opened document.'
-          });
-          doc.on('shout', function(data) {
-            switch (data.action) {
-              case "announce":
-                console.log(data.msg);
-              break;
-              case "cursor":
-                cursors[data.user] = {
-                  row: data.row,
-                  column: data.column,
-                  color: data.color
-                };
-                updateCursor(data.user, location.area);
-              break;
-              case "selection":
-                selections[data.user] = [data.row, data.column, data.row2, data.column2, data.color];
-                //updateSelections(data.user, location.area);
-              break;
-            }
-          });
-          
-          editors[location.area].selection.on("changeCursor", function(data) {
-            var position = editors[location.area].selection.getCursor();
-            doc.shout({
-              action: "cursor",
-              user: username,
-              color: color,
-              column: position.column,
-              row: position.row
-            });
-          });
-          editors[location.area].selection.on("changeSelection", function(data) {
-            var position = editors[location.area].getSelectionRange();
-            if (position.first) doc.shout({
-              action: "selections",
-              user: username,
-              color: cursorColor,
-              column: position.first.column,
-              row: position.first.row,
-              column2: position.end.column,
-              row2: position.end.row
-            });
-          });
-            
-          var modelist = ace.require('ace/ext/modelist');
-          var UndoManager = ace.require("ace/undomanager").UndoManager;
-          ace.require("ace/ext/emmet");
-          editors[location.area] = ace.edit("editor" + location.area);
-          editors[location.area].setBehavioursEnabled(true);
-          
-          if (localStorage.fontSize) {$(".panel-editor").css("font-size", localStorage.fontSize + "px");}
-          
-          editors[location.area].setOptions({
-            enableBasicAutocompletion: true
-          });
-          editors[location.area].focus();
-          var mode = modelist.getModeForPath(path).mode;
-          editors[location.area].getSession().setMode(mode);
-          editors[location.area].setOption("enableEmmet", true);
-          editors[location.area].getSession().setTabSize(2);
-          
-          if (localStorage.lineWrap > 0) editors[location.area].getSession().setUseWrapMode(true);
-          else editors[location.area].getSession().setUseWrapMode(false);
-          
-          //editors[location.area].session.setValue(value);
-          editors[location.area].setValue(value, -1);
-          editors[location.area].getSession().setUndoManager(new UndoManager());
-          
-          /*
-          // Hover over text in editor to trigger guides
-          editors[location.area].on('mousemove', function(e) {
-            var position = e.getDocumentPosition();
-            var token = editors[location.area].session.getTokenAt(position.row, position.column);
-            if (token.type == 'support.type' || token.type == 'support.function') {
-              switch (token.value) {
-    	      case '': break;
-              }
-            //console.log(token);
-            }
-          });
-          */
-  
-          editors[location.area].getSession().on('change', function(e) {
-            clearTimeout(dirtyFileTimer);
-            dirtyFileTimer = setTimeout(function () {
-  
-              // force browsersync update
-/*  
-              $.get("http://webappeditor.com:3000/__browser_sync__?method=reload&args=" + encodedUrl, function (data) {});
- 
-              if (editors[location.area].getSession().getUndoManager().isClean()) w2ui[location.layout].get(location.panel).set(tabId, { caption: path });
-              else w2ui[location.layout].get(location.panel).set(tabId, { caption: ' * ' + path});
-  
-              if (editors[currentFile].getSession().getUndoManager().hasUndo()) console.log("enable undo button");
-              else console.log("disable undo button");
-  
-              if (editors[currentFile].getSession().getUndoManager().hasRedo()) console.log("enable redo button");
-              else console.log("disable redo button");
-  
-              checkUnsaved();
-*/
-  
-            }, 500);
-            
-            /*
-            // alert ("livecoding: " + liveCoding + "\nDelay:" + liveCodingDelay + "\nrunning?" + editors[currentFile].running);
-            if (liveCodingDelay > 0 && editors[currentFile].running) {
-              clearTimeout(liveCodingTimer);
-              liveCodingTimer = setTimeout(function() {
-                runCode();
-              }, liveCodingDelay);
-            }
-            */
-          });
-          
-          if (localStorage.editorTheme) {editors[location.area].setTheme(localStorage.editorTheme);}
-          else {
-              
-            if (localStorage.uitheme == "dark") {
-              editors[location.area].setTheme("ace/theme/vibrant_ink");
-            } else {
-              editors[location.area].setTheme("ace/theme/chrome");
-            }
-          }
-          
-          // add tab and listen for tab close clicks
-          w2ui[location.layout].get(location.panel).tabs.add({
-            id: tabId,
-            closable: true,
-            caption: '<i class="fa fa-file-text-o"></i> ' + title
-          });
-          
-          // needs to be handled elsewhere for all tabs at once!
-          
-                  
-          // alert ("running");
-          refreshTabs();
-          w2ui[location.layout].get(location.panel).tabs.click(tabId);
-          w2popup.close();
-
-        }
-        
-      });
-
-    }
-  });
+    });
+  }).fail(function (err) {alert("failed to fetch file"); console.log(err);});
 }
 
 
