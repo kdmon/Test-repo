@@ -2302,6 +2302,7 @@ function startDoc(settings) {
   var location = pickPanel();
   
   // fetch file via github api
+  // NB: Github API is limited to 1MB files and will return '204' if exceeded
   var repo = github.getRepo(user, repository);
   repo.read(branch, path, function(err, value) {
     if(err) {
