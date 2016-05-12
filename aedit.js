@@ -2303,7 +2303,14 @@ function startDoc(settings) {
   var location = pickPanel();
   
   // fetch requested file
-  $.get(url, function (value) {
+  var repo = github.getRepo(user, repository);
+  repo.readProxy(branch, path, function(err, value) {
+    
+    if (err) {
+      w2popup("Failed to open file");
+      console.log(err);
+      return;
+    }
   
     // Don't attempt to open binaries in editor!
     
@@ -2323,33 +2330,6 @@ function startDoc(settings) {
         console.log ("Unable to initiate real-time document", error);
       }
       else {
-        
-        // Attach editor to share document
-        
-        doc.attach_ace(editors[location.area], preserveContent, username, color);
-        doc.shout({
-          action: "announce",
-          msg: username + ' opened document.'
-        });
-        doc.on('shout', function(data) {
-          switch (data.action) {
-            case "announce":
-              console.log(data.msg);
-            break;
-            case "cursor":
-              cursors[data.user] = {
-                row: data.row,
-                column: data.column,
-                color: data.color
-              };
-              // updateCursor(data.user, location.area);
-            break;
-            case "selection":
-              selections[data.user] = [data.row, data.column, data.row2, data.column2, data.color];
-              //updateSelections(data.user, location.area);
-            break;
-          }
-        });
         
         var editSession = ace.createEditSession('', '');
         var editorObj = editors[location.area].setSession(editSession);
@@ -2467,6 +2447,35 @@ function startDoc(settings) {
           }
         }
         
+        
+        // Attach editor to share document
+        
+        doc.attach_ace(editors[location.area], preserveContent, username, color);
+        doc.shout({
+          action: "announce",
+          msg: username + ' opened document.'
+        });
+        doc.on('shout', function(data) {
+          switch (data.action) {
+            case "announce":
+              console.log(data.msg);
+            break;
+            case "cursor":
+              cursors[data.user] = {
+                row: data.row,
+                column: data.column,
+                color: data.color
+              };
+              // updateCursor(data.user, location.area);
+            break;
+            case "selection":
+              selections[data.user] = [data.row, data.column, data.row2, data.column2, data.color];
+              //updateSelections(data.user, location.area);
+            break;
+          }
+        });
+        
+        
         // add tab
         w2ui[location.layout].get(location.panel).tabs.add({
           id: tabId,
@@ -2483,7 +2492,7 @@ function startDoc(settings) {
       }
       
     });
-  }).fail(function (err) {alert("failed to fetch file"); console.log(err);});
+  });
 }
 
 
