@@ -63,63 +63,13 @@
       });
     }
     
-    /*
-    // HTTP Request Abstraction
-    // =======
-    //
-    // I'm not proud of this and neither should you be if you were
-    // responsible for the XMLHttpRequest spec.
-
-    function _request(method, path, data, cb, raw, sync) {
-      function getURL() {
-        var url = path.indexOf('//') >= 0 ? path : API_URL + path;
-        return url + ((/\?/).test(url) ? "&" : "?") + (new Date()).getTime();
-      }
-
-      var xhr = new XMLHttpRequest();
-
-      xhr.open(method, getURL(), !sync);
-      
-      if (!sync) {
-        xhr.onreadystatechange = function () {
-          console.log ('gh library...')
-          if (this.readyState == 4) {
-            if (this.status >= 200 && this.status < 300 || this.status === 304) {
-              cb(null, raw ? this.responseText : this.responseText ? JSON.parse(this.responseText) : true, this);
-            } else {
-              cb({path: path, request: this, error: this.status});
-            }
-          }
-        };
-      }
-
-      if (!raw) {
-        xhr.dataType = "json";
-        xhr.setRequestHeader('Accept','application/vnd.github.v3+json');
-      } else {
-        xhr.setRequestHeader('Accept','application/vnd.github.v3.raw+json');
-      }
-
-      xhr.setRequestHeader('Content-Type','application/json;charset=UTF-8');
-      if ((options.token) || (options.username && options.password)) {
-        var authorization = options.token ? 'token ' + options.token : 'Basic ' + btoa(options.username + ':' + options.password);
-        xhr.setRequestHeader('Authorization', authorization);
-      }
-      if (data)
-        xhr.send(JSON.stringify(data));
-      else
-        xhr.send();
-      if (sync) return xhr.response;
-    }
-    */
-    
-    
-    
     // https://developer.github.com/guides/traversing-with-pagination/
     
     function _requestAllPages(path, cb) {
       var results = [];
+      var iteration = 0;
       (function iterate() {
+        iteration ++;
         _request("GET", path, null, function(err, res, xhr) {
           if (err) {
             return cb(err);
@@ -130,11 +80,13 @@
           var links = (xhr.getResponseHeader('link') || '').split(/\s*,\s*/g);
           var next = '';
           
+          // extract link to next page 
           for (var i = 0; i < links.length; i++) {
-            if (links[i].substring('rel="next"')) next = url;
+            var item = links[i];
+            if (item.indexOf('rel="next"') > -1) next = item.match(/<(.*?)>/).pop();
           }
           
-          if (next.length === 0) {
+          if (next === '' || iteration > 50) {
             cb(err, results);
           } else {
             path = next;
