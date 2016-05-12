@@ -1346,7 +1346,7 @@ function initAll() {
 
 function initPanels() {
   
-  
+  var i = 0;
   $(".w2ui-panel-content").each(function() {
     var panelId = $(this).parent().attr('id');
     if (panelAreas.indexOf(panelId) > -1) {
@@ -2284,6 +2284,7 @@ function pickPanel(identifier) {
 }
 
 function startDoc(settings) {
+  console.log(settings);
   w2popup.open().lock("Loading " + settings.path, true);
   // TabId stores the full url of the file
   var tabId = settings.user + '/' + settings.repo + '/' + 
@@ -2297,7 +2298,7 @@ function startDoc(settings) {
   var preserveContent = settings.preserveContent || false;
   var color = settings.color || "red";
   var username = config.user || 'guest';
-  var url = "/"+user+"/"+repository+"/"+branch+"/"+path;
+  var url = '/' + user + '/' + repository + '/' + branch + '/' + path;
   var encodedUrl = encodeURIComponent(url);
   var location = pickPanel();
   
@@ -2391,7 +2392,6 @@ function startDoc(settings) {
         editors[location.area].setOptions({
           enableBasicAutocompletion: true
         });
-        editors[location.area].focus();
         var mode = modelist.getModeForPath(path).mode;
         editors[location.area].getSession().setMode(mode);
         editors[location.area].setOption("enableEmmet", true);
@@ -2475,7 +2475,8 @@ function startDoc(settings) {
         refreshTabs();
         w2ui[location.layout].get(location.panel).tabs.click(tabId);
         w2popup.close();
-
+        editors[location.area].focus();
+  
       }
       
     });
@@ -2531,6 +2532,7 @@ setTimeout(function () {
 
 // KNOCKOUT MODEL - not implemented
 
+/*
 var Model = function() {
   var self = this;
   // Tracks opened projects
@@ -2601,12 +2603,13 @@ var Editor = function() {
   var self = this;
   self.document = ko.observable();
 };
+
 var app = new Model();
 
 setTimeout(function() {
   ko.applyBindings(app);
 }, 250);
-
+*/
 
 
 // Start app
