@@ -22,6 +22,17 @@
   // Initial Setup
   // -------------
 
+  // Extend btoa to support characters outside the latin1 range.
+  // Otherwise, chrome reports: Failed to execute 'btoa' on 'Window'.
+  
+  String.prototype.b64encode = function() { 
+    return btoa(unescape(encodeURIComponent(this))); 
+  };
+  
+  String.prototype.b64decode = function() { 
+      return decodeURIComponent(escape(atob(this))); 
+  };
+
   var API_URL = 'https://api.github.com';
 
   var Github = function(options) {
@@ -642,11 +653,10 @@
 
       this.write = function(branch, path, content, message, cb) {
         that.getSha(branch, path, function(err, sha) {
-          console.log("getsha", err, sha);
           if (err && err.error!=404) return cb(err);
           _request("PUT", repoPath + "/contents/" + path, {
             message: message,
-            content: btoa(content),
+            content: content.b64encode(), //copes with chars outside latin1 set
             branch: branch,
             sha: sha
           }, cb);
