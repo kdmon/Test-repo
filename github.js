@@ -453,12 +453,14 @@
       this.commit = function(parent, tree, message, cb) {
         var user = new Github.User();
         user.show(null, function(err, userData){
+          // fallback to anononymous email address if none is available
+          var anonEmail = userData.login + "@users.noreply.github.com";
           if (err) return cb(err);
           var data = {
             "message": message,
             "author": {
-              "name": options.user,
-              "email": userData.email
+              "name": userData.login,
+              "email": userData.email || anonEmail
             },
             "parents": [
               parent
@@ -624,21 +626,58 @@
         });
       };
 
-      // Move a file to a new location
+      // Move a file to a new location (same as renaming a file)
       // -------
 
-      this.move = function(branch, path, newPath, cb) {
+      this.moveFile = function(branch, oldPath, newPath, cb) {
         updateTree(branch, function(err, latestCommit) {
           that.getTree(latestCommit+"?recursive=true", function(err, tree) {
-            // Update Tree
-            //_.each(tree, function(ref) {
-            $.each(tree, function(ref) {
-              if (ref.path === path) ref.path = newPath;
-              if (ref.type === "tree") delete ref.sha;
-            });
+
+            for (var i = 0; i < tree.length; i++) {
+              // Find the file in the git tree and change its path.
+              // If its a folder, ignore it.
+              if (tree[i].path === oldPath && tree[i].type != "tree") { 
+                    tree[i].path = newPath;
+                    // delete tree[i].sha;
+                  }
+            }
 
             that.postTree(tree, function(err, rootTree) {
-              that.commit(latestCommit, rootTree, 'Deleted '+path , function(err, commit) {
+              that.commit(latestCommit, rootTree, 'Moved (renamed) ' +
+              oldPath + " to " + newPath, function(err, commit) {
+                that.updateHead(branch, commit, function(err) {
+                  cb(err);
+                });
+              });
+            });
+          });
+        });
+      };
+
+      // Move or rename a folder to a new location (same as renaming a file)
+      // -------
+
+      this.moveFolder = function(branch, oldPath, newPath, cb) {
+        updateTree(branch, function(err, latestCommit) {
+          that.getTree(latestCommit+"?recursive=true", function(err, tree) {
+            
+            /*  
+             *  In git folders cannot be empty and only exist by virtue of 
+             *  files pointing to them. Thus, any files with a matching path
+             *  in the git tree must be updated with the new path.
+             *
+             */
+             
+            for (var i = 0; i < tree.length; i++) {
+              var item = tree[i];
+              if (item.path.indexOf(oldPath) > -1) {
+                tree[i].path = item.path.replace(oldPath, newPath);
+              }
+            }
+
+            that.postTree(tree, function(err, rootTree) {
+              that.commit(latestCommit, rootTree, 'Moved (renamed) ' +
+              oldPath + ' to ' + newPath, function(err, commit) {
                 that.updateHead(branch, commit, function(err) {
                   cb(err);
                 });
