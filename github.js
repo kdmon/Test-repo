@@ -33,22 +33,32 @@
         return url;
       }
       
-      // Important to prevent default behaviour auto-injecting javascript files!
       var dataType = raw ? 'text' : 'json';
       
       $.ajax({
         beforeSend: function (xhr){
+          
+          // Correct header is required for Github API calls.
+          if (!raw) {
+            xhr.dataType = "json";
+            xhr.setRequestHeader('Accept','application/vnd.github.v3+json');
+          } else {
+            // Prevent jquery from auto-interpreting javascript files!
+            xhr.dataType = "text";
+            xhr.setRequestHeader('Accept','application/vnd.github.v3.raw+json');
+          }
+          
           xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
           if ((options.token) || (options.username && options.password)) {
             var authorization = options.token ? 'token ' + options.token : 
               'Basic ' + btoa(options.username + ':' + options.password);
             xhr.setRequestHeader('Authorization', authorization);
           }
+
         },
         type: method,
         url: getURL(),
-        dataType: dataType, // Vital to ensure js files are not auto-injected!
-        data: data,
+        data: JSON.stringify(data),
       })
       .done(function (response, status, xhr) {
         // if (!raw && typeof response !== Object) response = JSON.parse(response);
