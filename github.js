@@ -40,11 +40,9 @@
           
           // Correct header is required for Github API calls.
           if (!raw) {
-            xhr.dataType = "json";
             xhr.setRequestHeader('Accept','application/vnd.github.v3+json');
           } else {
             // Prevent jquery from auto-interpreting javascript files!
-            xhr.dataType = "text";
             xhr.setRequestHeader('Accept','application/vnd.github.v3.raw+json');
           }
           
@@ -57,6 +55,7 @@
 
         },
         type: method,
+        dataType: dataType, // Prevent jquery auto-interpreting JS files!!!
         url: getURL(),
         data: JSON.stringify(data),
       })
@@ -64,8 +63,8 @@
         // if (!raw && typeof response !== Object) response = JSON.parse(response);
         cb(null, response, xhr);
       })
-      .fail(function (xhr, status, error) {
-        cb({path: path, request: xhr, error: status});
+      .fail(function (response, status, error) {
+        cb({path: path, request: response, error: response.status});
       });
     }
     
@@ -643,6 +642,7 @@
 
       this.write = function(branch, path, content, message, cb) {
         that.getSha(branch, path, function(err, sha) {
+          console.log("getsha", err, sha);
           if (err && err.error!=404) return cb(err);
           _request("PUT", repoPath + "/contents/" + path, {
             message: message,
