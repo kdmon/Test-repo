@@ -529,11 +529,18 @@ function initButtons () {
     fullscreen : {
       id: 'fullscreen',
       type: 'html',
+      html: '<i class="fa fa-arrows-alt" title="Fullscreen" onclick="toggleFullscreen()" ' +
+      'style="background: white; padding: 2px; cursor:pointer;"></span></div>'
+    },
+    /*
+    fullscreen : {
+      id: 'fullscreen',
+      type: 'html',
       html: '<div style="opacity: 0.8; background:">' +
       '<img id="fullscreenbutton" title="Toggle fullscreen" onclick="toggleFullscreen()" ' +
       'style="padding: 5px; width: 32px; opacity: 0.8;" ' + 
       'src="http://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Octicons-screen-full.svg/210px-Octicons-screen-full.svg.png"/></div>'
-    }, 
+    }, */
     save: {
       id: 'save',
       type: 'button',
