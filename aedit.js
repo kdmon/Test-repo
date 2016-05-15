@@ -183,7 +183,7 @@ function checkUser() {
   var tempKey = window.location.search.substr(start,start+20);
   $.ajax({
     type: "GET",
-    url: "http://webappeditor.com/waecallback?code=" + tempKey
+    url: "https://webappeditor.com/waecallback?code=" + tempKey
   }).done (function (result) {
     // extract token
     var token = result.split('&');
@@ -881,12 +881,12 @@ function openPreview (url, caption, panel) {
   var previewId = "preview_" + url.hashCode();
   // strip leading slash in pathname
   url = (url.substr(0,1) === "/") ? url.substr(1, url.length) : url;
-  var fullUrl = (url.substr(4) === 'http') ? url : 'http://webappeditor.com/' + url;
+  var fullUrl = (url.substr(4) === 'http') ? url : 'https://webappeditor.com/' + url;
   if (url.substr(url.length-3).toLowerCase() == '.md')
-    fullUrl = 'http://webappeditor.com/markdown.html?r=' + randomString(100) +
+    fullUrl = 'https://webappeditor.com/markdown.html?r=' + randomString(100) +
     "&url=" + fullUrl;
   if (url.substr(url.length-4).toLowerCase() == '.tex')
-    fullUrl = 'http://webappeditor.com/kdmon/texlive.js/master/tex.html?r=' +
+    fullUrl = 'https://webappeditor.com/kdmon/texlive.js/master/tex.html?r=' +
     randomString(100) + "&url=" + fullUrl;
   tabList[previewId] = {
     id: previewId,
