@@ -2729,5 +2729,5 @@ setTimeout(function() {
 
 // Start app
 
-var connection = new sharejs.Connection("http://webappeditor.com:8081/channel");
+var connection = new sharejs.Connection("https://webappeditor.com:444/channel");
 authenticate();
