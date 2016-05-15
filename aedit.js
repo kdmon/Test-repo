@@ -530,7 +530,7 @@ function initButtons () {
       id: 'fullscreen',
       type: 'html',
       html: '<i class="fa fa-arrows-alt" title="Fullscreen" onclick="toggleFullscreen()" ' +
-      'style="background: white; padding: 2px; cursor:pointer;"></span></div>'
+      'style="cursor: pointer; padding: 1px 10px 1px 10px; border: 1px solid #aaa;"></span></div>'
     },
     /*
     fullscreen : {
