@@ -1950,7 +1950,7 @@ function fileTreeMenu (node) {
         startDoc(conf);
       }
     },
-    renameFile: { 
+    rename: { 
       label: "Rename",
       icon: "fa fa-edit",
       action: function () {
@@ -1985,7 +1985,7 @@ function fileTreeMenu (node) {
           if (parts.length>0) newPath = parts.join("/") + "/" + node.text;
           else newPath = node.text;
           
-          repo.moveFile(branch, oldPath, newPath, function(err) {
+          repo.move(branch, oldPath, newPath, function(err) {
             if (err) {
               w2alert("File could not be renamed.");
               console.log(err);
@@ -1993,59 +1993,7 @@ function fileTreeMenu (node) {
               tree.rename_node(node, old);
             }
             else {
-              w2alert("File renamed successfully.");
-              //update node path here!
-              node.data.path = newPath;
-            }
-          });
-          
-        });
-      }
-    },
-    renameFolder: { 
-      label: "Rename",
-      icon: "fa fa-edit",
-      action: function () {
-        
-        // Get old folder name.
-        var old = node.text.replace(/\s+$/, ''); // trim right spaces
-        
-        tree.edit(node, null, function(node, success, cancelled) {
-          
-          // Check if folder name was changed
-          if (!success || cancelled) return;
-          if (node.text.replace(/\s+$/, '')==old) return;
-          
-          // Check if file name is valid, otherwise revert to old folder name.
-          // TODO: improve regex matching pattern.
-          if (node.text.indexOf('/') > -1) {
-            w2alert("Ignoring new folder name due to invalid characters.");
-            tree.rename_node(node, old);
-            return;
-          }
-
-          // Checks passed, so now try to commit the name change.
-          
-          var repo = github.getRepo(node.data.user, node.data.repo);
-          var branch = node.data.branch;
-          var oldPath = node.data.path;
-          var parts = node.data.path.split('/');
-          parts.pop(); // remove old folder name
-          var newPath = '';
-          
-          // Prevent leading slash in new path!
-          if (parts.length>0) newPath = parts.join("/") + "/" + node.text;
-          else newPath = node.text;
-          
-          repo.moveFolder(branch, oldPath, newPath, function(err) {
-            if (err) {
-              w2alert("Folder could not be renamed.");
-              console.log(err);
-              // revert to old folder name
-              tree.rename_node(node, old);
-            }
-            else {
-              w2alert("Folder renamed successfully.");
+              w2alert("File was renamed successfully.");
               //update node path here!
               node.data.path = newPath;
             }
@@ -2122,13 +2070,12 @@ function fileTreeMenu (node) {
   };
 
   if (node.data.type == "directory") {
-    delete items.renameFile;
     delete items.edit;
     delete items.preview;
   }
 
   if (node.data.type == "file" || node.data.type == "binary") {
-    delete items.renameFolder;
+    
   }
   
   return items;
@@ -2146,8 +2093,8 @@ function openProject (user, repository, branch, panelArea) {
   
   // 1. Fetch all repo files in one go
 
-  repo.getTree(branch + '?recursive=true', function (err, tree) {
-
+  repo.getTree(branch + '?recursive=true', function (err, response) {
+    var tree = response.tree;
     if (err) {
       w2ui[id].unlock();
       console.log("Error retrieving files", err);
