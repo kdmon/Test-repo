@@ -4,9 +4,9 @@
 	<title>Example</title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
-  <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
 	</head>
 <body>
 	<div id="mapid" style="width: 100%; height: 90vh"></div>
@@ -3279,9 +3279,15 @@
         localStorage.booliKey + options.unique;
       options.hash = Sha1.hash(text);
       url = url + $.param(options);
-      $.get(url,function(response){
-        console.log(response);
+      $.ajax({
+        dataType: 'json',
+        crossDomain: true,
+        type: "get",
+        url: url
       })
+      .done(function(response) {
+        console.log(response);
+      });
     }
     
     queryBooli ('listings', {q: 'nacka'});
