@@ -303,7 +303,8 @@
             //console.log(this);
             var p = this.get(panel);
             if (p === null) return false;
-            if (p.hidden) return this.show(panel, immediate); else return this.hide(panel, immediate != "DISABLE HIDE ANIMATION");
+            if (p.hidden) return this.show(panel, immediate != "DISABLE HIDE ANIMATION");
+            else return this.hide(panel, immediate != "DISABLE HIDE ANIMATION");
         },
 
         set: function (panel, options) {
@@ -681,7 +682,8 @@
                 if (!obj.box) return;
                 
               
-               // $(".preview-iframe").css("z-index", "120");
+                $(".preview-iframe").css("opacity", "0.2");
+                $(".panel-container > div").css("opacity", "0.2");
                 
                 
                 // Block all iframes from capturing mouse events by
@@ -789,6 +791,9 @@
               			delete obj.iframeBlocks;
                   }
                 }, 100);
+                
+                $(".preview-iframe").css("opacity", "1");
+                $(".panel-container > div").css("opacity", "1");
             }
         },
 
