@@ -915,7 +915,7 @@ function openPreview (url, caption, panel) {
       };
     });
 
-  w2ui.layout.show('right');
+  w2ui.layout.show('right', true);
   w2ui[location.layout].get(location.panel).tabs.click(previewId);
   // Does not work
   $(location.id).find(".w2ui-tabs").scrollLeft(99999);
@@ -1270,10 +1270,12 @@ function updateLayout(force,resizeEvent) {
 var fps = 0;
 function calcLayout (force,resizeEvent) {
   // refresh layout every n frames or x ms after last cursor move
+  // Firefox is good at about fps 10, timer 50.
+  // Chrome can handle faster updates: fps 5, timer 10
   fps ++;
-  if (fps < 10 && force === undefined) {
+  if (fps < 5 && force === undefined) {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(function(){calcLayout(true)}, 50);
+    resizeTimer = setTimeout(function(){calcLayout(true)}, 10);
     return;
   }
   if (force === undefined) fps = 0;
