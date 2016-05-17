@@ -388,7 +388,7 @@
       this.getTree = function(tree, cb) {
         _request("GET", repoPath + "/git/trees/"+tree, null, function(err, res) {
           if (err) return cb(err);
-          cb(null, res.tree);
+          cb(null, res);
         });
       };
 
@@ -435,14 +435,14 @@
         });
       };
 
-      // Post a new tree object having a file path pointer replaced
+      // Create a new tree object having a file path pointer replaced
       // with a new blob SHA getting a tree SHA back
       // -------
 
-      this.postTree = function(tree, cb) {
-        _request("POST", repoPath + "/git/trees", { "tree": tree }, function(err, res) {
+      this.createTree = function(tree, baseSHA, cb) {
+        _request("POST", repoPath + "/git/trees", { "tree": tree, base_tree: baseSHA }, function(err, res) {
           if (err) return cb(err);
-          cb(null, res.sha);
+          cb(null, res);
         });
       };
 
@@ -458,10 +458,11 @@
           if (err) return cb(err);
           var data = {
             "message": message,
+            /*
             "author": {
               "name": userData.login,
               "email": userData.email || anonEmail
-            },
+            },*/
             "parents": [
               parent
             ],
@@ -478,8 +479,8 @@
       // Update the reference of your head to point to the new commit SHA
       // -------
 
-      this.updateHead = function(head, commit, cb) {
-        _request("PATCH", repoPath + "/git/refs/heads/" + head, { "sha": commit }, function(err, res) {
+      this.updateHead = function(head, commit, force, cb) {
+        _request("PATCH", repoPath + "/git/refs/heads/" + head, { "sha": commit, force: force }, function(err, res) {
           cb(err);
         });
       };
@@ -629,56 +630,34 @@
       // Move a file to a new location (same as renaming a file)
       // -------
 
-      this.moveFile = function(branch, oldPath, newPath, cb) {
-        updateTree(branch, function(err, latestCommit) {
-          that.getTree(latestCommit+"?recursive=true", function(err, tree) {
-
-            for (var i = 0; i < tree.length; i++) {
-              // Find the file in the git tree and change its path.
-              // If its a folder, ignore it.
-              if (tree[i].path === oldPath && tree[i].type != "tree") { 
-                    tree[i].path = newPath;
-                    // delete tree[i].sha;
-                  }
-            }
-
-            that.postTree(tree, function(err, rootTree) {
-              that.commit(latestCommit, rootTree, 'Moved (renamed) ' +
-              oldPath + " to " + newPath, function(err, commit) {
-                that.updateHead(branch, commit, function(err) {
-                  cb(err);
-                });
-              });
-            });
-          });
-        });
-      };
-
-      // Move or rename a folder to a new location (same as renaming a file)
-      // -------
-
-      this.moveFolder = function(branch, oldPath, newPath, cb) {
-        updateTree(branch, function(err, latestCommit) {
-          that.getTree(latestCommit+"?recursive=true", function(err, tree) {
+      this.move = function(branch, oldPath, newPath, cb) {
+        that.getRef('heads/' + branch, function (err, sha){
+          that.getTree(sha+"?recursive=true", 
+          function(err, tree) {
+            var orig_tree = tree;
             
-            /*  
-             *  In git folders cannot be empty and only exist by virtue of 
-             *  files pointing to them. Thus, any files with a matching path
-             *  in the git tree must be updated with the new path.
-             *
-             */
-             
-            for (var i = 0; i < tree.length; i++) {
-              var item = tree[i];
-              if (item.path.indexOf(oldPath) > -1) {
-                tree[i].path = item.path.replace(oldPath, newPath);
+            for (var i = 0; i < tree.tree.length; i++) {
+              
+              // c.f. https://github.com/philschatz/octokit.js/issues/78
+              if (tree.tree[i].path.indexOf(oldPath) === 0) {
+                console.log("matching", tree.tree[i], oldPath);
+                tree.tree[i].path = tree.tree[i].path.replace(oldPath, newPath);
+              }
+
+              if (tree.tree[i].type === 'tree') {
+                console.log("matching folder no: ", i)
+                //  Remove folders. Git will recreate them, except empty ones!
+                tree.tree.splice(i,1);
+                i --; // Compensate for-loop counter as array length is reduced!
               }
             }
-
-            that.postTree(tree, function(err, rootTree) {
-              that.commit(latestCommit, rootTree, 'Moved (renamed) ' +
-              oldPath + ' to ' + newPath, function(err, commit) {
-                that.updateHead(branch, commit, function(err) {
+            console.log(tree.tree);
+            that.createTree(tree.tree, undefined, function(err, newTree) {
+              console.log(newTree);
+              that.commit(orig_tree.sha, newTree.sha, 'Renamed ' +
+              oldPath + " to " + newPath, function(err, commit) {
+                console.log (commit);
+                that.updateHead(branch, commit, true, function(err) {
                   cb(err);
                 });
               });
