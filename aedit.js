@@ -974,7 +974,7 @@ function refreshTabs() {
     if (w2ui[location[1]].get(location[3]).tabs.tabs.length === 0) {
       console.log("expensive fx");
       $("#editor" + i).hide();
-      $("#container"+ i + " .w2ui-sidebar").hide();
+      $("#container"+ i + " .jstree").hide();
       $("#content" + i).html('<div class="inactive-panel">' +
       '<p><b>This subpanel is empty.</b></p>' +
       '<ul><li>To use it, drag a tab over.</li>' +
@@ -1183,7 +1183,7 @@ function tabClick(obj, event) {
   
   $("#editor" + item.panel).hide();
   $("#content" + item.panel).hide();
-  $("#container" + item.panel + " .w2ui-sidebar").hide();
+  $("#container" + item.panel + " .jstree").hide();
   
   // hide preview iframes in current panel
   for (var index in tabList) {
