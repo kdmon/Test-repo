@@ -101,6 +101,7 @@
   min-width: 100%;
   display: inline-block;
   border-radius: 4px;
+  background: white;
 }
 
 #request-form {
@@ -132,8 +133,8 @@
 }
 
 .blurred {
-  filter: blur(1.5px); 
-  -webkit-filter: blur(1.5px);
+  filter: blur(0px); 
+  -webkit-filter: blur(0px);
 }
 
 .blurred span {
@@ -150,32 +151,183 @@
   border: 1px solid #ddd;
 }
 
-
-#patientContainer {
-  height: 5em;
-}
-
-#questionContainer {
-  background: white;
-  padding: 0 1em 0 1em;
-}
-
 #signButton {
+  background: #FFA;
+  box-shadow: 0 10px 10px 0 #88e;
+  opacity: 0.8;
   cursor: pointer;
   margin: 0;
 }
 
 #signButton:hover {
-  background: #FFA;
-  box-shadow: 0 0 4px 0 #555;
+  opacity: 1;
+  box-shadow: none;
+  color: black;
+}
+
+.ui-checkbox-on .ui-icon {
+    width: 32px!important; 
+    height: 32px!important; 
+    margin-left: -20px !important; 
+    margin-top: -15px !important; 
+    box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; 
+    -webkit-border-radius: 0 !important; border-radius: 0 !important; 
+    background: url(http://www.surveyshare.com/images/icons/check.png) 50% 50% no-repeat;
+}
+
+.ui-icon-checkbox-off {
+    background-image: none;
+    box-shadow: none; -webkit-box-shadow: none; -moz-box-shadow: none; 
+    border-radius: 0px; -webkit-border-radius: 0px; -moz-border-radius: 0px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.check_box {
+    display:none;
+}
+
+.check_box + label{
+    background:url('images/check-box.png') no-repeat;
+    height: 16px;
+    width: 16px;
+    display:inline-block;
+    padding: 0 0 0 0px;
+}
+
+.check_box:checked + label{
+    background: url(http://www.surveyshare.com/images/icons/check.png) 50% 50% no-repeat;
+    height: 16px;
+    width: 16px;
+    display:inline-block;
+    padding: 0 0 0 0px;
 }
 
   </style>
-  
+
+</head>
+<body>
+  <div data-role="page" id="game">
+    <div data-role="header" data-theme="a">
+        <h1>Game</h1>
+        <a data-role="button" href="#badges">Badges</a>
+    </div>
+    <div data-role="contents">
+        <h1>Select level</h1>
+        <div class="level threestars" id="level1">1</div>
+        <div class="level  onestar" id="level2">2</div>
+        <div class="level current" id="level3">3</div>
+        <div class="level" id="level4">4</div>
+        <div class="level" id="level5">5</div>
+        <div class="level" id="level6">6</div>
+        
+    </div>
+</div>
+
+<div data-role="page" id="badges">
+    <div data-role="header" data-theme="a">
+        <h1>Badges</h1>
+        <a data-role="button" href="#game">Game</a>
+    </div>
+    <div data-role="contents">
+        <h1 style="text-align: center">Your Achievements</h1>
+        <div id="container" class="badgebackground"></div>
+    </div>
+</div>
+
+<div data-role="page" id="levels">
+    <div data-role="header" data-theme="a">
+        <h1 id="levelnumber">Level</h1>
+        <a data-role="button" href="#game">Back</a>
+    </div>
+    <div data-role="contents" style="margin: 1em">
+      <div style="margin-bottom: 1em; background: white; box-shadow: 0 0 10px 0 #ccc; padding: 1em">
+        <div id="patientPortrait">Loading portrait</div>
+        <div id="patientInfo">Loading info</div>
+        <div class="badgebackground" style="display:none">
+            <a data-role="button" href="#" id="irrcmv" class="gameoption">Irradiated and CMV negative</a>
+            <a data-role="button" href="#" id="irr" class="gameoption">Irradiated</a>
+            <a data-role="button" href="#" id="cmv" class="gameoption">CMV negative</a>
+            <a data-role="button" href="#" id="notrequired" class="gameoption">Special component not required</a>
+        </div>
+      </div>
+        <h3 style="text-align: center; margin: 1em">Please verify the request form.</h3>
+    
+        <div id="request-form" style="text-align:center">
+          <h1 style="color: #e99; text-shadow: 1px 1px 5px #fff;">BLOOD REQUEST FORM</h1>
+          <div class="request-section split blurred">
+            <h2>Patient ID</h2>
+            <p>Patient name: <span class="handwritten" id="patientname">patient name</span></p>
+            <p>Gender: <span class="handwritten" id="patientgender">patient gender</span></p>
+            <p>DOB: <span class="handwritten" id="patientdob">21-12-2010</span></p>
+            <p>NHS Number: <span class="handwritten" id="patientchi">81822192</span></p>
+          </div>
+          <div class="request-section split blurred">
+            <h2> Units</h2>
+            <p>Components: <span class="handwritten" id="bloodcomponent">1 x platelets</span></p>
+            <div data-role="fieldcontain">
+                <fieldset data-role="controlgroup" data-iconpos="right">
+                    <input type="checkbox" name="checkbox-0" id="checkbox-0" class="check_box" />
+                    <input type="checkbox" name="checkbox-1" id="checkbox-1" class="check" />
+                    <input type="checkbox" name="checkbox-2" id="checkbox-2" class="check" />
+                    <input type="checkbox" name="checkbox-3" id="checkbox-3" class="check" />
+                    <label for="checkbox-0">15 minutes</label>
+                    <label for="checkbox-1">30 minutes</label>
+                    <label for="checkbox-2">45 minutes</label>
+                    <label for="checkbox-3">60 minutes</label>
+                </fieldset>
+            </div>
+            <label><input type="checkbox" name="checkbox" id="irrbox">Irradiated</label>
+            <label><input type="checkbox" name="checkbox" id="cmvbox">CMV-negative</label>
+            <label><input type="checkbox" name="checkbox" id="hepbox">HEP E</label>
+            <p>Indication: <span style="padding-bottom: 2.5em" class="handwritten" id="bloodindication">Doctor's orders</span></p>
+          </div>
+          <div class="request-section">
+            <div class="split" style="margin-right: 1em; padding-right: 1em; border-right:1px solid #aaa; vertical-align:top; height: 20em;">
+              <h2> Special requirements</h2>
+              <p>
+              Tick any relevant boxes and verify the form when you're ready.
+              </p>
+            </div>
+            <div class="split highlighted">
+              <h2> Request authorised by</h2>
+              <hr style="border: none; border-bottom: dotted 5px #555">
+              <p class="">(PLEASE WRITE CLEARLY)</p>
+              <p id="signButton" class="handwritten">Verify request</p>
+              <p id="signButton" class="handwritten">Challenge request</p>
+            </div>
+          </div>
+          <h3 style="color: #aaa;">A hospital trust near you</h3>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+</div>
 
 
-<script type='text/javascript'>//<![CDATA[ 
-$(window).load(function(){
+<div data-role="page" id="badgedetails" data-theme="a">
+    <div data-role="header" data-theme="a">
+        <h1>Badge details</h1>
+        <a data-role="button" href="#" data-rel="back">Back</a>
+    </div>
+    <div data-role="contents">
+        <div class="badgebackground">
+            <img src="" class="largebadge" id="badgeimage"/>
+            <p id="badgedescription"></p>
+            <h3>Criteria</h3>
+            <p id="badgecriteria"></p>
+            <h3>Tweet</h3>
+            <p>Share your achievements with your colleagues!</p>
+            <a href="https://twitter.com/intent/tweet?text=I have just unlocked a new award in the special blood components game!&url=http://optimalblooduse.eu/app/" data-theme="b" data-role="button">Tweet now</a>
+            <br/><br/>
+            <a href="#" data-role="button" data-rel="back">Return to badges</a>
+        </div>
+    </div>
+</div>
+
+
+<script type='text/javascript'>
+
   
 var badges = {
     "diamondoftime" : {
@@ -256,23 +408,23 @@ var badges = {
 }
 
 var components = {
-    "red cells": {
-        "p":0.4,
+    "red blood cells": {
+        "p":0.6,
         "cmv":"",
         "irradiation":""
     },    
     "platelets":{
-        "p":0.3,
+        "p":0.4,
         "cmv":"",
         "irradiation":""
     },
     "fresh frozen plasma":{
-        "p":0.1,
+        "p":0.3,
         "cmv": false,
         "irradiation": false
     },
     "cryoprecipitate":{
-        "p":0.1,
+        "p":0.2,
         "cmv": false,
         "irradiation": false
     },
@@ -281,7 +433,7 @@ var components = {
         "cmv": true,
         "irradiation": true
     },
-    "cryopreserved red cells after deglycerolisation":{
+    "cryopreserved (deglycerolised) red cells":{
         "p":0.1,
         "cmv": "",
         "irradiation": false
@@ -290,7 +442,8 @@ var components = {
         "p":0.1,
         "cmv": "",
         "irradiation": true
-    },
+    }
+    /*
     "bone marrow":{
         "p":0.1,
         "cmv": false,
@@ -300,7 +453,7 @@ var components = {
         "p":0.1,
         "cmv": false,
         "irradiation": false
-    }
+    }*/
 };
 
 var conditions = {    
@@ -315,12 +468,12 @@ var conditions = {
         "irradiation": true,
         "baby" : true
     },
-    "Aplastic Anaemia and who have been treated with Anti-Thymocyte Globuline (ATG)":{
+    "Aplastic Anaemia and has been treated with Anti-Thymocyte Globuline (ATG)":{
         "p":0.1,
         "cmv": "",
         "irradiation": true
     },    
-    "HIV/Aids": {
+    "tested positive to HIV": {
         "p":0.1,
         "cmv": false,
         "irradiation": false
@@ -420,7 +573,7 @@ var drugs = {
 
 
 var treatments = {    
-    "elective transfusion during pregnancy (not at delivery)":{
+    "her fourth month of pregnancy":{
         "p":0.1,
         "cmv": true,
         "irradiation": "",
@@ -438,13 +591,13 @@ var treatments = {
         "irradiation": true,
         "baby" : true
     },
-    "routine infant 'top-up' and who has no history of intrauterine transfusion (IUT)":{
+    "routine infant 'top-up' and has no history of intrauterine transfusion (IUT)":{
         "p":0.1,
         "cmv": "",
         "irradiation": "",
         "baby" : true
     },
-    "infant cardiac surgery and who has no history of intrauterine transfusion (IUT)":{
+    "infant cardiac surgery and has no history of intrauterine transfusion (IUT)":{
         "p":0.1,
         "cmv": "",
         "irradiation": "",
@@ -537,23 +690,25 @@ function generateQuestions () {
         switch (questionType) {
             case 1: // condition/diagnosis
                 questionPhrase = "How should " + component + " be transfused  to a patient who has " + condition + "?";
-                questionPhrase = "a patient requires a transfusion with " + component + " and has " + condition + ".";
+                questionPhrase = "<patient> requires a transfusion with <strong>" + component + "</strong>. <pronoun> has " + condition + "."
                 firstFactor = condition;
                 secondFactor = conditions[condition];
                 break;
             case 2: // medication
                 questionPhrase = "How should " + component + " be supplied for a patient who is being treated with " + drug + "?";
-                questionPhrase = "a patient is receiving treated with " + drug + " and requires a transfusion with " + component + ".";
+                questionPhrase = "<patient> requires a transfusion with <strong>" + component + "</strong>. <pronoun> is receiving treatment with " + drug + "."
                 firstFactor = drug;
                 secondFactor = drugs[drug];
                 break;
             case 3: // treatment
                 questionPhrase = "How should " + component + " be administered to a patient who is undergoing " + treatment + "?";
+                questionPhrase = "<patient> requires a transfusion with <strong>" + component + "</strong>. <pronoun> is undergoing " + treatment + "."
                 firstFactor = treatment;
                 secondFactor = treatments[treatment];
                 break;
             case 4: // history
                 questionPhrase = "How should " + component + " be administered to a patient who has undergone " + history + "?"; 
+                questionPhrase = "<patient> requires a transfusion with <strong>" + component + "</strong>. <pronoun> has undergone " + history + "."
                 firstFactor = history;
                 secondFactor = histories[history];
                 break;
@@ -664,28 +819,31 @@ function makeLevel (level) {
         $("#patientname").html(first + ' ' + last);
         $("#patientgender").html(gender);
         $("#bloodcomponent").html('1 x ' + questions[currentQuestion].component);
-        $("#patientchi").html(Math.round(Math.random() * 1000000));
+        $("#patientchi").html(Math.round(Math.random() * 10000000000));
         
-        var age = questions[currentQuestion].baby ? 'baby' : 'adult';
         
-        var month = Math.round(Math.random() * 12)
-        var year = new Date().getFullYear() - (Math.round(Math.random() * 44) + 18);
-        if (age == 'baby') year = new Date().getFullYear() - 1;
-        var day = Math.round(Math.random() * 30)
+        var month = Math.round(Math.random() * 11) + 1
+        var yearsOld = (Math.round(Math.random() * 33) + 18);
+        var year = new Date().getFullYear() - yearsOld;
+        if (questions[currentQuestion].baby) year = new Date().getFullYear() - 1;
+        var day = Math.round(Math.random() * 29) + 1
         $("#patientdob").html(day + '-' + month + '-' + year);
         
+        var age = questions[currentQuestion].baby ? 'baby' : 'adult';
         var genderLabel = gender === 'female' ? 'woman' : 'man';
         if (age == 'baby') {
           genderLabel = (gender === 'female' ? 'girl' : 'boy'); 
         }
+        else age = yearsOld + " year old ";
         var name = "" + first + " " + last + " (" + age + " " + genderLabel + ")";
         var patientReference = age == 'baby' ? first : title + ". " + last;
-        var theQuestion = questions[currentQuestion].question.replace("a patient", patientReference);
+        var pronoun = gender === "female" ? "She" : "He";
+        var theQuestion = questions[currentQuestion].question.replace("<patient>", patientReference).replace("<pronoun>", pronoun);
         var imgurl = data.results[0].picture.large;
         if (age === 'baby') imgurl = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Human-Male-White-Newborn-Baby-Crying.jpg/320px-Human-Male-White-Newborn-Baby-Crying.jpg";
-        var html = '<div><img class="portrait" src="' + imgurl + '"><h2>' + name + '</h2></div>';
-        $("#patientContainer").html( html );
-        $("#questionContainer").html( '<p> ' + theQuestion + '</p>');
+
+        $("#patientInfo").html( '<h2>' + name + '</h2><p> ' + theQuestion + '</p>');
+        $("#patientPortrait").html( '<img class="portrait" src="' + imgurl + '">');
       }
     });
     
@@ -735,122 +893,7 @@ generateBadgeView ();
 var questions = generateQuestions();
 //console.log (questions[1]);
 
-
-
-});//]]>  
-
 </script>
-
-
-</head>
-<body>
-  <div data-role="page" id="game">
-    <div data-role="header" data-theme="a">
-        <h1>Game</h1>
-        <a data-role="button" href="#badges">Badges</a>
-    </div>
-    <div data-role="contents">
-        <h1>Select level</h1>
-        <div class="level threestars" id="level1">1</div>
-        <div class="level  onestar" id="level2">2</div>
-        <div class="level current" id="level3">3</div>
-        <div class="level" id="level4">4</div>
-        <div class="level" id="level5">5</div>
-        <div class="level" id="level6">6</div>
-        
-    </div>
-</div>
-
-<div data-role="page" id="badges">
-    <div data-role="header" data-theme="a">
-        <h1>Badges</h1>
-        <a data-role="button" href="#game">Game</a>
-    </div>
-    <div data-role="contents">
-        <h1 style="text-align: center">Your Achievements</h1>
-        <div id="container" class="badgebackground"></div>
-    </div>
-</div>
-
-<div data-role="page" id="levels">
-    <div data-role="header" data-theme="a">
-        <h1 id="levelnumber">Level</h1>
-        <a data-role="button" href="#game">Back</a>
-    </div>
-    <div data-role="contents" style="margin: 1em">
-      <div style="margin-bottom: 1em; background: white; box-shadow: 0 0 10px 0 #ccc; padding: 1em">
-        <div id="patientContainer">Loading patient</div>
-        <div id="questionContainer">Loading question</div>
-        <div class="badgebackground" style="display:none">
-            <a data-role="button" href="#" id="irrcmv" class="gameoption">Irradiated and CMV negative</a>
-            <a data-role="button" href="#" id="irr" class="gameoption">Irradiated</a>
-            <a data-role="button" href="#" id="cmv" class="gameoption">CMV negative</a>
-            <a data-role="button" href="#" id="notrequired" class="gameoption">Special component not required</a>
-        </div>
-      </div>
-        <h3 style="text-align: center; margin: 1em">Q: Please complete and sign the blood request form.</h3>
-    
-        <div id="request-form" style="text-align:center">
-          <h1 style="color: #a00; text-decoration:underline">BLOOD REQUEST FORM</h1>
-          <div class="request-section highlighted">
-            <div class="split" style="margin-right: 1em; padding-right: 1em; border-right:1px solid #aaa; vertical-align:top; height: 20em;">
-              <h2> Special requirements</h2>
-              <label><input type="checkbox" name="checkbox" id="irrbox">Irradiated</label>
-              <label><input type="checkbox" name="checkbox" id="cmvbox">CMV-negative</label>
-              <label><input type="checkbox" name="checkbox" id="hepbox">HEP E</label>
-              <p>
-              Tick any relevant boxes and sign the form when you're ready.
-              </p>
-            </div>
-            <div class="split">
-              <h2> Request authorised by</h2>
-              <p id="signButton" class="handwritten">Sign and date now</p>
-              <hr style="border: none; border-bottom: dotted 5px #555">
-              <p class="">Name (PLEASE WRITE CLEARLY):</p>
-            </div>
-          </div>
-          <div class="request-section split blurred">
-            <h2>Patient ID</h2>
-            <p>Patient name: <span class="handwritten" id="patientname">patient name</span></p>
-            <p>Gender: <span class="handwritten" id="patientgender">patient gender</span></p>
-            <p>DOB: <span class="handwritten" id="patientdob">21-12-2010</span></p>
-            <p>NHS Number: <span class="handwritten" id="patientchi">81822192</span></p>
-          </div>
-          <div class="request-section split blurred">
-            <h2> Units</h2>
-            <p>Blood units: <span class="handwritten" id="bloodcomponent">1 x platelets</span></p>
-            <p>Blood group: <span class="handwritten" id="bloodgroup">AB -</span></p>
-            <p>Indication: <span style="padding-bottom: 2.5em" class="handwritten" id="bloodindication">Doctor's orders</span></p>
-          </div>
-          <h3 style="color: #aaa;">A hospital trust near you</h3>
-        </div>
-    </div>
-    <br>
-    <br>
-    <br>
-</div>
-
-
-<div data-role="page" id="badgedetails" data-theme="a">
-    <div data-role="header" data-theme="a">
-        <h1>Badge details</h1>
-        <a data-role="button" href="#" data-rel="back">Back</a>
-    </div>
-    <div data-role="contents">
-        <div class="badgebackground">
-            <img src="" class="largebadge" id="badgeimage"/>
-            <p id="badgedescription"></p>
-            <h3>Criteria</h3>
-            <p id="badgecriteria"></p>
-            <h3>Tweet</h3>
-            <p>Share your achievements with your colleagues!</p>
-            <a href="https://twitter.com/intent/tweet?text=I have just unlocked a new award in the special blood components game!&url=http://optimalblooduse.eu/app/" data-theme="b" data-role="button">Tweet now</a>
-            <br/><br/>
-            <a href="#" data-role="button" data-rel="back">Return to badges</a>
-        </div>
-    </div>
-</div>
-  
 </body>
 
 
