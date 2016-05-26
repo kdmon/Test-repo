@@ -97,8 +97,8 @@
   border: 1px solid #ccc;
   color: blue;
   font-weight: 400;
-  font-size: 3em;
-  min-width: 100%;
+  font-size: 2em;
+  width: 100%;
   display: inline-block;
   border-radius: 4px;
   background: white;
@@ -119,7 +119,8 @@
   padding: 1em;
   margin: 0.2em;
   margin-bottom: 1em;
-  vertical-align: top
+  vertical-align: top;
+  border: 1px solid #aaa;
 }
 
 .split {
@@ -142,13 +143,17 @@
 }
 
 .portrait {
-  margin: 0 1em 0 1em;
+  margin: 1em 1em 3em 1em;
   max-height: 5em;
   float: left; 
   border-radius: 50px;
   filter: blur(1px) sepia(100%); 
   -webkit-filter: blur(1px) sepia(100%); 
   border: 1px solid #ddd;
+}
+#patientInfo {
+  max-height: 12em;
+  overflow-y: auto;
 }
 
 #signButton {
@@ -157,9 +162,11 @@
   opacity: 0.8;
   cursor: pointer;
   margin: 0;
+  width: 50%;
 }
 
 #signButton:hover {
+  background: #FFF;
   opacity: 1;
   box-shadow: none;
   color: black;
@@ -202,6 +209,7 @@
     padding: 0 0 0 0px;
 }
 
+
   </style>
 
 </head>
@@ -240,7 +248,7 @@
         <a data-role="button" href="#game">Back</a>
     </div>
     <div data-role="contents" style="margin: 1em">
-      <div style="margin-bottom: 1em; background: white; box-shadow: 0 0 10px 0 #ccc; padding: 1em">
+      <div style="margin-bottom: 1em; background: white; box-shadow: 0 0 10px 0 #ccc; padding: 1em; max-width: 50em; margin: auto">
         <div id="patientPortrait">Loading portrait</div>
         <div id="patientInfo">Loading info</div>
         <div class="badgebackground" style="display:none">
@@ -250,52 +258,47 @@
             <a data-role="button" href="#" id="notrequired" class="gameoption">Special component not required</a>
         </div>
       </div>
-        <h3 style="text-align: center; margin: 1em">Please verify the request form.</h3>
+        <h3 style="text-align: center; margin: 1em">Please review and amend the request as necessary.</h3>
     
         <div id="request-form" style="text-align:center">
           <h1 style="color: #e99; text-shadow: 1px 1px 5px #fff;">BLOOD REQUEST FORM</h1>
-          <div class="request-section split blurred">
+          <div class="request-section split">
             <h2>Patient ID</h2>
             <p>Patient name: <span class="handwritten" id="patientname">patient name</span></p>
             <p>Gender: <span class="handwritten" id="patientgender">patient gender</span></p>
             <p>DOB: <span class="handwritten" id="patientdob">21-12-2010</span></p>
             <p>NHS Number: <span class="handwritten" id="patientchi">81822192</span></p>
           </div>
-          <div class="request-section split blurred">
-            <h2> Units</h2>
-            <p>Components: <span class="handwritten" id="bloodcomponent">1 x platelets</span></p>
-            <div data-role="fieldcontain">
-                <fieldset data-role="controlgroup" data-iconpos="right">
-                    <input type="checkbox" name="checkbox-0" id="checkbox-0" class="check_box" />
-                    <input type="checkbox" name="checkbox-1" id="checkbox-1" class="check" />
-                    <input type="checkbox" name="checkbox-2" id="checkbox-2" class="check" />
-                    <input type="checkbox" name="checkbox-3" id="checkbox-3" class="check" />
-                    <label for="checkbox-0">15 minutes</label>
-                    <label for="checkbox-1">30 minutes</label>
-                    <label for="checkbox-2">45 minutes</label>
-                    <label for="checkbox-3">60 minutes</label>
-                </fieldset>
-            </div>
-            <label><input type="checkbox" name="checkbox" id="irrbox">Irradiated</label>
-            <label><input type="checkbox" name="checkbox" id="cmvbox">CMV-negative</label>
-            <label><input type="checkbox" name="checkbox" id="hepbox">HEP E</label>
-            <p>Indication: <span style="padding-bottom: 2.5em" class="handwritten" id="bloodindication">Doctor's orders</span></p>
-          </div>
-          <div class="request-section">
-            <div class="split" style="margin-right: 1em; padding-right: 1em; border-right:1px solid #aaa; vertical-align:top; height: 20em;">
-              <h2> Special requirements</h2>
+          <div class="request-section split">
+            <h2> Components</h2>
+            <p>Units: <span class="handwritten" id="bloodcomponent">.</span></p>
+            <form>
+              <fieldset data-role="controlgroup" data-type="horizontal">
+                  <legend>Request as irradiated:</legend>
+                  <input type="radio" name="irradiatedradio" id="radio1" value="yes">
+                  <label for="radio1">Yes</label>
+                  <input type="radio" name="irradiatedradio" id="radio2" value="no">
+                  <label for="radio2">No</label>
+              </fieldset>
               <p>
-              Tick any relevant boxes and verify the form when you're ready.
-              </p>
-            </div>
-            <div class="split highlighted">
-              <h2> Request authorised by</h2>
-              <hr style="border: none; border-bottom: dotted 5px #555">
-              <p class="">(PLEASE WRITE CLEARLY)</p>
-              <p id="signButton" class="handwritten">Verify request</p>
-              <p id="signButton" class="handwritten">Challenge request</p>
-            </div>
+                <fieldset data-role="controlgroup" data-type="horizontal">
+                  <legend>Request as CMV-negative:</legend>
+                  <input type="radio" name="cmvradio" id="radio3" value="yes">
+                  <label for="radio3">Yes</label>
+                  <input type="radio" name="cmvradio" id="radio4" value="no">
+                  <label for="radio4">No</label>
+              </fieldset></p><p>
+              <fieldset data-role="controlgroup" data-type="horizontal">
+                  
+                  <legend>Request as Hep-E negative:</legend>
+                  <input type="radio" name="hepradio" id="radio5" value="yes">
+                  <label for="radio5">Yes</label>
+                  <input type="radio" name="hepradio" id="radio6" value="no">
+                  <label for="radio6">No</label>
+              </fieldset></p>
+          </form>
           </div>
+            <p id="signButton" class="handwritten">Submit request</p>
           <h3 style="color: #aaa;">A hospital trust near you</h3>
         </div>
     </div>
@@ -573,7 +576,7 @@ var drugs = {
 
 
 var treatments = {    
-    "her fourth month of pregnancy":{
+    "an elective transfusion in her third month of pregnancy":{
         "p":0.1,
         "cmv": true,
         "irradiation": "",
@@ -818,7 +821,7 @@ function makeLevel (level) {
         var gender = data.results[0].gender;
         $("#patientname").html(first + ' ' + last);
         $("#patientgender").html(gender);
-        $("#bloodcomponent").html('1 x ' + questions[currentQuestion].component);
+        $("#bloodcomponent").html('1 x unit of ' + questions[currentQuestion].component);
         $("#patientchi").html(Math.round(Math.random() * 10000000000));
         
         
