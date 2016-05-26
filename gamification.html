@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title> - jsFiddle demo</title>
+  <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+  <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+  <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Just+Another+Hand' rel='stylesheet' type='text/css'>
+  
+  <style type='text/css'>
+  .badgebackground {
+    border-radius: 20px;
+    padding: 5px;
+    margin: 5px;
+    background-image: url("http://optimalblooduse.eu/app/badges/bg.png");
+  }
+
+
+.badge {
+    width: 6em;
+    opacity: 0.1;
+    margin: 10px;
+    border-radius: 10px;
+    
+}
+
+.largebadge {
+    width: 50%;
+    max-width: 512px;
+    opacity: 1;
+    border-radius: 15px;
+    margin: 9px;
+    border: 1px solid #444;
+    box-shadow: 10px 10px 5px rgba(0,0,0,0.5);
+}
+
+.badge:hover {
+    width: 6em;
+    opacity: .2;
+    margin: 9px;
+    border: 1px solid #aaa;
+    box-shadow: 10px 10px 5px rgba(0,0,0,0.5);
+}
+
+.earned, .earned:hover {
+    opacity: 1;
+    
+}
+
+.level {
+    float: left;
+    display: block;
+    padding: 50px;
+    font-size: 6em;
+    border-radius: 10px;
+    text-align: middle;
+    background: #aaa no-repeat;
+    margin: 10px;
+    background-size: contain;
+}
+
+.current {
+    background: #da0 no-repeat;
+}
+
+.threestars {
+    background: #4a4 no-repeat;
+    background-image: url("http://optimalblooduse.eu/app/badges/threestars.png");
+    background-size: contain;
+}
+
+
+.twostars {
+    background: #4a4 no-repeat;
+    background-image: url("http://optimalblooduse.eu/app/badges/twostars.png");
+    background-size: contain;
+}
+
+.onestar {
+    background: #4a4 no-repeat;
+    background-image: url("http://optimalblooduse.eu/app/badges/onestar.png");
+    background-size: contain;
+}
+
+.nostars {
+    background: #4a4 no-repeat;
+    background-image: url("http://optimalblooduse.eu/app/badges/nostars.png");
+    background-size: contain;
+}
+
+.handwritten {
+  font-family: 'Just Another Hand', cursive;
+  padding-left: 4px;
+  padding-top: 8px;
+  padding-bottom: 0;
+  border: 1px solid #ccc;
+  color: blue;
+  font-weight: 400;
+  font-size: 3em;
+  min-width: 100%;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+#request-form {
+  background: #fee;
+  border-radius: 0 0 90px 2px / 0 0 6px 6px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.3), 0 0 40px rgba(128,128,128,.1) inset;
+  color: #555;
+  padding: 1em;
+  max-width: 50em;
+  margin: auto;
+}
+
+.request-section {
+  border-radius: 4px;
+  padding: 1em;
+  margin: 0.2em;
+  margin-bottom: 1em;
+  vertical-align: top
+}
+
+.split {
+  width: 40%;
+  display: inline-block;
+}
+
+.highlighted {
+  background: #FFFAFA;
+  border: 1px solid #ddd;
+}
+
+.blurred {
+  filter: blur(1.5px); 
+  -webkit-filter: blur(1.5px);
+}
+
+.blurred span {
+  font-size: 2em !important;
+}
+
+.portrait {
+  margin: 0 1em 0 1em;
+  max-height: 5em;
+  float: left; 
+  border-radius: 50px;
+  filter: blur(1px) sepia(100%); 
+  -webkit-filter: blur(1px) sepia(100%); 
+  border: 1px solid #ddd;
+}
+
+
+#patientContainer {
+  height: 5em;
+}
+
+#questionContainer {
+  background: white;
+  padding: 0 1em 0 1em;
+}
+
+#signButton {
+  cursor: pointer;
+  margin: 0;
+}
+
+#signButton:hover {
+  background: #FFA;
+  box-shadow: 0 0 4px 0 #555;
+}
+
+  </style>
+  
+
+
+<script type='text/javascript'>//<![CDATA[ 
+$(window).load(function(){
+  
+var badges = {
+    "diamondoftime" : {
+        "label" : "You have accurately prescribed five blood components in rapid succession!",
+        "criteria" : "Five correct prescriptions within 10 minutes."
+    },
+    
+    "haemoglobingemstone" : {
+        "label" : "You have protected two patients with weaked immune systems due to drugs or treatments!",
+        "criteria" : "Two correct prescriptions of irradiation.",
+        "earned": true
+    },
+    
+    "vialofplasma" : {
+        "label" : "You have achieved cost-effective resource utilisation by consistently following guidelines.",
+        "criteria" : "Two correct prescriptions of irradiation."
+    },
+    
+    "cytomegaloring" : {
+        "label" : "You have helped five patients avoid cytomegalovirus infection!",
+        "criteria" : "Five correct prescriptions of CMV negative."
+    },
+    
+    "irradiatoraward" : {
+        "label" : "You have safeguarded ten patients from Graft versus Host Disease!",
+        "criteria" : "ten correct prescriptions of Irradiation."
+    },
+    
+    "rapidresponse" : {
+        "label" : "You have come to a sound decision in under half a minute!",
+        "criteria" : "One correct answer in under 30 seconds"
+    },
+    
+    "granulocyteinactivator" : {
+        "label" : "You have twarthed the risk of both GvHD and CMV infection at once!",
+        "criteria" : "Correct answer to granulocyte question."
+    },
+    
+    "plasmacannon" : {
+        "label" : "You have correctly ordered plasma without attempting to irradiate or screen for cytomegalovirus.",
+        "criteria" : "Correct answer to blood plasma question."
+    },
+    
+    "redcellsaviour" : {
+        "label" : "You have accurately prescribed CMV negative  red cells, thus preventing cytomegalovirus infection!",
+        "criteria" : "Correct prescription of red cells to pregnant patient."
+    },
+    
+    "plateletirradiator" : {
+        "label" : "You have inactivated stray lymphocytes in a bag of platelets, thus preventing GvHD!",
+        "criteria" : "Correct prescription of platelets to patient at risk of GvHD."
+    },
+    
+    "indecisive" : {
+        "label" : "You have requested more details when sufficient information was given.",
+        "criteria" : "Incorrectly requesting more details."
+    },
+    
+    "radioactivewaster" : {
+        "label" : "You have twice ordered irradiated components when they were not required!",
+        "criteria" : "Twice requesting irradiated products incorrectly."
+    },
+    
+    "overcautious" : {
+        "label" : "You have unnecessarily requested CMV negative components three times!",
+        "criteria" : "Twice requesting CMV negative products inappropriately."
+    },
+    
+    "cytomegalovirus" : {
+        "label" : "You have omitted to request CMV negative components, putting the patient at risk of infection!",
+        "criteria" : "Incorrectly prescribing cellular blood components without screening for CMV to patient at risk of CMV infection."
+    },
+    
+    "graftversushostdisease" : {
+        "label" : "You have failed to irradiate a component for a patient at risk of developing Graft versus Host Disease!",
+        "criteria" : "Incorrectly prescribing cellular blood components without irradiation to a patient at risk of Graft versus Host Disease."
+    }
+}
+
+var components = {
+    "red cells": {
+        "p":0.4,
+        "cmv":"",
+        "irradiation":""
+    },    
+    "platelets":{
+        "p":0.3,
+        "cmv":"",
+        "irradiation":""
+    },
+    "fresh frozen plasma":{
+        "p":0.1,
+        "cmv": false,
+        "irradiation": false
+    },
+    "cryoprecipitate":{
+        "p":0.1,
+        "cmv": false,
+        "irradiation": false
+    },
+    "granulocytes":{
+        "p":0.1,
+        "cmv": true,
+        "irradiation": true
+    },
+    "cryopreserved red cells after deglycerolisation":{
+        "p":0.1,
+        "cmv": "",
+        "irradiation": false
+    },
+    "emergency red cells donated by a close family member":{
+        "p":0.1,
+        "cmv": "",
+        "irradiation": true
+    },
+    "bone marrow":{
+        "p":0.1,
+        "cmv": false,
+        "irradiation": false
+    },
+    "haemopoietic stem cells":{
+        "p":0.1,
+        "cmv": false,
+        "irradiation": false
+    }
+};
+
+var conditions = {    
+    "Hodgkin's Lymphoma":{
+        "p":0.2,
+        "cmv": "",
+        "irradiation": true
+    },
+    "neonatal alloimmune thrombocytopenia (NAIT)":{
+        "p":0.2,
+        "cmv": true,
+        "irradiation": true,
+        "baby" : true
+    },
+    "Aplastic Anaemia and who have been treated with Anti-Thymocyte Globuline (ATG)":{
+        "p":0.1,
+        "cmv": "",
+        "irradiation": true
+    },    
+    "HIV/Aids": {
+        "p":0.1,
+        "cmv": false,
+        "irradiation": false
+    },
+    "a common viral infection": {
+        "p":0.1,
+        "cmv": false,
+        "irradiation": false
+    },
+    "Leukaemia":{
+        "p":0.1,
+        "cmv": "",
+        "irradiation": false
+    },
+    "SCID (Severe combined immunodeficiency)":{
+        "p":0.05,
+        "cmv": "",
+        "irradiation": true
+    },
+    "DiGeorge syndrome":{
+        "p":0.05,
+        "cmv": "",
+        "irradiation": true
+    },
+    "Wiskott Aldrich syndrome":{
+        "p":0.05,
+        "cmv": "",
+        "irradiation": true
+    },
+    "Reticular dysgnesis":{
+        "p":0.05,
+        "cmv": "",
+        "irradiation": true
+    },
+    "Adenosine deaminase (ADA) deficiency":{
+        "p":0.05,
+        "cmv": "",
+        "irradiation": true
+    },
+    "Chronic mucosal candidiasis":{
+        "p":0.05,
+        "cmv": "",
+        "irradiation": true
+    },
+    "Adenosine deaminase (ADA) deficiency":{
+        "p":0.05,
+        "cmv": "",
+        "irradiation": true
+    },
+    "Major Histocompatibility Complex (MHC) class I- or class II-deficiency":{
+        "p":0.05,
+        "cmv": "",
+        "irradiation": true
+    }
+};
+
+
+var drugs = {    
+    "alemtuzumab (Campath)":{
+        "p":0.3,
+        "cmv": "",
+        "irradiation": true
+    },
+    
+    "anti-thymocyte globuline (ATG)":{
+        "p":0.2,
+        "cmv": "",
+        "irradiation": true
+    },
+    
+    "fludarabine": {
+        "p":0.1,
+        "cmv": "",
+        "irradiation": true
+    },    
+    "cladribine":{
+        "p":0.1,
+        "cmv": "",
+        "irradiation": true
+    },
+    "deoxycoformicin":{
+        "p":0.1,
+        "cmv": "",
+        "irradiation": true
+    },
+    "bendamustine":{
+        "p":0.1,
+        "cmv": "",
+        "irradiation": true
+    },
+    "clofarabine":{
+        "p":0.1,
+        "cmv": "",
+        "irradiation": true
+    }
+};
+
+
+var treatments = {    
+    "elective transfusion during pregnancy (not at delivery)":{
+        "p":0.1,
+        "cmv": true,
+        "irradiation": "",
+        "female": true
+    },
+    "intrauterine transfusion":{
+        "p":0.1,
+        "cmv": true,
+        "irradiation": true,
+        "baby" : true
+    },
+    "neontatal exchange transfusion":{
+        "p":0.1,
+        "cmv": true,
+        "irradiation": true,
+        "baby" : true
+    },
+    "routine infant 'top-up' and who has no history of intrauterine transfusion (IUT)":{
+        "p":0.1,
+        "cmv": "",
+        "irradiation": "",
+        "baby" : true
+    },
+    "infant cardiac surgery and who has no history of intrauterine transfusion (IUT)":{
+        "p":0.1,
+        "cmv": "",
+        "irradiation": "",
+        "baby" : true
+    },
+    "autologous bone marrow harvest":{
+        "p":0.1,
+        "cmv": "",
+        "irradiation": true
+    },
+    "autologous peripheral blood stem cell harvest":{
+        "p":0.1,
+        "cmv": "",
+        "irradiation": true
+    },
+    "autologous bone marrow transplant":{
+        "p":0.1,
+        "cmv": "",
+        "irradiation": true
+    },
+    "autologous peripheral blood stem cell transplant":{
+        "p":0.1,
+        "cmv": "",
+        "irradiation": true
+    },
+    "bone marrow donation":{
+        "p":0.1,
+        "cmv": "",
+        "irradiation": true
+    },
+    "peripheral blood stem cell donation":{
+        "p":0.1,
+        "cmv": "",
+        "irradiation": true
+    },
+    "allogeneic haemopoetic stem cell transplant":{
+        "p":0.1,
+        "cmv": "",
+        "irradiation": true
+    }
+};
+
+
+var histories = {    
+    "intrauterine transfusion (IUT) in the past six months":{
+        "p":0.1,
+        "cmv": true,
+        "irradiation": true,
+        "baby" : true
+    },
+    "stem cell transplant in the past six months":{
+        "p":0.1,
+        "cmv": "",
+        "irradiation": true
+    },
+    "bone marrow transplant in the past six months":{
+        "p":0.1,
+        "cmv": "",
+        "irradiation": true
+    }
+};
+
+
+
+// globals
+
+var currentQuestion = 0;
+
+
+
+
+function generateQuestions () {
+    
+    var questionBank = [];
+    
+    for (var i=0; i<100; i++) {
+        
+        var component = randomPick (components);
+        var condition = randomPick (conditions);
+        var drug = randomPick (drugs);
+        var treatment = randomPick (treatments);
+        var history = randomPick (histories);
+        
+        var questionPhrase = "";
+        
+        var firstFactor, secondFactor;
+        
+        var questionType = Math.floor(Math.random()*4) +1;
+        
+        switch (questionType) {
+            case 1: // condition/diagnosis
+                questionPhrase = "How should " + component + " be transfused  to a patient who has " + condition + "?";
+                questionPhrase = "a patient requires a transfusion with " + component + " and has " + condition + ".";
+                firstFactor = condition;
+                secondFactor = conditions[condition];
+                break;
+            case 2: // medication
+                questionPhrase = "How should " + component + " be supplied for a patient who is being treated with " + drug + "?";
+                questionPhrase = "a patient is receiving treated with " + drug + " and requires a transfusion with " + component + ".";
+                firstFactor = drug;
+                secondFactor = drugs[drug];
+                break;
+            case 3: // treatment
+                questionPhrase = "How should " + component + " be administered to a patient who is undergoing " + treatment + "?";
+                firstFactor = treatment;
+                secondFactor = treatments[treatment];
+                break;
+            case 4: // history
+                questionPhrase = "How should " + component + " be administered to a patient who has undergone " + history + "?"; 
+                firstFactor = history;
+                secondFactor = histories[history];
+                break;
+        }
+        
+        //$("<p> " + (i+1) + ". " + questionPhrase +"</p>").appendTo($("#questions"));
+        
+        
+        var cmv = (
+            (
+                components[component].cmv
+                ||
+                secondFactor.cmv
+            )
+            && !(components[component].cmv === false)
+        );
+        
+    
+        // Logic for irradiation:
+        
+        var irr = (
+            (
+                components[component].irradiation
+                ||
+                secondFactor.irradiation
+            )
+            && !(components[component].irradiation === false)
+        );
+        
+        var answer = "notrequired";
+    
+        if (irr && cmv) answer = "irrcmv";
+        else if (irr) answer = "irr";
+        else if (cmv) answer = "cmv";
+        
+        questionBank[i] = {};
+        questionBank[i].question = questionPhrase;
+        questionBank[i].answer = answer;
+        questionBank[i].component = component;
+        questionBank[i].factor = firstFactor;
+        questionBank[i].baby = secondFactor.baby || false;
+        questionBank[i].female = secondFactor.female || false;
+        
+    }
+    
+    return (questionBank);
+}
+
+function randomPick (obj) {
+    var totalprop = 0;
+    for (item in obj) {
+        totalprop += obj[item].p;
+    }
+    var chance = Math.random()*totalprop;
+    var min = 0;
+    var max = 0;
+    for (item in obj) {
+        max += obj[item].p;
+        if (chance > min && chance < max){
+            //obj[item].p -= 0.05;
+            return(item);
+        }
+        min += obj[item].p;
+    }
+}
+
+
+function generateBadgeView () {
+    for (item in badges){
+        var status = (badges[item].earned) ? "earned" : "";
+        $('<img src="http://optimalblooduse.eu/app/badges/' + item + '.png" class="badge ' + status +'" id="'+item+'"/>').appendTo($("#container"));
+        $("#"+item).bind("click", function(){
+            viewBadge(this.id)
+        });
+    }
+}
+
+function viewBadge (badge) {
+    //$("#badgetdetails").popup('open');
+    $("#badgetitle").text(badges[badge].badge);
+    $("#badgedescription").text(badges[badge].label);
+    $("#badgecriteria").text(badges[badge].criteria);
+    $("#badgeimage").attr("src", "http://optimalblooduse.eu/app/badges/" + badge + ".png");
+    
+    $.mobile.changePage('#badgedetails');
+}
+
+function toTitleCase(str) {
+  return str.replace(/\w\S*/g, function(txt){
+    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+  });
+}
+
+function makeLevel (level) {
+    $("#patientContainer").html('Loading new patient...');
+    $("#questionContainer").html('Loading new question...');
+    currentQuestion = rand(questions);
+    var param = '';
+    if (questions[currentQuestion].female) param = "&gender=female";
+    $.ajax({
+      url: 'https://randomuser.me/api/?nat=gb' + param,
+      dataType: 'json',
+      success: function(data){
+        var first = toTitleCase(data.results[0].name.first);
+        var last = toTitleCase(data.results[0].name.last);
+        var title = toTitleCase(data.results[0].name.title.replace('monsieur', 'mr').replace('mademoiselle', 'ms'));
+        var gender = data.results[0].gender;
+        $("#patientname").html(first + ' ' + last);
+        $("#patientgender").html(gender);
+        $("#bloodcomponent").html('1 x ' + questions[currentQuestion].component);
+        $("#patientchi").html(Math.round(Math.random() * 1000000));
+        
+        var age = questions[currentQuestion].baby ? 'baby' : 'adult';
+        
+        var month = Math.round(Math.random() * 12)
+        var year = new Date().getFullYear() - (Math.round(Math.random() * 44) + 18);
+        if (age == 'baby') year = new Date().getFullYear() - 1;
+        var day = Math.round(Math.random() * 30)
+        $("#patientdob").html(day + '-' + month + '-' + year);
+        
+        var genderLabel = gender === 'female' ? 'woman' : 'man';
+        if (age == 'baby') {
+          genderLabel = (gender === 'female' ? 'girl' : 'boy'); 
+        }
+        var name = "" + first + " " + last + " (" + age + " " + genderLabel + ")";
+        var patientReference = age == 'baby' ? first : title + ". " + last;
+        var theQuestion = questions[currentQuestion].question.replace("a patient", patientReference);
+        var imgurl = data.results[0].picture.large;
+        if (age === 'baby') imgurl = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Human-Male-White-Newborn-Baby-Crying.jpg/320px-Human-Male-White-Newborn-Baby-Crying.jpg";
+        var html = '<div><img class="portrait" src="' + imgurl + '"><h2>' + name + '</h2></div>';
+        $("#patientContainer").html( html );
+        $("#questionContainer").html( '<p> ' + theQuestion + '</p>');
+      }
+    });
+    
+}
+
+
+function answer (ans) {
+
+    if (questions[currentQuestion].answer == ans) {
+        var randomBadge = rand (badges);
+        badges[randomBadge].earned = true;
+        viewBadge (randomBadge);
+    }
+    else {
+        makeLevel("level1");
+    }
+}
+
+function rand (obj) {
+    var i = 0;
+    for (item in obj) i++;
+    var randomNumber = Math.floor(Math.random()*i);
+    i = 0;
+    
+    for (item in obj) {
+        if (i == randomNumber) return (item);
+        i++;
+    }
+}
+
+
+$(".level").bind("click", function () {
+    makeLevel (this.id);
+    $.mobile.changePage('#levels');
+});
+
+$(".gameoption").bind("click", function () {
+    answer (this.id);
+});
+
+
+$( "#levels" ).bind ( "pageshow", function( event ) {    
+    makeLevel ("level1");
+});
+
+generateBadgeView ();
+var questions = generateQuestions();
+//console.log (questions[1]);
+
+
+
+});//]]>  
+
+</script>
+
+
+</head>
+<body>
+  <div data-role="page" id="game">
+    <div data-role="header" data-theme="a">
+        <h1>Game</h1>
+        <a data-role="button" href="#badges">Badges</a>
+    </div>
+    <div data-role="contents">
+        <h1>Select level</h1>
+        <div class="level threestars" id="level1">1</div>
+        <div class="level  onestar" id="level2">2</div>
+        <div class="level current" id="level3">3</div>
+        <div class="level" id="level4">4</div>
+        <div class="level" id="level5">5</div>
+        <div class="level" id="level6">6</div>
+        
+    </div>
+</div>
+
+<div data-role="page" id="badges">
+    <div data-role="header" data-theme="a">
+        <h1>Badges</h1>
+        <a data-role="button" href="#game">Game</a>
+    </div>
+    <div data-role="contents">
+        <h1 style="text-align: center">Your Achievements</h1>
+        <div id="container" class="badgebackground"></div>
+    </div>
+</div>
+
+<div data-role="page" id="levels">
+    <div data-role="header" data-theme="a">
+        <h1 id="levelnumber">Level</h1>
+        <a data-role="button" href="#game">Back</a>
+    </div>
+    <div data-role="contents" style="margin: 1em">
+      <div style="margin-bottom: 1em; background: white; box-shadow: 0 0 10px 0 #ccc; padding: 1em">
+        <div id="patientContainer">Loading patient</div>
+        <div id="questionContainer">Loading question</div>
+        <div class="badgebackground" style="display:none">
+            <a data-role="button" href="#" id="irrcmv" class="gameoption">Irradiated and CMV negative</a>
+            <a data-role="button" href="#" id="irr" class="gameoption">Irradiated</a>
+            <a data-role="button" href="#" id="cmv" class="gameoption">CMV negative</a>
+            <a data-role="button" href="#" id="notrequired" class="gameoption">Special component not required</a>
+        </div>
+      </div>
+        <h3 style="text-align: center; margin: 1em">Q: Please complete and sign the blood request form.</h3>
+    
+        <div id="request-form" style="text-align:center">
+          <h1 style="color: #a00; text-decoration:underline">BLOOD REQUEST FORM</h1>
+          <div class="request-section highlighted">
+            <div class="split" style="margin-right: 1em; padding-right: 1em; border-right:1px solid #aaa; vertical-align:top; height: 20em;">
+              <h2> Special requirements</h2>
+              <label><input type="checkbox" name="checkbox" id="irrbox">Irradiated</label>
+              <label><input type="checkbox" name="checkbox" id="cmvbox">CMV-negative</label>
+              <label><input type="checkbox" name="checkbox" id="hepbox">HEP E</label>
+              <p>
+              Tick any relevant boxes and sign the form when you're ready.
+              </p>
+            </div>
+            <div class="split">
+              <h2> Request authorised by</h2>
+              <p id="signButton" class="handwritten">Sign and date now</p>
+              <hr style="border: none; border-bottom: dotted 5px #555">
+              <p class="">Name (PLEASE WRITE CLEARLY):</p>
+            </div>
+          </div>
+          <div class="request-section split blurred">
+            <h2>Patient ID</h2>
+            <p>Patient name: <span class="handwritten" id="patientname">patient name</span></p>
+            <p>Gender: <span class="handwritten" id="patientgender">patient gender</span></p>
+            <p>DOB: <span class="handwritten" id="patientdob">21-12-2010</span></p>
+            <p>NHS Number: <span class="handwritten" id="patientchi">81822192</span></p>
+          </div>
+          <div class="request-section split blurred">
+            <h2> Units</h2>
+            <p>Blood units: <span class="handwritten" id="bloodcomponent">1 x platelets</span></p>
+            <p>Blood group: <span class="handwritten" id="bloodgroup">AB -</span></p>
+            <p>Indication: <span style="padding-bottom: 2.5em" class="handwritten" id="bloodindication">Doctor's orders</span></p>
+          </div>
+          <h3 style="color: #aaa;">A hospital trust near you</h3>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+</div>
+
+
+<div data-role="page" id="badgedetails" data-theme="a">
+    <div data-role="header" data-theme="a">
+        <h1>Badge details</h1>
+        <a data-role="button" href="#" data-rel="back">Back</a>
+    </div>
+    <div data-role="contents">
+        <div class="badgebackground">
+            <img src="" class="largebadge" id="badgeimage"/>
+            <p id="badgedescription"></p>
+            <h3>Criteria</h3>
+            <p id="badgecriteria"></p>
+            <h3>Tweet</h3>
+            <p>Share your achievements with your colleagues!</p>
+            <a href="https://twitter.com/intent/tweet?text=I have just unlocked a new award in the special blood components game!&url=http://optimalblooduse.eu/app/" data-theme="b" data-role="button">Tweet now</a>
+            <br/><br/>
+            <a href="#" data-role="button" data-rel="back">Return to badges</a>
+        </div>
+    </div>
+</div>
+  
+</body>
+
+
+</html>
+
