@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <title> - jsFiddle demo</title>
+  <title>Clinical vignette</title>
   <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
   <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
   <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
@@ -95,13 +95,14 @@
   padding-top: 8px;
   padding-bottom: 0;
   border: 1px solid #ccc;
-  color: blue;
+  color: #000;;
   font-weight: 400;
   font-size: 2em;
   width: 100%;
   display: inline-block;
   border-radius: 4px;
-  background: white;
+  background: #fcc;
+  font-weight: 400 !important;
 }
 
 #request-form {
@@ -121,6 +122,8 @@
   margin-bottom: 1em;
   vertical-align: top;
   border: 1px solid #aaa;
+  background: #fffafa;
+  height: 35em;
 }
 
 .split {
@@ -129,8 +132,10 @@
 }
 
 .highlighted {
-  background: #FFFAFA;
-  border: 1px solid #ddd;
+  background: #FFA;
+  color: blue;
+  text-decoration: none;
+  margin:0.5em 0 0.5em 0;
 }
 
 .blurred {
@@ -143,7 +148,7 @@
 }
 
 .portrait {
-  margin: 1em 1em 3em 1em;
+  margin: 1em 0.5em 3em 0em;
   max-height: 5em;
   float: left; 
   border-radius: 50px;
@@ -244,61 +249,66 @@
 
 <div data-role="page" id="levels">
     <div data-role="header" data-theme="a">
-        <h1 id="levelnumber">Level</h1>
+        <h1 id="levelnumber">Patient vignettes</h1>
         <a data-role="button" href="#game">Back</a>
     </div>
     <div data-role="contents" style="margin: 1em">
+    
+      <h3 style="text-align: center;">Please review and amend the request as necessary.</h3>
+    
       <div style="margin-bottom: 1em; background: white; box-shadow: 0 0 10px 0 #ccc; padding: 1em; max-width: 50em; margin: auto">
         <div id="patientPortrait">Loading portrait</div>
         <div id="patientInfo">Loading info</div>
-        <div class="badgebackground" style="display:none">
-            <a data-role="button" href="#" id="irrcmv" class="gameoption">Irradiated and CMV negative</a>
-            <a data-role="button" href="#" id="irr" class="gameoption">Irradiated</a>
-            <a data-role="button" href="#" id="cmv" class="gameoption">CMV negative</a>
-            <a data-role="button" href="#" id="notrequired" class="gameoption">Special component not required</a>
-        </div>
       </div>
-        <h3 style="text-align: center; margin: 1em">Please review and amend the request as necessary.</h3>
-    
         <div id="request-form" style="text-align:center">
           <h1 style="color: #e99; text-shadow: 1px 1px 5px #fff;">BLOOD REQUEST FORM</h1>
           <div class="request-section split">
-            <h2>Patient ID</h2>
-            <p>Patient name: <span class="handwritten" id="patientname">patient name</span></p>
-            <p>Gender: <span class="handwritten" id="patientgender">patient gender</span></p>
-            <p>DOB: <span class="handwritten" id="patientdob">21-12-2010</span></p>
-            <p>NHS Number: <span class="handwritten" id="patientchi">81822192</span></p>
-          </div>
-          <div class="request-section split">
             <h2> Components</h2>
             <p>Units: <span class="handwritten" id="bloodcomponent">.</span></p>
-            <form>
+            
+            <h2> Special requirements</h2>
+            <p>How should the unit(s) be specified?</p>
+            
+            <ul data-role="listview" data-inset="true">
+              <li data-icon="false" ><a href="#" id="irrcmv">Irradiated and CMV-negative</a></li>
+              <li data-icon="false" ><a href="#" id="irr">Irradiated only</a></li>
+              <li data-icon="false" ><a href="#" id="cmv">CMV-negative only</a></li>
+              <li data-icon="false" ><a href="#" id="notrequired">No special requirement</a></li>
+            </ul>
+            
+            <form style="display:none">
               <fieldset data-role="controlgroup" data-type="horizontal">
-                  <legend>Request as irradiated:</legend>
+                  <legend>Request irradiated:</legend>
                   <input type="radio" name="irradiatedradio" id="radio1" value="yes">
                   <label for="radio1">Yes</label>
                   <input type="radio" name="irradiatedradio" id="radio2" value="no">
                   <label for="radio2">No</label>
               </fieldset>
-              <p>
                 <fieldset data-role="controlgroup" data-type="horizontal">
-                  <legend>Request as CMV-negative:</legend>
+                  <legend>Request CMV-negative:</legend>
                   <input type="radio" name="cmvradio" id="radio3" value="yes">
                   <label for="radio3">Yes</label>
                   <input type="radio" name="cmvradio" id="radio4" value="no">
                   <label for="radio4">No</label>
-              </fieldset></p><p>
+              </fieldset>
               <fieldset data-role="controlgroup" data-type="horizontal">
-                  
-                  <legend>Request as Hep-E negative:</legend>
+                  <legend>Request Hep-E negative:</legend>
                   <input type="radio" name="hepradio" id="radio5" value="yes">
                   <label for="radio5">Yes</label>
                   <input type="radio" name="hepradio" id="radio6" value="no">
                   <label for="radio6">No</label>
-              </fieldset></p>
+              </fieldset>
           </form>
           </div>
-            <p id="signButton" class="handwritten">Submit request</p>
+          <div class="request-section split">
+            <h2>Patient ID</h2>
+            <p>Patient surname: <span class="handwritten" id="patientlast">Surname</span></p>
+            <p>Patient first name: <span class="handwritten" id="patientfirst">Firstname</span></p>
+            <p>Gender: <span class="handwritten" id="patientgender">patient gender</span></p>
+            <p>DOB: <span class="handwritten" id="patientdob">21-12-2010</span></p>
+            <p>Patient identifier: <span class="handwritten" id="patientchi">81822192</span></p>
+          </div>
+          <p style="display:none" id="signButton" class="handwritten">Validate form</p>
           <h3 style="color: #aaa;">A hospital trust near you</h3>
         </div>
     </div>
@@ -576,7 +586,7 @@ var drugs = {
 
 
 var treatments = {    
-    "an elective transfusion in her third month of pregnancy":{
+    "an elective procedure in her third month of pregnancy":{
         "p":0.1,
         "cmv": true,
         "irradiation": "",
@@ -699,13 +709,13 @@ function generateQuestions () {
                 break;
             case 2: // medication
                 questionPhrase = "How should " + component + " be supplied for a patient who is being treated with " + drug + "?";
-                questionPhrase = "<patient> requires a transfusion with <strong>" + component + "</strong>. <pronoun> is receiving treatment with " + drug + "."
+                questionPhrase = "<patient> requires a transfusion with <strong>" + component + "</strong>. <pronoun> is also receiving treatment with " + drug + "."
                 firstFactor = drug;
                 secondFactor = drugs[drug];
                 break;
             case 3: // treatment
                 questionPhrase = "How should " + component + " be administered to a patient who is undergoing " + treatment + "?";
-                questionPhrase = "<patient> requires a transfusion with <strong>" + component + "</strong>. <pronoun> is undergoing " + treatment + "."
+                questionPhrase = "<patient> requires a transfusion with <strong>" + component + "</strong>. <pronoun> is also undergoing " + treatment + "."
                 firstFactor = treatment;
                 secondFactor = treatments[treatment];
                 break;
@@ -819,7 +829,8 @@ function makeLevel (level) {
         var last = toTitleCase(data.results[0].name.last);
         var title = toTitleCase(data.results[0].name.title.replace('monsieur', 'mr').replace('mademoiselle', 'ms'));
         var gender = data.results[0].gender;
-        $("#patientname").html(first + ' ' + last);
+        $("#patientlast").html(last);
+        $("#patientfirst").html(first);
         $("#patientgender").html(gender);
         $("#bloodcomponent").html('1 x unit of ' + questions[currentQuestion].component);
         $("#patientchi").html(Math.round(Math.random() * 10000000000));
@@ -845,7 +856,7 @@ function makeLevel (level) {
         var imgurl = data.results[0].picture.large;
         if (age === 'baby') imgurl = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Human-Male-White-Newborn-Baby-Crying.jpg/320px-Human-Male-White-Newborn-Baby-Crying.jpg";
 
-        $("#patientInfo").html( '<h2>' + name + '</h2><p> ' + theQuestion + '</p>');
+        $("#patientInfo").html( '<h3>' + name + '</h3><p> ' + theQuestion + '</p>');
         $("#patientPortrait").html( '<img class="portrait" src="' + imgurl + '">');
       }
     });
