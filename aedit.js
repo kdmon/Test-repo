@@ -3,7 +3,7 @@
 var toolbars = {};
 var buttons = {};
 var fullscreen = false;
-var github, user, once = 0;
+var octo, user, once = 0;
 var tabList = {};
 var draggedTabId = '';
 var resizeTimer;
@@ -29,6 +29,7 @@ var cursorKey = 'Guest';
 
 // Helpers
 
+// Octokat.js recursively fetch all from github API
 
 function timeSince(datestamp) {
   //datestamp = datestamp.replace(/[.Z]\w+/, "Z");
@@ -161,18 +162,15 @@ function authenticate () {
   once ++;
   if (once > 2) {$("#sign-in-notice").show(); return;}
 
-  github = new Github({
-    token: localStorage.token,
-    auth: "oauth"
+  octo = new Octokat({
+    token: localStorage.token
   });
   
-  user = github.getUser();
-
-  user.show('', function(err, user) {
+  user = octo.user.fetch().then(function(user) {
     if (user === undefined) checkUser();
     else {
       config.user = user.login;
-      config.avatar = user.avatar_url;
+      config.avatar = user.avatarUrl;
       init();
     }
   });
@@ -460,7 +458,7 @@ function initButtons () {
     topmenu: ['logo', 'topspacer','signin'],
     editor: ['usermenu','filemenu', 'editmenu', 'tools'],
     preview: ['pause', 'previewurl', 'refreshPreview', 'share'],
-    filebrowser: ['newfile','sidebarsearch','refreshFiles'],
+    filebrowser: ['newfile','uploadfile','refreshFiles','sidebarsearch'],
     media: ['url', 'refresh', 'share'],
     empty: [],
     help: []
@@ -665,6 +663,20 @@ function initButtons () {
       icon: 'fa fa-file-o',
       hint: 'New file'
     },
+    uploadfile: {
+      id: 'uploadfile',
+      type: 'button',
+      caption: '',
+      icon: 'fa fa-cloud-upload',
+      hint: 'Upload file'
+    },
+    refreshFiles: {
+      id: 'refreshFiles',
+      type: 'button',
+      caption: '',
+      icon: 'fa fa-refresh',
+      hint: 'Reload files'
+    },
     sidebarsearch: {
       type: 'html',
       id: 'sidebarsearch',
@@ -701,13 +713,6 @@ function initButtons () {
       caption: '',
       icon: 'fa fa-sort',
       hint: 'Split view'
-    },
-    refreshFiles: {
-      id: 'refreshFiles',
-      type: 'button',
-      caption: '',
-      icon: 'fa fa-refresh',
-      hint: 'Reload files'
     },
     refreshPreview: {
       id: 'refreshPreview',
@@ -808,19 +813,19 @@ function toolbarClick(obj, event) {
   switch (event.target) {
     case 'signin':
       window.location.href="https://github.com/login/oauth/authorize?client_id=3420cd58602c446289f9&scope=user,repo";
-      break;
+    break;
     case 'editmenu:Search':
       editors[panel.area].execCommand("find");
-      break;
+    break;
     case 'editmenu:Replace':
       editors[panel.area].execCommand("replace");
-      break;
+    break;
     case 'editmenu:Go to line':
       editors[panel.area].execCommand("gotoline");
-      break;
+    break;
     case 'tools:Open preview':
       openPreview(tab);
-      break;
+    break;
     case 'filemenu:Save file':
       var content = editors[tabList[tab].panel].getSession().getValue();
       var path =  tabList[tab].path;
@@ -828,42 +833,237 @@ function toolbarClick(obj, event) {
       var repoName = tabList[tab].id.split('/')[1];
       var branch = tabList[tab].id.split('/')[2];
       var message = prompt("Please describe your changes to the file", "Update file.");
-      var repo = github.getRepo(repoUser, repoName);
+      var repo = octo.getRepo(repoUser, repoName);
       repo.write(branch, path, content, message, function(err) {
         if (err) {console.log(err); alert ("Failed to save changes! " + err);console.log(err)}
         else alert ("Changes saved successfully!");
       });
-      break;
+    break;
     case 'share':
       window.open(tabList[tab].fullUrl, "_blank");
-      break;
+    break;
     case 'account:Sign out':
       var token = localStorage.token;
       localStorage.removeItem('token');
       window.location = 'waelogout?token=' + token;
-      break;
+    break;
     case 'refreshFiles':
       console.log ('refreshing', tabList[tab]);
-      break;
+    break;
     case 'refreshPreview':
       $("#" + tabList[tab].id).attr("src", tabList[tab].fullUrl);
-      break;
+    break;
     case 'newfile':
       var reponame = tabList[tab].id.split('_')[1];
       var branch = tabList[tab].id.split('/')[2];
       var filename = prompt ("Please enter new file name and path");
-      var repo = github.getRepo(config.user, reponame);
+      if (filename === null) return;
+      var repo = octo.getRepo(config.user, reponame);
       repo.write(branch, filename, '', 'New file: ' + filename, function(err) {
         if (err) {console.log(err); alert ("Failed to create file! " + err);}
         else {
           alert ("File created successfully!");
         }
       });
-      break;
+    break;
+    case 'uploadfile':
+      var username = tabList[tab].id.split('_')[1];
+      var reponame = tabList[tab].id.split('_')[2];
+      var branch = tabList[tab].id.split('_')[3];
+      //var filename = prompt ("Please enter new file name and path");
+      var html = '<h3>Select a file for upload</h3><p>' +
+      '<input id="fileBox" type="file" onchange="console.log(this)"/></p>' + 
+      '<p>File path where you want to store the file (root path is used if empty)</p>' +
+      '<input id="uploadpath" type="text">' + '<p>Commit message (optional)</p>' +
+      '<textarea id="uploadmsg" cols=30 rows=3>Uploaded file.</textarea><br>' +
+      '<button onclick="upload(' + "'" + username + "', '" + reponame + "', '" + branch + "'" + ')">Upload</button>';
+      w2popup.open ({
+        title: 'Upload file',
+        body: html
+      });
+    break;
     default:
     //obj.owner.content('main', 'event' + event.target);
     break;
   }
+}
+
+
+// Helper for writeMany promise handling
+
+if (jQuery.when.all===undefined) {
+    jQuery.when.all = function(deferreds) {
+        var deferred = new jQuery.Deferred();
+        $.when.apply(jQuery, deferreds).then(
+            function() {
+                deferred.resolve(Array.prototype.slice.call(arguments));
+            },
+            function() {
+                deferred.fail(Array.prototype.slice.call(arguments));
+            });
+
+        return deferred;
+    }
+}
+
+function writeMany(username, reponame, branch, files, message, parentCommitShas) {
+
+  if (files == null) {
+    files = [
+      {path: 'test/file.txt', contents: 'A test file', binary: false},
+      {path: 'test/file2.txt', contents: 'A test file 2', binary: false}];
+  }
+  if (message == null) {
+    message = "Changed Multiple";
+  }
+  if (parentCommitShas == null) {
+    parentCommitShas = null;
+  }
+  if (branch == null) {
+    branch = 'master';
+  }
+  var repo = octo.repos(username, reponame);
+  
+  // 1. Get the original git tree, storing the promise.
+  repo.git.refs('heads/' + branch).fetch().then(function(oldTree) {
+    
+    // 2. Asynchronously create blobs for each file and store the promises
+    // which returns SHAs for blobs that are used to construct the new git tree.
+
+    oldTree = oldTree.object.sha;
+    
+    var blobs = [];
+  
+    for (var i = 0; i < files.length; i++) {
+      var file = files[i];
+      blobs[i] = repo.git.blobs.create({
+        encoding: file.binary ? 'base64' : 'utf-8',
+        content: file.contents
+      }).then(function (blob){
+        return ({
+          path: file.path,
+          mode: '100644',
+          type: 'blob',
+          sha: blob.sha
+        });
+      });
+    }
+      
+    // 3. Generate a new tree which includes the sha's of the created blobs
+    $.when.all(blobs).done(function (blobTree) {
+      repo.git.trees.create({tree: blobTree, base_tree: oldTree})
+      .then(function(newTree){
+        console.log("newtree", newTree);
+        
+        // 4. Create a new commit using the resulting tree
+        repo.git.commits.create({
+          message: message,
+          tree: newTree.sha, 
+          parents: [oldTree]
+        }).then(function(commitObj){
+          // 5. Update head to latest commit
+          repo.git.refs('heads/' + branch).update({
+            ref:"heads/" + branch,
+            sha: commitObj.sha
+          });
+        });
+      });
+    });
+  });
+}
+
+
+function upload(username, reponame, branch) {
+  
+  var file = document.getElementById('fileBox').files[0]; //Files[0] = 1st file
+  var reader = new FileReader();
+  reader.onload = function(evt) {
+    var fileData = evt.target.result;
+    var bytes = new Uint8Array(fileData);
+    var binaryText = '';
+
+    for (var index = 0; index < bytes.byteLength; index++) {
+      binaryText += String.fromCharCode( bytes[index] );
+    }
+
+    var content = btoa(binaryText);
+    var message = document.getElementById("uploadmsg").value;
+    var path = document.getElementById("uploadpath").value;
+    var filename = path + file.name;
+    console.log(username, reponame, branch, filename, content, message);
+    
+    // Uploading a file involves the following steps:
+    // 1. Create blob
+    // 2. Fetch tree
+    // 3. Modify tree
+    // 4. Update tree
+    // 5. Commit tree
+    
+    octo.repos(username,reponame).contents(filename).add({
+      message: 'Uploaded file to ' + filename,
+      content: content,
+    }).then(function(info) {
+      console.log('File created. New sha is ', info.commit.sha);
+    });
+    
+    //return;
+    /*
+    var repo = octo.getRepo(config.user, reponame);
+    var octo = new Octokat({token: 'API_TOKEN'});
+    
+    var repo = octo.repos('philschatz', 'octokat.js');
+    var config = {
+      message: 'Updating file',
+      content: base64encode('New file contents'),
+      //sha: '123456789abcdef', // the blob SHA
+      // branch: 'gh-pages'
+    };
+    
+    repo.contents(filename).add({
+      message: 'Uploaded file to ' + filename,
+      content: content,
+    }).then(function(info) {
+      console.log('File created. new sha is ', info.commit.sha);
+    });
+    
+    repo.write(branch, filename, bytes, message || 'Uploaded ' + filename, function(err) {
+      if (err) {console.log(err); alert ("Failed to upload file! " + err);}
+      else {
+        alert ("File uploaded successfully!");
+      }
+    });
+  */
+    
+  };
+  
+  reader.readAsArrayBuffer(file);
+  
+  
+/*
+  reader.onload = function(event) {
+    var bytes = event.target.result;
+    bytes = new Int8Array(content);
+    var content = '';
+
+    for (var index = 0; index < bytes.byteLength; index++) {
+      content += String.fromCharCode( bytes[index] );
+    }
+    //content = btoa(content.replace(/^(.+,)/, ''));
+    var message = document.getElementById("uploadmsg").value;
+    var path = document.getElementById("uploadpath").value;
+    var filename = path + file.name;
+    var repo = octo.getRepo(config.user, reponame);
+    console.log(reponame, branch, filename, content, message);
+    repo.write(branch, filename, content, message || 'Uploaded ' + filename, function(err) {
+      if (err) {console.log(err); alert ("Failed to upload file! " + err);}
+      else {
+        alert ("File uploaded successfully!");
+      }
+    });
+  }
+  
+  reader.readAsArrayBuffer(file);
+  */
 }
 
 function randomString(length) {
@@ -1413,7 +1613,7 @@ function showProjectsInOverlay () {
     ]
   });
   
-  github.getUser().repos(function(err, repos) {
+  octo.getUser().repos(function(err, repos) {
     
     if (err) w2alert('No repositories are accessible');
     
@@ -1448,7 +1648,7 @@ function showProjectsInOverlay () {
         else if (item.owner.login !== config.user)
           shared.nodes.push({
             id: item.full_name + '_' + Math.round(Math.random*1000000),
-            text: '<img class="custom-icon" src="' + item.owner.avatar_url +'"/> ' + item.full_name
+            text: '<img class="custom-icon" src="' + item.owner.avatarUrl +'"/> ' + item.fullName
           });
         else
           open.nodes.push({
@@ -1532,9 +1732,9 @@ function showProjectsInPanel () {
     ]
   });
   
-  github.getUser().repos(function(err, repos) {
-    
-    if (err) w2alert('No repositories are accessible');
+  octo.user.repos.fetchAll().then(function(repos) {
+    console.log(repos);
+    if (repos.length === 0) w2alert('No repositories are accessible');
     
     else {
       
@@ -1544,34 +1744,37 @@ function showProjectsInPanel () {
       var forked =  {id: 'forked', text: 'Forked  projects (', group: true, expanded: false, nodes: []};
       
       var obj = repos.sort(function(a,b){
-        if(a.full_name.toLowerCase() > b.full_name.toLowerCase()) return 1;
-        if (a.full_name.toLowerCase() < b.full_name.toLowerCase()) return -1;
+        if(a.fullName.toLowerCase() > b.fullName.toLowerCase()) return 1;
+        if (a.fullName.toLowerCase() < b.fullName.toLowerCase()) return -1;
         else return 0;
       });
         
       for (var i in obj) {
         var item = obj[i];
         
+        // stop when encountering api functions appended to end of result set
+        if (typeof item === "function") break;
+        
         if (item.fork)
           forked.nodes.push({
-            id: item.full_name + '_' + Math.round(Math.random*1000000),
+            id: item.fullName + '_' + Math.round(Math.random*1000000),
             text: item.name,
             icon: "fa fa-code-fork"
           });
         else if (item.private)
           secret.nodes.push({
-            id: item.full_name + '_' + Math.round(Math.random*1000000),
+            id: item.fullName + '_' + Math.round(Math.random*1000000),
             text: item.name,
             icon:  "fa fa-eye-slash"
           });
         else if (item.owner.login !== config.user)
           shared.nodes.push({
-            id: item.full_name + '_' + Math.round(Math.random*1000000),
-            text: '<img class="custom-icon" src="' + item.owner.avatar_url +'"/> ' + item.full_name
+            id: item.fullName + '_' + Math.round(Math.random*1000000),
+            text: '<img class="custom-icon" src="' + item.owner.avatarUrl +'"/> ' + item.fullName
           });
         else
           open.nodes.push({
-            id: item.full_name + '_' + Math.round(Math.random*1000000),
+            id: item.fullName + '_' + Math.round(Math.random*1000000),
             text: item.name,
             icon: "fa fa-github"
           });
@@ -1744,7 +1947,7 @@ function flipRepo (elem) {
 
 function showProjectsInTab (panelArea) {
   
-  github.getUser().repos(function(err, repos) {
+  octo.getUser().repos(function(err, repos) {
     
     if (err) w2alert('No repositories are accessible');
     
@@ -1782,7 +1985,7 @@ function showProjectsInTab (panelArea) {
         else if (item.owner.login !== config.user)
           shared.nodes.push({
             id: item.full_name + '_' + rnd,
-            text: '<img class="custom-icon" src="' + item.owner.avatar_url +'"/> ' + item.full_name
+            text: '<img class="custom-icon" src="' + item.owner.avatarUrl +'"/> ' + item.fullName
           });
         else
           open.nodes.push({
@@ -1875,9 +2078,7 @@ function showProject (user, repository) {
   w2ui.panelLayout.content('left', '<p>Fetching repository details...</p>');
   w2ui.panelLayout.show('left');
 
-  var repo = github.getRepo(user, repository);
-  
-  repo.show(function(err, data) {
+  octo.repos(user, repository).fetch().then(function(data) {
     var description = data.description;
     description = (description !== null && description !== '' ?
       '<p>' + description + '</p>': '<p>No description available.</p>');
@@ -1891,7 +2092,7 @@ function showProject (user, repository) {
     if (fork) repoIcon = '<i class="fa fa-code-fork"></i> ';
     if (isPrivate) repoIcon = '<i class="fa fa-eye-slash"></i> ';
     if (owner !== config.user) repoIcon = '<img class="avatar-large" src="' +
-      data.owner.avatar_url +'"/> ';
+      data.owner.avatarUrl +'"/> ';
     var history = '<p>Created ' + created + ' by ' + owner + '.</p>';
     if (parentRepo) history = '<p>Forked from ' + parentRepo.full_name + ' ' +
     created + ', by ' + owner + '.</p>';
@@ -1910,7 +2111,7 @@ function showProject (user, repository) {
       
     var cardBack = '<div class="card-back"><i class="fa fa-2x fa-share repo-config" ' + 
       'onclick="$(this).parent().parent().toggleClass(' + "'flipped'" + ')"></i>' + 
-      '<div class="repo-blurb"><h1>Options</h1><p>Add collaborator</p></div>'
+      '<div class="repo-blurb"><h1>Options</h1><p>Add collaborator</p></div>' +
       '</div>';
     
     var projectHTML = '<div class="card-container"><div class="card">' + 
@@ -1918,7 +2119,12 @@ function showProject (user, repository) {
       
     w2ui.panelLayout.content('left', projectHTML);
     
-    repo.listBranches(function(err, branches) {
+    octo.repos(user, repository).branches.fetch().then(function(results) {
+      console.log(results);
+      var branches = [];
+      for (var i = 0; i< results.items.length; i++) {
+        branches.push (results.items[i].name);
+      }
       $("#branch-list").html('<select class="branch-selector"><option>' + 
         branches.join('</option><option>') +
         '</option><option>New branch...</option></select>');
@@ -1974,7 +2180,7 @@ function fileTreeMenu (node) {
 
           // Checks passed, so now try to commit the name change.
           
-          var repo = github.getRepo(node.data.user, node.data.repo);
+          var repo = octo.getRepo(node.data.user, node.data.repo);
           var branch = node.data.branch;
           var oldPath = node.data.path;
           var parts = node.data.path.split('/');
@@ -2019,7 +2225,7 @@ function fileTreeMenu (node) {
         node.data.name + "</em>?", "Warning",
         function (result) {
           if (result === "Yes") {
-            var repo = github.getRepo(node.data.user, node.data.repo);
+            var repo = octo.getRepo(node.data.user, node.data.repo);
             var branch = node.data.branch;
             var path = node.data.path;
             repo.remove(branch, path, function(err) {
@@ -2084,18 +2290,19 @@ function fileTreeMenu (node) {
 // Create a sidebar for browsing repository files
 function openProject (user, repository, branch, panelArea) {
   var safeRepo = repository.replace(/[^a-z0-9_-]|\s+/gmi, "");
-  var id = "filebrowser_" + safeRepo + "_" + Math.round(Math.random() * 10000000);
-  var repo = github.getRepo(user, repository);
   branch = (branch !== undefined) ? branch : 'master';
   if (branch == 'getbranchfromselection') branch = $('#branch-list select').val();
-  
+  var id = "filebrowser_" + user + "_" + safeRepo + "_" + branch + "_" + Math.round(Math.random() * 10000000);
+
   w2ui.layout.show('left');
   
   // 1. Fetch all repo files in one go
 
-  repo.getTree(branch + '?recursive=true', function (err, response) {
+  
+  octo.repos(user, repository).git.trees('master').fetch({'recursive' :true}).then(function (response) {
     var tree = response.tree;
-    if (err) {
+    console.log(tree.length)
+    if (tree.length === 0) {
       w2ui[id].unlock();
       console.log("Error retrieving files", err);
     }
@@ -2362,15 +2569,37 @@ function startDoc(settings) {
   var location = pickPanel();
   
   // fetch requested file
-  var repo = github.getRepo(user, repository);
+  /*
+  this.readProxy = function(branch, path, cb) {
+    var params = '';
+    if (branch !== undefined) params = '?ref=' + branch;
+    var url = "/" + user + "/" + repo + "/" + branch + "/" + path;
+    _request("GET", url, null, function(err, obj) {
+      if (err && err.error === 404) return cb("not found", null, null);
+      if (err) return cb(err);
+      cb(null, obj);
+    }, true, true);
+  };
+  
+  octo.getRepo(user, repository);
   repo.readProxy(branch, path, function(err, value) {
+  */
     
+    
+  /* 
     if (err) {
       w2popup("Failed to open file");
       console.log(err);
       return;
     }
-  
+    
+  $.get(url, function (value){
+    
+  */
+    $.ajax({
+      url: url,
+      dataType: 'text'
+    }).success(function(value) {
     // Don't attempt to open binaries in editor!
     
     var bytes = toUTF8Array(value);
