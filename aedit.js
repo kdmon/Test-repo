@@ -910,8 +910,9 @@ function writeMany(username, reponame, branch, files, message, parentCommitShas)
 
   if (files == null) {
     files = [
-      {path: 'test/file.txt', contents: 'A test file', binary: false},
-      {path: 'test/file2.txt', contents: 'A test file 2', binary: false}];
+      {path: 'test/file4.txt', contents: 'A test file 4', binary: false},
+      {path: 'test/file5.txt', contents: 'A test file 5', binary: false}
+    ];
   }
   if (message == null) {
     message = "Changed Multiple";
@@ -923,34 +924,37 @@ function writeMany(username, reponame, branch, files, message, parentCommitShas)
     branch = 'master';
   }
   var repo = octo.repos(username, reponame);
+  var oldTree = parentCommitShas;
   
   // 1. Get the original git tree, storing the promise.
-  repo.git.refs('heads/' + branch).fetch().then(function(oldTree) {
+  repo.git.refs('heads/' + branch).fetch().then(function(latestTree) {
     
     // 2. Asynchronously create blobs for each file and store the promises
     // which returns SHAs for blobs that are used to construct the new git tree.
 
-    oldTree = oldTree.object.sha;
-    
+    if (oldTree == null) oldTree = latestTree.object.sha;
     var blobs = [];
-  
     for (var i = 0; i < files.length; i++) {
       var file = files[i];
-      blobs[i] = repo.git.blobs.create({
-        encoding: file.binary ? 'base64' : 'utf-8',
-        content: file.contents
-      }).then(function (blob){
-        return ({
-          path: file.path,
-          mode: '100644',
-          type: 'blob',
-          sha: blob.sha
+      (function(){
+        var that = file;
+        blobs[i] = repo.git.blobs.create({
+          encoding: that.binary ? 'base64' : 'utf-8',
+          content: that.contents
+        }).then(function (blob){
+          return ({
+            path: that.path,
+            mode: '100644',
+            type: 'blob',
+            sha: blob.sha
+          });
         });
-      });
+      })(file);
     }
       
     // 3. Generate a new tree which includes the sha's of the created blobs
     $.when.all(blobs).done(function (blobTree) {
+        console.log("blobtree", blobTree);
       repo.git.trees.create({tree: blobTree, base_tree: oldTree})
       .then(function(newTree){
         console.log("newtree", newTree);
