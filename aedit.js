@@ -906,20 +906,17 @@ if (jQuery.when.all===undefined) {
     }
 }
 
-function removeFile (username, reponame, branch, path, message) {
-  console.log(username, reponame, branch, path, message);
+function removeFile (username, reponame, branch, path, sha, message) {
+  console.log(username, reponame, branch, path, sha, message);
   if (path.indexOf('/') === 0) path = path.substring(1, path.length);
   var repo = octo.repos(username,reponame);
-  repo.contents(path).fetch({branch: branch || 'master'})
-  .then(function (response) {
-    repo.contents(path).remove({
-      sha: response.sha,
-      message: message||'Remove ' + path
-    }).then(function () {
-      alert ("Done");
-    });
+  repo.contents(path).remove({
+    sha: sha,
+    branch: branch || 'master',
+    message: message||'Deleted ' + path
+  }).then(function () {
+    alert ("Done");
   });
-
 }
 
 function writeMany(username, reponame, branch, files, message, parentCommitShas) {
@@ -1010,7 +1007,7 @@ function upload(username, reponame, branch) {
     var message = document.getElementById("uploadmsg").value;
     var path = document.getElementById("uploadpath").value;
     var filename = path + file.name;
-    console.log(username, reponame, branch, filename, content, message);
+    //console.log(username, reponame, branch, filename, content, message);
     
     files = [
       {path: filename, contents: content, binary: true}
@@ -2183,9 +2180,7 @@ function fileTreeMenu (node) {
         node.data.name + "</em>?", "Warning",
         function (result) {
           if (result === "Yes") {
-            var branch = node.data.branch;
-            var path = node.data.path;
-            removeFile(node.data.user, node.data.repo, node.data.branch, node.data.path);
+            removeFile(node.data.user, node.data.repo, node.data.branch, node.data.path, node.data.sha);
           }
         });
       }
@@ -2302,6 +2297,7 @@ function openProject (user, repository, branch, panelArea) {
           repo: repository,
           branch: branch,
           path: node.id,
+          sha: item.sha,
           name: node.text
         };
         
