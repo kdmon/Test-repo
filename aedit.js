@@ -848,23 +848,25 @@ function toolbarClick(obj, event) {
       window.location = 'waelogout?token=' + token;
     break;
     case 'refreshFiles':
+      var parts = tabList[tab].id.split('_');
+      var user = parts[1];
+      var repo = parts[2];
+      var branch = parts[3];
+      var elem = tabList[tab].id;
+      refreshProject(user,repo,branch, elem);
       console.log ('refreshing', tabList[tab]);
     break;
     case 'refreshPreview':
       $("#" + tabList[tab].id).attr("src", tabList[tab].fullUrl);
     break;
     case 'newfile':
-      var reponame = tabList[tab].id.split('_')[1];
-      var branch = tabList[tab].id.split('/')[2];
+      var username = tabList[tab].id.split('_')[1];
+      var reponame = tabList[tab].id.split('_')[2];
+      var branch = tabList[tab].id.split('_')[3];
       var filename = prompt ("Please enter new file name and path");
       if (filename === null) return;
-      var repo = octo.getRepo(config.user, reponame);
-      repo.write(branch, filename, '', 'New file: ' + filename, function(err) {
-        if (err) {console.log(err); alert ("Failed to create file! " + err);}
-        else {
-          alert ("File created successfully!");
-        }
-      });
+      writeFile (username, reponame, branch, [{path: filename, content: ''}]);
+      
     break;
     case 'uploadfile':
       var username = tabList[tab].id.split('_')[1];
@@ -889,21 +891,20 @@ function toolbarClick(obj, event) {
 }
 
 
-// Helper for writeMany promise handling
+// Helper for multiple promise handling
 
 if (jQuery.when.all===undefined) {
-    jQuery.when.all = function(deferreds) {
-        var deferred = new jQuery.Deferred();
-        $.when.apply(jQuery, deferreds).then(
-            function() {
-                deferred.resolve(Array.prototype.slice.call(arguments));
-            },
-            function() {
-                deferred.fail(Array.prototype.slice.call(arguments));
-            });
-
-        return deferred;
-    }
+  jQuery.when.all = function(deferreds) {
+    var deferred = new jQuery.Deferred();
+    $.when.apply(jQuery, deferreds).then(
+      function() {
+        deferred.resolve(Array.prototype.slice.call(arguments));
+      },
+      function() {
+        deferred.fail(Array.prototype.slice.call(arguments));
+      });
+    return deferred;
+  };
 }
 
 function removeFile (username, reponame, branch, path, sha, message) {
@@ -915,31 +916,205 @@ function removeFile (username, reponame, branch, path, sha, message) {
     branch: branch || 'master',
     message: message||'Deleted ' + path
   }).then(function () {
-    alert ("Done");
+    alert ("Removed file");
   });
 }
 
-function writeMany(username, reponame, branch, files, message, parentCommitShas) {
+function moveFile (username, reponame, branch, oldPath, newPath, message) {
+  
+  // Username, repo and the files array with one or more changes are required
+  if (username == null || reponame == null || oldPath == null || newPath == null) 
+    return (false);
+  if (message == null) message = "Moved " + oldPath + " to " + newPath;
+  if (branch == null) branch = 'master';
 
-  if (files == null) {
-    files = [
-      {path: 'test/file4.txt', contents: 'A test file 4', binary: false},
-      {path: 'test/file5.txt', contents: 'A test file 5', binary: false}
-    ];
-  }
-  if (message == null) {
-    message = "Changed Multiple";
-  }
-  if (parentCommitShas == null) {
-    parentCommitShas = null;
-  }
-  if (branch == null) {
-    branch = 'master';
-  }
+  // Head points to a commit which points to a tree, which points to files (blobs)
+  // 1. Get the SHA reference of the latest commit in the branch.
+  
+  var repo = octo.repos(username, reponame);
+  repo.git.refs('heads/' + branch).fetch().then(function(reference) {
+    var ref = reference.object.sha;
+    
+    // 2. Get the branch tree
+    repo.git.trees(ref).fetch({'recursive':true}).then(function(result){
+      var oldTree = result.sha;
+      var newTree = result.tree;
+
+      // 3. Make necessary changes to the tree
+      // c.f. https://github.com/philschatz/octokit.js/issues/78
+      
+      for (var i = 0; i < newTree.length; i++) {
+        // Change exact matches only
+        if (newTree[i].path === oldPath) {
+          newTree[i].path = newTree[i].path.replace(oldPath, newPath);
+        }
+        
+        // Remove all folders (type: tree) to reset any references to old blobs.
+        // Git will recreate folders in a later step.
+        
+        if (newTree[i].type === 'tree') {
+          newTree.splice(i,1);
+          i --; // Decrement for-loop counter to reflect the reduced array size.
+        }
+      }
+      
+      // 4. Create the new tree.
+      // Important: Do not pass in base_tree property, otherwise changes will
+      // be applied on top, causing files to be duplicated!
+      
+      repo.git.trees.create({tree: newTree})
+      .then(function(actualTree){
+        // 5. Create a new commit using the new tree
+        repo.git.commits.create({
+          message: message,
+          tree: actualTree.sha, 
+          parents: [oldTree]
+        }).then(function(commitObj){
+          // 6. Update head to latest commit
+          repo.git.refs('heads/' + branch).update({
+            ref:"heads/" + branch,
+            sha: commitObj.sha
+          });
+          alert ("Moved file");
+        });
+      });
+    });
+  });
+}
+
+function moveFolder (username, reponame, branch, oldPath, newPath, message) {
+  
+  // Username, repo and the files array with one or more changes are required
+  if (username == null || reponame == null || oldPath == null || newPath == null) 
+    return (false);
+  if (message == null) message = "Moved " + oldPath + " to " + newPath;
+  if (branch == null) branch = 'master';
+
+  // 1. Get the SHA reference of the branch tree.
+  
+  var repo = octo.repos(username, reponame);
+  repo.git.refs('heads/' + branch).fetch().then(function(result) {
+    console.log(result);
+    var ref = result.object.sha;
+    
+    // 2. Get the branch tree
+    
+    repo.git.trees(ref).fetch({'recursive':true}).then(function(result){
+      var oldTree = result.sha;
+      var newTree = result.tree;
+
+      // 3. Make necessary changes to the tree
+      // c.f. https://github.com/philschatz/octokit.js/issues/78
+      
+      for (var i = 0; i < newTree.length; i++) {
+        if (newTree[i].path.indexOf(oldPath + "/") === 0) {
+          console.log("matching", newTree[i], oldPath);
+          newTree[i].path = newTree[i].path.replace(oldPath, newPath);
+        }
+      
+        // Remove any folders (type: tree). Git will recreate folders on commit.
+        if (newTree[i].type === 'tree') {
+          console.log("matching folder no: ", i);
+          newTree.splice(i,1);
+          i --; // Decrement for-loop counter to reflect the reduced array size.
+        }
+      }
+      
+      // 4. Create the new tree
+      // Do not set base_tree to prevent duplication of folders
+      
+      repo.git.trees.create({tree: newTree})
+      .then(function(newTree){
+        
+        // 5. Create a new commit using the new tree
+        repo.git.commits.create({
+          message: message,
+          tree: newTree.sha, 
+          parents: [oldTree]
+        }).then(function(commitObj){
+          // 6. Update head to latest commit
+          repo.git.refs('heads/' + branch).update({
+            ref:"heads/" + branch,
+            sha: commitObj.sha
+          });
+          alert ("Moved folder");
+        });
+      });
+    });
+  });
+}
+
+function removeFolder (username, reponame, branch, folder, message) {
+  
+  // Username, repo and the files array with one or more changes are required
+  if (username == null || reponame == null || folder == null) 
+    return (false);
+  if (message == null) message = "Removed folder " + folder;
+  if (branch == null) branch = 'master';
+
+  // 1. Get the SHA reference of the branch tree.
+  
+  var repo = octo.repos(username, reponame);
+  repo.git.refs('heads/' + branch).fetch().then(function(reference) {
+    var ref = reference.object.sha;
+    
+    // 2. Get the branch tree
+    
+    repo.git.trees(ref).fetch({'recursive':true}).then(function(result){
+      var oldTree = result.sha;
+      var newTree = result.tree;
+
+      // 3. Make the necessary changes to the tree
+      
+      for (var i = 0; i < newTree.length; i++) {
+
+        // Remove any files within the same path and all folders.
+        // Git will recreate necessary folders on commit.
+
+        if (newTree[i].path === folder || newTree[i].path.indexOf(folder + "/") === 0 || newTree[i].type === 'tree') {
+          newTree.splice(i,1);
+          i --; // Decrement for-loop counter to reflect the reduced array size.
+        }
+      
+      }
+      
+      // 4. Create the new tree
+      // Do not set base_tree to ensure files are actually removed
+      
+      repo.git.trees.create({tree: newTree})
+      .then(function(actualTree){
+        
+        // 5. Create a new commit using the new tree
+        repo.git.commits.create({
+          message: message,
+          tree: actualTree.sha, 
+          parents: [oldTree]
+        }).then(function(commitObj){
+          // 6. Update head to latest commit
+          repo.git.refs('heads/' + branch).update({
+            ref:"heads/" + branch,
+            sha: commitObj.sha
+          });
+          alert ("removed folder");
+        });
+      });
+    });
+  });
+}
+
+
+function writeFile (username, reponame, branch, files, message, parentCommitShas) {
+
+  // Username, repo and the files array with one or more changes are required
+  if (files == null || username == null || reponame == null) return (false);
+  if (message == null) message = "Modified file(s)";
+  if (parentCommitShas == null) parentCommitShas = null;
+  if (branch == null) branch = 'master';
+  
   var repo = octo.repos(username, reponame);
   var oldTree = parentCommitShas;
   
-  // 1. Get the original git tree, storing the promise.
+    // 1. Get the original git tree, storing the promise.
   repo.git.refs('heads/' + branch).fetch().then(function(latestTree) {
     
     // 2. Asynchronously create blobs for each file and store the promises
@@ -953,7 +1128,7 @@ function writeMany(username, reponame, branch, files, message, parentCommitShas)
         var that = file;
         blobs[i] = repo.git.blobs.create({
           encoding: that.binary ? 'base64' : 'utf-8',
-          content: that.contents
+          content: that.content
         }).then(function (blob){
           return ({
             path: that.path,
@@ -967,18 +1142,17 @@ function writeMany(username, reponame, branch, files, message, parentCommitShas)
       
     // 3. Generate a new tree which includes the sha's of the created blobs
     $.when.all(blobs).done(function (blobTree) {
-        console.log("blobtree", blobTree);
+      
       repo.git.trees.create({tree: blobTree, base_tree: oldTree})
       .then(function(newTree){
-        console.log("newtree", newTree);
         
-        // 4. Create a new commit using the resulting tree
+    // 4. Create a new commit using the resulting tree
         repo.git.commits.create({
           message: message,
           tree: newTree.sha, 
           parents: [oldTree]
         }).then(function(commitObj){
-          // 5. Update head to latest commit
+    // 5. Update head to latest commit
           repo.git.refs('heads/' + branch).update({
             ref:"heads/" + branch,
             sha: commitObj.sha
@@ -1010,10 +1184,10 @@ function upload(username, reponame, branch) {
     //console.log(username, reponame, branch, filename, content, message);
     
     files = [
-      {path: filename, contents: content, binary: true}
+      {path: filename, content: content, binary: true}
     ];
   
-    writeMany (username, reponame, branch, files, message);
+    writeFile (username, reponame, branch, files, message);
     
   };
   
@@ -2098,9 +2272,9 @@ function fileTreeMenu (node) {
   var tree = $("#container_" + node.data.jsTree).jstree(true);
   var items = {
     edit: {
-      label: "Edit",
+      label: "Edit file",
       icon: "fa fa-pencil",
-      separator_after : true,
+      separator_after : false,
       action: function () {
         var conf = {
           user: node.data.user,
@@ -2111,8 +2285,8 @@ function fileTreeMenu (node) {
         startDoc(conf);
       }
     },
-    rename: { 
-      label: "Rename",
+    renameFolder: { 
+      label: "Rename folder",
       icon: "fa fa-edit",
       action: function () {
         
@@ -2135,7 +2309,7 @@ function fileTreeMenu (node) {
 
           // Checks passed, so now try to commit the name change.
           
-          var repo = octo.getRepo(node.data.user, node.data.repo);
+          var repo = octo.repos(node.data.user, node.data.repo);
           var branch = node.data.branch;
           var oldPath = node.data.path;
           var parts = node.data.path.split('/');
@@ -2146,34 +2320,56 @@ function fileTreeMenu (node) {
           if (parts.length>0) newPath = parts.join("/") + "/" + node.text;
           else newPath = node.text;
           
-          repo.move(branch, oldPath, newPath, function(err) {
-            if (err) {
-              w2alert("File could not be renamed.");
-              console.log(err);
-              // revert to old file name
-              tree.rename_node(node, old);
-            }
-            else {
-              w2alert("File was renamed successfully.");
-              //update node path here!
-              node.data.path = newPath;
-            }
-          });
+          moveFolder (node.data.user, node.data.repo, node.data.branch, node.data.path, newPath);
+     
           
         });
       }
     },
-    /*duplicate: { 
-      label: "Duplicate",
-      icon: "fa fa-copy",
+    renameFile: { 
+      label: "Rename file",
+      icon: "fa fa-edit",
       action: function () {
-        alert ("duplicate");
+        
+        // Get old filename.
+        var old = node.text.replace(/\s+$/, ''); // trim right spaces
+        
+        tree.edit(node, null, function(node, success, cancelled) {
+          
+          // Check if filename was changed
+          if (!success || cancelled) return;
+          if (node.text.replace(/\s+$/, '')==old) return;
+          
+          // Check if file name is valid, otherwise revert to old filename.
+          // TODO: improve regex matching pattern.
+          if (node.text.indexOf('/') > -1) {
+            w2alert("Ignoring new filename due to invalid characters.");
+            tree.rename_node(node, old);
+            return;
+          }
+
+          // Checks passed, so now try to commit the name change.
+          
+          var repo = octo.repos(node.data.user, node.data.repo);
+          var branch = node.data.branch;
+          var oldPath = node.data.path;
+          var parts = node.data.path.split('/');
+          parts.pop(); // remove old filename
+          var newPath = '';
+          
+          //prevent leading slash in new path!
+          if (parts.length>0) newPath = parts.join("/") + "/" + node.text;
+          else newPath = node.text;
+          
+          moveFile (node.data.user, node.data.repo, node.data.branch, node.data.path, newPath);
+     
+          
+        });
       }
     },
-    */
-    remove: { 
+    removeFile: { 
       separator_after : true,
-      label: "Delete",
+      label: "Delete file",
       icon: "fa fa-trash",
       action: function () {
         w2confirm("Are you sure you want to delete <em>" +
@@ -2185,6 +2381,29 @@ function fileTreeMenu (node) {
         });
       }
     },
+    removeFolder: { 
+      separator_before : true,
+      separator_after : true,
+      label: "Delete folder",
+      icon: "fa fa-trash",
+      action: function () {
+        w2confirm("Are you sure you want to delete the folder <em>" +
+        node.data.name + "</em> and any files contained within it?", "Warning",
+        function (result) {
+          if (result === "Yes") {
+            removeFolder(node.data.user, node.data.repo, node.data.branch, node.data.path);
+          }
+        });
+      }
+    },
+    /*duplicate: { 
+      label: "Duplicate",
+      icon: "fa fa-copy",
+      action: function () {
+        alert ("duplicate");
+      }
+    },
+    */
     preview: {
       separator_before : true,
       label: "Quick preview",
@@ -2195,16 +2414,16 @@ function fileTreeMenu (node) {
       }
     },
     open: {
-      label: "External preview",
+      label: "Preview in window",
       icon: "fa fa-external-link",
       action: function () {
         window.open('/' + node.data.user + '/' + node.data.repo + '/' +
           node.data.branch +'/' + node.data.path, 
-          "_blank", "top=100, left=100, width=500, height=500");
+          "_blank", "top=100, left=100, width=500, height=500,toolbar=1,resizable=1");
       }
     },
     qrcode: {
-      label: "Show QR code",
+      label: "Open QR code",
       separator_after : true,
       icon: "fa fa-qrcode",
       action: function () {
@@ -2215,7 +2434,7 @@ function fileTreeMenu (node) {
     new: {
       label: "Create new ...",
       separator_after : true,
-      icon: "fa fa-plus-square",
+      icon: "fa fa-file-o",
       action: function () {
         console.log("creating",node);
         var newNode = tree.create_node(node);
@@ -2226,10 +2445,16 @@ function fileTreeMenu (node) {
 
   if (node.data.type == "directory") {
     delete items.edit;
+    delete items.open;
     delete items.preview;
+    delete items.qrcode;
+    delete items.renameFile;
+    delete items.removeFile;
   }
 
   if (node.data.type == "file" || node.data.type == "binary") {
+    delete items.renameFolder;
+    delete items.removeFolder;
     
   }
   
@@ -2410,8 +2635,6 @@ function openProject (user, repository, branch, panelArea) {
         
         startDoc(conf);
       });
-      
-
 
       // Activate filetree widget
       
@@ -2419,6 +2642,159 @@ function openProject (user, repository, branch, panelArea) {
       $(location.id).find(".w2ui-tabs").scrollLeft(99999);
       refreshTabs();
     
+    }
+  });
+}
+
+
+// Create a sidebar for browsing repository files
+function refreshProject (user, repository, branch, id) {
+  
+  // 1. Fetch all repo files in one go
+
+  octo.repos(user, repository).git.trees('master').fetch({'recursive':true}).then(function (response) {
+
+    var tree = response.tree;
+    console.log(tree.length, response.truncated);
+    if (tree.length === 0) {
+      w2alert("Error retrieving files", err);
+    }
+        
+    // GitHub data tree API handles a maximum of approx 60000 file
+    // and truncates repositories that are larger than this!
+    
+    else if (response.truncated) {
+      w2alert("Projects with more than <b>60,000 files</b> are unsupported.<br>"+
+        "Please try opening a project with fewer files.", "Error");
+    }
+
+    // 2. Generate filetree widget
+    else {
+      
+      // Prepare jstree data structure
+      
+      var jsTreeFiles = [];
+      var jsTreeFolders = [];
+      for (var i = 0; i < tree.length; i ++) {
+        var item = tree[i];
+        var node = {};
+        node.id = item.path;
+        var parts = item.path.split('/');
+        node.text = parts.pop();
+        
+        node.data = {
+          jsTree: id,
+          user: user,
+          repo: repository,
+          branch: branch,
+          path: node.id,
+          sha: item.sha,
+          name: node.text
+        };
+        
+        // Check if root node
+        if (parts.length === 0) node.parent = '#';
+        else node.parent = parts.join('/');
+        
+        // Check if directory (type "tree") or file (type "blob").
+        // Ignore git submodules (has type "commit") and symbolic links.
+
+        if (item.type === "tree") {
+          node.icon = "fa fa-folder";
+          node.data.type = "directory";
+          jsTreeFolders.push(node);
+        }
+        
+        // Or a file
+        else if (item.type === "blob") {
+          node.icon = "fa fa-file-o"; 
+          node.data.type = "file";
+          jsTreeFiles.push(node);
+        }
+        
+      }
+      
+      // Remove existing jstree widget
+      $("#container_"+id).jstree("destroy");
+      
+      // Create new jstree widget 
+      $("#container_"+id).jstree({
+        core : {
+          data : jsTreeFolders.concat(jsTreeFiles),
+          check_callback : function (action, node, node_parent, position, evt) {
+            if (action === "move_node") {
+              //only allow dropping inside directory or tree root
+              var targetType = node_parent.data ? node_parent.data : {};
+              return (node_parent.id === "#" || 
+                      targetType.type === "directory");
+            }
+            return true;  //allow all other operations
+          },
+          show_only_matches: true
+        },
+        plugins : [
+          "contextmenu",
+          "search",
+          "unique",
+          "dnd",
+          "state",
+          "sort"
+        ],
+        contextmenu : {
+          items : fileTreeMenu
+        },
+        sort: function (a, b) {
+            var nodeA = this.get_node(a);
+            var nodeB = this.get_node(b);
+            var lengthA = nodeA.children.length;
+            var lengthB = nodeB.children.length;                
+            if ((lengthA === 0 && lengthB === 0) || (lengthA > 0 && lengthB > 0))
+              return this.get_text(a) > this.get_text(b) ? 1 : -1;
+            else
+              return lengthA > lengthB ? -1 : 1;
+        }
+      });
+      
+      // Listen for and handle jsTree events
+      
+      $('#container_' + id)
+      .on('create_node.jstree', function (e, data) {
+        console.log("Created node", data);
+      })
+      .on('delete_node.jstree', function (e, data) {
+        console.log("Deleted node", data);
+      })
+      .on('move_node.jstree', function (e, data) {
+        console.log("Moved node", data);
+      })
+      .on('rename_node.jstree', function (e, node) {
+        /*
+        var old = node.text.replace(/\s+$/, ''); // trim right spaces
+        instance.edit(node, null, function(node, success, cancelled) {
+            if (!success || cancelled) return;
+            if (node.text.replace(/\s+$/, '')==old) return;
+
+            // all good, your rename code here
+        */
+        
+      })
+      .on('dblclick', '.jstree-anchor', function () {
+        var instance = $.jstree.reference(this),
+        node = instance.get_node(this);
+        
+        // Only open files for editing
+        if (node.data.type !== 'file') return;
+        
+        var conf = {
+          user: node.data.user,
+          repo: node.data.repo,
+          branch: node.data.branch,
+          path: node.data.path
+        };
+        
+        startDoc(conf);
+      });
+
     }
   });
 }
@@ -2525,39 +2901,12 @@ function startDoc(settings) {
   var encodedUrl = encodeURIComponent(url);
   var location = pickPanel();
   
-  // fetch requested file
-  /*
-  this.readProxy = function(branch, path, cb) {
-    var params = '';
-    if (branch !== undefined) params = '?ref=' + branch;
-    var url = "/" + user + "/" + repo + "/" + branch + "/" + path;
-    _request("GET", url, null, function(err, obj) {
-      if (err && err.error === 404) return cb("not found", null, null);
-      if (err) return cb(err);
-      cb(null, obj);
-    }, true, true);
-  };
-  
-  octo.getRepo(user, repository);
-  repo.readProxy(branch, path, function(err, value) {
-  */
+  $.ajax({
+    url: url,
+    dataType: 'text'
+  }).success(function(value) {
     
-    
-  /* 
-    if (err) {
-      w2popup("Failed to open file");
-      console.log(err);
-      return;
-    }
-    
-  $.get(url, function (value){
-    
-  */
-    $.ajax({
-      url: url,
-      dataType: 'text'
-    }).success(function(value) {
-    // Don't attempt to open binaries in editor!
+    // Check to prevent opening binary files in text editor!
     
     var bytes = toUTF8Array(value);
     
