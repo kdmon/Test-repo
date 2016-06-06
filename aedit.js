@@ -906,6 +906,22 @@ if (jQuery.when.all===undefined) {
     }
 }
 
+function removeFile (username, reponame, branch, path, message) {
+  console.log(username, reponame, branch, path, message);
+  if (path.indexOf('/') === 0) path = path.substring(1, path.length);
+  var repo = octo.repos(username,reponame);
+  repo.contents(path).fetch({branch: branch || 'master'})
+  .then(function (response) {
+    repo.contents(path).remove({
+      sha: response.sha,
+      message: message||'Remove ' + path
+    }).then(function () {
+      alert ("Done");
+    });
+  });
+
+}
+
 function writeMany(username, reponame, branch, files, message, parentCommitShas) {
 
   if (files == null) {
@@ -996,78 +1012,16 @@ function upload(username, reponame, branch) {
     var filename = path + file.name;
     console.log(username, reponame, branch, filename, content, message);
     
-    // Uploading a file involves the following steps:
-    // 1. Create blob
-    // 2. Fetch tree
-    // 3. Modify tree
-    // 4. Update tree
-    // 5. Commit tree
-    
-    octo.repos(username,reponame).contents(filename).add({
-      message: 'Uploaded file to ' + filename,
-      content: content,
-    }).then(function(info) {
-      console.log('File created. New sha is ', info.commit.sha);
-    });
-    
-    //return;
-    /*
-    var repo = octo.getRepo(config.user, reponame);
-    var octo = new Octokat({token: 'API_TOKEN'});
-    
-    var repo = octo.repos('philschatz', 'octokat.js');
-    var config = {
-      message: 'Updating file',
-      content: base64encode('New file contents'),
-      //sha: '123456789abcdef', // the blob SHA
-      // branch: 'gh-pages'
-    };
-    
-    repo.contents(filename).add({
-      message: 'Uploaded file to ' + filename,
-      content: content,
-    }).then(function(info) {
-      console.log('File created. new sha is ', info.commit.sha);
-    });
-    
-    repo.write(branch, filename, bytes, message || 'Uploaded ' + filename, function(err) {
-      if (err) {console.log(err); alert ("Failed to upload file! " + err);}
-      else {
-        alert ("File uploaded successfully!");
-      }
-    });
-  */
+    files = [
+      {path: filename, contents: content, binary: true}
+    ];
+  
+    writeMany (username, reponame, branch, files, message);
     
   };
   
   reader.readAsArrayBuffer(file);
   
-  
-/*
-  reader.onload = function(event) {
-    var bytes = event.target.result;
-    bytes = new Int8Array(content);
-    var content = '';
-
-    for (var index = 0; index < bytes.byteLength; index++) {
-      content += String.fromCharCode( bytes[index] );
-    }
-    //content = btoa(content.replace(/^(.+,)/, ''));
-    var message = document.getElementById("uploadmsg").value;
-    var path = document.getElementById("uploadpath").value;
-    var filename = path + file.name;
-    var repo = octo.getRepo(config.user, reponame);
-    console.log(reponame, branch, filename, content, message);
-    repo.write(branch, filename, content, message || 'Uploaded ' + filename, function(err) {
-      if (err) {console.log(err); alert ("Failed to upload file! " + err);}
-      else {
-        alert ("File uploaded successfully!");
-      }
-    });
-  }
-  
-  reader.readAsArrayBuffer(file);
-  */
 }
 
 function randomString(length) {
@@ -2229,13 +2183,9 @@ function fileTreeMenu (node) {
         node.data.name + "</em>?", "Warning",
         function (result) {
           if (result === "Yes") {
-            var repo = octo.getRepo(node.data.user, node.data.repo);
             var branch = node.data.branch;
             var path = node.data.path;
-            repo.remove(branch, path, function(err) {
-              if(err) {w2alert("File could not be deleted."); console.log(err)}
-              else { w2alert("File deleted successfully."); tree.delete_node(node);}
-            });
+            removeFile(node.data.user, node.data.repo, node.data.branch, node.data.path);
           }
         });
       }
