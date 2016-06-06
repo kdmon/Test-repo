@@ -2247,13 +2247,20 @@ function openProject (user, repository, branch, panelArea) {
   
   // 1. Fetch all repo files in one go
 
-  
   octo.repos(user, repository).git.trees('master').fetch({'recursive' :true}).then(function (response) {
+
     var tree = response.tree;
-    console.log(tree.length)
+    console.log(tree.length, response.truncated);
     if (tree.length === 0) {
-      w2ui[id].unlock();
-      console.log("Error retrieving files", err);
+      w2alert("Error retrieving files", err);
+    }
+        
+    // GitHub data tree API handles a maximum of approx 60000 file
+    // and truncates repositories that are larger than this!
+    
+    else if (response.truncated) {
+      w2alert("Projects with more than <b>60,000 files</b> are unsupported.<br>"+
+        "Please try opening a project with fewer files.", "Error");
     }
 
     // 2. Generate filetree widget
