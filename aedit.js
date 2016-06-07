@@ -2204,11 +2204,12 @@ function showProject (user, repository) {
   w2ui.panelLayout.show('left');
 
   octo.repos(user, repository).fetch().then(function(data) {
+    console.log(data);
     var description = data.description;
     description = (description !== null && description !== '' ?
       '<p>' + description + '</p>': '<p>No description available.</p>');
     
-    var created = timeSince(data.created_at);
+    var created = timeSince(data.createdAt);
     var fork = data.fork;
     var isPrivate = data.private;
     var parentRepo = fork ? data.parent : false;
