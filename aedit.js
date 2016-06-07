@@ -829,15 +829,11 @@ function toolbarClick(obj, event) {
     case 'filemenu:Save file':
       var content = editors[tabList[tab].panel].getSession().getValue();
       var path =  tabList[tab].path;
-      var repoUser = tabList[tab].id.split('/')[0];
-      var repoName = tabList[tab].id.split('/')[1];
+      var username = tabList[tab].id.split('/')[0];
+      var reponame = tabList[tab].id.split('/')[1];
       var branch = tabList[tab].id.split('/')[2];
       var message = prompt("Please describe your changes to the file", "Update file.");
-      var repo = octo.getRepo(repoUser, repoName);
-      repo.write(branch, path, content, message, function(err) {
-        if (err) {console.log(err); alert ("Failed to save changes! " + err);console.log(err)}
-        else alert ("Changes saved successfully!");
-      });
+      writeFile (username, reponame, branch, [{path: path, content: content}], message);
     break;
     case 'share':
       window.open(tabList[tab].fullUrl, "_blank");
@@ -1127,8 +1123,8 @@ function writeFile (username, reponame, branch, files, message, parentCommitShas
       (function(){
         var that = file;
         blobs[i] = repo.git.blobs.create({
-          encoding: that.binary ? 'base64' : 'utf-8',
-          content: that.content
+          encoding: 'base64', //that.binary ? 'base64' : 'utf-8',
+          content: btoa(that.content)
         }).then(function (blob){
           return ({
             path: that.path,
@@ -1177,7 +1173,7 @@ function upload(username, reponame, branch) {
       binaryText += String.fromCharCode( bytes[index] );
     }
 
-    var content = btoa(binaryText);
+    var content = binaryText;
     var message = document.getElementById("uploadmsg").value;
     var path = document.getElementById("uploadpath").value;
     var filename = path + file.name;
@@ -2472,7 +2468,7 @@ function openProject (user, repository, branch, panelArea) {
   
   // 1. Fetch all repo files in one go
 
-  octo.repos(user, repository).git.trees('master').fetch({'recursive' :true}).then(function (response) {
+  octo.repos(user, repository).git.trees(branch).fetch({'recursive' :true}).then(function (response) {
 
     var tree = response.tree;
     console.log(tree.length, response.truncated);
@@ -2652,7 +2648,7 @@ function refreshProject (user, repository, branch, id) {
   
   // 1. Fetch all repo files in one go
 
-  octo.repos(user, repository).git.trees('master').fetch({'recursive':true}).then(function (response) {
+  octo.repos(user, repository).git.trees(branch).fetch({'recursive':true}).then(function (response) {
 
     var tree = response.tree;
     console.log(tree.length, response.truncated);
