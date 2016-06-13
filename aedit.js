@@ -1152,7 +1152,7 @@ function writeFile (username, reponame, branch, files, message, parentCommitShas
           repo.git.refs('heads/' + branch).update({
             ref:"heads/" + branch,
             sha: commitObj.sha
-          });
+          }).then(function(){alert ("Written file(s)")});
         });
       });
     });
@@ -2220,7 +2220,7 @@ function showProject (user, repository) {
     if (owner !== config.user) repoIcon = '<img class="avatar-large" src="' +
       data.owner.avatarUrl +'"/> ';
     var history = '<p>Created ' + created + ' by ' + owner + '.</p>';
-    if (parentRepo) history = '<p>Forked from ' + parentRepo.full_name + ' ' +
+    if (parentRepo) history = '<p>Forked from ' + parentRepo.fullName + ' ' +
     created + ', by ' + owner + '.</p>';
     
     var editButton = '<div id="editbutton" class="pressable" ' +
