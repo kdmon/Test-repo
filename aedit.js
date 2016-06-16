@@ -1688,6 +1688,7 @@ function initPanels() {
       + '<div id="content' + i + '" class="panel-content"></div>'
       + '<div id="editor' + i + '" class="panel-editor"></div></div>');
       editors[i] = ace.edit($(this).find(".panel-editor")[0]);
+      editors[i].$blockScrolling = Infinity;
       editors[i].on('focus', function(event, obj) {
         $('.w2ui_tabs').removeClass('active');
         $('.w2ui_tabs').removeClass('active-tab');
