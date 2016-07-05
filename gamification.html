@@ -157,7 +157,7 @@
 }
 
 .pencil, .pencil > * {
-  cursor: url('pen.ico'), auto !important;	
+  cursor: url('pen_64.ico'), auto !important;	
 }
 
 .highlighted {
@@ -310,61 +310,24 @@ input[type="checkbox"]:checked + label {
           <p>Units: <span class="handwritten" id="bloodcomponent">.</span></p>
           
           <h2> Special requirements</h2>
-          <div class="highlighted">
-            <h3 style="display:none">How should the unit(s) be specified?</h3>
+          <div class="highlighted pencil">
+            <div class="box-border"></div>
+            <input type="checkbox" data-role="none" name="irrad" id="irrad" />
+            <label data-role="none" for="irrad">Irradiated</label>
             
-            <ul data-role="listview" data-inset="true" style="display:none">
-              <li data-icon="false" ><a href="#" id="irrcmv">Irradiated and CMV-negative</a></li>
-              <li data-icon="false" ><a href="#" id="irr">Irradiated only</a></li>
-              <li data-icon="false" ><a href="#" id="cmv">CMV-negative only</a></li>
-              <li data-icon="false" ><a href="#" id="notrequired">No special requirement</a></li>
-            </ul>
+            <div class="box-border"></div>
+            <input type="checkbox" data-role="none" name="cmvneg" id="cmvneg" />
+            <label data-role="none" for="cmvneg">CMV negative</label>
             
-            <div class="pencil">
-              <div class="box-border"></div>
-              <input type="checkbox" data-role="none" name="irrad" id="irrad" />
-              <label data-role="none" for="irrad">Irradiated</label>
-              
-              <div class="box-border"></div>
-              <input type="checkbox" data-role="none" name="cmvneg" id="cmvneg" />
-              <label data-role="none" for="cmvneg">CMV negative</label>
-              
-              <div class="box-border"></div>
-              <input type="checkbox" data-role="none" name="hep" id="hep" />
-              <label data-role="none" for="hep">Hep-E negative</label>
-            </div>
-                  
-            
-            <form style="display:none">
-              <fieldset data-role="controlgroup" data-type="horizontal">
-                  <legend>Request as irradiated?</legend>
-                  <input type="radio" name="irradiatedradio" id="radio1" value="yes">
-                  <label for="radio1">Yes</label>
-                  <input type="radio" name="irradiatedradio" id="radio2" value="no">
-                  <label for="radio2">No</label>
-              </fieldset>
-                <fieldset data-role="controlgroup" data-type="horizontal">
-                  <legend>Request as CMV-negative?</legend>
-                  <input type="radio" name="cmvradio" id="radio3" value="yes">
-                  <label for="radio3">Yes</label>
-                  <input type="radio" name="cmvradio" id="radio4" value="no">
-                  <label for="radio4">No</label>
-              </fieldset>
-              <fieldset data-role="controlgroup" data-type="horizontal">
-                  <legend>Request as Hep-E negative?</legend>
-                  <input type="radio" name="hepradio" id="radio5" value="yes">
-                  <label for="radio5">Yes</label>
-                  <input type="radio" name="hepradio" id="radio6" value="no">
-                  <label for="radio6">No</label>
-              </fieldset>
-          </form>
+            <div class="box-border"></div>
+            <input type="checkbox" data-role="none" name="hep" id="hepe" />
+            <label data-role="none" for="hep">Hep-E negative</label>
           </div>
-        
           <center>
           <p>Tick any boxes as appropriate and press the green button to check your answer.</p>
-          <h3 id="signButton" class="pencil submit-button"> Sign request!</h3>
+          <h3 id="signButton" onclick="check()" class="pencil submit-button"> Sign request!</h3>
           </center>
-        </div >
+        </div>
         <div class="request-section split">
           <h2>Patient ID</h2>
           <p>Patient surname: <span class="handwritten" id="patientlast">Surname</span></p>
@@ -928,16 +891,32 @@ function makeLevel (level) {
 }
 
 
-function answer (ans) {
+function check () {
+  var rightAnswer = questions[currentQuestion].answer;
+  
+  var irradiated = $('#irrad').is(':checked');
+  var cmv = $('#cmvneg').is(':checked');
+  var hep = $('#hepe').is(':checked'); // not used
+  
+  var ans = 'notrequired';
 
-    if (questions[currentQuestion].answer == ans) {
-        var randomBadge = rand (badges);
-        badges[randomBadge].earned = true;
-        viewBadge (randomBadge);
-    }
-    else {
-        makeLevel("level1");
-    }
+  if (irradiated && cmv) ans = "irrcmv";
+  else if (irradiated) ans ="irr";
+  else if (cmv) ans = "cmv";
+  
+  //console.log(irradiated, cmv, ans, rightAnswer);
+  
+  if (ans == rightAnswer) {
+    alert ("Correct!")
+    makeLevel("level1");
+    //var randomBadge = rand (badges);
+    //badges[randomBadge].earned = true;
+    //viewBadge (randomBadge);
+  }
+  else {
+    alert("Wrong answer")
+    makeLevel("level1");
+  }
 }
 
 function rand (obj) {
