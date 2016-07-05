@@ -4,10 +4,11 @@
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <title>Clinical vignette</title>
   <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
   <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Just+Another+Hand' rel='stylesheet' type='text/css'>
-  
+  <script src="/jwarby/jquery-awesome-cursor/master/dist/jquery.awesome-cursor.min.js"></script>
   <style type='text/css'>
   .badgebackground {
     border-radius: 20px;
@@ -123,7 +124,7 @@
   vertical-align: top;
   border: 1px solid #aaa;
   background: #fffafa;
-  height: 35em;
+  height: 31em;
 }
 
 .split {
@@ -131,12 +132,6 @@
   display: inline-block;
 }
 
-.highlighted {
-  background: #FFA;
-  color: blue;
-  text-decoration: none;
-  margin:0.5em 0 0.5em 0;
-}
 
 .blurred {
   filter: blur(0px); 
@@ -161,60 +156,106 @@
   overflow-y: auto;
 }
 
-#signButton {
-  background: #FFA;
-  box-shadow: 0 10px 10px 0 #88e;
-  opacity: 0.8;
-  cursor: pointer;
-  margin: 0;
-  width: 50%;
+.pencil, .pencil > * {
+  cursor: url('pen.ico'), auto !important;	
 }
 
-#signButton:hover {
-  background: #FFF;
-  opacity: 1;
-  box-shadow: none;
+.highlighted {
+  text-align: center;
   color: black;
+  background: #FFD;
+  padding: 1em;
+  margin: 0;
+  box-shadow: 0 0 5px 0 #aaa;
+}
+.highlighted:hover {
+  background: #FFC;
+}
+.submit-button {
+  width: 50%;
+  padding: 0.5em;
+  background: #ADA;
+  border: 3px solid green;
+  cursor: pointer;
+  border-radius: 1em;
 }
 
-.ui-checkbox-on .ui-icon {
-    width: 32px!important; 
-    height: 32px!important; 
-    margin-left: -20px !important; 
-    margin-top: -15px !important; 
-    box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; 
-    -webkit-border-radius: 0 !important; border-radius: 0 !important; 
-    background: url(http://www.surveyshare.com/images/icons/check.png) 50% 50% no-repeat;
+.submit-button:hover {
+  background: #DFD;
 }
-
-.ui-icon-checkbox-off {
-    background-image: none;
-    box-shadow: none; -webkit-box-shadow: none; -moz-box-shadow: none; 
-    border-radius: 0px; -webkit-border-radius: 0px; -moz-border-radius: 0px;
-    background-color: rgba(0, 0, 0, 0);
-}
-
-.check_box {
-    display:none;
-}
-
-.check_box + label{
-    background:url('images/check-box.png') no-repeat;
-    height: 16px;
-    width: 16px;
-    display:inline-block;
-    padding: 0 0 0 0px;
-}
-
-.check_box:checked + label{
-    background: url(http://www.surveyshare.com/images/icons/check.png) 50% 50% no-repeat;
-    height: 16px;
-    width: 16px;
-    display:inline-block;
-    padding: 0 0 0 0px;
+@media (max-width: 600px) {
+    
+  .split {
+    width: 90%;
+    display: inline-block;
+  }
 }
 
 
+
+/* Custom Icons For Checkbox */
+label {
+  text-align: left;
+  color: black;
+  margin:5px 0;
+  padding: 0.5em;
+  position:relative;
+  font-size:30px;
+  -webkit-transition:.2s linear;
+  -moz-transition:.2s linear;
+  -o-transition:.2s linear;
+  transition:.2s linear
+}
+
+label:before,label:after {
+    content:'';
+    right:11px;
+    width:3px;
+    bottom:0;
+    background: black;
+    position:absolute;
+    top:0;
+}
+
+label:before {
+    transform:rotate(45deg);
+    transform-origin:0 14px;
+    height:0;
+    -webkit-transition:.2s linear;
+    -moz-transition:.2s linear;
+    -o-transition:.2s linear;
+    transition:.2s linear
+}
+
+label:after {
+    transform:rotate(-45deg);
+    transform-origin:0 20px;
+    height:0;
+    -webkit-transition:.2s linear .2s;
+    -moz-transition:.2s linear .2s;
+    -o-transition:.2s linear .2s;
+    transition:.2s linear .2s
+}
+
+input[type="checkbox"] {
+    display:none
+}
+
+input[type="checkbox"]:checked + label:after,input[type="checkbox"]:checked + label:before {
+    height:100%;
+}
+
+input[type="checkbox"]:checked + label {
+    font-weight: 800;
+}
+
+.box-border {
+  width: 1.7em;
+  height: 1.9em;
+  border: 2px solid black;
+  border-radius: 5px;
+  float: right;
+}
   </style>
 
 </head>
@@ -254,45 +295,63 @@
     </div>
     <div data-role="contents" style="margin: 1em">
     
-      <h3 style="text-align: center;">Please review and amend the request as necessary.</h3>
-    
       <div style="margin-bottom: 1em; background: white; box-shadow: 0 0 10px 0 #ccc; padding: 1em; max-width: 50em; margin: auto">
         <div id="patientPortrait">Loading portrait</div>
         <div id="patientInfo">Loading info</div>
       </div>
-        <div id="request-form" style="text-align:center">
-          <h1 style="color: #e99; text-shadow: 1px 1px 5px #fff;">BLOOD REQUEST FORM</h1>
-          <div class="request-section split">
-            <h2> Components</h2>
-            <p>Units: <span class="handwritten" id="bloodcomponent">.</span></p>
+  
+      <h2 style="text-align: center;">Please complete the yellow section of the request form.</h2>
+      
+      <div id="request-form" style="text-align:center">
+        <h1 style="color: #e99; text-shadow: 1px 1px 5px #fff;">BLOOD REQUEST FORM</h1>
+        <div class="request-section split">
+          
+          <h2> Components</h2>
+          <p>Units: <span class="handwritten" id="bloodcomponent">.</span></p>
+          
+          <h2> Special requirements</h2>
+          <div class="highlighted">
+            <h3 style="display:none">How should the unit(s) be specified?</h3>
             
-            <h2> Special requirements</h2>
-            <p>How should the unit(s) be specified?</p>
-            
-            <ul data-role="listview" data-inset="true">
+            <ul data-role="listview" data-inset="true" style="display:none">
               <li data-icon="false" ><a href="#" id="irrcmv">Irradiated and CMV-negative</a></li>
               <li data-icon="false" ><a href="#" id="irr">Irradiated only</a></li>
               <li data-icon="false" ><a href="#" id="cmv">CMV-negative only</a></li>
               <li data-icon="false" ><a href="#" id="notrequired">No special requirement</a></li>
             </ul>
             
+            <div class="pencil">
+              <div class="box-border"></div>
+              <input type="checkbox" data-role="none" name="irrad" id="irrad" />
+              <label data-role="none" for="irrad">Irradiated</label>
+              
+              <div class="box-border"></div>
+              <input type="checkbox" data-role="none" name="cmvneg" id="cmvneg" />
+              <label data-role="none" for="cmvneg">CMV negative</label>
+              
+              <div class="box-border"></div>
+              <input type="checkbox" data-role="none" name="hep" id="hep" />
+              <label data-role="none" for="hep">Hep-E negative</label>
+            </div>
+                  
+            
             <form style="display:none">
               <fieldset data-role="controlgroup" data-type="horizontal">
-                  <legend>Request irradiated:</legend>
+                  <legend>Request as irradiated?</legend>
                   <input type="radio" name="irradiatedradio" id="radio1" value="yes">
                   <label for="radio1">Yes</label>
                   <input type="radio" name="irradiatedradio" id="radio2" value="no">
                   <label for="radio2">No</label>
               </fieldset>
                 <fieldset data-role="controlgroup" data-type="horizontal">
-                  <legend>Request CMV-negative:</legend>
+                  <legend>Request as CMV-negative?</legend>
                   <input type="radio" name="cmvradio" id="radio3" value="yes">
                   <label for="radio3">Yes</label>
                   <input type="radio" name="cmvradio" id="radio4" value="no">
                   <label for="radio4">No</label>
               </fieldset>
               <fieldset data-role="controlgroup" data-type="horizontal">
-                  <legend>Request Hep-E negative:</legend>
+                  <legend>Request as Hep-E negative?</legend>
                   <input type="radio" name="hepradio" id="radio5" value="yes">
                   <label for="radio5">Yes</label>
                   <input type="radio" name="hepradio" id="radio6" value="no">
@@ -300,18 +359,22 @@
               </fieldset>
           </form>
           </div>
-          <div class="request-section split">
-            <h2>Patient ID</h2>
-            <p>Patient surname: <span class="handwritten" id="patientlast">Surname</span></p>
-            <p>Patient first name: <span class="handwritten" id="patientfirst">Firstname</span></p>
-            <p>Gender: <span class="handwritten" id="patientgender">patient gender</span></p>
-            <p>DOB: <span class="handwritten" id="patientdob">21-12-2010</span></p>
-            <p>Patient identifier: <span class="handwritten" id="patientchi">81822192</span></p>
-          </div>
-          <p style="display:none" id="signButton" class="handwritten">Validate form</p>
-          <h3 style="color: #aaa;">A hospital trust near you</h3>
+        
+          <center>
+          <p>Tick any boxes as appropriate and press the green button to check your answer.</p>
+          <h3 id="signButton" class="pencil submit-button"> Sign request!</h3>
+          </center>
+        </div >
+        <div class="request-section split">
+          <h2>Patient ID</h2>
+          <p>Patient surname: <span class="handwritten" id="patientlast">Surname</span></p>
+          <p>Patient first name: <span class="handwritten" id="patientfirst">Firstname</span></p>
+          <p>Gender: <span class="handwritten" id="patientgender">patient gender</span></p>
+          <p>DOB: <span class="handwritten" id="patientdob">21-12-2010</span></p>
+          <p>Patient identifier: <span class="handwritten" id="patientchi">81822192</span></p>
         </div>
-    </div>
+        <h3 style="color: #aaa;">A hospital trust near you</h3>
+      </div>
     <br>
     <br>
     <br>
@@ -446,7 +509,7 @@ var components = {
         "cmv": true,
         "irradiation": true
     },
-    "cryopreserved (deglycerolised) red cells":{
+    "cryopreserved red cells":{
         "p":0.1,
         "cmv": "",
         "irradiation": false
@@ -703,25 +766,25 @@ function generateQuestions () {
         switch (questionType) {
             case 1: // condition/diagnosis
                 questionPhrase = "How should " + component + " be transfused  to a patient who has " + condition + "?";
-                questionPhrase = "<patient> requires a transfusion with <strong>" + component + "</strong>. <pronoun> has " + condition + "."
+                questionPhrase = "<patient> requires a transfusion with <strong>" + component + "</strong>. <pronoun> has <strong>" + condition + "</strong>."
                 firstFactor = condition;
                 secondFactor = conditions[condition];
                 break;
             case 2: // medication
                 questionPhrase = "How should " + component + " be supplied for a patient who is being treated with " + drug + "?";
-                questionPhrase = "<patient> requires a transfusion with <strong>" + component + "</strong>. <pronoun> is also receiving treatment with " + drug + "."
+                questionPhrase = "<patient> requires a transfusion with <strong>" + component + "</strong>. <pronoun> is also receiving treatment with <strong>" + drug + "</strong>."
                 firstFactor = drug;
                 secondFactor = drugs[drug];
                 break;
             case 3: // treatment
                 questionPhrase = "How should " + component + " be administered to a patient who is undergoing " + treatment + "?";
-                questionPhrase = "<patient> requires a transfusion with <strong>" + component + "</strong>. <pronoun> is also undergoing " + treatment + "."
+                questionPhrase = "<patient> requires a transfusion with <strong>" + component + "</strong>. <pronoun> is also undergoing <strong>" + treatment + "</strong>."
                 firstFactor = treatment;
                 secondFactor = treatments[treatment];
                 break;
             case 4: // history
                 questionPhrase = "How should " + component + " be administered to a patient who has undergone " + history + "?"; 
-                questionPhrase = "<patient> requires a transfusion with <strong>" + component + "</strong>. <pronoun> has undergone " + history + "."
+                questionPhrase = "<patient> requires a transfusion with <strong>" + component + "</strong>. <pronoun> has undergone <strong>" + history + "</strong>."
                 firstFactor = history;
                 secondFactor = histories[history];
                 break;
@@ -790,6 +853,7 @@ function randomPick (obj) {
 
 
 function generateBadgeView () {
+  return;
     for (item in badges){
         var status = (badges[item].earned) ? "earned" : "";
         $('<img src="http://optimalblooduse.eu/app/badges/' + item + '.png" class="badge ' + status +'" id="'+item+'"/>').appendTo($("#container"));
