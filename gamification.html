@@ -109,17 +109,26 @@
 
 #request-form {
   position: relative;
-  top: -2em;
+  top: 1em;
+  left: 0.5em;
   background: #fee;
   background: url("pink_rice.png");
-  border-radius: 0 0 90px 2px / 0 0 6px 16px;
-  box-shadow: 0 -8px 123px rgba(0,0,0,.3),19px -30px 120px rgb(255, 228, 228) inset;
+  border-radius: 0 0 90px 12px / 0 0 6px 116px;
+  box-shadow: 0 -8px 20px rgba(0,0,0,.15), 19px -30px 120px rgb(225, 218, 218) inset;
   color: #555;
   padding: 1em;
-  max-width: 52em;
+  max-width: 48em;
   margin: -6em auto 0 auto;
   transform: rotate(0deg);
+  opacity: 0.98;
 }
+
+#request-form:hover {
+  box-shadow: 0 12px 50px rgba(0,0,0,.35), 19px -30px 50px rgb(225, 218, 218) inset;
+  top: 0.8em;
+}
+
+
 
 .request-section {
   border-radius: 4px;
@@ -146,10 +155,10 @@
 }
 
 .portrait {
-  margin: -0.5em 0.5em 3em 0em;
-  max-height: 7em;
+  margin: 0 0.5em 1em 0em;
+  max-height: 8em;
   float: left; 
-  border-radius: 5px;
+  border-radius: 7px;
   filter: blur(1px) sepia(100%); 
   -webkit-filter: blur(1px) sepia(100%); 
   border: 1px solid #ddd;
@@ -173,21 +182,20 @@
 }
 
 .highlighted {
-  margin: 0.25em;
+  margin: 0.25em 0 0.25em 0;
   text-align: center;
   color: black;
   background: #FFc;
   padding: 0.5em;
+  border: 1px solid #ddd;
 }
 
 .submit-button {
   padding: 0;
   cursor: pointer;
   margin: 1em 0 0 0;
-  font-family: 'Just Another Hand', cursive;
   font-size: 2em;
-  color: gray;
-  background: #FEE;
+  background: #Fff;
   border: 1px solid #ddd;
   border-bottom: 2px dotted black;
   border-radius: 4px 4px 0 0;
@@ -199,11 +207,11 @@
 
 .clip {
     position: absolute;
-    width: 200px;
-    left: 55%;
-    z-index: 8;
-    top: 1.5em;
-    transform: rotate(4deg);
+    width: 300px;
+    left: 45%;
+    z-index: 18;
+    top: 2.8em;
+    transform: rotate(2deg);
 }
 
 
@@ -265,14 +273,22 @@ input[type="checkbox"]:checked + label {
 
 .patient-record {
   background: url("cork-wallet.png");
-  padding: 1em 1em 6em 1em; 
+  padding: 1.25em 1em 6em 1em; 
   max-width: 34em; 
   min-height: 7em;
   margin: 2em auto 0 auto;
-  transform: rotate(3deg);
+  transform: rotate(2deg);
   position: relative;
-  top: -1em;
+  top: 0;
+  left: 1em;
 }
+
+.patient-record:hover {
+  box-shadow: 0 10px 15px 0 rgba(0,0,0,0.15);
+  z-index: 10;
+  opacity: 0.98;
+  cursor: help;
+} 
 
 .box-border {
   width: 2em;
@@ -283,11 +299,53 @@ input[type="checkbox"]:checked + label {
   border-radius: 4px;
 }
 
+.postit-container {
+  display: block;
+  position: absolute;
+  right: 1em;
+  bottom: -8em;
+}
+
+.postit {
+  width: 170px;
+  height: 100px;
+  padding: 1em;
+  margin: 1em;
+  z-index: 2;
+  position: relative;   
+  border: 1px solid #E8E8E8;
+  border-top: 0em solid #FFFFCC;
+  border-bottom-right-radius: 60px 5px;
+  display:inline-block;    
+  background: #ffff88; /* Old browsers */
+  background: linear-gradient(135deg, #ffff88 81%,#ffff88 82%,#ffff88 82%,#ffffc6 100%); /* W3C */
+}
+
+.cornershadow {     
+  content: "";
+  position: relative;
+  z-index: 1;
+  right:-20px;
+  bottom: 55px;
+  width:200px;
+  height: 25px;
+  background: rgba(0, 0, 0, 0.2);
+  box-shadow:2px 15px 5px rgba(0, 0, 0, 0.40);
+  -moz-transform: matrix(-1, -0.1, 0, 1, 0, 0);
+   -webkit-transform: matrix(-1, -0.1, 0, 1, 0, 0);
+        -o-transform: matrix(-1, -0.1, 0, 1, 0, 0);
+       -ms-transform: matrix(-1, -0.1, 0, 1, 0, 0);
+           transform: matrix(-1, -0.1, 0, 1, 0, 0);
+}
+
 .board {
   background: url("wood.jpg");
-  max-width: 50em;
-  margin: 4em auto 4em auto;
+  max-width: 51em;
+  min-height: 60em;
+  margin: 7em auto 4em auto;
   border-radius: 1em;
+  padding-right: 1em;
+  padding-left: 0.5em;
 }
 
 .container {
@@ -321,11 +379,18 @@ input[type="checkbox"]:checked + label {
 
 @media (max-width: 600px) {
 
-  body {font-size: 0.8em;}
+  body {font-size: 0.9em;}
       
+  .board {
+    margin-top: 3em;
+  }
   .clip {
-    width: 100px;
-    top: 4em;
+    width: 120px;
+    top: 2.5em;
+  }
+  
+  .part-two {
+    display: none !important;
   }
   
   .patient-record {
@@ -387,15 +452,22 @@ input[type="checkbox"]:checked + label {
     <div data-role="contents" style="margin: 1em">
     
       <div class="board">
+          
         
-        <img class="clip" src="clip.png">
+        <img class="clip" src="clip2.png">
         <div class="patient-record">
           <div id="patientPortrait" style="transform:rotate(0deg);">Loading portrait</div>
-          <div id="patientInfo"  style="transform:rotate(-3deg);">Loading info</div>
+          <div id="patientInfo"  style="transform:rotate(-2deg);">Loading info</div>
+          <div class="postit-container">
+            <div class="postit">
+              <em>Hint: check any special requirements and sign the request form to verify your answers.</em>
+            </div>
+            <div class="cornershadow"></div>
+          </div>
         </div>
       
         <div id="request-form" style="text-align:center">
-          <h2 style="color: #e99; text-shadow: 1px 1px 5px #fff;">BLOOD REQUEST FORM</h2>
+          <h1 style="color: #e99; text-shadow: 1px 1px 5px #fff;">BLOOD REQUEST FORM</h1>
           <div class="request-section split">
             
             <h2> Components</h2>
@@ -423,10 +495,8 @@ input[type="checkbox"]:checked + label {
               <label class="pencil" data-role="none" for="hepe">Hep-E negative</label>
             </div>
             
-            
             <div class="highlighted">
-            
-            <h3 style="margin:0.25em"> Sign to authorise request</h3>
+            <h3> Sign to verify request</h3>
             <div class="pencil submit-button">
               <div class="container">
                 <div class="faded-signature">
@@ -437,9 +507,8 @@ input[type="checkbox"]:checked + label {
                 </div>
               </div>
             </div>
-          
             </div>
-              <em>Hint: check any special requirements and sign the request to verify your answers.</em>
+          
             
           <script>
             (function () {
@@ -505,7 +574,7 @@ input[type="checkbox"]:checked + label {
           </div>
         
           
-          <div class="request-section split">
+          <div class="request-section split part-two">
             <h2>Patient ID</h2>
             <p>Patient surname: <span class="handwritten" id="patientlast">Surname</span></p>
             <p>Patient first name: <span class="handwritten" id="patientfirst">Firstname</span></p>
@@ -513,12 +582,14 @@ input[type="checkbox"]:checked + label {
             <p>DOB: <span class="handwritten" id="patientdob">21-12-2010</span></p>
             <p>Patient identifier: <span class="handwritten" id="patientchi">81822192</span></p>
           </div>
-          <h3 style="color: #444;">A hospital trust near you</h3>
         </div>
-      <br>
-      <br>
-      <br>
+        <br>
+          
+        <br>
+    
+        <h3 style="text-align: center; color: transparent;">A hospital trust near you</h3>
       </div>
+
       </div>
   
   </div>
