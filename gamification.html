@@ -17,7 +17,6 @@
     background-image: url("http://optimalblooduse.eu/app/badges/bg.png");
   }
 
-
 .badge {
     width: 6em;
     opacity: 0.1;
@@ -154,29 +153,43 @@
 
 .pencil, .pencil > * {
   cursor: url('pen_64.ico'), auto !important;	
+  margin: 0 !important;
+}
+
+.white {
+  padding: 0.5em;
+  margin-bottom: 0.5em;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
 
 .highlighted {
   text-align: center;
   color: black;
   background: #FFc;
-  padding: 1em;
-  margin: 0;
-  box-shadow: 0 0 5px 0 #aaa;
+  padding: 0.5em;
+  margin: 1em 0 0 0;
+  border: 1px solid #ddd;
 }
 
 .submit-button {
-  padding: 0.8em;
-  background: #CFC;
-  border-bottom: 2px dotted green;
+  padding: 0;
   cursor: pointer;
   margin: 1em 0 0 0;
-  box-shadow: 0 0 5px 0 #aaa;
+  border-bottom: 5px dotted black;
+  font-family: 'Just Another Hand', cursive;
+  font-size: 2.5em;
+whiblue
 }
 
 .submit-button:hover {
+  color: blue;
   background: #AFA;
-}
 
 @media (max-width: 600px) {
     
@@ -255,9 +268,12 @@ input[type="checkbox"]:checked + label {
 .box-border {
   width: 2em;
   height: 2.2em;
-  background: #DDA;
-  border-radius: 5px;
+  background: #fee;
   float: right;
+  
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  
 }
   </style>
 
@@ -297,7 +313,7 @@ input[type="checkbox"]:checked + label {
     </div>
     <div data-role="contents" style="margin: 1em">
   
-      <h2 style="text-align: center;">Complete the yellow section of the request form.</h2>
+      <h2 style="display:none; text-align: center;">Complete the yellow section of the request form.</h2>
       
       <div style="margin-bottom: 1em; background: white; box-shadow: 0 0 10px 0 #ccc; padding: 1em; max-width: 50em; margin: auto">
         <div id="patientPortrait">Loading portrait</div>
@@ -310,27 +326,39 @@ input[type="checkbox"]:checked + label {
           
           <h2> Components</h2>
           <p>Units: <span class="handwritten" id="bloodcomponent">.</span></p>
+
           
-          <h2> Special requirements</h2>
-          <div class="highlighted">
-            <p style="margin: 0 0 0.5em 0"><em>Tick as appropriate and press the green button to check your answer.</em></p>
+
+          <p style="margin-bottom: 0"> Special requirements: </p>
+            
+          <div class="white">
             <div class="box-border"></div>
             <input type="checkbox" data-role="none" name="irrad" id="irrad" />
             <label class="pencil" data-role="none" for="irrad">Irradiated</label>
-            
+          </div>
+          
+          <div class="white">
             <div class="box-border"></div>
             <input type="checkbox" data-role="none" name="cmvneg" id="cmvneg" />
             <label class="pencil" data-role="none" for="cmvneg">CMV negative</label>
-            
+          </div>
+          
+          <div class="white">
             <div class="box-border"></div>
             <input type="checkbox" data-role="none" name="hepe" id="hepe" />
             <label class="pencil" data-role="none" for="hepe">Hep-E negative</label>
-           
-           </div>
-          <center>
-          <h3 onclick="check()" class="pencil submit-button"> Sign request!</h3>
-          </center>
+          </div>
+          
+        <center>
+          <div style="margin-top: 0.5em !important" onclick="check()" class="pencil submit-button"> Sign request!</div>
+        </center>
+
+          <div class="highlighted">
+            <em>Tick any special requirements and sign the request to check your answers.</em>
+          </div>
+          
         </div>
+      
         
         <div class="request-section split">
           <h2>Patient ID</h2>
