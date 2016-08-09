@@ -848,7 +848,7 @@ function toolbarClick(obj, event) {
       var parts = tabList[tab].id.split('_');
       var user = parts[1];
       // Bugfix: Preserve repos with dots in name!
-      var reponame = actualRepoName; //tabList[tab].id.split('_')[2];
+      var repo = actualRepoName; //tabList[tab].id.split('_')[2];
       var branch = parts[3];
       var elem = tabList[tab].id;
       refreshProject(user,repo,branch, elem);
