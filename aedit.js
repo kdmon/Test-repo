@@ -2461,7 +2461,8 @@ function fileTreeMenu (node) {
 
 // Create a sidebar for browsing repository files
 function openProject (user, repository, branch, panelArea) {
-  var safeRepo = repository.replace(/[^a-z0-9_-]|\s+/gmi, "");
+  // strip out any character that isn't: a-z A-Z 0-9 _.-
+  var safeRepo = repository.replace(/[^a-z0-9._-]|\s+/gmi, "");
   branch = (branch !== undefined) ? branch : 'master';
   if (branch == 'getbranchfromselection') branch = $('#branch-list select').val();
   var id = "filebrowser_" + user + "_" + safeRepo + "_" + branch + "_" + Math.round(Math.random() * 10000000);
@@ -2904,6 +2905,7 @@ function startDoc(settings) {
     dataType: 'text'
   }).success(function(value) {
     
+    w2popup.close();
     // Check to prevent opening binary files in text editor!
     
     var bytes = toUTF8Array(value);
@@ -3077,7 +3079,6 @@ function startDoc(settings) {
         
         //  Tab close clicks to be handled elsewhere!
         
-        w2popup.close();
         refreshTabs();
         w2ui[location.layout].get(location.panel).tabs.click(tabId);
         
