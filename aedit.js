@@ -830,7 +830,8 @@ function toolbarClick(obj, event) {
       var content = editors[tabList[tab].panel].getSession().getValue();
       var path =  tabList[tab].path;
       var username = tabList[tab].id.split('/')[0];
-      var reponame = tabList[tab].id.split('/')[1];
+      // Bugfix: Preserve repos with dots in name!
+      var reponame = actualRepoName; //tabList[tab].id.split('_')[2];
       var branch = tabList[tab].id.split('/')[2];
       var message = prompt("Please describe your changes to the file", "Update file.");
       writeFile (username, reponame, branch, [{path: path, content: content}], message);
@@ -846,7 +847,8 @@ function toolbarClick(obj, event) {
     case 'refreshFiles':
       var parts = tabList[tab].id.split('_');
       var user = parts[1];
-      var repo = parts[2];
+      // Bugfix: Preserve repos with dots in name!
+      var reponame = actualRepoName; //tabList[tab].id.split('_')[2];
       var branch = parts[3];
       var elem = tabList[tab].id;
       refreshProject(user,repo,branch, elem);
@@ -867,7 +869,8 @@ function toolbarClick(obj, event) {
     break;
     case 'uploadfile':
       var username = tabList[tab].id.split('_')[1];
-      var reponame = tabList[tab].id.split('_')[2];
+      // Bugfix: Preserve repos with dots in name!
+      var reponame = actualRepoName; //tabList[tab].id.split('_')[2];
       var branch = tabList[tab].id.split('_')[3];
       //var filename = prompt ("Please enter new file name and path");
       var html = '<h3>Select a file for upload</h3><p>' +
