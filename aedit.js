@@ -857,7 +857,8 @@ function toolbarClick(obj, event) {
     break;
     case 'newfile':
       var username = tabList[tab].id.split('_')[1];
-      var reponame = tabList[tab].id.split('_')[2];
+      // Bugfix: Preserve repos with dots in name!
+      var reponame = actualRepoName; //tabList[tab].id.split('_')[2];
       var branch = tabList[tab].id.split('_')[3];
       var filename = prompt ("Please enter new file name and path");
       if (filename === null) return;
@@ -2460,9 +2461,11 @@ function fileTreeMenu (node) {
 }
 
 // Create a sidebar for browsing repository files
+var actualRepoName;
 function openProject (user, repository, branch, panelArea) {
-  // strip out any character that isn't: a-z A-Z 0-9 _.-
-  var safeRepo = repository.replace(/[^a-z0-9._-]|\s+/gmi, "");
+  // strip out any character that isn't: a-z A-Z 0-9 _- (notably periods: .)
+  actualRepoName = repository;
+  var safeRepo = repository.replace(/[^a-z0-9_-]|\s+/gmi, "");
   branch = (branch !== undefined) ? branch : 'master';
   if (branch == 'getbranchfromselection') branch = $('#branch-list select').val();
   var id = "filebrowser_" + user + "_" + safeRepo + "_" + branch + "_" + Math.round(Math.random() * 10000000);
