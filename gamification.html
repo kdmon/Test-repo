@@ -1009,9 +1009,7 @@ input[type="checkbox"]:checked + label {
           
           var cmv = (
               (
-                  components[component].cmv
-                  ||
-                  secondFactor.cmv
+                  components[component].cmv || secondFactor.cmv
               )
               && !(components[component].cmv === false)
           );
@@ -1021,9 +1019,7 @@ input[type="checkbox"]:checked + label {
           
           var irr = (
               (
-                  components[component].irradiation
-                  ||
-                  secondFactor.irradiation
+                  components[component].irradiation || secondFactor.irradiation
               )
               && !(components[component].irradiation === false)
           );
@@ -1034,9 +1030,24 @@ input[type="checkbox"]:checked + label {
           else if (irr) answer = "irr";
           else if (cmv) answer = "cmv";
           
+          var explanation = "";
+          
+          if (components[component].irradiation === true) explanation += component + " is an indication for irradiation.\n";
+          if (components[component].irradiation === false) explanation += component + " is NOT an indication for irradiation.\n";
+          
+          if (components[component].cmv === true) explanation += component + " is an indication for CMV-negative.\n";
+          if (components[component].cmv === false) explanation += component + " is NOT an indication for CMV-negative.\n";
+          
+          if (secondFactor.irradiation === true) explanation += firstFactor + " is an indication for irradiation.\n";
+          if (secondFactor.irradiation === false) explanation += firstFactor + " is NOT an indication for irradiation.\n";
+          
+          if (secondFactor.cmv === true) explanation += firstFactor + " is an indication for CMV-negative.\n";
+          if (secondFactor.cmv === false) explanation += firstFactor + " is NOT an indication for CMV-negative.\n";
+          
           questionBank[i] = {};
           questionBank[i].question = questionPhrase;
           questionBank[i].answer = answer;
+          questionBank[i].explanation = explanation;
           questionBank[i].component = component;
           questionBank[i].factor = firstFactor;
           questionBank[i].baby = secondFactor.baby || false;
@@ -1144,7 +1155,6 @@ input[type="checkbox"]:checked + label {
       
   }
   
-  
   function check () {
     var rightAnswer = questions[currentQuestion].answer;
     
@@ -1161,14 +1171,14 @@ input[type="checkbox"]:checked + label {
     //console.log(irradiated, cmv, ans, rightAnswer);
     
     if (ans == rightAnswer) {
-      alert ("Correct!")
+      alert ("You are correct: " + questions[currentQuestion].explanation);
       makeLevel("level1");
       //var randomBadge = rand (badges);
       //badges[randomBadge].earned = true;
       //viewBadge (randomBadge);
     }
     else {
-      alert("Wrong answer")
+      alert ("You answered incorrectly: " + questions[currentQuestion].explanation);
       makeLevel("level1");
     }
   }
