@@ -1032,17 +1032,35 @@ input[type="checkbox"]:checked + label {
           
           var explanation = "";
           
-          if (components[component].irradiation === true) explanation += component + " is an indication for irradiation.\n";
-          if (components[component].irradiation === false) explanation += component + " is NOT an indication for irradiation.\n";
+          // double irradiation rationale, e.g. gran+atg
+          if (components[component].irradiation === true && secondFactor.irradiation === true)
+            explanation += component + " is a non-leucodepleted cellular blood component and must be irradiated. Furtermore, " + firstFactor + " is an indication for irradiation.";
           
-          if (components[component].cmv === true) explanation += component + " is an indication for CMV-negative.\n";
-          if (components[component].cmv === false) explanation += component + " is NOT an indication for CMV-negative.\n";
+          // component irradiation, e.g. gran
+          if (components[component].irradiation === true && !(secondFactor.irradiation === true))
+            explanation += component + " is a non-leucodepleted cellular blood component and must be irradiated.";
           
-          if (secondFactor.irradiation === true) explanation += firstFactor + " is an indication for irradiation.\n";
-          if (secondFactor.irradiation === false) explanation += firstFactor + " is NOT an indication for irradiation.\n";
+          // component irradiation, e.g. gran
+          if (components[component].irradiation === false && secondFactor.irradiation === true)
+            explanation += "although " + firstFactor + " is an indication for irradiating cellular blood components, " + component + " do not contain viable donor lymphocytes that give rise to TA-GvHD.";
           
-          if (secondFactor.cmv === true) explanation += firstFactor + " is an indication for CMV-negative.\n";
-          if (secondFactor.cmv === false) explanation += firstFactor + " is NOT an indication for CMV-negative.\n";
+          // factor irradiation, e.g. red cells + campath
+          if (secondFactor.irradiation === true && !(components[component].irradiation === false) && !(components[component].irradiation === true))
+            explanation += firstFactor + " is an indication for irradiating " + component + ", which contain viable donor lymphocytes that could give rise to TA-GvHD.\n";
+          
+          if (secondFactor.irradiation === false)
+            explanation += firstFactor + " is NOT an indication for irradiated blood.\n";
+          
+          if (components[component].cmv === true)
+            explanation += "\nAs " + component + " cannot be leucodepleted and are often given to immunosuppressed patients, they must be provided as CMV-negative.\n";
+
+          if (components[component].cmv === false)
+            explanation += "\nAdditionally, " + component + " from CMV-negative donors is never required as it does not contain lymphocytes (monocytes) that hosts CMV.\n";
+          
+          if (secondFactor.cmv === true)
+            explanation += "\nAlso, " + firstFactor + " is an indication for CMV-negative blood.\n";
+          if (secondFactor.cmv === false)
+            explanation += "\nAlso, " + firstFactor + " is NOT an indication for CMV-negative blood.\n";
           
           questionBank[i] = {};
           questionBank[i].question = questionPhrase;
