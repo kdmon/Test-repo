@@ -452,8 +452,6 @@ input[type="checkbox"]:checked + label {
     <div data-role="contents" style="margin: 1em">
     
       <div class="board">
-          
-        
         <img class="clip" src="clip2.png">
         <div class="patient-record">
           <div id="patientPortrait" style="transform:rotate(0deg);">Loading portrait</div>
@@ -1123,53 +1121,59 @@ input[type="checkbox"]:checked + label {
   }
   
   function makeLevel (level) {
-      $('input:checkbox').removeAttr('checked');
-      window.signature.initialize();
-      window.scrollTo(0,0);
-      $("#patientContainer").html('Loading new patient...');
-      $("#questionContainer").html('Loading new question...');
-      currentQuestion = rand(questions);
-      var param = '';
-      if (questions[currentQuestion].female) param = "&gender=female";
-      $.ajax({
-        url: 'https://randomuser.me/api/?nat=gb' + param,
-        dataType: 'json',
-        success: function(data){
-          var first = toTitleCase(data.results[0].name.first);
-          var last = toTitleCase(data.results[0].name.last);
-          var title = toTitleCase(data.results[0].name.title.replace('monsieur', 'mr').replace('mademoiselle', 'ms'));
-          var gender = data.results[0].gender;
-          $("#patientlast").html(last);
-          $("#patientfirst").html(first);
-          $("#patientgender").html(gender);
-          $("#bloodcomponent").html('1 x unit of ' + questions[currentQuestion].component);
-          $("#patientchi").html(Math.round(Math.random() * 10000000000));
-          
-          
-          var month = Math.round(Math.random() * 11) + 1
-          var yearsOld = (Math.round(Math.random() * 33) + 18);
-          var year = new Date().getFullYear() - yearsOld;
-          if (questions[currentQuestion].baby) year = new Date().getFullYear() - 1;
-          var day = Math.round(Math.random() * 29) + 1
-          $("#patientdob").html(day + '-' + month + '-' + year);
-          
-          var age = questions[currentQuestion].baby ? 'baby' : 'adult';
-          var genderLabel = gender === 'female' ? 'woman' : 'man';
-          if (age == 'baby') {
-            genderLabel = (gender === 'female' ? 'girl' : 'boy'); 
-          }
-          else age = yearsOld + " year old ";
-          var name = "" + first + " " + last + " (" + age + " " + genderLabel + ")";
-          var patientReference = age == 'baby' ? first : title + ". " + last;
-          var pronoun = gender === "female" ? "She" : "He";
-          var theQuestion = questions[currentQuestion].question.replace("<patient>", patientReference).replace("<pronoun>", pronoun);
-          var imgurl = data.results[0].picture.large;
-          if (age === 'baby') imgurl = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Human-Male-White-Newborn-Baby-Crying.jpg/320px-Human-Male-White-Newborn-Baby-Crying.jpg";
-  
-          $("#patientInfo").html( '<h3 style="margin:0.25em">' + name + '</h3><p style="margin:0.25em"> ' + theQuestion + '</p>');
-          $("#patientPortrait").html( '<img class="portrait" src="' + imgurl + '">');
+    $(".board").animate({ 'marginLeft': '2000px'}, 1000);
+    $(".clip").hide();
+    $('input:checkbox').removeAttr('checked');
+    window.signature.initialize();
+    window.scrollTo(0,0);
+    $("#patientContainer").html('Loading new patient...');
+    $("#questionContainer").html('Loading new question...');
+    currentQuestion = rand(questions);
+    var param = '';
+    if (questions[currentQuestion].female) param = "&gender=female";
+    $.ajax({
+      url: 'https://randomuser.me/api/?nat=gb' + param,
+      dataType: 'json',
+      success: function(data){
+        var first = toTitleCase(data.results[0].name.first);
+        var last = toTitleCase(data.results[0].name.last);
+        var title = toTitleCase(data.results[0].name.title.replace('monsieur', 'mr').replace('mademoiselle', 'ms'));
+        var gender = data.results[0].gender;
+        $("#patientlast").html(last);
+        $("#patientfirst").html(first);
+        $("#patientgender").html(gender);
+        $("#bloodcomponent").html('1 x unit of ' + questions[currentQuestion].component);
+        $("#patientchi").html(Math.round(Math.random() * 10000000000));
+        
+        
+        var month = Math.round(Math.random() * 11) + 1
+        var yearsOld = (Math.round(Math.random() * 33) + 18);
+        var year = new Date().getFullYear() - yearsOld;
+        if (questions[currentQuestion].baby) year = new Date().getFullYear() - 1;
+        var day = Math.round(Math.random() * 29) + 1
+        $("#patientdob").html(day + '-' + month + '-' + year);
+        
+        var age = questions[currentQuestion].baby ? 'baby' : 'adult';
+        var genderLabel = gender === 'female' ? 'woman' : 'man';
+        if (age == 'baby') {
+          genderLabel = (gender === 'female' ? 'girl' : 'boy'); 
         }
-      });
+        else age = yearsOld + " year old ";
+        var name = "" + first + " " + last + " (" + age + " " + genderLabel + ")";
+        var patientReference = age == 'baby' ? first : title + ". " + last;
+        var pronoun = gender === "female" ? "She" : "He";
+        var theQuestion = questions[currentQuestion].question.replace("<patient>", patientReference).replace("<pronoun>", pronoun);
+        var imgurl = data.results[0].picture.large;
+        if (age === 'baby') imgurl = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Human-Male-White-Newborn-Baby-Crying.jpg/320px-Human-Male-White-Newborn-Baby-Crying.jpg";
+
+        $("#patientInfo").html( '<h3 style="margin:0.25em">' + name + '</h3><p style="margin:0.25em"> ' + theQuestion + '</p>');
+        $("#patientPortrait").html( '<img class="portrait" src="' + imgurl + '">');
+        $(".board").animate({ 'marginLeft': '25%'}, 1000, function() {
+          $(".clip").show();
+          $(".board").css({ 'marginLeft': 'auto'});
+        });
+      }
+    });
       
   }
   
