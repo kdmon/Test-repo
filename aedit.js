@@ -1126,9 +1126,12 @@ function writeFile (username, reponame, branch, files, message, parentCommitShas
       var file = files[i];
       (function(){
         var that = file;
+        console.log(that.path + " " + (that.binary ? 'base64' : 'utf-8'));
         blobs[i] = repo.git.blobs.create({
-          encoding: 'base64', //that.binary ? 'base64' : 'utf-8',
-          content: btoa(that.content)
+          // Nov-2016:  problems with utf-8 encoding - so re-enabling check
+          // encoding: 'base64', //that.binary ? 'base64' : 'utf-8',
+          encoding: that.binary ? 'base64' : 'utf-8',
+          content: that.binary ? btoa(that.content) : that.content
         }).then(function (blob){
           return ({
             path: that.path,
