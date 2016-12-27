@@ -941,7 +941,9 @@ function collaborate () {
   $('<div id="' + id +'" class="preview-iframe" style="position:absolute;overflow:auto;"></div>').prependTo("body");
   
   // $('<div id="container_' + id +'" class="panel-content" style="display:none"></div>').appendTo( "body" );
-  $("#"+id).append('<div style="width:40%" id="remotesVideos"></div><video style="width:40%" id="localVideo"></video><div id="chathistory"></div><textarea rows="2" style="height:54px; width:90%" id="chatbox"></textarea><br/><button onclick="say()">Say</button>');
+  //$("#"+id).append('<div style="width:40%" id="remotesVideos"></div><video style="width:40%" id="localVideo"></video><div id="chathistory"></div><textarea rows="2" style="height:54px; width:90%" id="chatbox"></textarea><br/><button onclick="say()">Say</button>');
+
+  $("#"+id).append('<div id="remoteVideos"><video id="localVideo"></video></div><video id="largeVideo"></video><div id="chathistory"></div><textarea rows="2" style="height:54px; width:90%" id="chatbox"></textarea><br/><button onclick="say()">Say</button>');
 
   w2ui.layout.show('right', true);
   w2ui[location.layout].get(location.panel).tabs.click(id);
@@ -1060,10 +1062,22 @@ function setupWebrtc (room, media) {
     mediaEnabled.webrtc = true;
     setTimeout(function () {
       $("#largeVideo").show().attr({
-          "src": $("#localVideo").attr("src"),
+        "src": $("#localVideo").attr("src"),
+        "autoplay": "autoplay"
+      });
+      
+      $("#largeVideo").on('click', function() {
+        $(this).hide();
+      });
+      
+      $("#remoteVideos").on('click', function (e) {
+        $("#largeVideo").show().attr({
+          "src": $(e.target).attr("src"),
           "autoplay": "autoplay"
         });
+      });
     }, 2000);
+    
     //$("#mediacontainer").show();
     //$("#mediabuttonstop").show();
     //$("#mediabuttonleave").hide();
