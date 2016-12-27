@@ -938,10 +938,10 @@ function collaborate () {
   });
   
   // 4. render into temporary dom element once
-  $('<div id="' + id +'" class="preview-iframe" style="position:absolute; overflow: hidden;"></div>').prependTo("body");
+  $('<div id="' + id +'" class="preview-iframe" style="position:absolute;overflow:auto;"></div>').prependTo("body");
   
   // $('<div id="container_' + id +'" class="panel-content" style="display:none"></div>').appendTo( "body" );
-  $("#"+id).append('<h3>Video chat</h3><video height="300" id="localVideo"></video><div id="remotesVideos"></div>');
+  $("#"+id).append('<h3>Video chat</h3><div style="width:100%" id="remotesVideos"></div><video style="width:100%" id="localVideo"></video>');
 
   w2ui[location.layout].get(location.panel).tabs.click(id);
   $(location.id).find(".w2ui-tabs").scrollLeft(99999);
