@@ -913,7 +913,7 @@ if (jQuery.when.all===undefined) {
 
 function collaborate () {
   
-  var room = prompt("Please enter collaboration room code");
+  var room = "54321-a-chat-room-for-collaborating-12345";
   
   setupWebrtc (room, 'video');
   
