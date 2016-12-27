@@ -941,13 +941,60 @@ function collaborate () {
   $('<div id="' + id +'" class="preview-iframe" style="position:absolute;overflow:auto;"></div>').prependTo("body");
   
   // $('<div id="container_' + id +'" class="panel-content" style="display:none"></div>').appendTo( "body" );
-  $("#"+id).append('<h3>Video chat</h3><div style="width:100%" id="remotesVideos"></div><video style="width:100%" id="localVideo"></video>');
+  $("#"+id).append('<div style="width:40%" id="remotesVideos"></div><video style="width:40%" id="localVideo"></video><div id="chathistory"></div><textarea rows="2" style="height:54px" id="chatbox"></textarea><br/><button onclick="say()">Say</button>');
 
   w2ui.layout.show('right', true);
   w2ui[location.layout].get(location.panel).tabs.click(id);
   $(location.id).find(".w2ui-tabs").scrollLeft(99999);
   refreshTabs();
+  
+  startChat();
 
+}
+
+
+function say() {
+  var msg = $('#chatbox').val().trim();
+  setTimeout(function() {$('#chatbox').val('').focus();}, 50);
+  if (msg == '') return;
+  var d = new Date();
+  chatroom.shout({
+    action: "say",
+    timestamp: d.toISOString(),
+    user: config.user,
+    msg: msg
+  });
+  var stamp = d.toLocaleTimeString();
+  $("#chathistory").append('<div><em>(' + stamp + ') you said: </em> ' + msg + '</div>').scrollTop(999999);
+}
+
+var chatroom;
+
+function startChat() {
+  var room = "a-single-global-chatroom-12345-54321";
+  connection.open(room, 'text', function(error, doc) {
+    chatroom = doc;
+    chatroom.on('shout', function(data) {
+      switch (data.action) {
+        case "announce":
+          var d = new Date(data.timestamp);
+          var stamp = d.toLocaleTimeString();
+          $("#chathistory").append('<div> (' + stamp + ') <b>: ' + data.msg + '</b></div>').scrollTop(999999);
+          break;
+        case "say":
+          var d = new Date(data.timestamp);
+          var stamp = d.toLocaleTimeString();
+          $("#chathistory").append('<div> (' + stamp + ') <em>' + data.user + '</em>: ' + data.msg + '</div>').scrollTop(999999);
+          break;
+      }
+    });
+    var d = new Date();
+    chatroom.shout({
+      action: "announce",
+      timestamp: d.toISOString(),
+      msg: (config.user || 'A guest') + " joined the room."
+    });
+  });
 }
 
 var webrtc;
