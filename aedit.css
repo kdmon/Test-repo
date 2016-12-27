@@ -44,11 +44,6 @@ body {
   transform:scale(-1,1);
 }
 
-#largeVideo:hover {
-  opacity: 0.6;
-}
-
-
 #remoteVideos {
   background: black;
 }
