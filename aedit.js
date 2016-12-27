@@ -941,7 +941,7 @@ function collaborate () {
   $('<div id="' + id +'" class="preview-iframe" style="position:absolute;overflow:auto;"></div>').prependTo("body");
   
   // $('<div id="container_' + id +'" class="panel-content" style="display:none"></div>').appendTo( "body" );
-  $("#"+id).append('<div style="width:40%" id="remotesVideos"></div><video style="width:40%" id="localVideo"></video><div id="chathistory"></div><textarea rows="2" style="height:54px" id="chatbox"></textarea><br/><button onclick="say()">Say</button>');
+  $("#"+id).append('<div style="width:40%" id="remotesVideos"></div><video style="width:40%" id="localVideo"></video><div id="chathistory"></div><textarea rows="2" style="height:54px; width:90%" id="chatbox"></textarea><br/><button onclick="say()">Say</button>');
 
   w2ui.layout.show('right', true);
   w2ui[location.layout].get(location.panel).tabs.click(id);
@@ -965,7 +965,7 @@ function say() {
     msg: msg
   });
   var stamp = d.toLocaleTimeString();
-  $("#chathistory").append('<div><em>(' + stamp + ') you said: </em> ' + msg + '</div>').scrollTop(999999);
+  $("#chathistory").prepend('<div><em>(' + stamp + ') you said: </em> ' + msg + '</div>').scrollTop(999999);
 }
 
 var chatroom;
@@ -979,12 +979,12 @@ function startChat() {
         case "announce":
           var d = new Date(data.timestamp);
           var stamp = d.toLocaleTimeString();
-          $("#chathistory").append('<div> (' + stamp + ') <b>: ' + data.msg + '</b></div>').scrollTop(999999);
+          $("#chathistory").prepend('<div> (' + stamp + ') <b>: ' + data.msg + '</b></div>').scrollTop(999999);
           break;
         case "say":
           var d = new Date(data.timestamp);
           var stamp = d.toLocaleTimeString();
-          $("#chathistory").append('<div> (' + stamp + ') <em>' + data.user + '</em>: ' + data.msg + '</div>').scrollTop(999999);
+          $("#chathistory").prepend('<div> (' + stamp + ') <em>' + data.user + '</em>: ' + data.msg + '</div>').scrollTop(999999);
           break;
       }
     });
