@@ -458,6 +458,7 @@ function initButtons () {
     topmenu: ['logo', 'topspacer','signin'],
     editor: ['usermenu','filemenu', 'editmenu', 'tools'],
     preview: ['pause', 'previewurl', 'refreshPreview', 'share'],
+    collaboration: ['pause'],
     filebrowser: ['newfile','uploadfile','refreshFiles','sidebarsearch'],
     media: ['url', 'refresh', 'share'],
     empty: [],
@@ -836,6 +837,9 @@ function toolbarClick(obj, event) {
       var message = prompt("Please describe your changes to the file", "Update file.");
       writeFile (username, reponame, branch, [{path: path, content: content}], message);
     break;
+    case 'account:Collaborate':
+      collaborate();
+    break;
     case 'share':
       window.open(tabList[tab].fullUrl, "_blank");
     break;
@@ -905,6 +909,118 @@ if (jQuery.when.all===undefined) {
       });
     return deferred;
   };
+}
+
+function collaborate () {
+  
+  var room = prompt("Please enter collaboration room code");
+  
+  setupWebrtc (room, 'video');
+  
+  var id = "collaboration-window-" +  Math.round(Math.random() * 10000000);
+  
+  var title = '<i class="fa fa-comment-o"></i> Collaboration';
+
+  var location = pickPanel('preview');
+
+  // 3. Show tab
+  tabList[id] = {
+    id: id,
+    caption: title,
+    type: 'preview',
+    panel: location.area
+  };
+  
+  w2ui[location.layout].get(location.panel).tabs.add({
+    id: id,
+    closable: true,
+    caption: title
+  });
+  
+  // 4. render into temporary dom element once
+  $('<div id="' + id +'" class="preview-iframe" style="position:absolute; overflow: hidden;"></div>').prependTo("body");
+  
+  // $('<div id="container_' + id +'" class="panel-content" style="display:none"></div>').appendTo( "body" );
+  $("#"+id).append('<h3>Collaborate</h3><video height="300" id="localVideo"></video><div id="remotesVideos"></div>');
+
+  w2ui[location.layout].get(location.panel).tabs.click(id);
+  $(location.id).find(".w2ui-tabs").scrollLeft(99999);
+  refreshTabs();
+
+}
+
+var webrtc;
+var mediaEnabled = {};
+
+function setupWebrtc (room, media) {
+
+  if (webrtc) {
+    webrtc.stopLocalVideo();
+    webrtc.leaveRoom();
+    webrtc.connection.disconnect();
+    mediaEnabled.leftRoom = true;
+    mediaEnabled.webrtc = false;
+  }
+
+  webrtc = false;
+
+  if (media == "audio") {
+    webrtc = new SimpleWebRTC({
+      //url: "https://webappeditor.com:8888",
+      socketio: {'force new connection': true},
+      localVideoEl: 'localVideo',
+      remoteVideosEl: 'remoteVideos',
+      
+      autoRequestMedia: true,
+      media: {
+          video: false,
+          audio: true
+      }
+    });
+
+    mediaEnabled.audio = "unmuted";
+    mediaEnabled.video = false;
+  }
+  
+  else {
+    $("#localVideo").show();
+    webrtc = new SimpleWebRTC({
+      //url: "https://webappeditor.com:8888",
+      socketio: {'force new connection': true},
+      localVideoEl: 'localVideo',
+      remoteVideosEl: 'remoteVideos',
+      
+      autoRequestMedia: true,
+      media: {
+        video: {
+          mandatory: {
+            maxFrameRate: 15,
+            maxWidth: 320,
+            maxHeight: 240
+          }
+        },
+        audio: true
+      }
+    });
+    
+    mediaEnabled.audio = "unmuted";
+    mediaEnabled.video = "live";
+  }
+  
+  webrtc.on('readyToCall', function() {
+    webrtc.joinRoom(room);
+    mediaEnabled.webrtc = true;
+    setTimeout(function () {
+      $("#largeVideo").show().attr({
+          "src": $("#localVideo").attr("src"),
+          "autoplay": "autoplay"
+        });
+    }, 2000);
+    //$("#mediacontainer").show();
+    //$("#mediabuttonstop").show();
+    //$("#mediabuttonleave").hide();
+  });
+
 }
 
 function removeFile (username, reponame, branch, path, sha, message) {
@@ -1540,6 +1656,10 @@ function tabClick(obj, event) {
       tabList[item.id].visible = true;
       switchToolbar(location.layout, location.panel, 'preview');
       break;
+    case 'preview-collaborate':
+      tabList[item.id].visible = true;
+      switchToolbar(location.layout, location.panel, 'collaborate');
+      break;
     case 'filebrowser':
       elem = $("#container_" + item.id).detach();
       elem.appendTo("#container" + item.panel).show();
@@ -1599,6 +1719,7 @@ function updateLayout(force,resizeEvent) {
   
   window.requestAnimationFrame(function() {calcLayout(force, resizeEvent)});
 }
+
 var fps = 0;
 function calcLayout (force,resizeEvent) {
   // refresh layout every n frames or x ms after last cursor move
@@ -2186,10 +2307,6 @@ function showProjectsInTab (panelArea) {
   });
   w2popup.lock('Loading projects ...', true);
 
-}
-
-function addTab (id, caption, type, panel, activate) {
-  
 }
 
 function pushNodes (id, nodes) {
