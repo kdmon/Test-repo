@@ -943,7 +943,7 @@ function collaborate () {
   // $('<div id="container_' + id +'" class="panel-content" style="display:none"></div>').appendTo( "body" );
   //$("#"+id).append('<div style="width:40%" id="remotesVideos"></div><video style="width:40%" id="localVideo"></video><div id="chathistory"></div><textarea rows="2" style="height:54px; width:90%" id="chatbox"></textarea><br/><button onclick="say()">Say</button>');
 
-  $("#"+id).append('<div id="remoteVideos"><video id="localVideo"></video></div><video id="largeVideo"></video><div id="chathistory"></div><textarea rows="2" style="height:54px; width:90%" id="chatbox"></textarea><br/><button onclick="say()">Say</button>');
+  $("#"+id).append('<div id="remoteVideos"><video id="localVideo"></video></div><video id="largeVideo"></video><textarea rows="2" style="height:54px; width:70%" id="chatbox"></textarea><button style="height:54px; width: 18%; padding-left:5px; vertical-align:top;" onclick="say()">Say</button><div id="chathistory"></div>');
 
   w2ui.layout.show('right', true);
   w2ui[location.layout].get(location.panel).tabs.click(id);
