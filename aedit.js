@@ -943,6 +943,7 @@ function collaborate () {
   // $('<div id="container_' + id +'" class="panel-content" style="display:none"></div>').appendTo( "body" );
   $("#"+id).append('<h3>Video chat</h3><div style="width:100%" id="remotesVideos"></div><video style="width:100%" id="localVideo"></video>');
 
+  w2ui.layout.show('right', true);
   w2ui[location.layout].get(location.panel).tabs.click(id);
   $(location.id).find(".w2ui-tabs").scrollLeft(99999);
   refreshTabs();
