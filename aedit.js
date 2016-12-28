@@ -940,9 +940,6 @@ function collaborate () {
   // 4. render into temporary dom element once
   $('<div id="' + id +'" class="preview-iframe" style="position:absolute;overflow:auto;"></div>').prependTo("body");
   
-  // $('<div id="container_' + id +'" class="panel-content" style="display:none"></div>').appendTo( "body" );
-  //$("#"+id).append('<div style="width:40%" id="remotesVideos"></div><video style="width:40%" id="localVideo"></video><div id="chathistory"></div><textarea rows="2" style="height:54px; width:90%" id="chatbox"></textarea><br/><button onclick="say()">Say</button>');
-
   $("#"+id).append('<div id="remoteVideos"><video id="localVideo"></video></div><video id="largeVideo"></video><textarea rows="2" style="height:54px; width:70%" id="chatbox"></textarea><button style="height:54px; width: 18%; margin-left:10px; vertical-align:top;" onclick="say()">Say</button><div id="chathistory"></div>');
 
   w2ui.layout.show('right', true);
@@ -967,7 +964,7 @@ function say() {
     msg: msg
   });
   var stamp = d.toLocaleTimeString();
-  $("#chathistory").prepend('<div><em>(' + stamp + ') you said: </em> ' + msg + '</div>').scrollTop(999999);
+  $("#chathistory").append('<div><em>(' + stamp + ') you said: </em> ' + msg + '</div>').scrollTop(999999);
 }
 
 var chatroom;
@@ -981,12 +978,12 @@ function startChat() {
         case "announce":
           var d = new Date(data.timestamp);
           var stamp = d.toLocaleTimeString();
-          $("#chathistory").prepend('<div> (' + stamp + ') <b>: ' + data.msg + '</b></div>').scrollTop(999999);
+          $("#chathistory").append('<div> (' + stamp + ') <b>: ' + data.msg + '</b></div>').scrollTop(999999);
           break;
         case "say":
           var d = new Date(data.timestamp);
           var stamp = d.toLocaleTimeString();
-          $("#chathistory").prepend('<div> (' + stamp + ') <em>' + data.user + '</em>: ' + data.msg + '</div>').scrollTop(999999);
+          $("#chathistory").append('<div> (' + stamp + ') <em>' + data.user + '</em>: ' + data.msg + '</div>').scrollTop(999999);
           break;
       }
     });
