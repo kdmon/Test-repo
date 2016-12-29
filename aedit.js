@@ -1001,7 +1001,8 @@ function startChat() {
   connection.open(room, 'text', function(error, doc) {
     chatroom = doc;
     chatroom.on('shout', function(data) {
-      notification.stop();
+      notification.pause();
+      notification.currentTime = 0;
       notification.play();
       switch (data.action) {
         case "announce":
