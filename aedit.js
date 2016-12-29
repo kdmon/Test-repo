@@ -938,10 +938,30 @@ function collaborate () {
   });
   
   // 4. render into temporary dom element once
+  
   $('<div id="' + id +'" class="preview-iframe" style="position:absolute;overflow:auto;"></div>').prependTo("body");
   
-  $("#"+id).append('<div id="remoteVideos"><video id="localVideo"></video></div><video id="largeVideo"></video><textarea rows="2" style="height:54px; width:70%" id="chatbox"></textarea><button style="height:54px; width: 18%; margin-left:10px; vertical-align:top;" onclick="say()">Say</button><div id="chathistory"></div>');
+  var htmlBlock = '<div style="height:100%; width:100%; background:blue;">';
+  
+  htmlBlock += '<div style="height:50%; float:left; width:100%; background:#300;">';
+    htmlBlock += '<div id="remoteVideos"><video id="localVideo"></video></div>';
+    htmlBlock += '<div id="largeVideoContainer"><div id="innerVideoContainer"><i id="hidelargevideo" class="fa fa-2x fa-times"></i><video id="largeVideo"></video></div></div>';
+  htmlBlock += '</div>';
+  
+  htmlBlock += '<div style="height:100%; width:100%; background:green;">';
+    htmlBlock += '<div id="chathistory" style="height: 100%; max-height: 47%; overflow: auto; background: white"></div>';
+  htmlBlock += '</div>';
+  
+  htmlBlock += '<div>';
+    htmlBlock += '<textarea rows="2" style="height:50px; width:70%" id="chatbox"></textarea>';
+    htmlBlock += '<button style="height:54px; width: 18%; margin-left:4px; vertical-align:top;" onclick="say()">Say</button>';
+  htmlBlock += '</div>';
 
+  htmlBlock += '</div>';
+
+  
+  $("#"+id).append(htmlBlock);
+  
   w2ui.layout.show('right', true);
   w2ui[location.layout].get(location.panel).tabs.click(id);
   $(location.id).find(".w2ui-tabs").scrollLeft(99999);
@@ -950,7 +970,6 @@ function collaborate () {
   startChat();
 
 }
-
 
 function say() {
   var msg = $('#chatbox').val().trim();
@@ -993,6 +1012,11 @@ function startChat() {
       timestamp: d.toISOString(),
       msg: (config.user || 'A guest') + " joined the room."
     });
+  });
+  $('#chatbox').keypress(function( event ) {
+    if ( event.which == 13 ) {
+      say();
+    }
   });
 }
 
@@ -1063,11 +1087,21 @@ function setupWebrtc (room, media) {
         "autoplay": "autoplay"
       });
       
+      
       $("#largeVideo").on('click', function() {
-        $(this).hide();
+        $("#largeVideoContainer").hide();
+      });
+      
+      $("#largeVideo").on('mouseover', function() {
+        $("#hidelargevideo").show();
+      });
+      
+      $("#largeVideo").on('mouseout', function() {
+        $("#hidelargevideo").hide();
       });
       
       $("#remoteVideos").on('click', function (e) {
+        $("#largeVideoContainer").show();
         $("#largeVideo").show().attr({
           "src": $(e.target).attr("src"),
           "autoplay": "autoplay"
