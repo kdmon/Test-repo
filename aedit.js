@@ -924,6 +924,7 @@ function collaborate () {
   var location = pickPanel('preview');
 
   // 3. Show tab
+  
   tabList[id] = {
     id: id,
     caption: title,
@@ -950,10 +951,9 @@ function collaborate () {
     htmlBlock += '<textarea rows="2" style="height:50px; width:70%" id="chatbox"></textarea>';
     htmlBlock += '<button style="height:54px; width: 18%; margin-left:4px; vertical-align:top;" onclick="say()">Say</button>';
   htmlBlock += '</div>';
-
   
   $("#"+id).append(htmlBlock);
-   w2ui.layout.show('right', true);
+  w2ui.layout.show('right', true);
   w2ui[location.layout].get(location.panel).tabs.click(id);
   $(location.id).find(".w2ui-tabs").scrollLeft(99999);
   refreshTabs();
@@ -1077,18 +1077,16 @@ function setupWebrtc (room, media) {
         "src": $("#localVideo").attr("src"),
         "autoplay": "autoplay"
       });
-      
- 
-      
-      $("#largeVideo").on('click', function() {
+
+      $("#innerVideoContainer").on('click', function() {
         $("#largeVideoContainer").hide();
       });
       
-      $("#largeVideo").on('mouseover', function() {
+      $("#innerVideoContainer").on('mouseover', function() {
         $("#hidelargevideo").show();
       });
       
-      $("#largeVideo").on('mouseout', function() {
+      $("#innerVideoContainer").on('mouseout', function() {
         $("#hidelargevideo").hide();
       });     
       $("#remoteVideos").on('click', function (e) {
