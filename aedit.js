@@ -945,7 +945,7 @@ function collaborate () {
   var htmlBlock = '<div id="remoteVideos"><video id="localVideo"></video></div>';
   htmlBlock += '<div id="largeVideoContainer"><div id="innerVideoContainer"><i id="hidelargevideo" class="fa fa-2x fa-times"></i><video id="largeVideo"></video></div></div>';
 
-    htmlBlock += '<div id="chathistory" style="height: 100%; max-height: 47%; overflow: auto; background: white"></div>';
+    htmlBlock += '<div id="chathistory" style="overflow: auto; background: white"></div>';
   
   htmlBlock += '<div>';
     htmlBlock += '<textarea rows="2" style="height:50px; width:70%" id="chatbox"></textarea>';
@@ -977,13 +977,32 @@ function say() {
   $("#chathistory").append('<div><em>(' + stamp + ') you said: </em> ' + msg + '</div>').scrollTop(999999);
 }
 
+if(!String.linkify) {
+  String.prototype.linkify = function() {
+
+    // http://, https://, ftp://
+    var urlPattern = /\b(?:https?|ftp):\/\/[a-z0-9-+&@#\/%?=~_|!:,.;]*[a-z0-9-+&@#\/%=~_|]/gim;
+
+    // www. sans http:// or https://
+    var pseudoUrlPattern = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+
+    return this
+      .replace(urlPattern, '<a target="_blank" href="$&">$&</a>')
+      .replace(pseudoUrlPattern, '$1<a target="_blank" href="http://$2">$2</a>');
+  };
+}
+
 var chatroom;
+//var notification = new Audio("http://freesound.org/data/previews/234/234524_4019029-lq.mp3")
+var notification = new Audio("notification_loud.mp3")
 
 function startChat() {
   var room = "a-single-global-chatroom-12345-54321";
   connection.open(room, 'text', function(error, doc) {
     chatroom = doc;
     chatroom.on('shout', function(data) {
+      notification.stop();
+      notification.play();
       switch (data.action) {
         case "announce":
           var d = new Date(data.timestamp);
@@ -992,6 +1011,7 @@ function startChat() {
           break;
         case "say":
           var d = new Date(data.timestamp);
+          data.msg = data.msg.linkify();
           var stamp = d.toLocaleTimeString();
           $("#chathistory").append('<div> (' + stamp + ') <em>' + data.user + '</em>: ' + data.msg + '</div>').scrollTop(999999);
           break;
@@ -1080,6 +1100,7 @@ function setupWebrtc (room, media) {
 
       $("#innerVideoContainer").on('click', function() {
         $("#largeVideoContainer").hide();
+        $("#chathistory").css("height","60%");
       });
       
       $("#innerVideoContainer").on('mouseover', function() {
@@ -1091,7 +1112,9 @@ function setupWebrtc (room, media) {
       });     
       $("#remoteVideos").on('click', function (e) {
  
-        $("#largeVideoContainer").show();       $("#largeVideo").show().attr({
+        $("#chathistory").css("height","25%");
+        $("#largeVideoContainer").show();
+        $("#largeVideo").show().attr({
           "src": $(e.target).attr("src"),
           "autoplay": "autoplay"
         });
