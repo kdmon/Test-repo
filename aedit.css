@@ -35,13 +35,31 @@ body {
   overflow: auto;
 }
 
-#largeVideo {
-  display: none;
-  background: #000;
+#largeVideoContainer {
   width: 100%;
-  max-height: 245px;
-  margin-bottom: 2px;
+  max-height: 240px;
+  background: #111;
+  margin-bottom: 4px;
+}
+
+#innerVideoContainer {
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto 0 auto;
+}
+
+#largeVideo {
+  width: 100%;
+  height: 100%;
+  display: block;
   transform:scale(-1,1);
+}
+
+
+#hidelargevideo {
+  color:white;
+  position: absolute;
+  z-index: 4;
 }
 
 #remoteVideos {
