@@ -991,7 +991,7 @@ function say() {
     msg: msg
   });
   var stamp = d.toLocaleTimeString();
-  $("#chathistory").append('<div><em>(' + stamp + ') you said: </em> ' + msg + '</div>').scrollTop(999999);
+  $("#chathistory").append('<div>' + stamp + ': <b>' + msg + '</b></div>').scrollTop(999999);
 }
 
 
@@ -1011,13 +1011,13 @@ function startChat() {
         case "announce":
           var d = new Date(data.timestamp);
           var stamp = d.toLocaleTimeString();
-          $("#chathistory").append('<div> (' + stamp + ') <b>: ' + data.msg + '</b></div>').scrollTop(999999);
+          $("#chathistory").append('<div> ' + stamp + ' *** ' + data.msg + ' ***</div>').scrollTop(999999);
           break;
         case "say":
           var d = new Date(data.timestamp);
           data.msg = data.msg;
           var stamp = d.toLocaleTimeString();
-          $("#chathistory").append('<div> (' + stamp + ') <em>' + data.user + '</em>: ' + data.msg + '</div>').scrollTop(999999);
+          $("#chathistory").append('<div> ' + stamp + ' <em>' + data.user + '</em>: ' + data.msg + '</div>').scrollTop(999999);
           break;
       }
     });
