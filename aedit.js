@@ -963,7 +963,7 @@ function collaborate () {
 }
 
 function say() {
-  var msg = $('#chatbox').val().trim();
+  var msg = $('#chatbox').val().trim().linkify();
   setTimeout(function() {$('#chatbox').val('').focus();}, 50);
   if (msg == '') return;
   var d = new Date();
