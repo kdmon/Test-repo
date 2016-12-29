@@ -46,6 +46,7 @@ body {
   width: 100%;
   max-width: 320px;
   margin: 0 auto 0 auto;
+  cursor: pointer;
 }
 
 #largeVideo {
@@ -54,7 +55,6 @@ body {
   display: block;
   transform:scale(-1,1);
 }
-
 
 #hidelargevideo {
   color:white;
@@ -73,6 +73,11 @@ body {
   background: #000;
   max-height: 54px;
   opacity: 0.8;
+  cursor: pointer;
+}
+
+#remoteVideos video:hover, #localVideo:hover {
+  opacity: 1;
 }
 
 #layout {
