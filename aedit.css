@@ -60,6 +60,7 @@ body {
   color:white;
   position: absolute;
   z-index: 4;
+  display: none;
 }
 
 #remoteVideos {
