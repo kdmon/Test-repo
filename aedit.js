@@ -962,20 +962,7 @@ function collaborate () {
 
 }
 
-function say() {
-  var msg = $('#chatbox').val().trim().linkify();
-  setTimeout(function() {$('#chatbox').val('').focus();}, 50);
-  if (msg == '') return;
-  var d = new Date();
-  chatroom.shout({
-    action: "say",
-    timestamp: d.toISOString(),
-    user: config.user,
-    msg: msg
-  });
-  var stamp = d.toLocaleTimeString();
-  $("#chathistory").append('<div><em>(' + stamp + ') you said: </em> ' + msg + '</div>').scrollTop(999999);
-}
+// HELPER FX TO CONVERT TO URLs to A HREF TARGET _BLANK
 
 if(!String.linkify) {
   String.prototype.linkify = function() {
@@ -991,6 +978,22 @@ if(!String.linkify) {
       .replace(pseudoUrlPattern, '$1<a target="_blank" href="http://$2">$2</a>');
   };
 }
+
+function say() {
+  var msg = $('#chatbox').val().trim().linkify();
+  setTimeout(function() {$('#chatbox').val('').focus();}, 50);
+  if (msg == '') return;
+  var d = new Date();
+  chatroom.shout({
+    action: "say",
+    timestamp: d.toISOString(),
+    user: config.user,
+    msg: msg
+  });
+  var stamp = d.toLocaleTimeString();
+  $("#chathistory").append('<div><em>(' + stamp + ') you said: </em> ' + msg + '</div>').scrollTop(999999);
+}
+
 
 var chatroom;
 //var notification = new Audio("http://freesound.org/data/previews/234/234524_4019029-lq.mp3")
@@ -1012,7 +1015,7 @@ function startChat() {
           break;
         case "say":
           var d = new Date(data.timestamp);
-          data.msg = data.msg.linkify();
+          data.msg = data.msg;
           var stamp = d.toLocaleTimeString();
           $("#chathistory").append('<div> (' + stamp + ') <em>' + data.user + '</em>: ' + data.msg + '</div>').scrollTop(999999);
           break;
