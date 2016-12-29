@@ -30,9 +30,14 @@ body {
 }
 
 #chathistory {
-  border: 1px solid black;
-  height: 220px;
+  height: 25%;
   overflow: auto;
+  -webkit-touch-callout: all;
+  -webkit-user-select: all;
+  -khtml-user-select: all;
+  -moz-user-select: all;
+  -ms-user-select: all;
+  user-select: all;
 }
 
 #largeVideoContainer {
@@ -69,7 +74,6 @@ body {
 
 #remoteVideos video, #localVideo {
   transform:scale(-1,1);
-  width: 30%;
   min-height: 0;
   background: #000;
   max-height: 54px;
