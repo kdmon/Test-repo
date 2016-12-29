@@ -941,28 +941,19 @@ function collaborate () {
   
   $('<div id="' + id +'" class="preview-iframe" style="position:absolute;overflow:auto;"></div>').prependTo("body");
   
-  var htmlBlock = '<div style="height:100%; width:100%; background:blue;">';
-  
-  htmlBlock += '<div style="height:50%; float:left; width:100%; background:#300;">';
-    htmlBlock += '<div id="remoteVideos"><video id="localVideo"></video></div>';
-    htmlBlock += '<div id="largeVideoContainer"><div id="innerVideoContainer"><i id="hidelargevideo" class="fa fa-2x fa-times"></i><video id="largeVideo"></video></div></div>';
-  htmlBlock += '</div>';
-  
-  htmlBlock += '<div style="height:100%; width:100%; background:green;">';
+  var htmlBlock = '<div id="remoteVideos"><video id="localVideo"></video></div>';
+  htmlBlock += '<div id="largeVideoContainer"><div id="innerVideoContainer"><i id="hidelargevideo" class="fa fa-2x fa-times"></i><video id="largeVideo"></video></div></div>';
+
     htmlBlock += '<div id="chathistory" style="height: 100%; max-height: 47%; overflow: auto; background: white"></div>';
-  htmlBlock += '</div>';
   
   htmlBlock += '<div>';
     htmlBlock += '<textarea rows="2" style="height:50px; width:70%" id="chatbox"></textarea>';
     htmlBlock += '<button style="height:54px; width: 18%; margin-left:4px; vertical-align:top;" onclick="say()">Say</button>';
   htmlBlock += '</div>';
 
-  htmlBlock += '</div>';
-
   
   $("#"+id).append(htmlBlock);
-  
-  w2ui.layout.show('right', true);
+   w2ui.layout.show('right', true);
   w2ui[location.layout].get(location.panel).tabs.click(id);
   $(location.id).find(".w2ui-tabs").scrollLeft(99999);
   refreshTabs();
@@ -1087,6 +1078,7 @@ function setupWebrtc (room, media) {
         "autoplay": "autoplay"
       });
       
+ 
       
       $("#largeVideo").on('click', function() {
         $("#largeVideoContainer").hide();
@@ -1098,11 +1090,10 @@ function setupWebrtc (room, media) {
       
       $("#largeVideo").on('mouseout', function() {
         $("#hidelargevideo").hide();
-      });
-      
+      });     
       $("#remoteVideos").on('click', function (e) {
-        $("#largeVideoContainer").show();
-        $("#largeVideo").show().attr({
+ 
+        $("#largeVideoContainer").show();       $("#largeVideo").show().attr({
           "src": $(e.target).attr("src"),
           "autoplay": "autoplay"
         });
