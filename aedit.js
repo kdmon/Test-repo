@@ -2090,13 +2090,13 @@ function showProjectsInPanel () {
   $().w2layout({
     name: 'panelLayout',
     panels: [
-      { type: 'left', size: '50%', hidden: true},
+      { type: 'right', size: '50%', hidden: true},
       { type: 'main'}
     ]
   });
   
   octo.user.repos.fetchAll().then(function(repos) {
-    console.log(repos);
+    //console.log(repos);
     if (repos.length === 0) w2alert('No repositories are accessible');
     
     else {
@@ -2434,8 +2434,8 @@ function pushNodes (id, nodes) {
 // Create a sidebar for browsing repository files
 function showProject (user, repository) {
   
-  w2ui.panelLayout.content('left', '<p>Fetching repository details...</p>');
-  w2ui.panelLayout.show('left');
+  w2ui.panelLayout.content('right', '<p>Fetching repository details...</p>');
+  w2ui.panelLayout.show('right');
 
   octo.repos(user, repository).fetch().then(function(data) {
     console.log(data);
@@ -2477,7 +2477,7 @@ function showProject (user, repository) {
     var projectHTML = '<div class="card-container"><div class="card">' + 
       cardFront + cardBack + '</div></div>';
       
-    w2ui.panelLayout.content('left', projectHTML);
+    w2ui.panelLayout.content('right', projectHTML);
     
     octo.repos(user, repository).branches.fetch().then(function(results) {
       console.log(results);
