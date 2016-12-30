@@ -3201,7 +3201,7 @@ function startDoc(settings) {
         
         if (localStorage.fontSize) {$(".panel-editor").css("font-size", localStorage.fontSize + "px");}
         
-        $(".panel-editor").css("font-size", "14px");
+        $(".panel-editor").css("font-size", "15px");
         
         editors[location.area].setOptions({
           enableBasicAutocompletion: true
