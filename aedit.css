@@ -29,7 +29,14 @@ body {
   background: #cdf;
 }
 
+#chatbox {
+  margin: 4px;  
+}
+
 #chathistory {
+  border: 1px solid #aaa;
+  margin: 4px;
+  padding: 4px;
   height: 25%;
   overflow: auto;
   -webkit-touch-callout: all;
