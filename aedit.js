@@ -3201,9 +3201,12 @@ function startDoc(settings) {
         
         if (localStorage.fontSize) {$(".panel-editor").css("font-size", localStorage.fontSize + "px");}
         
+        $(".panel-editor").css("font-size", "14px");
+        
         editors[location.area].setOptions({
           enableBasicAutocompletion: true
         });
+        
         var mode = modelist.getModeForPath(path).mode;
         editors[location.area].getSession().setMode(mode);
         editors[location.area].setOption("enableEmmet", true);
