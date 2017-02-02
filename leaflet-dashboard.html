@@ -13,9 +13,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
     
   	<style>
+  	
   		#map {
   			width: 100%;
-  			height: 400px;
+  			height: 800px;
   		}
   		
   		.awesome-marker i {
@@ -75,7 +76,7 @@
           status: "green",
           lastError: "",
           lastWarning: "",
-          
+          errors: 0,
           warnings: 0
         },
         {
@@ -88,6 +89,7 @@
           errors: 4,
           warnings: 0
         },
+
         {
           name: "Trondheim, Sykehusapotek Midt-Norge",
           lat: "63.420793",
@@ -107,10 +109,9 @@
           lastWarning: "",
           errors: 0,
           warnings: 0
-        }
-      ];
+        }      ];
     
-      
+
       // Create map icons
       
       var greenIcon = L.AwesomeMarkers.icon({
@@ -142,8 +143,8 @@
       // Create leaflet map
       
     	var map = L.map('map', {
-    		center: [39.73, -104.99],
-    		zoom: 10,
+    		center: [65.117835, 13.531302],
+    		zoom: 5,
     		layers: [green,amber,red,all]
     	});
     
@@ -163,15 +164,23 @@
     	var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
     	var osm = new L.TileLayer(osmUrl, {minZoom: 2, maxZoom: 12, attribution: osmAttrib});		
       map.addLayer(osm);
+
+      for (var i = 0; i < obj.length; i++) {
+        var point = obj[i];
+        var pointIcon;
+        if (point.status == 'red') pointIcon = redIcon;
+        else if (point.status == 'amber') pointIcon = amberIcon;
+        else pointIcon = greenIcon;
+      	L.marker([point.lat, point.lon],{icon: pointIcon}).bindPopup(point.name + "<br>Last error: " + point.lastError + "<br>Last warning: " + point.lastWarning).addTo(all);
+      }
       
-      
-    	L.marker([39.61, -105.02],{icon: greenIcon}).bindPopup('This is Littleton, CO.').addTo(all);
-    	L.marker([39.61, -105.02],{icon: greenIcon}).bindPopup('This is Littleton, CO.').addTo(green);
-    	L.marker([39.74, -104.99],{icon: amberIcon}).bindPopup('This is Denver, CO.').addTo(all);
-    	L.marker([39.74, -104.99],{icon: amberIcon}).bindPopup('This is Denver, CO.').addTo(amber);
-    	L.marker([39.73, -104.8],{icon: redIcon}).bindPopup('This is Aurora, CO.').addTo(all);
-    	L.marker([39.73, -104.8],{icon: redIcon}).bindPopup('This is Aurora, CO.').addTo(red);
-    
+      /*
+      	L.marker([39.61, -105.02],{icon: greenIcon}).bindPopup('This is Littleton, CO.').addTo(green);
+      	L.marker([39.74, -104.99],{icon: amberIcon}).bindPopup('This is Denver, CO.').addTo(all);
+      	L.marker([39.74, -104.99],{icon: amberIcon}).bindPopup('This is Denver, CO.').addTo(amber);
+      	L.marker([39.73, -104.8],{icon: redIcon}).bindPopup('This is Aurora, CO.').addTo(all);
+      	L.marker([39.73, -104.8],{icon: redIcon}).bindPopup('This is Aurora, CO.').addTo(red);
+      */
       
     </script>
     
