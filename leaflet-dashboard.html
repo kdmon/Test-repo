@@ -16,7 +16,7 @@
   	
   		#map {
   			width: 100%;
-  			height: 100vh;
+  			height: 95vh;
   		}
   		
   		.awesome-marker i {
@@ -37,76 +37,293 @@
       
       var obj = [
         {
+          name: "Arendal, Sykehusapotek Syd",
+          id: 100,
+          lat: "58.466851",
+          lon: "8.754993",
+          status: "green",
+          lastError: "None",
+          lastWarning: "None",
+          errors: 0,
+          warnings: 0
+        },
+        {
+          name: "Bærum, Sykehusapotek Syd",
+          id: 101,
+          lat: "59.898665",
+          lon: "10.510626",
+          status: "green",
+          lastError: "None",
+          lastWarning: "None",
+          errors: 0,
+          warnings: 0
+        },
+        {
+          name: "Drammen, Sykehusapotek Syd",
+          id: 102,
+          lat: "59.749069",
+          lon: "10.199942",
+          status: "green",
+          lastError: "None",
+          lastWarning: "None",
+          errors: 0,
+          warnings: 0
+        },
+        {
+          name: "Elverum, Sykehusapotek Syd",
+          id: 103,
+          lat: "60.877224",
+          lon: "11.571296",
+          status: "green",
+          lastError: "None",
+          lastWarning: "None",
+          errors: 0,
+          warnings: 0
+        },
+        {
+          name: "Gjøvik, Sykehusapotek Syd",
+          id: 107,
+          lat: "59.898665",
+          lon: "10.510626",
+          status: "green",
+          lastError: "None",
+          lastWarning: "None",
+          errors: 0,
+          warnings: 0
+        },
+        {
+          name: "Hamar, Sykehusapotek Syd",
+          id: 108,
+          lat: "60.798297",
+          lon: "11.071956",
+          status: "green",
+          lastError: "None",
+          lastWarning: "None",
+          errors: 0,
+          warnings: 0
+        },
+        {
+          name: "Kongsvinger, Sykehusapotek Syd",
+          id: 109,
+          lat: "60.802846",
+          lon: "10.680904",
+          status: "green",
+          lastError: "None",
+          lastWarning: "None",
+          errors: 0,
+          warnings: 0
+        },
+        {
+          name: "Kristiansand, Sykehusapotek Syd",
+          id: 110,
+          lat: "58.164323",
+          lon: "7.981047",
+          status: "green",
+          lastError: "None",
+          lastWarning: "None",
+          errors: 0,
+          warnings: 0
+        },
+        {
+          name: "Lillehammer, Sykehusapotek Syd",
+          id: 111,
+          lat: "61.112389",
+          lon: "10.473816",
+          status: "green",
+          lastError: "None",
+          lastWarning: "None",
+          errors: 0,
+          warnings: 0
+        },
+        {
+          name: "Lørenskog, Sykehusapotek Syd",
+          id: 112,
+          lat: "59.932275",
+          lon: "10.994138",
+          status: "green",
+          lastError: "None",
+          lastWarning: "None",
+          errors: 0,
+          warnings: 0
+        },
+        {
+          name: "Radiumhospitalet, Sykehusapotek Syd",
+          id: 113,
+          lat: "59.930858",
+          lon: "10.661352",
+          status: "green",
+          lastError: "None",
+          lastWarning: "None",
+          errors: 0,
+          warnings: 0
+        },
+        {
+          name: "Rikshospitalet, Sykehusapotek Syd",
+          id: 114,
+          lat: "59.947445",
+          lon: "10.714900",
+          status: "green",
+          lastError: "None",
+          lastWarning: "None",
+          errors: 0,
+          warnings: 0
+        },
+        {
+          name: "Ullevål, Sykehusapotek Syd",
+          id: 115,
+          lat: "59.938007",
+          lon: "10.735681",
+          status: "green",
+          lastError: "None",
+          lastWarning: "None",
+          errors: 0,
+          warnings: 0
+        },
+        {
+          name: "Skien, Sykehusapotek Syd",
+          id: 116,
+          lat: "59.193088",
+          lon: "9.594856",
+          status: "green",
+          lastError: "None",
+          lastWarning: "None",
+          errors: 0,
+          warnings: 0
+        },
+        {
+          name: "Tønsberg, Sykehusapotek Syd",
+          id: 117,
+          lat: "59.272586",
+          lon: "10.418695",
+          status: "green",
+          lastError: "None",
+          lastWarning: "None",
+          errors: 0,
+          warnings: 0
+        },
+        {
+          name: "Kalnes, Sykehusapotek Østfold",
+          id: 118,
+          lat: "59.318083",
+          lon: "11.026387",
+          status: "green",
+          lastError: "None",
+          lastWarning: "None",
+          errors: 0,
+          warnings: 0
+        },
+        {
+          name: "Moss, Sykehusapotek Østfold",
+          id: 119,
+          lat: "59.447219",
+          lon: "10.696686",
+          status: "green",
+          lastError: "None",
+          lastWarning: "None",
+          errors: 0,
+          warnings: 0
+        },
+        {
           name: "Kristiansund, Sykehusapotek Midt-Norge",
+          id: 1,
           lat: "63.108432",
           lon: "7.724748",
           status: "green",
-          lastError: "",
-          lastWarning: "",
+          lastError: "None",
+          lastWarning: "None",
           errors: 0,
           warnings: 0
         },
         {
           name: "Levanger, Sykehusapotek Midt-Norge",
+          id: 2,
           lat: "63.742991",
           lon: "11.289269",
           status: "green",
-          lastError: "",
-          lastWarning: "",
+          lastError: "None",
+          lastWarning: "None",
           errors: 0,
           warnings: 0
         },
         {
           name: "Molde, Sykehusapotek Midt-Norge",
+          id: 3,
           lat: "62.737531",
           lon: "7.140658",
           status: "amber",
-          lastError: "",
+          lastError: "None",
           lastWarning: "Low disk space",
           errors: 0,
           warnings: 1
         },
         {
           name: "Namsos, Sykehusapotek Midt-Norge",
+          id: 4,
           lat: "64.470709",
           lon: "11.505329",
           status: "green",
-          lastError: "",
-          lastWarning: "",
+          lastError: "None",
+          lastWarning: "None",
           errors: 0,
           warnings: 0
         },
         {
-          name: "Tromsø, Sykehusapotek Nord",
-          lat: "69.682966",
-          lon: "18.982541",
-          status: "red",
-          lastError: "Unable to connect to database",
-          lastWarning: "",
-          errors: 4,
-          warnings: 0
-        },
-
-        {
           name: "Trondheim, Sykehusapotek Midt-Norge",
+          id: 6,
           lat: "63.420793",
           lon: "10.387976",
           status: "green",
-          lastError: "",
-          lastWarning: "",
+          lastError: "None",
+          lastWarning: "None",
           errors: 0,
           warnings: 0
         },
         {
           name: "Ålesund, Sykehusapotek Midt-Norge",
+          id: 6,
           lat: "62.464217",
           lon: "6.314725",
           status: "green",
-          lastError: "",
-          lastWarning: "",
+          lastError: "None",
+          lastWarning: "None",
           errors: 0,
           warnings: 0
-        }      ];
+        },
+        
+        {
+          name: "Bodø, Sykehusapotek Nord",
+          id: 58,
+          lat: "67.283233",
+          lon: "14.397368",
+          status: "amber",
+          lastError: "None",
+          lastWarning: "Slow query",
+          errors: 0,
+          warnings: 4
+        },
+        {
+          name: "Harstad, Sykehusapotek Nord",
+          id: 58,
+          lat: "68.796169",
+          lon: "16.525338",
+          status: "green",
+          lastError: "None",
+          lastWarning: "None",
+          errors: 0,
+          warnings: 0
+        },
+        {
+          name: "Tromsø, Sykehusapotek Nord",
+          id: 5,
+          lat: "69.682966",
+          lon: "18.982541",
+          status: "red",
+          lastError: "Unable to connect to database",
+          lastWarning: "None",
+          errors: 4,
+          warnings: 0
+        }
+        ];
     
 
       // Create map icons
@@ -161,32 +378,31 @@
     	var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
     	var osm = new L.TileLayer(osmUrl, {minZoom: 4, maxZoom: 16, attribution: osmAttrib});		
       map.addLayer(osm);
+      
+      var html = '<br><br><div style="padding: 1em; background: #00c; color: white">Open detailed view</div>';
+      
+      // add markers to map
 
       for (var i = 0; i < obj.length; i++) {
         var point = obj[i];
+        var pointDescription = "<b>" + point.name + "</b><br><br>Last error: " +
+                               point.lastError + "<br>Last warning: " + 
+                               point.lastWarning + html;
         var pointIcon;
         if (point.status == 'red') {
           pointIcon = redIcon;
-          L.marker([point.lat, point.lon],{icon: pointIcon}).bindPopup("<b>" + point.name + "</b><br>Last error: " + point.lastError + "<br>Last warning: " + point.lastWarning).addTo(red);
+          L.marker([point.lat, point.lon],{icon: pointIcon}).bindPopup(pointDescription).addTo(red);
         }
         else if (point.status == 'amber') {
           pointIcon = amberIcon;
-        	L.marker([point.lat, point.lon],{icon: pointIcon}).bindPopup("<b>" + point.name + "</b><br>Last error: " + point.lastError + "<br>Last warning: " + point.lastWarning).addTo(amber);
+        	L.marker([point.lat, point.lon],{icon: pointIcon}).bindPopup(pointDescription).addTo(amber);
         }
         else {
           pointIcon = greenIcon;
-        	L.marker([point.lat, point.lon],{icon: pointIcon}).bindPopup("<b>" + point.name + "</b><br>Last error: " + point.lastError + "<br>Last warning: " + point.lastWarning).addTo(green);
+        	L.marker([point.lat, point.lon],{icon: pointIcon}).bindPopup(pointDescription).addTo(green);
         }
-      	L.marker([point.lat, point.lon],{icon: pointIcon}).bindPopup("<b>" + point.name + "</b><br>Last error: " + point.lastError + "<br>Last warning: " + point.lastWarning).addTo(all);
+      	L.marker([point.lat, point.lon],{icon: pointIcon}).bindPopup(pointDescription).addTo(all);
       }
-      
-      /*
-      	L.marker([39.61, -105.02],{icon: greenIcon}).bindPopup('This is Littleton, CO.').addTo(green);
-      	L.marker([39.74, -104.99],{icon: amberIcon}).bindPopup('This is Denver, CO.').addTo(all);
-      	L.marker([39.74, -104.99],{icon: amberIcon}).bindPopup('This is Denver, CO.').addTo(amber);
-      	L.marker([39.73, -104.8],{icon: redIcon}).bindPopup('This is Aurora, CO.').addTo(all);
-      	L.marker([39.73, -104.8],{icon: redIcon}).bindPopup('This is Aurora, CO.').addTo(red);
-      */
       
     </script>
     
