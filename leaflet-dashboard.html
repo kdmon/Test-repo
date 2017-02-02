@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    
+  	<title>Layers Control Tutorial - Leaflet</title>
+  	<meta charset="utf-8" />
+  	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+  	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+  	<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+  
+  	<style>
+  		#map {
+  			width: 100%;
+  			height: 400px;
+  		}
+  	</style>
+  	
+  </head>
+  
+  <body>
+    <div id="map"></div>
+    
+    <script>
+      // Create list of map markers
+    
+    	var all = new L.LayerGroup();
+    	var green = new L.LayerGroup();
+    	var amber = new L.LayerGroup();
+    	var red = new L.LayerGroup();
+    
+    	L.marker([39.61, -105.02]).bindPopup('This is Littleton, CO.').addTo(all);
+    	L.marker([39.61, -105.02]).bindPopup('This is Littleton, CO.').addTo(green);
+    	L.marker([39.74, -104.99]).bindPopup('This is Denver, CO.').addTo(all);
+    	L.marker([39.74, -104.99]).bindPopup('This is Denver, CO.').addTo(amber);
+    	L.marker([39.73, -104.8]).bindPopup('This is Aurora, CO.').addTo(all);
+    	L.marker([39.73, -104.8]).bindPopup('This is Aurora, CO.').addTo(red);
+    
+      // Create leaflet map
+      
+    	var map = L.map('map', {
+    		center: [39.73, -104.99],
+    		zoom: 10,
+    		layers: [green,amber,red]
+    	});
+    
+      // Associate overlays
+    	var overlays = {
+    		"All servers": all,
+    		"Servers with errors in last 24h": red,
+    		"Servers with warnings in last 24h": amber,
+    		"Servers w/o errors or warnings in last 24h": green
+    	};
+    
+    	L.control.layers(overlays).addTo(map);
+    	
+      // Add tiles from OSM
+      
+    	var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    	var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+    	var osm = new L.TileLayer(osmUrl, {minZoom: 8, maxZoom: 12, attribution: osmAttrib});		
+      map.addLayer(osm);
+      
+    </script>
+    
+  </body>
+</html>
