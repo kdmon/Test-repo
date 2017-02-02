@@ -6,37 +6,129 @@
   	<title>Layers Control Tutorial - Leaflet</title>
   	<meta charset="utf-8" />
   	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-  	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
   	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+  	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   	<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css" />
+    
   	<style>
   		#map {
   			width: 100%;
   			height: 400px;
   		}
+  		
+  		.awesome-marker i {
+        font-size: 20px;
+        margin-top: 8px;
+      }
   	</style>
   	
   </head>
   
   <body>
+    
+    <i class="fa fa-bath" aria-hidden="true"></i>
+
+    
     <div id="map"></div>
     
     <script>
     
+      // READ IN DATA VIA AJAX
+      
+      var obj = [
+        {
+          name: "Kristiansund, Sykehusapotek Midt-Norge",
+          lat: "63.108432",
+          lon: "7.724748",
+          status: "green",
+          lastError: "",
+          lastWarning: "",
+          errors: 0,
+          warnings: 0
+        },
+        {
+          name: "Levanger, Sykehusapotek Midt-Norge",
+          lat: "63.742991",
+          lon: "11.289269",
+          status: "green",
+          lastError: "",
+          lastWarning: "",
+          errors: 0,
+          warnings: 0
+        },
+        {
+          name: "Molde, Sykehusapotek Midt-Norge",
+          lat: "62.737531",
+          lon: "7.140658",
+          status: "amber",
+          lastError: "",
+          lastWarning: "Low disk warning",
+          errors: 0,
+          warnings: 1
+        },
+        {
+          name: "Namsos, Sykehusapotek Midt-Norge",
+          lat: "64.470709",
+          lon: "11.505329",
+          status: "green",
+          lastError: "",
+          lastWarning: "",
+          
+          warnings: 0
+        },
+        {
+          name: "Tromsø, Sykehusapotek Nord",
+          lat: "69.682966",
+          lon: "18.982541",
+          status: "red",
+          lastError: "Unable to connect to database",
+          lastWarning: "",
+          errors: 4,
+          warnings: 0
+        },
+        {
+          name: "Trondheim, Sykehusapotek Midt-Norge",
+          lat: "63.420793",
+          lon: "10.387976",
+          status: "green",
+          lastError: "",
+          lastWarning: "",
+          errors: 0,
+          warnings: 0
+        },
+        {
+          name: "Ålesund, Sykehusapotek Midt-Norge",
+          lat: "62.464217",
+          lon: "6.314725",
+          status: "green",
+          lastError: "",
+          lastWarning: "",
+          errors: 0,
+          warnings: 0
+        }
+      ];
+    
+      
       // Create map icons
       
       var greenIcon = L.AwesomeMarkers.icon({
-        icon: 'coffee',
+        icon: 'check-square-o',
+        prefix: 'fa',
         markerColor: 'green'
       });
+      
       var amberIcon = L.AwesomeMarkers.icon({
-        icon: 'coffee',
+        icon: 'question-circle',
+        prefix: 'fa',
+        iconColor: 'white',
         markerColor: 'orange'
       });
+      
       var redIcon = L.AwesomeMarkers.icon({
-        icon: 'coffee',
+        icon: 'warning',
+        prefix: 'fa',
         markerColor: 'red'
       });
     
@@ -46,13 +138,6 @@
     	var green = new L.LayerGroup();
     	var amber = new L.LayerGroup();
     	var red = new L.LayerGroup();
-    
-    	L.marker([39.61, -105.02],{icon: greenIcon}).bindPopup('This is Littleton, CO.').addTo(all);
-    	L.marker([39.61, -105.02],{icon: greenIcon}).bindPopup('This is Littleton, CO.').addTo(green);
-    	L.marker([39.74, -104.99],{icon: amberIcon}).bindPopup('This is Denver, CO.').addTo(all);
-    	L.marker([39.74, -104.99],{icon: amberIcon}).bindPopup('This is Denver, CO.').addTo(amber);
-    	L.marker([39.73, -104.8],{icon: redIcon}).bindPopup('This is Aurora, CO.').addTo(all);
-    	L.marker([39.73, -104.8],{icon: redIcon}).bindPopup('This is Aurora, CO.').addTo(red);
     
       // Create leaflet map
       
@@ -64,10 +149,10 @@
     
       // Associate overlays
     	var overlays = {
-    		"Servers with errors in last 24h": red,
-    		"Servers with warnings in last 24h": amber,
-    		"Servers w/o errors or warnings in last 24h": green,
-    		"All servers": all
+    		"Show servers with errors": red,
+    		"Show servers with warnings": amber,
+    		"Show healthy servers": green,
+    		"Show all servers": all
     	};
     
     	L.control.layers(overlays).addTo(map);
@@ -76,8 +161,17 @@
       
     	var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
     	var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
-    	var osm = new L.TileLayer(osmUrl, {minZoom: 8, maxZoom: 12, attribution: osmAttrib});		
+    	var osm = new L.TileLayer(osmUrl, {minZoom: 2, maxZoom: 12, attribution: osmAttrib});		
       map.addLayer(osm);
+      
+      
+    	L.marker([39.61, -105.02],{icon: greenIcon}).bindPopup('This is Littleton, CO.').addTo(all);
+    	L.marker([39.61, -105.02],{icon: greenIcon}).bindPopup('This is Littleton, CO.').addTo(green);
+    	L.marker([39.74, -104.99],{icon: amberIcon}).bindPopup('This is Denver, CO.').addTo(all);
+    	L.marker([39.74, -104.99],{icon: amberIcon}).bindPopup('This is Denver, CO.').addTo(amber);
+    	L.marker([39.73, -104.8],{icon: redIcon}).bindPopup('This is Aurora, CO.').addTo(all);
+    	L.marker([39.73, -104.8],{icon: redIcon}).bindPopup('This is Aurora, CO.').addTo(red);
+    
       
     </script>
     
