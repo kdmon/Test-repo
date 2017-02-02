@@ -42,15 +42,15 @@
     	var map = L.map('map', {
     		center: [39.73, -104.99],
     		zoom: 10,
-    		layers: [green,amber,red]
+    		layers: [green,amber,red,all]
     	});
     
       // Associate overlays
     	var overlays = {
-    		"All servers": all,
     		"Servers with errors in last 24h": red,
     		"Servers with warnings in last 24h": amber,
-    		"Servers w/o errors or warnings in last 24h": green
+    		"Servers w/o errors or warnings in last 24h": green,
+    		"All servers": all
     	};
     
     	L.control.layers(overlays).addTo(map);
