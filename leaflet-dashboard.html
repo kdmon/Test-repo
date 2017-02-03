@@ -423,11 +423,15 @@
     	L.control.layers(overlays).addTo(map);
     	
       // Add tiles from OSM
+      var Stamen_TonerLite = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.{ext}', {
+      	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      	subdomains: 'abcd',
+      	minZoom: 4,
+      	maxZoom: 13,
+      	ext: 'png'
+      });
       
-    	var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-    	var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
-    	var osm = new L.TileLayer(osmUrl, {minZoom: 4, maxZoom: 16, attribution: osmAttrib});		
-      map.addLayer(osm);
+      map.addLayer(Stamen_TonerLite);
       
       var html = '<br><br><div style="padding: 1em; background: #00c; color: white">Open detailed view</div>';
       
