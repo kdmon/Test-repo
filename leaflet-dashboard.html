@@ -4,11 +4,14 @@
   <head>
     
   	<title>Layers Control Tutorial - Leaflet</title>
+  	
   	<meta charset="utf-8" />
   	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  	
   	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
   	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
   	<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
     
@@ -202,6 +205,50 @@
           warnings: 0
         },
         {
+          name: "Bergen, Sykehusapoteka Vest",
+          id: 218,
+          lat: "60.373978",
+          lon: "5.359857",
+          status: "green",
+          lastError: "None",
+          lastWarning: "None",
+          errors: 0,
+          warnings: 0
+        },
+        {
+          name: "Førde, Sykehusapoteka Vest",
+          id: 219,
+          lat: "61.456758",
+          lon: "5.888605",
+          status: "green",
+          lastError: "None",
+          lastWarning: "None",
+          errors: 0,
+          warnings: 0
+        },
+        {
+          name: "Haugesund, Sykehusapoteka Vest",
+          id: 220,
+          lat: "59.409032",
+          lon: "5.279654",
+          status: "green",
+          lastError: "None",
+          lastWarning: "None",
+          errors: 0,
+          warnings: 0
+        },
+        {
+          name: "Stavanger, Sykehusapoteka Vest",
+          id: 221,
+          lat: "58.952418",
+          lon: "5.732182",
+          status: "green",
+          lastError: "None",
+          lastWarning: "None",
+          errors: 0,
+          warnings: 0
+        },
+        {
           name: "Kalnes, Sykehusapotek Østfold",
           id: 118,
           lat: "59.318083",
@@ -364,9 +411,9 @@
     
       // Associate overlays
     	var overlays = {
-    		"Show servers with errors": red,
-    		"Show servers with warnings": amber,
     		"Show healthy servers": green,
+    		"Show servers with warnings": amber,
+    		"Show servers with errors": red,
     		"Show all servers": all
     	};
     
@@ -391,17 +438,19 @@
         var pointIcon;
         if (point.status == 'red') {
           pointIcon = redIcon;
-          L.marker([point.lat, point.lon],{icon: pointIcon}).bindPopup(pointDescription).addTo(red);
+          L.marker([point.lat, point.lon],{icon: pointIcon, title:point.name, zIndexOffset: 10000 + i}).bindPopup(pointDescription).addTo(red);
+      	  L.marker([point.lat, point.lon],{icon: pointIcon, title:point.name, zIndexOffset: 10000 + i}).bindPopup(pointDescription).addTo(all);
         }
         else if (point.status == 'amber') {
           pointIcon = amberIcon;
-        	L.marker([point.lat, point.lon],{icon: pointIcon}).bindPopup(pointDescription).addTo(amber);
+        	L.marker([point.lat, point.lon],{icon: pointIcon, title:point.name, zIndexOffset: 5000 + i}).bindPopup(pointDescription).addTo(amber);
+      	  L.marker([point.lat, point.lon],{icon: pointIcon, title:point.name, zIndexOffset: 5000 + i}).bindPopup(pointDescription).addTo(all);
         }
         else {
           pointIcon = greenIcon;
-        	L.marker([point.lat, point.lon],{icon: pointIcon}).bindPopup(pointDescription).addTo(green);
+        	L.marker([point.lat, point.lon],{icon: pointIcon, title:point.name}).bindPopup(pointDescription).addTo(green);
+      	  L.marker([point.lat, point.lon],{icon: pointIcon, title:point.name}).bindPopup(pointDescription).addTo(all);
         }
-      	L.marker([point.lat, point.lon],{icon: pointIcon}).bindPopup(pointDescription).addTo(all);
       }
       
     </script>
