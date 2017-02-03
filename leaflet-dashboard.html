@@ -225,7 +225,10 @@
           lastWarning: "None",
           errors: 0,
           warnings: 0
-        },
+        }
+      ];
+      
+      /*
         {
           name: "Bergen, Sykehusapoteka Vest",
           id: 218,
@@ -370,7 +373,7 @@
           errors: 4,
           warnings: 0
         }
-        ];
+      */
     
 
       // Create map icons
@@ -404,8 +407,8 @@
       // Create leaflet map
       
     	var map = L.map('map', {
-    		center: [65.117835, 13.531302],
-    		zoom: 4,
+    		center: [59.8, 10.131302],
+    		zoom: 6,
     		layers: [green,amber,red,all]
     	});
     
@@ -447,6 +450,7 @@
       	  L.marker([point.lat, point.lon],{icon: pointIcon, title:point.name, zIndexOffset: 5000 + i}).bindPopup(pointDescription).addTo(all);
         }
         else {
+          pointDescription = "<b>" + point.name + "</b><br><br>Running normally" + html;
           pointIcon = greenIcon;
         	L.marker([point.lat, point.lon],{icon: pointIcon, title:point.name}).bindPopup(pointDescription).addTo(green);
       	  L.marker([point.lat, point.lon],{icon: pointIcon, title:point.name}).bindPopup(pointDescription).addTo(all);
