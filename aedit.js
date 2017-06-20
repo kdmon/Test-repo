@@ -167,23 +167,22 @@ function authenticate () {
   });
   
   user = octo.user.fetch().then(function(user) {
-    if (user === undefined) checkUser();
-    else {
-      config.user = user.login;
-      config.avatar = user.avatarUrl;
-      init();
-    }
-  });
+    config.user = user.login;
+    config.avatar = user.avatarUrl;
+    init();
+  }).fail(checkUser);
 }
 
 function checkUser() {
   var start = window.location.search.indexOf('code=') + 5;
   var tempKey = window.location.search.substr(start,start+20);
+  console.log('chkuser');
   $.ajax({
     type: "GET",
     url: "https://webappeditor.com/waecallback?code=" + tempKey
   }).done (function (result) {
     // extract token
+    console.log('got token');
     var token = result.split('&');
     token = token[0].split('=');
     token = token[1];
@@ -1101,7 +1100,7 @@ function setupWebrtc (room, media) {
         "src": $("#localVideo").attr("src"),
         "autoplay": "autoplay"
       });
-      
+
       // New video copying ...
       $("#largeVideo")[0].srcObject = $("#localVideo")[0].srcObject;
       $("#largeVideo")[0].muted = true;
@@ -1909,6 +1908,7 @@ $(".w2ui-toolbar:not(.selectable)").on('mousedown', function(event) {
 
 
 function init(inOverlay) {
+  console.log('init');
   initLayout();
   initButtons();
   if (inOverlay) showProjectsInOverlay();
@@ -2195,7 +2195,7 @@ function showProjectsInPanel () {
       //'<img class="avatar-large" src="' + config.avatar + '"/></h2>' +
       '<div id="startscreen">' +
        '<h2 class="accordion"><i class="fa fa-plus-square"></i> Create a new project.</h2>' +
-       '<div class="apanel" id="newproject"><p>' + 'New project' + '</p></div>' +
+       '<div class="apanel" id="newproject"><p>' + 'This section is being worked on. Please use github.com to create a repository to begin.' + '</p></div>' +
        '<h2 class="accordion"><i class="fa fa-search"></i> Browse all projects.</h2>' + 
        '<div class="apanel project-browser" id="project-browser"></div>' +
        '<h2 class="accordion active"><i class="fa fa-hourglass-end"></i> ' +
@@ -2282,6 +2282,7 @@ function showProjectsInPanel () {
         
         $("#recent").html('').prepend(recentHistory || 
           '<p>You do not appear to have any recently saved projects.</p>');
+        setTimeout(updateLayout, 10);
       });
       
       
@@ -2500,6 +2501,7 @@ function showProject (user, repository) {
       $('#editbutton').show();
       // Default to master branch, if it exists
       if (branches.indexOf('master')>-1) $('#branch-list select').val('master');
+      updateLayout();
     });
     
   });
@@ -3466,4 +3468,8 @@ setTimeout(function() {
 // Start app
 
 var connection = new sharejs.Connection("https://webappeditor.com:444/channel");
-authenticate();
+
+setTimeout(function() {
+  console.log('auth')
+  authenticate();
+}, 500);
