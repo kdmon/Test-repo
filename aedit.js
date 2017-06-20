@@ -1101,6 +1101,10 @@ function setupWebrtc (room, media) {
         "src": $("#localVideo").attr("src"),
         "autoplay": "autoplay"
       });
+      
+      // New video copying ...
+      $("#largeVideo")[0].srcObject = $("#localVideo")[0].srcObject;
+      $("#largeVideo")[0].muted = true;
 
       $("#innerVideoContainer").on('click', function() {
         $("#largeVideoContainer").hide();
@@ -1122,6 +1126,10 @@ function setupWebrtc (room, media) {
           "src": $(e.target).attr("src"),
           "autoplay": "autoplay"
         });
+        
+        // New video copying ...
+        $("#largeVideo")[0].srcObject = $(e.target)[0].srcObject;
+        $("#largeVideo")[0].muted = true;
       });
     }, 2000);
     
