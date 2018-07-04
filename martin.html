@@ -5,75 +5,17 @@
   </head>
   <body>
     
-    <h1>Martin's app</h1>
+    <img id="reward" src="https://j.gifs.com/W6Pp6n.gif" style="width: 100%; height: 100%; z-index: 9999; position: fixed;">
     
-    <img src="https://j.gifs.com/W6Pp6n.gif" style="width: 150px">
+    
+    <h1>Martin's app</h1>
     
     <h3>Kan du svaren på frågorna?</h3>
     
     <div id="question-container"></div>
     
-    <div>
-      <div class="question">
-        <p>Fråga 1: Vad heter spanien's huvudstad?</p>
-        <select>
-          <option>Ankeborg</option>
-          <option>Madrid</option>
-          <option>Panama</option>
-          <option>Stockholm</option>
-        </select>
-        <button>Svara</button>
-      </div>
-      
-      <div class="question">
-        <p>Fråga 2: Hur stort är universum?</p>
-        <select>
-          <option>1000000 Kilometer</option>
-          <option>1000000 Pascal</option>
-          <option>1000000 Hekto</option>
-          <option>1000000 Ljusår</option>
-        </select>
-        <button>Svara</button>
-      </div>
-      
-      <div class="question">
-        <p>Fråga 3: Fråga tre?</p>
-        <select>
-          <option>1000000 Kilometer</option>
-          <option>1000000 Pascal</option>
-          <option>1000000 Hekto</option>
-          <option>1000000 Ljusår</option>
-        </select>
-        <button>Svara</button>
-      </div>
-    </div>
-    
-    <style>
-      .question {
-        background: yellow;
-        padding: 1em;
-        border-top: 1px dashed black;
-      }
-    </style>
-    
     <script>
     
-      function svara () {
-        var svaret = $("#svaret").val();
-        var rattSvar = questions[currentQuestion-1].svar;
-        
-        if (svaret == rattSvar) alert ("Du svarade rätt! - bra jobbat!")
-        else  alert ("Ajaj, du svarade fel! - bättre lycka nästa gång!")
-        
-        currentQuestion ++;
-        
-        
-      }
-    
-    
-    
-      $('.question').hide();
-      
       var questions = [
         {
       		titel: "Vad heter spaniens huvudstad?",
@@ -92,13 +34,43 @@
       
       var currentQuestion = 1;
       
-      var elem = "<p>Fråga " + currentQuestion + ": " + questions[currentQuestion-1].titel + '</p><select id="svaret">';
-      
-      for (var c = 0; c<4; c++) {
-        elem = elem + "<option>" + questions[currentQuestion-1].alternativ[c] + "</option>";
+    
+      function svara () {
+        var svaret = $("#svaret").val();
+        var rattSvar = questions[currentQuestion-1].svar;
+        
+        if (svaret == rattSvar) {
+          $("#reward").show();
+          alert ("Du svarade rätt! - bra jobbat!")
+          
+          setTimeout(function() {
+            $("#reward").hide();
+          }, 2500)
+          
+        }
+        else  alert ("Ajaj, du svarade fel! - bättre lycka nästa gång!")
+        
+        currentQuestion ++;
+        showQuestion();
+        
       }
       
-      $('#question-container').html(elem + '</select><button onclick="svara()">Svara</button>');
+      
+      function showQuestion () {
+        
+        var elem = "<p>Fråga " + currentQuestion + ": " + questions[currentQuestion-1].titel + '</p><select id="svaret">';
+        
+        for (var c = 0; c<4; c++) {
+          elem = elem + "<option>" + questions[currentQuestion-1].alternativ[c] + "</option>";
+        }
+        
+        $('#question-container').html(elem + '</select><button onclick="svara()">Svara</button>');
+        
+      }
+      
+      showQuestion();
+    
+      $("#reward").hide();
       
       
       
