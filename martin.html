@@ -1,0 +1,125 @@
+<html>
+  <head>
+    <title>Martin's App</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  </head>
+  <body>
+    
+    <h1>Martin's app</h1>
+    
+    <img src="https://j.gifs.com/W6Pp6n.gif" style="width: 150px">
+    
+    <h3>Kan du svaren på frågorna?</h3>
+    
+    <div id="question-container"></div>
+    
+    <div>
+      <div class="question">
+        <p>Fråga 1: Vad heter spanien's huvudstad?</p>
+        <select>
+          <option>Ankeborg</option>
+          <option>Madrid</option>
+          <option>Panama</option>
+          <option>Stockholm</option>
+        </select>
+        <button>Svara</button>
+      </div>
+      
+      <div class="question">
+        <p>Fråga 2: Hur stort är universum?</p>
+        <select>
+          <option>1000000 Kilometer</option>
+          <option>1000000 Pascal</option>
+          <option>1000000 Hekto</option>
+          <option>1000000 Ljusår</option>
+        </select>
+        <button>Svara</button>
+      </div>
+      
+      <div class="question">
+        <p>Fråga 3: Fråga tre?</p>
+        <select>
+          <option>1000000 Kilometer</option>
+          <option>1000000 Pascal</option>
+          <option>1000000 Hekto</option>
+          <option>1000000 Ljusår</option>
+        </select>
+        <button>Svara</button>
+      </div>
+    </div>
+    
+    <style>
+      .question {
+        background: yellow;
+        padding: 1em;
+        border-top: 1px dashed black;
+      }
+    </style>
+    
+    <script>
+    
+      function svara () {
+        var svaret = $("#svaret").val();
+        var rattSvar = questions[currentQuestion-1].svar;
+        
+        if (svaret == rattSvar) alert ("Du svarade rätt! - bra jobbat!")
+        else  alert ("Ajaj, du svarade fel! - bättre lycka nästa gång!")
+        
+        currentQuestion ++;
+        
+        
+      }
+    
+    
+    
+      $('.question').hide();
+      
+      var questions = [
+        {
+      		titel: "Vad heter spaniens huvudstad?",
+      		alternativ: ["Ankeborg", "Madrid", "Panama", "Stockholm"],
+          svar: "Madrid"
+      	}, {
+      		titel: "Hur stort är universum?",
+      		alternativ: ["Ingen vet", "1 miljon fotbollsplaner", "Lite större än växjö", "Ungefär 100000 Jordar"],
+          svar: "Ingen vet"
+      	}, {
+      		titel: "Hur många RPM har en tvättmaskinh?",
+      		alternativ: ["1", "1200", "90", "Ungefär 100000"],
+          svar: "1200"
+      	}
+      ];
+      
+      var currentQuestion = 1;
+      
+      var elem = "<p>Fråga " + currentQuestion + ": " + questions[currentQuestion-1].titel + '</p><select id="svaret">';
+      
+      for (var c = 0; c<4; c++) {
+        elem = elem + "<option>" + questions[currentQuestion-1].alternativ[c] + "</option>";
+      }
+      
+      $('#question-container').html(elem + '</select><button onclick="svara()">Svara</button>');
+      
+      
+      
+      
+      // Loopar igenom alla frågor
+      
+      /*
+      for (var i=0; i < questions.length; i = i + 1) {
+        $('#question-container').append("<p>Fråga: " + questions[i].titel + "</p>");
+        var element = "<select>";
+        
+        for (var c = 0; c<4; c++) {
+          element = element + "<option>" + questions[i].alternativ[c] + "</option>";
+        }
+        
+        $('#question-container').append(element + "</select>")
+        
+      }
+      */
+      
+    </script>
+    
+  </body>
+</html>
