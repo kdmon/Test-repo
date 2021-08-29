@@ -4,7 +4,7 @@
   </head>
   <body style="background: #eee; padding: 2em;">
     <div style="margin: 0 auto; padding: 2em; border: 1px solid; background: #fff; min-height: 500px;">
-      <h1>Vilken är Störst och Starkast?</h1>
+      <h1>Vem är Störst och Starkast?</h1>
       <div id="item1" class="item"></div>
       <div id="item2" class="item"></div>
       <div id="app"></div>
@@ -30,10 +30,10 @@
         let i = left //left pointer
         let j = right //right pointer
         while (i <= j) {
-          while (items[i] < pivot) {
+          while (confirm(`Is ${items[i]} < ${pivot}`)) {
             i++;
           }
-          while (items[j] > pivot) {
+          while (confirm(`Is ${items[j]} > ${pivot}`)) {
             j--;
           }
           if (i <= j) {
@@ -69,17 +69,17 @@
         return array;
       }
 
-      let a = shuffle([1,2,3,4,5,6,7,8,9])
-      let b = quickSort(a, 0, a.length - 1)
-      
-      alert('a: ' + a, 'qs: ' + b)
+      let a = shuffle(['a','b','c','d','e','f','g'])
+      //alert('a: ' + a)
+      quickSort(a, 0, a.length - 1)
+      alert('qs: ' + a)
 
       let c = shuffle(['a','b','c','d','e','f','g'])
       
       let item1 = document.getElementById('item1')
       let item2 = document.getElementById('item2')
-      item1.innerHTML = '<p>Item 1</p>'
-      item2.innerHTML = 'Item 2'
+      item1.innerHTML = '<p>Hulken</p>'
+      item2.innerHTML = '<p>Bamse</p>'
       
     </script>
   </body>
