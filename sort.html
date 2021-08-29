@@ -70,10 +70,11 @@
       }
 
       let a = shuffle([1,2,3,4,5,6,7,8,9])
+      let b = quickSort(a, 0, a.length - 1)
       
-      alert(a, quickSort(a, 0, a.length - 1)
+      alert('a: ' + a, 'qs: ' + b)
 
-      let b = shuffle(['a','b','c','d','e','f','g'])
+      let c = shuffle(['a','b','c','d','e','f','g'])
       
       let item1 = document.getElementById('item1')
       let item2 = document.getElementById('item2')
