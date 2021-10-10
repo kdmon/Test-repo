@@ -1,0 +1,44 @@
+<!DOCTYPE>
+<html>
+  <body>
+    <h1>Web audio</h1>
+    Frekvens: <input id="freq" value="440">
+    <br>
+    <button onclick="playNote()">Ton</button>
+    <button onclick="playNoise()">Brus</button>
+    
+    <script>
+      function playNote() {
+        // create web audio api context
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+        
+        // create Oscillator node
+        const oscillator = audioCtx.createOscillator()
+        oscillator.type = 'sine'
+        oscillator.frequency.setValueAtTime(parseInt(document.getElementById("freq").value), audioCtx.currentTime) // value in hertz
+        oscillator.connect(audioCtx.destination)
+        oscillator.start()
+        setTimeout(function() {oscillator.stop()}, 500)
+      }
+      
+      function playNoise () {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)()
+        
+        var bufferSize = 2 * audioContext.sampleRate,
+            noiseBuffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate),
+            output = noiseBuffer.getChannelData(0);
+        for (var i = 0; i < bufferSize; i++) {
+            output[i] = Math.random() * 100 - 100;
+        }
+        
+        var whiteNoise = audioContext.createBufferSource();
+        whiteNoise.buffer = noiseBuffer;
+        whiteNoise.loop = true;
+        whiteNoise.start(0);
+        
+        whiteNoise.connect(audioContext.destination);
+      }
+    </script>
+    
+  </body>
+</html>
