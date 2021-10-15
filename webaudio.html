@@ -1,24 +1,31 @@
-<!DOCTYPE>
+<!DOCTYPE html>
 <html>
   <body>
     <h1>Web audio</h1>
     Frekvens: <input id="freq" value="440">
     <br>
-    <button onclick="playNote()">Ton</button>
+    <button onclick="playNote(440, 300)">Ton1</button>
+    <button onclick="playNote(261.63+261.63, 500)">Ton2</button>
     <button onclick="playNoise()">Brus</button>
     
     <script>
-      function playNote() {
-        // create web audio api context
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)()
-        
+      let notes = [32, 34, 36, 38, 41, 43, 46, 49,52,55,58,61]
+      // create web audio api context
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+      function playNote (freq, duration) {
         // create Oscillator node
         const oscillator = audioCtx.createOscillator()
         oscillator.type = 'sine'
         oscillator.frequency.setValueAtTime(parseInt(document.getElementById("freq").value), audioCtx.currentTime) // value in hertz
         oscillator.connect(audioCtx.destination)
         oscillator.start()
-        setTimeout(function() {oscillator.stop()}, 500)
+        factor = Math.random()
+        setInterval(function () {
+          // hz = freq - Math.floor(Math.random() * 880 * factor)
+          hz = notes[Math.floor(notes.length * Math.random())]*5
+          oscillator.frequency.setValueAtTime(hz, audioCtx.currentTime) // value in hertz
+        }, duration)
+        setTimeout(function() {factor = Math.random(); oscillator.stop()}, 15000)
       }
       
       function playNoise () {
